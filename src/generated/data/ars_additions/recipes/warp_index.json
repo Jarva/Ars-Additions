@@ -6,16 +6,24 @@
   },
   "pedestalItems": [
     {
-      "item": "ars_nouveau:enchanters_eye"
+      "item": {
+        "item": "ars_nouveau:enchanters_eye"
+      }
     },
     {
-      "item": "ars_nouveau:scryers_crystal"
+      "item": {
+        "item": "ars_nouveau:scryers_crystal"
+      }
     },
     {
-      "item": "ars_nouveau:starbuncle_charm"
+      "item": {
+        "item": "ars_nouveau:starbuncle_charm"
+      }
     },
     {
-      "item": "ars_nouveau:bookwyrm_charm"
+      "item": {
+        "item": "ars_nouveau:bookwyrm_charm"
+      }
     }
   ],
   "reagent": [

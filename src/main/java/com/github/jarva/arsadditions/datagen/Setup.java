@@ -18,8 +18,7 @@ public class Setup {
         DataGenerator gen = event.getGenerator();
 
         gen.addProvider(event.includeServer(), new PatchouliProvider(gen));
-        gen.addProvider(event.includeServer(), new LangDatagen(gen.getPackOutput(), root, "en_us"));
-        gen.addProvider(event.includeServer(), new RecipeProvider(gen.getPackOutput()));
+        gen.addProvider(event.includeServer(), new LangDatagen(gen, root, "en_us"));
         gen.addProvider(event.includeServer(), new EnchantingAppProvider(gen));
     }
 

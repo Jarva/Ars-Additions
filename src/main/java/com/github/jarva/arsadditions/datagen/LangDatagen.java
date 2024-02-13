@@ -1,23 +1,22 @@
 package com.github.jarva.arsadditions.datagen;
 
 import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
-import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.common.items.Glyph;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import java.util.function.Supplier;
 
 public class LangDatagen extends LanguageProvider {
 
-    public LangDatagen(PackOutput output, String modid, String locale) {
-        super(output, modid, locale);
+    public LangDatagen(DataGenerator gen, String modid, String locale) {
+        super(gen, modid, locale);
     }
 
     @Override
     protected void addTranslations() {
         ArsNouveauAPI api = ArsNouveauAPI.getInstance();
-        for (Supplier<Glyph> supplier : GlyphRegistry.getGlyphItemMap().values()) {
+        for (Supplier<Glyph> supplier : api.getGlyphItemMap().values()) {
             Glyph glyph = supplier.get();
             if (!glyph.spellPart.getRegistryName().getNamespace().equals(Setup.root)) continue;
             this.add(Setup.root + ".glyph_desc." + glyph.spellPart.getRegistryName().getPath(), glyph.spellPart.getBookDescription());

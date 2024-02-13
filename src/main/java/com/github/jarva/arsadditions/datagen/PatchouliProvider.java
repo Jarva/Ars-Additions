@@ -8,14 +8,16 @@ import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
-import static com.hollingsworth.arsnouveau.setup.registry.RegistryHelper.getRegistryName;
+import static com.hollingsworth.arsnouveau.api.RegistryHelper.getRegistryName;
 
 public class PatchouliProvider extends com.hollingsworth.arsnouveau.common.datagen.PatchouliProvider {
 
@@ -24,10 +26,10 @@ public class PatchouliProvider extends com.hollingsworth.arsnouveau.common.datag
     }
 
     @Override
-    public void collectJsons(CachedOutput cache) {
+    public void run(CachedOutput cache) throws IOException {
 
         for (PatchouliPage patchouliPage : pages) {
-            saveStable(cache, patchouliPage.build(), patchouliPage.path());
+            DataProvider.saveStable(cache, patchouliPage.build(), patchouliPage.path());
         }
 
     }
@@ -88,7 +90,7 @@ public class PatchouliProvider extends com.hollingsworth.arsnouveau.common.datag
 
     @Override
     public Path getPath(ResourceLocation category, String fileName) {
-        return this.output.resolve("assets/" + Setup.root + "/patchouli_books/example/en_us/entries/" + category.getPath() + "/" + fileName + ".json");
+        return this.generator.getOutputFolder().resolve("data/" + Setup.root + "/patchouli_books/example/en_us/entries/" + category.getPath() + "/" + fileName + ".json");
     }
 
     ImbuementPage ImbuementPage(ItemLike item) {

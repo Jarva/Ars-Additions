@@ -28,7 +28,7 @@ displayName = "Ars Additions"
 # authors="Me!" #optional
 # A multi-line description for your mod. This has no minimum length, but it *is* required!
 description = '''
-Ars Additions
+An Ars Nouveau addon focused on small tweaks and quality of life additions.
 '''
 
 # An (optional) dependency for your mod. Though technically not required,

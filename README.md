@@ -4,7 +4,10 @@
 
 An Ars Nouveau addon focused on small tweaks and quality of life additions.
 
-Trello: <https://trello.com/b/I4KiHMIb/task-list>
+### Feature List
+
+* Warp Index - Allows remote access to Storage Lectern
+* Stabilized Warp Index - Allows cross-dimensional remote access to Storage Lectern
 
 Modrinth: <https://modrinth.com/mod/ars-additions>  
 CurseForge: <https://legacy.curseforge.com/minecraft/mc-mods/ars-additions/>

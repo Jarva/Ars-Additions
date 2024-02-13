@@ -1,0 +1,142 @@
+plugins {
+    id "dev.architectury.loom" version "1.4-SNAPSHOT"
+    id "maven-publish"
+}
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
+
+archivesBaseName = project.archives_base_name
+version = "${project.minecraft_version}-${new File('version').text.trim()}"
+group = project.maven_group
+
+def generatedResources = file("src/generated")
+sourceSets {
+    main {
+        resources.srcDir generatedResources
+    }
+}
+
+loom {
+    runs {
+        data {
+            data()
+            programArgs "--all", "--mod", "ars_additions"
+            programArgs "--existing", file("src/main/resources").absolutePath
+            programArgs "--output", generatedResources.absolutePath
+        }
+    }
+}
+
+repositories {
+    mavenLocal() {
+        content {
+            includeGroup "com.hollingsworth.ars_nouveau"
+        }
+    }
+
+    maven {
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
+    }
+
+    maven { url = 'https://files.minecraftforge.net/maven/' }
+
+    maven {
+        url = "https://maven.theillusivec4.top/"
+    }
+    maven {
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+        url = "https://maven.blamejared.com"
+    }
+    maven {
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+
+    maven { url 'https://jitpack.io' }
+
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_mappings}@zip")
+    }
+
+    forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
+
+    modImplementation "com.hollingsworth.ars_nouveau:ars_nouveau-${project.minecraft_version}:${project.ars_version}"
+    modImplementation "software.bernie.geckolib:geckolib-forge-${project.minecraft_version}:${project.gecko_version}"
+    modImplementation "vazkii.patchouli:Patchouli:${project.minecraft_version}-${project.patchouli_version}"
+
+    modCompileOnlyApi "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"
+    modCompileOnlyApi "mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}"
+
+    modRuntimeOnly("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
+
+    modImplementation "top.theillusivec4.curios:curios-forge:${project.curios_version}+${project.minecraft_version}"
+    modImplementation "com.github.glitchfiend:TerraBlender-forge:${project.minecraft_version}-${project.terrablender_version}"
+
+    implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-common:0.2.0-beta.8"))
+    implementation("com.github.llamalad7.mixinextras:mixinextras-forge:0.2.0-beta.8")
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.release = 17
+}
+
+java {
+    withSourcesJar()
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : project.mod_id,
+                "Specification-Vendor"    : project.mod_author,
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : version,
+                "Implementation-Vendor"   : project.mod_author,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+// configure the maven publication
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
+
+    repositories {}
+}

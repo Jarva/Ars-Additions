@@ -1,0 +1,13 @@
+{
+  "chat.ars_additions.warp_index.bound": "Bound %s",
+  "chat.ars_additions.warp_index.invalid_block": "Invalid %s",
+  "chat.ars_additions.warp_index.no_activate": "You are unable to reach the %s here",
+  "chat.ars_additions.warp_index.out_of_range": "Your %s is not loaded",
+  "chat.ars_additions.warp_index.unbound": "%s + %s to bind a %s",
+  "item.ars_additions.stabilized_warp_index": "Stabilized Warp Index",
+  "item.ars_additions.warp_index": "Warp Index",
+  "key.ars_additions.open_lectern": "[Ars Additions] Activate Warp Index",
+  "tooltip.ars_additions.warp_index.bound": "Bound to (%s, %s, %s) in %s",
+  "tooltip.ars_additions.warp_index.keybind": "Press the %s key to open",
+  "tooltip.ars_additions.warp_index.keybind.outline": "[%s]"
+}

@@ -49,10 +49,10 @@ jobs:
           commit_message: "ci: bump version"
       - uses: Kir-Antipov/mc-publish@v3.3
         with:
-#          modrinth-id: MODRINTH_ID
-#          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-#          curseforge-id: CURSEFORGE_ID
-#          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          modrinth-id: GYK6Gk8R
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 974408
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           name: ars_additions-${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
           version: ${{ inputs.version }}

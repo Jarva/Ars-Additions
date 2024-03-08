@@ -1,0 +1,71 @@
+{
+  "parent": "ars_additions:block/source_jar/source_jar0",
+  "overrides": [
+    {
+      "predicate": {
+        "ars_additions:source": 0.01
+      },
+      "model": "ars_additions:block/source_jar/source_jar_sliver"
+    },
+    {
+      "predicate": {
+        "ars_additions:source": 1.0
+      },
+      "model": "ars_additions:block/source_jar/source_jar10"
+    },
+    {
+      "predicate": {
+        "ars_additions:source": 2.0
+      },
+      "model": "ars_additions:block/source_jar/source_jar20"
+    },
+    {
+      "predicate": {
+        "ars_additions:source": 3.0
+      },
+      "model": "ars_additions:block/source_jar/source_jar30"
+    },
+    {
+      "predicate": {
+        "ars_additions:source": 4.0
+      },
+      "model": "ars_additions:block/source_jar/source_jar40"
+    },
+    {
+      "predicate": {
+        "ars_additions:source": 5.0
+      },
+      "model": "ars_additions:block/source_jar/source_jar50"
+    },
+    {
+      "predicate": {
+        "ars_additions:source": 6.0
+      },
+      "model": "ars_additions:block/source_jar/source_jar60"
+    },
+    {
+      "predicate": {
+        "ars_additions:source": 7.0
+      },
+      "model": "ars_additions:block/source_jar/source_jar70"
+    },
+    {
+      "predicate": {
+        "ars_additions:source": 8.0
+      },
+      "model": "ars_additions:block/source_jar/source_jar80"
+    },
+    {
+      "predicate": {
+        "ars_additions:source": 9.0
+      },
+      "model": "ars_additions:block/source_jar/source_jar90"
+    },
+    {
+      "predicate": {
+        "ars_additions:source": 10.0
+      },
+      "model": "ars_additions:block/source_jar/source_jar100"
+    }
+  ]
+}

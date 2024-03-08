@@ -24,6 +24,8 @@ public class LangDatagen extends LanguageProvider {
             this.add(Setup.root + ".glyph_name." + glyph.spellPart.getRegistryName().getPath(), glyph.spellPart.getName());
         }
 
+        this.add("block.ars_additions.ender_source_jar", "Ender Source Jar");
+
         this.add("item.ars_additions.warp_index", "Warp Index");
         this.add("item.ars_additions.stabilized_warp_index", "Stabilized Warp Index");
 

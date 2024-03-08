@@ -1,7 +1,7 @@
 package com.github.jarva.arsadditions;
 
 import com.github.jarva.arsadditions.networking.NetworkHandler;
-import com.github.jarva.arsadditions.registry.ModRegistry;
+import com.github.jarva.arsadditions.registry.AddonSetup;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,7 +22,7 @@ public class ArsAdditions {
 
     public ArsAdditions() {
         IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModRegistry.registerRegistries(modbus);
+        AddonSetup.registers(modbus);
         modbus.addListener(this::common);
         modbus.addListener(this::client);
         MinecraftForge.EVENT_BUS.register(this);

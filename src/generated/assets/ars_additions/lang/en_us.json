@@ -1,4 +1,5 @@
 {
+  "block.ars_additions.ender_source_jar": "Ender Source Jar",
   "chat.ars_additions.warp_index.bound": "Bound %s",
   "chat.ars_additions.warp_index.invalid_block": "Invalid %s",
   "chat.ars_additions.warp_index.no_activate": "You are unable to reach the %s here",

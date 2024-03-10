@@ -24,7 +24,7 @@ public class ArsAdditionsClient {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void initKeybinds(RegisterKeyMappingsEvent evt) {
-            openTerm = new KeyMapping("key.ars_additions.open_lectern", KeyConflictContext.IN_GAME, InputConstants.UNKNOWN, KeyMapping.CATEGORY_GAMEPLAY);
+            openTerm = new KeyMapping("key.ars_additions.open_lectern", KeyConflictContext.IN_GAME, InputConstants.UNKNOWN, "key.category.ars_nouveau.general");
             evt.register(openTerm);
         }
 

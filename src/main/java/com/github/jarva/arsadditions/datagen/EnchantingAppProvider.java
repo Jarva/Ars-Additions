@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatusRecipe;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
@@ -38,12 +39,20 @@ public class EnchantingAppProvider extends ApparatusRecipeProvider {
                 .withPedestalItem(1, BlockRegistry.SCRYERS_CRYSTAL)
                 .withPedestalItem(1, ItemsRegistry.STARBUNCLE_CHARM)
                 .withPedestalItem(1, ItemsRegistry.BOOKWYRM_CHARM)
-                .build());
+                .build()
+        );
         this.addRecipe(this.builder().withResult(AddonItemRegistry.ADVANCED_LECTERN_REMOTE)
                 .withReagent(AddonItemRegistry.LECTERN_REMOTE)
                 .withPedestalItem(1, Items.NETHERITE_INGOT)
                 .withPedestalItem(1, Items.NETHER_STAR)
                 .withPedestalItem(1, Blocks.ENDER_CHEST)
-                .build());
+                .build()
+        );
+        this.addRecipe(this.builder().withResult(AddonBlockRegistry.ENDER_SOURCE_JAR)
+                .withReagent(BlockRegistry.SOURCE_JAR)
+                .withPedestalItem(4, Items.ENDER_PEARL)
+                .withPedestalItem(4, Items.POPPED_CHORUS_FRUIT)
+                .build()
+        );
     }
 }

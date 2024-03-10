@@ -66,6 +66,14 @@ public class EnderSourceJarTile extends SourceJarTile implements ITickable {
     }
 
     @Override
+    public int getSource() {
+        if (getLevel() != null && !getLevel().isClientSide && getOwner() != null) {
+            EnderSourceData.getSource(getLevel().getServer(), getOwner());
+        }
+        return super.getSource();
+    }
+
+    @Override
     public int setSource(int source) {
         if (getLevel() != null && !getLevel().isClientSide && getOwner() != null) {
             EnderSourceData.setSource(getLevel().getServer(), getOwner(), source);

@@ -29,18 +29,18 @@ public class EnderSourceJarTile extends SourceJarTile implements ITickable {
 
     public void setOwner(UUID owner) {
         this.owner = owner;
-        if (getLevel() != null && !getLevel().isClientSide) {
-            int source = EnderSourceData.getSource(this.getLevel().getServer(), getOwner());
-            this.setSource(source);
-        }
     }
 
     @Override
     public void tick() {
+        if (level == null) return;
         if (level.isClientSide) return;
 
-        if (level.getGameTime() % 120 == 0) {
+        if (level.getGameTime() % 20 == 0 && !registered) {
+            int source = EnderSourceData.getSource(level.getServer(), getOwner());
+            this.setSource(source);
             SourceJarEventQueue.addPosition(level, this.worldPosition);
+            registered = true;
         }
     }
 

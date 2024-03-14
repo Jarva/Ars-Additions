@@ -43,7 +43,7 @@ public class RitualChunkLoading extends AbstractRitual {
 
     @Override
     public int getSourceCost() {
-        return 1000;
+        return 10000;
     }
 
     @Override

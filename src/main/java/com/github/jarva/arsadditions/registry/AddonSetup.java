@@ -10,6 +10,6 @@ public class AddonSetup {
         AddonBlockRegistry.BLOCK_ENTITIES.register(modEventBus);
         AddonItemRegistry.ITEMS.register(modEventBus);
 
-        DungeonLootTables.BASIC_LOOT.add(() -> new ItemStack(AddonItemRegistry.CODEX_ENTRY.get(), 1 + DungeonLootTables.r.nextInt(2)));
+        DungeonLootTables.BASIC_LOOT.add(() -> new ItemStack(AddonItemRegistry.CODEX_ENTRY.get(), 1));
     }
 }

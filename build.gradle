@@ -25,6 +25,12 @@ loom {
             programArgs "--output", generatedResources.absolutePath
         }
     }
+
+    forge {
+        mixinConfigs = [
+                "ars_additions.mixins.json"
+        ]
+    }
 }
 
 repositories {

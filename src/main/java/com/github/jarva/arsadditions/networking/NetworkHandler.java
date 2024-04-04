@@ -3,7 +3,6 @@ package com.github.jarva.arsadditions.networking;
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.item.WarpIndex;
 import com.github.jarva.arsadditions.util.PlayerInvUtil;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
@@ -16,7 +15,7 @@ import java.util.function.Supplier;
 public class NetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(ArsAdditions.MODID, "main"),
+            ArsAdditions.prefix( "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals

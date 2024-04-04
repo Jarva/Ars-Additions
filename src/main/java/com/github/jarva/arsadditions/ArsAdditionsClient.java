@@ -8,7 +8,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
@@ -32,7 +31,7 @@ public class ArsAdditionsClient {
         public static void init(FMLClientSetupEvent evt) {
             ArsAdditions.LOGGER.info("Running init");
             evt.enqueueWork(() -> {
-                ItemProperties.register(AddonBlockRegistry.ENDER_SOURCE_JAR.get().asItem(), new ResourceLocation(ArsAdditions.MODID, "source"), (stack, level, entity, seed) -> {
+                ItemProperties.register(AddonBlockRegistry.ENDER_SOURCE_JAR.get().asItem(), ArsAdditions.prefix( "source"), (stack, level, entity, seed) -> {
                     CompoundTag tag = stack.getTag();
                     if (tag == null) return 0.0F;
                     CompoundTag BET = tag.getCompound("BlockEntityTag");

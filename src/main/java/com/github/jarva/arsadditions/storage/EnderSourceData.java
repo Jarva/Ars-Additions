@@ -1,19 +1,30 @@
 package com.github.jarva.arsadditions.storage;
 
-import com.github.jarva.arsadditions.source.SourceJarEventQueue;
+import com.github.jarva.arsadditions.sync.SourceJarSync;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class EnderSourceData extends SavedData {
     public HashMap<UUID, Integer> source = new HashMap<>();
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
+        for (Map.Entry<UUID, Integer> entry : source.entrySet()) {
+            UUID uuid = entry.getKey();
+            Integer source = entry.getValue();
+
+            tag.putInt(uuid.toString(), source);
+        }
         return tag;
+    }
+
+    public void update(UUID uuid, int source) {
+        this.source.put(uuid, source);
+        setDirty();
     }
 
     public static EnderSourceData create() {
@@ -21,7 +32,12 @@ public class EnderSourceData extends SavedData {
     }
 
     public static EnderSourceData load(CompoundTag tag) {
-        return EnderSourceData.create();
+        EnderSourceData data = EnderSourceData.create();
+        List<UUID> uuids = tag.getAllKeys().stream().map(UUID::fromString).toList();
+        for (UUID uuid : uuids) {
+            data.source.put(uuid, tag.getInt(uuid.toString()));
+        }
+        return data;
     }
 
     public static EnderSourceData getData(MinecraftServer server) {
@@ -34,8 +50,9 @@ public class EnderSourceData extends SavedData {
 
     public static void setSource(MinecraftServer server, UUID uuid, int source) {
         if (source != EnderSourceData.getSource(server, uuid)) {
-            EnderSourceData.getData(server).source.put(uuid, source);
-            SourceJarEventQueue.updateSourceLevel(server, uuid);
+            EnderSourceData data = EnderSourceData.getData(server);
+            data.update(uuid, source);
+            SourceJarSync.updateSourceLevel(server, uuid);
         }
     }
 }

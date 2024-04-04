@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.registry.ArsNouveauRegistry;
 import com.hollingsworth.arsnouveau.api.familiar.AbstractFamiliarHolder;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import com.hollingsworth.arsnouveau.api.spell.AbstractCastMethod;
@@ -25,6 +26,13 @@ public class PatchouliProvider extends com.hollingsworth.arsnouveau.common.datag
 
     @Override
     public void collectJsons(CachedOutput cache) {
+        for (AbstractSpellPart glyph : ArsNouveauRegistry.GLYPHS) {
+            addGlyphPage(glyph);
+        }
+
+        for (AbstractRitual ritual : ArsNouveauRegistry.RITUALS) {
+            addRitualPage(ritual);
+        }
 
         for (PatchouliPage patchouliPage : pages) {
             saveStable(cache, patchouliPage.build(), patchouliPage.path());

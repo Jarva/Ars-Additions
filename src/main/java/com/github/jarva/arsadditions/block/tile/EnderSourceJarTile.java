@@ -1,7 +1,7 @@
 package com.github.jarva.arsadditions.block.tile;
 
 import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
-import com.github.jarva.arsadditions.source.SourceJarEventQueue;
+import com.github.jarva.arsadditions.sync.SourceJarSync;
 import com.github.jarva.arsadditions.storage.EnderSourceData;
 import com.hollingsworth.arsnouveau.common.block.ITickable;
 import com.hollingsworth.arsnouveau.common.block.tile.SourceJarTile;
@@ -39,7 +39,7 @@ public class EnderSourceJarTile extends SourceJarTile implements ITickable {
         if (level.getGameTime() % 20 == 0 && !registered) {
             int source = EnderSourceData.getSource(level.getServer(), getOwner());
             this.setSource(source);
-            SourceJarEventQueue.addPosition(level, this.worldPosition);
+            SourceJarSync.addPosition(level, this.worldPosition);
             registered = true;
         }
     }

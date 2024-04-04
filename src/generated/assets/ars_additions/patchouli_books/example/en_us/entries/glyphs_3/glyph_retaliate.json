@@ -1,0 +1,16 @@
+{
+  "category": "ars_nouveau:glyphs_3",
+  "icon": "ars_additions:glyph_retaliate",
+  "name": "ars_additions.glyph_name.glyph_retaliate",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.glyph_desc.glyph_retaliate"
+    },
+    {
+      "type": "ars_nouveau:glyph_recipe",
+      "recipe": "ars_additions:glyph_retaliate"
+    }
+  ],
+  "sortnum": 1
+}

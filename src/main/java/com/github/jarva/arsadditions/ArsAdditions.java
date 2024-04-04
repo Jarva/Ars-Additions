@@ -1,13 +1,17 @@
 package com.github.jarva.arsadditions;
 
+import com.github.jarva.arsadditions.config.ServerConfig;
 import com.github.jarva.arsadditions.networking.NetworkHandler;
 import com.github.jarva.arsadditions.registry.AddonSetup;
 import com.github.jarva.arsadditions.registry.ArsNouveauRegistry;
+import com.hollingsworth.arsnouveau.setup.config.ANModConfig;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -22,6 +26,9 @@ public class ArsAdditions {
     public static KeyMapping openLectern;
 
     public ArsAdditions() {
+        ANModConfig config = new ANModConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_SPEC, ModLoadingContext.get().getActiveContainer(), MODID + "-server");
+        ModLoadingContext.get().getActiveContainer().addConfig(config);
+
         IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
         AddonSetup.registers(modbus);
         ArsNouveauRegistry.init();

@@ -1,0 +1,18 @@
+{
+  "type": "ars_nouveau:glyph",
+  "count": 1,
+  "exp": 160,
+  "inputItems": [
+    {
+      "item": {
+        "item": "minecraft:netherite_sword"
+      }
+    },
+    {
+      "item": {
+        "item": "minecraft:shield"
+      }
+    }
+  ],
+  "output": "ars_additions:glyph_retaliate"
+}

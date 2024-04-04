@@ -1,4 +1,6 @@
 {
+  "ars_additions.glyph_desc.glyph_retaliate": "Applies spells to the last entity that dealt damage to you. The damage must be within the last 5 seconds.",
+  "ars_additions.glyph_name.glyph_retaliate": "Retaliate",
   "ars_additions.ritual_desc.ritual_chunk_loading": "The Ritual of Arcane Permanence force-loads surrounding chunks when provided with a constant stream of source.",
   "block.ars_additions.ender_source_jar": "Ender Source Jar",
   "chat.ars_additions.codex_entry.congratulations": "Congratulations!",

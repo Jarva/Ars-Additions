@@ -1,0 +1,15 @@
+{
+  "category": "ars_nouveau:rituals",
+  "icon": "ars_additions:ritual_chunk_loading",
+  "name": "item.ars_additions.ritual_chunk_loading",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.ritual_desc.ritual_chunk_loading"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "ars_additions:tablet_ritual_chunk_loading"
+    }
+  ]
+}

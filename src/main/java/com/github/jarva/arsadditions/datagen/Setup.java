@@ -22,6 +22,7 @@ public class Setup {
         gen.addProvider(event.includeServer(), new RecipeProvider(gen.getPackOutput()));
         gen.addProvider(event.includeServer(), new EnchantingAppProvider(gen));
         gen.addProvider(event.includeServer(), new DefaultLootProvider(gen.getPackOutput()));
+        gen.addProvider(event.includeServer(), new GlyphProvider(gen));
     }
 
 }

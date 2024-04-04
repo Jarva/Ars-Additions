@@ -1,4 +1,4 @@
-package com.github.jarva.arsadditions.source;
+package com.github.jarva.arsadditions.sync;
 
 import com.github.jarva.arsadditions.block.tile.EnderSourceJarTile;
 import com.github.jarva.arsadditions.storage.EnderSourceData;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SourceJarEventQueue {
+public class SourceJarSync {
     public static Map<ResourceKey<Level>, Set<BlockPos>> posMap = new ConcurrentHashMap<>();
 
     public static void addPosition(Level world, BlockPos pos) {

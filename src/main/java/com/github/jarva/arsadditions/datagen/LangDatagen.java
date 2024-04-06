@@ -37,6 +37,13 @@ public class LangDatagen extends LanguageProvider {
         this.add("item.ars_additions.lost_codex_entry", "Lost Codex Entry");
         this.add("item.ars_additions.ancient_codex_entry", "Ancient Codex Entry");
 
+        this.add("item.ars_additions.unstable_reliquary", "Unstable Reliquary");
+        this.add("tooltip.ars_additions.reliquary.marked.broken", "This Reliquary's tether is broken");
+        this.add("tooltip.ars_additions.reliquary.marked.empty", "Bind this Reliquary to a target by holding it in your offhand and casting a spell with Mark");
+        this.add("tooltip.ars_additions.reliquary.marked.entity", "Marked Entity:");
+        this.add("tooltip.ars_additions.reliquary.marked.location", "Marked Location:");
+        this.add("tooltip.ars_additions.reliquary.marked.location.pos", "X: %s, Y: %s, Z: %s");
+
         this.add("tooltip.ars_additions.warp_index.bound", "Bound to (%s, %s, %s) in %s");
         this.add("tooltip.ars_additions.warp_index.keybind", "Press the %s key to open");
         this.add("tooltip.ars_additions.warp_index.keybind.outline", "[%s]");

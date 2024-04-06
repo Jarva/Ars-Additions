@@ -1,0 +1,16 @@
+{
+  "category": "ars_nouveau:glyphs_3",
+  "icon": "ars_additions:glyph_mark",
+  "name": "ars_additions.glyph_name.glyph_mark",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.glyph_desc.glyph_mark"
+    },
+    {
+      "type": "ars_nouveau:glyph_recipe",
+      "recipe": "ars_additions:glyph_mark"
+    }
+  ],
+  "sortnum": 2
+}

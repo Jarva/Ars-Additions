@@ -38,7 +38,7 @@ public class MethodRetaliate extends AbstractCastMethod {
     public CastResolveType onCastOnBlock(UseOnContext context, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         Player player = context.getPlayer();
         if (player == null) return CastResolveType.FAILURE;
-        return cast(context.getPlayer(), resolver);
+        return cast(player, resolver);
     }
 
     @Override

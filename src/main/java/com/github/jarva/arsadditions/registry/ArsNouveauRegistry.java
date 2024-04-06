@@ -1,5 +1,7 @@
 package com.github.jarva.arsadditions.registry;
 
+import com.github.jarva.arsadditions.glyph.EffectMark;
+import com.github.jarva.arsadditions.glyph.MethodRecall;
 import com.github.jarva.arsadditions.glyph.MethodRetaliate;
 import com.github.jarva.arsadditions.ritual.RitualChunkLoading;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
@@ -20,6 +22,8 @@ public class ArsNouveauRegistry {
 
     private static void registerGlyphs() {
         register(MethodRetaliate.INSTANCE);
+        register(EffectMark.INSTANCE);
+        register(MethodRecall.INSTANCE);
     }
 
     private static void registerRituals() {

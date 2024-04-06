@@ -1,0 +1,16 @@
+{
+  "category": "ars_nouveau:glyphs_3",
+  "icon": "ars_additions:glyph_recall",
+  "name": "ars_additions.glyph_name.glyph_recall",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.glyph_desc.glyph_recall"
+    },
+    {
+      "type": "ars_nouveau:glyph_recipe",
+      "recipe": "ars_additions:glyph_recall"
+    }
+  ],
+  "sortnum": 1
+}

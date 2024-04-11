@@ -39,6 +39,11 @@ public class ArsAdditionsClient {
                 });
             });
         }
+        
+//        @SubscribeEvent
+//        public static void registerModels(ModelEvent.RegisterAdditional evt) {
+//            evt.register(ReliquaryRenderer.MODEL_LOCATION);
+//        }
     }
 
     @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)

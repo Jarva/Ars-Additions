@@ -1,0 +1,64 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "ars_additions:exploration_scroll",
+              "skip_existing_chunks": true,
+              "tag": "ars_additions:on_explorer_warp_scroll",
+              "search_radius": 100
+            }
+          ],
+          "name": "ars_additions:exploration_warp_scroll"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ars_nouveau:sourcestone",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "uniform",
+                "min": 4.0,
+                "max": 64.0
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ars_additions:codex_entry",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 4.0
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ars_additions:chests/ruined_portal"
+}

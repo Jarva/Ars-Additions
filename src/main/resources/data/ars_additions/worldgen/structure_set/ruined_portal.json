@@ -1,0 +1,22 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 30981980,
+    "separation": 15,
+    "spacing": 40,
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "minecraft:ruined_portals"
+    }
+  },
+  "structures": [
+    {
+      "structure": "ars_additions:ruined_portal",
+      "weight": 1
+    },
+    {
+      "structure": "ars_additions:ruined_portal_large",
+      "weight": 1
+    }
+  ]
+}

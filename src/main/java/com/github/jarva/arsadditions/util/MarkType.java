@@ -4,5 +4,13 @@ public enum MarkType {
     ENTITY,
     LOCATION,
     EMPTY,
-    BROKEN
+    BROKEN;
+
+    public static MarkType valueOfDefaulted(String markType) {
+        try {
+            return MarkType.valueOf(markType);
+        } catch (IllegalArgumentException e) {
+            return MarkType.EMPTY;
+        }
+    }
 }

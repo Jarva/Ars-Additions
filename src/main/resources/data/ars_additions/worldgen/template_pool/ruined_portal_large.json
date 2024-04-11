@@ -1,0 +1,149 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/red",
+        "projection": "rigid",
+        "processors": "ars_additions:ruined_portal"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/green",
+        "projection": "rigid",
+        "processors": "ars_additions:ruined_portal"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/blue",
+        "projection": "rigid",
+        "processors": "ars_additions:ruined_portal"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/purple",
+        "projection": "rigid",
+        "processors": "ars_additions:ruined_portal"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/red_horizontal",
+        "projection": "rigid",
+        "processors": "ars_additions:ruined_portal"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/green_horizontal",
+        "projection": "rigid",
+        "processors": "ars_additions:ruined_portal"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/blue_horizontal",
+        "projection": "rigid",
+        "processors": "ars_additions:ruined_portal"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/purple_horizontal",
+        "projection": "rigid",
+        "processors": "ars_additions:ruined_portal"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/red",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/green",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/blue",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/purple",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/red_horizontal",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/green_horizontal",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/blue_horizontal",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:ruined_portal/large/purple_horizontal",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

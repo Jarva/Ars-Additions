@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "i": {
+      "item": "minecraft:iron_nugget"
+    },
+    "m": {
+      "item": "ars_nouveau:archwood_planks"
+    }
+  },
+  "pattern": [
+    "i",
+    "m",
+    "i"
+  ],
+  "result": {
+    "item": "ars_additions:archwood_chain"
+  },
+  "show_notification": true
+}

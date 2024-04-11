@@ -7,6 +7,7 @@ import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -55,8 +57,31 @@ public class DefaultLootProvider extends LootTableProvider {
 
         @Override
         protected void generate() {
-            this.list.add(AddonBlockRegistry.ENDER_SOURCE_JAR.get());
-            this.add(AddonBlockRegistry.ENDER_SOURCE_JAR.get(), createManaMachineTable(AddonBlockRegistry.ENDER_SOURCE_JAR.get(), AddonBlockRegistry.ENDER_SOURCE_JAR_TILE.get()));
+            registerManaMachine(AddonBlockRegistry.ENDER_SOURCE_JAR, AddonBlockRegistry.ENDER_SOURCE_JAR_TILE);
+            registerDropSelf(AddonBlockRegistry.ARCHWOOD_CHAIN);
+            registerDropSelf(AddonBlockRegistry.GOLDEN_CHAIN);
+            registerDropSelf(AddonBlockRegistry.SOURCESTONE_CHAIN);
+            registerDropSelf(AddonBlockRegistry.POLISHED_SOURCESTONE_CHAIN);
+
+            registerDropSelf(AddonBlockRegistry.ARCHWOOD_MAGELIGHT_LANTERN);
+            registerDropSelf(AddonBlockRegistry.GOLDEN_MAGELIGHT_LANTERN);
+            registerDropSelf(AddonBlockRegistry.SOURCESTONE_MAGELIGHT_LANTERN);
+            registerDropSelf(AddonBlockRegistry.POLISHED_SOURCESTONE_MAGELIGHT_LANTERN);
+
+            registerDropSelf(AddonBlockRegistry.ARCHWOOD_LANTERN);
+            registerDropSelf(AddonBlockRegistry.GOLDEN_LANTERN);
+            registerDropSelf(AddonBlockRegistry.SOURCESTONE_LANTERN);
+            registerDropSelf(AddonBlockRegistry.POLISHED_SOURCESTONE_LANTERN);
+        }
+
+        private <B extends Block> void registerDropSelf(RegistryObject<B> block) {
+            this.list.add(block.get());
+            dropSelf(block.get());
+        }
+
+        private <B extends Block, T extends BlockEntity> void registerManaMachine(RegistryObject<B> block, RegistryObject<BlockEntityType<T>> tile) {
+            this.list.add(block.get());
+            this.add(block.get(), createManaMachineTable(block.get(), tile.get()));
         }
 
         public LootTable.Builder createManaMachineTable(Block block, BlockEntityType<?> tile) {

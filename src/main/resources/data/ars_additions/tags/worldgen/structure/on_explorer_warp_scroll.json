@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:monument",
+    "minecraft:mansion",
+    "minecraft:stronghold",
+    "minecraft:ancient_city",
+    "minecraft:desert_pyramid",
+    "minecraft:jungle_pyramid",
+    "minecraft:pillager_outpost",
+    "#minecraft:village",
+    "#ars_nouveau:wilden_den"
+  ]
+}

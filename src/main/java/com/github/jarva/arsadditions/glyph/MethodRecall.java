@@ -1,9 +1,9 @@
 package com.github.jarva.arsadditions.glyph;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.item.UnstableReliquary;
 import com.github.jarva.arsadditions.registry.names.AddonGlyphNames;
 import com.github.jarva.arsadditions.util.MarkType;
-import com.github.jarva.arsadditions.util.MarkUtils;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -61,13 +61,13 @@ public class MethodRecall extends AbstractCastMethod {
     }
 
     private CastResolveType cast(LivingEntity caster, SpellResolver resolver) {
-        ItemStack reliquary = MarkUtils.getReliquaryFromCaster(caster);
+        ItemStack reliquary = UnstableReliquary.getReliquaryFromCaster(caster);
         if (reliquary == null) return CastResolveType.FAILURE;
 
         Level level = caster.level();
         if (!(level instanceof ServerLevel serverLevel)) return CastResolveType.FAILURE;
 
-        MarkType mark = MarkUtils.getMarkType(reliquary);
+        MarkType mark = UnstableReliquary.getMarkType(reliquary);
         if (mark == null) return CastResolveType.FAILURE;
 
         CompoundTag tag = reliquary.getTag();
@@ -76,9 +76,13 @@ public class MethodRecall extends AbstractCastMethod {
         if (mark == MarkType.ENTITY) {
             UUID uuid = data.getUUID("entity_uuid");
             Entity found = serverLevel.getEntity(uuid);
-            if (found == null) return CastResolveType.FAILURE;
+            if (found == null) {
+                UnstableReliquary.breakReliquary(reliquary);
+                return CastResolveType.FAILURE;
+            }
 
             resolver.onResolveEffect(serverLevel, new EntityHitResult(found));
+            UnstableReliquary.damage(mark, reliquary, caster, found);
             return CastResolveType.SUCCESS;
         }
 
@@ -89,6 +93,7 @@ public class MethodRecall extends AbstractCastMethod {
 
             BlockHitResult bhr = new BlockHitResult( pos.getCenter(), Direction.UP, pos, false);
             resolver.onResolveEffect(caster.level(), bhr);
+            UnstableReliquary.damage(mark, reliquary, caster);
             return CastResolveType.SUCCESS;
         }
 

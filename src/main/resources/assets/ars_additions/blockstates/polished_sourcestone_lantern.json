@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "ars_additions:block/polished_sourcestone_lantern"
+    },
+    "hanging=true": {
+      "model": "ars_additions:block/polished_sourcestone_lantern_hanging"
+    }
+  }
+}

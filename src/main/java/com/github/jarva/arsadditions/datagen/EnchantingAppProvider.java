@@ -54,5 +54,12 @@ public class EnchantingAppProvider extends ApparatusRecipeProvider {
                 .withPedestalItem(4, Items.POPPED_CHORUS_FRUIT)
                 .build()
         );
+        this.addRecipe(this.builder().withResult(AddonItemRegistry.UNSTABLE_RELIQUARY)
+                .withReagent(BlockRegistry.MOB_JAR)
+                .withPedestalItem(1, ItemsRegistry.CONJURATION_ESSENCE)
+                .withPedestalItem(1, ItemsRegistry.MANIPULATION_ESSENCE)
+                .withPedestalItem(1, Items.ENDER_PEARL)
+                .build()
+        );
     }
 }

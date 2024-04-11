@@ -19,8 +19,8 @@ public class SlotMixin {
 
     @Inject(method = "set", at = @At(value = "HEAD"))
     private void setHook(ItemStack stack, CallbackInfo ci) {
-        if (stack.getItem() instanceof UnstableReliquary reliquary && !(container instanceof Inventory)) {
-            reliquary.breakReliquary(stack);
+        if (stack.getItem() instanceof UnstableReliquary && !(container instanceof Inventory)) {
+            UnstableReliquary.breakReliquary(stack);
         }
     }
 }

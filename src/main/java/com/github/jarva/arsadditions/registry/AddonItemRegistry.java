@@ -24,6 +24,7 @@ public class AddonItemRegistry {
     public static final RegistryObject<Item> CODEX_ENTRY_LOST;
     public static final RegistryObject<Item> CODEX_ENTRY_ANCIENT;
     public static final RegistryObject<Item> UNSTABLE_RELIQUARY;
+    public static final RegistryObject<Item> EXPLORATION_WARP_SCROLL;
 
     static {
         LECTERN_REMOTE = register(AddonItemNames.WARP_INDEX, WarpIndex::new);
@@ -32,6 +33,7 @@ public class AddonItemRegistry {
         CODEX_ENTRY_LOST = register(AddonItemNames.CODEX_ENTRY_LOST, CodexEntryLost::new);
         CODEX_ENTRY_ANCIENT = register(AddonItemNames.CODEX_ENTRY_ANCIENT, CodexEntryAncient::new);
         UNSTABLE_RELIQUARY = register(AddonItemNames.UNSTABLE_RELIQUARY, UnstableReliquary::new);
+        EXPLORATION_WARP_SCROLL = register(AddonItemNames.EXPLORATION_WARP_SCROLL, ExplorationWarpScroll::new);
     }
 
     private static RegistryObject<Item> register(String name, Supplier<Item> item) {

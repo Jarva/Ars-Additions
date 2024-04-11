@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/chain",
+  "render_type": "cutout",
+  "textures": {
+    "particle": "ars_additions:block/archwood_chain",
+    "all": "ars_additions:block/archwood_chain"
+  }
+}

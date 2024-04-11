@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "ars_additions:block/archwood_chain",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "ars_additions:block/archwood_chain"
+    },
+    "axis=z": {
+      "model": "ars_additions:block/archwood_chain",
+      "x": 90
+    }
+  }
+}

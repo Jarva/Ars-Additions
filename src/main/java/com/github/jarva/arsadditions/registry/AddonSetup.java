@@ -9,6 +9,8 @@ public class AddonSetup {
         AddonBlockRegistry.BLOCKS.register(modEventBus);
         AddonBlockRegistry.BLOCK_ENTITIES.register(modEventBus);
         AddonItemRegistry.ITEMS.register(modEventBus);
+        AddonLootItemFunctionsRegistry.FUNCTION_TYPES.register(modEventBus);
+        AddonEffectRegistry.EFFECTS.register(modEventBus);
 
         DungeonLootTables.BASIC_LOOT.add(() -> new ItemStack(AddonItemRegistry.CODEX_ENTRY.get(), 1));
     }

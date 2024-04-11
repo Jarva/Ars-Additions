@@ -14,6 +14,9 @@ public class ServerConfig {
     public final ForgeConfigSpec.ConfigValue<String> chunkloading_radius_increment_item;
     public final ForgeConfigSpec.IntValue chunkloading_radius_increment_max;
     public final ForgeConfigSpec.IntValue chunkloading_player_limit;
+    public final ForgeConfigSpec.IntValue reliquary_cost_player;
+    public final ForgeConfigSpec.IntValue reliquary_cost_entity;
+    public final ForgeConfigSpec.IntValue reliquary_cost_location;
 
     ServerConfig(ForgeConfigSpec.Builder builder) {
         builder.comment("Ritual of Arcane Permanence").push("chunkloading");
@@ -27,6 +30,11 @@ public class ServerConfig {
         chunkloading_radius_increment_max = builder.comment("What's the maximum amount of augmented increases the ritual should accept?").defineInRange("radius_increment_max", 1, 1, Integer.MAX_VALUE);
         chunkloading_require_online = builder.comment("Should the ritual require the player who started it to be online?").define("require_online", true);
         chunkloading_player_limit = builder.comment("How many rituals should players be able to run?").defineInRange("max_rituals", Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
+
+        builder.comment("Reliquary").push("mark_and_recall");
+        reliquary_cost_player = builder.comment("How much durability should targeting a player with Recall cost?").defineInRange("cost_player", 1000, 0, 1000);
+        reliquary_cost_entity = builder.comment("How much durability should targeting an entity with Recall cost?").defineInRange("cost_entity", 250, 0, 1000);
+        reliquary_cost_location = builder.comment("How much durability should targeting a location with Recall cost?").defineInRange("cost_location", 50, 0, 1000);
     }
 
     public static final ServerConfig SERVER;

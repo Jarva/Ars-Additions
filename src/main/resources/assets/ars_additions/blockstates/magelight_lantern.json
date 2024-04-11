@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "ars_additions:block/magelight_lantern"
+    },
+    "hanging=true": {
+      "model": "ars_additions:block/magelight_lantern_hanging"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "parent": "ars_nouveau:root",
+  "criteria": {
+    "find_ruined_portal": {
+      "conditions": {},
+      "trigger": "ars_additions:find_ruined_portal"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "ars_additions.adv.desc.find_ruined_portal"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "ars_nouveau:gilded_sourcestone_large_bricks"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "ars_additions.adv.title.find_ruined_portal"
+    }
+  },
+  "requirements": [
+    [
+      "find_ruined_portal"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

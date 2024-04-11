@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.datagen.tags;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.registry.AddonItemRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -21,6 +22,7 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        this.tag(ItemTags.BOOKSHELF_BOOKS).add(AddonItemRegistry.CODEX_ENTRY.get(), AddonItemRegistry.CODEX_ENTRY_LOST.get(), AddonItemRegistry.CODEX_ENTRY_ANCIENT.get());
         this.tag(FORGOTTEN_KNOWLEDGE_GLYPHS);
     }
 }

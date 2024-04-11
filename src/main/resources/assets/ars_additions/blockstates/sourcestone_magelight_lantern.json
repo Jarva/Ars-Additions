@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "ars_additions:block/sourcestone_magelight_lantern"
+    },
+    "hanging=true": {
+      "model": "ars_additions:block/sourcestone_magelight_lantern_hanging"
+    }
+  }
+}

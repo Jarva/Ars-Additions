@@ -1,15 +1,20 @@
 package com.github.jarva.arsadditions.glyph;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.item.UnstableReliquary;
+import com.github.jarva.arsadditions.registry.AddonEffectRegistry;
 import com.github.jarva.arsadditions.registry.names.AddonGlyphNames;
 import com.github.jarva.arsadditions.util.MarkType;
-import com.github.jarva.arsadditions.util.MarkUtils;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -48,22 +53,29 @@ public class EffectMark extends AbstractEffect {
 
         Entity entity = rayTraceResult.getEntity();
         data.putUUID("entity_uuid", entity.getUUID());
-        data.putString("entity_type", entity.getType().getDescriptionId());
+        data.putString("entity_type", EntityType.getKey(entity.getType()).toString());
+        if (entity.hasCustomName()) {
+            data.putString("entity_name", Component.Serializer.toJson(entity.getCustomName()));
+        }
 
-        saveMark(shooter, MarkType.ENTITY, data);
+        boolean marked = saveMark(shooter, MarkType.ENTITY, data);
+
+        if (marked && entity instanceof Player player) {
+            data.putString("entity_name", Component.Serializer.toJson(player.getDisplayName()));
+            player.addEffect(new MobEffectInstance(AddonEffectRegistry.MARKED_EFFECT.get(), 60 * 20 * 5));
+        }
     }
 
-    private void saveMark(LivingEntity caster, MarkType type, CompoundTag tag) {
-        ItemStack reliquary = MarkUtils.getReliquaryFromCaster(caster);
-        if (reliquary == null) return;
-
-        MarkType mark = MarkUtils.getMarkType(reliquary);
-        if (mark == MarkType.ENTITY || mark == MarkType.LOCATION) return;
+    private boolean saveMark(LivingEntity caster, MarkType type, CompoundTag tag) {
+        ItemStack reliquary = UnstableReliquary.getReliquaryFromCaster(caster);
+        if (reliquary == null) return false;
 
         CompoundTag itemTag = reliquary.getOrCreateTag();
 
         itemTag.putString("mark_type", type.name());
         itemTag.put("mark_data", tag);
+
+        return true;
     }
 
     @Override

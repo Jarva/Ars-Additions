@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "ars_additions:block/golden_lantern"
+    },
+    "hanging=true": {
+      "model": "ars_additions:block/golden_lantern_hanging"
+    }
+  }
+}

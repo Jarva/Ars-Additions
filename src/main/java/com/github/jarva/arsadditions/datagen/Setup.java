@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.datagen.tags.ItemTagProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,6 +24,7 @@ public class Setup {
         gen.addProvider(event.includeServer(), new EnchantingAppProvider(gen));
         gen.addProvider(event.includeServer(), new DefaultLootProvider(gen.getPackOutput()));
         gen.addProvider(event.includeServer(), new GlyphProvider(gen));
+        gen.addProvider(event.includeServer(), new ItemTagProvider(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new AdvancementProvider(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
     }
-
 }

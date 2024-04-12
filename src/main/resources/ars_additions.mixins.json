@@ -4,6 +4,9 @@
   "package": "com.github.jarva.arsadditions.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BookMixin",
+    "EffectBlinkMixin",
+    "PageRelationsAccessor",
     "RitualBrazierBlockMixin",
     "SlotMixin"
   ],

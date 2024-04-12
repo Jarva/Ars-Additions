@@ -1,0 +1,15 @@
+{
+  "category": "ars_nouveau:structures",
+  "icon": "ars_additions:sourcestone_lantern",
+  "name": "ars_additions.page.ruined_warp_portals",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.page1.ruined_warp_portals"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "ars_additions:exploration_warp_scroll"
+    }
+  ]
+}

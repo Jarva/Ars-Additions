@@ -1,0 +1,18 @@
+{
+  "category": "ars_nouveau:equipment",
+  "icon": "ars_additions:unstable_reliquary",
+  "name": "item.ars_additions.unstable_reliquary",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.page.unstable_reliquary"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "ars_nouveau:glyphs_3/glyph_mark",
+        "ars_nouveau:glyphs_3/glyph_recall"
+      ]
+    }
+  ]
+}

@@ -29,6 +29,8 @@ public class LangDatagen extends LanguageProvider {
             this.add(ritual.getDescriptionKey(), ritual.getLangDescription());
         }
 
+        // Blocks
+
         this.add("block.ars_additions.ender_source_jar", "Ender Source Jar");
         this.add("block.ars_additions.archwood_chain", "Archwood Chain");
         this.add("block.ars_additions.golden_chain", "Golden Chain");
@@ -45,6 +47,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("block.ars_additions.magelight_lantern", "Magelight Lantern");
         this.add("block.ars_additions.soul_magelight_lantern", "Soul Magelight Lantern");
 
+        // Items
+
         this.add("item.ars_additions.warp_index", "Warp Index");
         this.add("item.ars_additions.stabilized_warp_index", "Stabilized Warp Index");
         this.add("item.ars_additions.codex_entry", "Codex Entry");
@@ -52,6 +56,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("item.ars_additions.ancient_codex_entry", "Ancient Codex Entry");
         this.add("item.ars_additions.exploration_warp_scroll", "Explorer's Warp Scroll");
         this.add("item.ars_additions.unstable_reliquary", "Unstable Reliquary");
+
+        // Tooltips
 
         this.add("tooltip.ars_additions.exploration_warp_scroll.use", "Throw into the frame of a ruined warp portal or press %s to teleport.");
 
@@ -65,7 +71,11 @@ public class LangDatagen extends LanguageProvider {
         this.add("tooltip.ars_additions.warp_index.keybind", "Press the %s key to open");
         this.add("tooltip.ars_additions.warp_index.keybind.outline", "[%s]");
 
+        // Keybinds
+
         this.add("key.ars_additions.open_lectern", "[Ars Additions] Activate Warp Index");
+
+        // Chat Messages
 
         this.add("chat.ars_additions.codex_entry.lore", "Teaches a random Tier %s glyph");
         this.add("chat.ars_additions.codex_entry.congratulations", "Congratulations!");
@@ -77,12 +87,33 @@ public class LangDatagen extends LanguageProvider {
         this.add("chat.ars_additions.warp_index.out_of_range", "Your %s is not loaded");
         this.add("chat.ars_additions.warp_index.no_activate", "You are unable to reach the %s here");
 
+        // Effects
+
         this.add("effect.ars_additions.marked", "Marked");
+
+        // Advancements
 
         this.add("ars_additions.adv.title.find_ruined_portal", "Ancient Gateway");
         this.add("ars_additions.adv.desc.find_ruined_portal", "Find a ruined warp portal");
 
         this.add("ars_additions.adv.title.create_ruined_portal", "How does this still work?");
         this.add("ars_additions.adv.desc.create_ruined_portal", "Activate a ruined warp portal");
+
+        // Patchouli
+
+        this.add("ars_additions.page.warp_indexes", "Warp Indexes");
+        this.add("ars_additions.page1.warp_indexes", "Warp Indexes are used to remotely access your Storage Lecterns. The Warp Index allows you to access your Storage Lectern anywhere within the same dimension. The Stabilized Warp Index does not have the same limitation and will work in any dimension. Both of these Warp Indexes require your Storage Lectern to be chunk-loaded.");
+
+        this.add("ars_additions.category.structures", "Structures");
+        this.add("ars_additions.category.structures.desc", "Structures that can be found around your world to sprinkle in a little extra magic.");
+
+        this.add("ars_additions.page.ruined_warp_portals", "Ruined Warp Portals");
+        this.add("ars_additions.page1.ruined_warp_portals", "Ruined Warp Portals can be found scattered around the world, displaying an Ancient Warp Portal that has degraded over time. Accompanying these portals is a chest containing an Explorer's Warp Scroll. This scroll remains heavily imbued with magic after all these years and can activate the repaired portal with no additional source required.");
+
+        this.add("ars_nouveau.page.wilden_dens", "Wilden Dens");
+        this.add("ars_nouveau.page1.wilden_dens", "Wilden Dens can be found in forests far away from civilization. These Wilden Dens house the fearsome Wilden which you will need to defeat in order to harness their magic.");
+
+        this.add("ars_additions.page.unstable_reliquary", "Reliquaries are able to store references to entities and locations to be targeted using the Recall glyph. To store a reference in a Reliquary, hold it in your off-hand and cast a spell with the Mark glyph.");
+        this.add("ars_additions.page.ender_source_jar", "The Ender Source Jar allows you to store source in an ender-connected Source Jar. Each jar you place will link to the same pool of source, allowing you to use the Source Jar from anywhere.");
     }
 }

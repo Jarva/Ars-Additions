@@ -1,20 +1,22 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.registry.ArsNouveauRegistry;
+import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.familiar.AbstractFamiliarHolder;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import com.hollingsworth.arsnouveau.api.spell.AbstractCastMethod;
 import com.hollingsworth.arsnouveau.api.spell.AbstractEffect;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
+import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
-
-import java.nio.file.Path;
 
 import static com.hollingsworth.arsnouveau.setup.registry.RegistryHelper.getRegistryName;
 
@@ -23,6 +25,8 @@ public class PatchouliProvider extends com.hollingsworth.arsnouveau.common.datag
     public PatchouliProvider(DataGenerator generatorIn) {
         super(generatorIn);
     }
+
+    public static ResourceLocation STRUCTURES = new ResourceLocation(ArsNouveau.MODID, "structures");
 
     @Override
     public void collectJsons(CachedOutput cache) {
@@ -34,10 +38,43 @@ public class PatchouliProvider extends com.hollingsworth.arsnouveau.common.datag
             addRitualPage(ritual);
         }
 
+        addPage(new PatchouliBuilder(MACHINES, AddonItemRegistry.ADVANCED_LECTERN_REMOTE.get())
+                        .withName("ars_additions.page.warp_indexes")
+                        .withTextPage("ars_additions.page1.warp_indexes")
+                        .withPage(new ApparatusPage(AddonItemRegistry.LECTERN_REMOTE))
+                        .withPage(new ApparatusPage(AddonItemRegistry.ADVANCED_LECTERN_REMOTE))
+                        .withPage(new RelationsPage().withEntry(MACHINES, "storage_lectern").withEntry(MACHINES, "bookwyrm_charm")),
+                getPath(MACHINES, "warp_indexes")
+        );
+
+        addPage(new PatchouliBuilder(STRUCTURES, AddonBlockRegistry.SOURCESTONE_LANTERN)
+                    .withName("ars_additions.page.ruined_warp_portals")
+                    .withTextPage("ars_additions.page1.ruined_warp_portals")
+                        .withPage(new SpotlightPage(AddonItemRegistry.EXPLORATION_WARP_SCROLL.get())),
+                getPath(STRUCTURES, "ruined_warp_portals")
+        );
+
+        addPage(new PatchouliBuilder(STRUCTURES, BlockRegistry.FLOURISHING_WOOD)
+                        .withName("ars_nouveau.page.wilden_dens")
+                        .withTextPage("ars_nouveau.page1.wilden_dens"),
+                getPath(STRUCTURES, "wilden_dens")
+        );
+
+        addPage(new PatchouliBuilder(EQUIPMENT, AddonItemRegistry.UNSTABLE_RELIQUARY)
+                        .withTextPage("ars_additions.page.unstable_reliquary")
+                        .withPage(
+                                new RelationsPage()
+                                        .withEntry(GLYPHS_3, "glyph_mark")
+                                        .withEntry(GLYPHS_3, "glyph_recall")
+                        ),
+                getPath(EQUIPMENT, "unstable_reliquary")
+        );
+
+        addBasicItem(AddonBlockRegistry.ENDER_SOURCE_JAR.get(), MACHINES, new ApparatusPage(AddonBlockRegistry.ENDER_SOURCE_JAR));
+
         for (PatchouliPage patchouliPage : pages) {
             saveStable(cache, patchouliPage.build(), patchouliPage.path());
         }
-
     }
 
     @Override
@@ -92,14 +129,5 @@ public class PatchouliProvider extends com.hollingsworth.arsnouveau.common.datag
                 .withPage(new TextPage(Setup.root + ".glyph_desc." + spellPart.getRegistryName().getPath()))
                 .withPage(new GlyphScribePage(spellPart));
         this.pages.add(new PatchouliPage(builder, getPath(category, spellPart.getRegistryName().getPath())));
-    }
-
-    @Override
-    public Path getPath(ResourceLocation category, String fileName) {
-        return this.output.resolve("assets/" + Setup.root + "/patchouli_books/example/en_us/entries/" + category.getPath() + "/" + fileName + ".json");
-    }
-
-    ImbuementPage ImbuementPage(ItemLike item) {
-        return new ImbuementPage(Setup.root + ":imbuement_" + getRegistryName(item.asItem()).getPath());
     }
 }

@@ -1,11 +1,19 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.glyph.EffectMark;
+import com.github.jarva.arsadditions.glyph.MethodRecall;
 import com.github.jarva.arsadditions.glyph.MethodRetaliate;
+import com.hollingsworth.arsnouveau.ArsNouveau;
+import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.GlyphRecipe;
 import com.hollingsworth.arsnouveau.common.datagen.GlyphRecipeProvider;
+import com.hollingsworth.arsnouveau.common.lib.RitualLib;
+import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -28,6 +36,8 @@ public class GlyphProvider extends GlyphRecipeProvider {
     @Override
     public void collectJsons(CachedOutput cache) {
         addRecipe(MethodRetaliate.INSTANCE, i(Items.NETHERITE_SWORD), i(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.THORNS, 3))));
+        addRecipe(MethodRecall.INSTANCE, i(ItemsRegistry.CONJURATION_ESSENCE), i(Items.ENDER_PEARL), i(ItemsRegistry.SCRYER_SCROLL), i(ItemsRegistry.SCRY_CASTER));
+        addRecipe(EffectMark.INSTANCE, i(ItemsRegistry.MANIPULATION_ESSENCE), i(Items.ENDER_PEARL), i(BlockRegistry.MOB_JAR), i(RitualRegistry.getRitualItemMap().get(new ResourceLocation(ArsNouveau.MODID, RitualLib.CONTAINMENT))));
 
         for (GlyphRecipe recipe : recipes) {
             Path path = getScribeGlyphPath(output, recipe.output.getItem());

@@ -13,4 +13,6 @@ public class Triggers {
     public static <T extends CriterionTrigger<?>> T register(T trigger) {
         return CriteriaTriggers.register(trigger);
     }
+
+    public static void init() {}
 }

@@ -1,0 +1,15 @@
+{
+  "category": "ars_nouveau:machines",
+  "icon": "ars_additions:ender_source_jar",
+  "name": "block.ars_additions.ender_source_jar",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.page.ender_source_jar"
+    },
+    {
+      "type": "ars_nouveau:apparatus_recipe",
+      "recipe": "ars_additions:ender_source_jar"
+    }
+  ]
+}

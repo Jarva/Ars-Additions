@@ -1,0 +1,26 @@
+{
+  "category": "ars_nouveau:machines",
+  "icon": "ars_additions:stabilized_warp_index",
+  "name": "ars_additions.page.warp_indexes",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.page1.warp_indexes"
+    },
+    {
+      "type": "ars_nouveau:apparatus_recipe",
+      "recipe": "ars_additions:warp_index"
+    },
+    {
+      "type": "ars_nouveau:apparatus_recipe",
+      "recipe": "ars_additions:stabilized_warp_index"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "ars_nouveau:machines/storage_lectern",
+        "ars_nouveau:machines/bookwyrm_charm"
+      ]
+    }
+  ]
+}

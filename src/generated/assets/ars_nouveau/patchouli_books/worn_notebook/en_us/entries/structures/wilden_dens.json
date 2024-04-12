@@ -1,0 +1,11 @@
+{
+  "category": "ars_nouveau:structures",
+  "icon": "ars_nouveau:green_archwood_wood",
+  "name": "ars_nouveau.page.wilden_dens",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_nouveau.page1.wilden_dens"
+    }
+  ]
+}

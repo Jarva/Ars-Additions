@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions;
 
+import com.github.jarva.arsadditions.advancement.Triggers;
 import com.github.jarva.arsadditions.config.ServerConfig;
 import com.github.jarva.arsadditions.networking.NetworkHandler;
 import com.github.jarva.arsadditions.registry.AddonSetup;
@@ -35,6 +36,8 @@ public class ArsAdditions {
         modbus.addListener(this::common);
         modbus.addListener(this::client);
         MinecraftForge.EVENT_BUS.register(this);
+
+        Triggers.init();
     }
 
     public static ResourceLocation prefix(String path){

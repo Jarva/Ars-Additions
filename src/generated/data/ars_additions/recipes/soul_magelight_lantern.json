@@ -6,10 +6,10 @@
       "item": "minecraft:iron_nugget"
     },
     "m": {
-      "item": "ars_nouveau:archwood_planks"
+      "item": "minecraft:soul_sand"
     },
     "s": {
-      "item": "minecraft:torch"
+      "item": "ars_nouveau:source_gem"
     }
   },
   "pattern": [
@@ -18,7 +18,7 @@
     "imi"
   ],
   "result": {
-    "item": "ars_additions:archwood_lantern"
+    "item": "ars_additions:soul_magelight_lantern"
   },
   "show_notification": true
 }

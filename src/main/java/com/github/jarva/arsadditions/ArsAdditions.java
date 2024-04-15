@@ -1,12 +1,12 @@
 package com.github.jarva.arsadditions;
 
 import com.github.jarva.arsadditions.advancement.Triggers;
+import com.github.jarva.arsadditions.config.CommonConfig;
 import com.github.jarva.arsadditions.config.ServerConfig;
 import com.github.jarva.arsadditions.networking.NetworkHandler;
 import com.github.jarva.arsadditions.registry.AddonSetup;
 import com.github.jarva.arsadditions.registry.ArsNouveauRegistry;
 import com.hollingsworth.arsnouveau.setup.config.ANModConfig;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -24,11 +24,11 @@ public class ArsAdditions {
     public static final String MODID = "ars_additions";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static KeyMapping openLectern;
-
     public ArsAdditions() {
-        ANModConfig config = new ANModConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_SPEC, ModLoadingContext.get().getActiveContainer(), MODID + "-server");
-        ModLoadingContext.get().getActiveContainer().addConfig(config);
+        ANModConfig commonConfig = new ANModConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_SPEC, ModLoadingContext.get().getActiveContainer(), MODID + "-common");
+        ModLoadingContext.get().getActiveContainer().addConfig(commonConfig);
+        ANModConfig serverConfig = new ANModConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_SPEC, ModLoadingContext.get().getActiveContainer(), MODID + "-server");
+        ModLoadingContext.get().getActiveContainer().addConfig(serverConfig);
 
         IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
         AddonSetup.registers(modbus);

@@ -2,15 +2,16 @@ package com.github.jarva.arsadditions.registry;
 
 import com.github.jarva.arsadditions.block.EnderSourceJar;
 import com.github.jarva.arsadditions.block.MagelightLantern;
+import com.github.jarva.arsadditions.block.WarpNexus;
 import com.github.jarva.arsadditions.block.tile.EnderSourceJarTile;
 import com.github.jarva.arsadditions.block.tile.MagelightLanternTile;
+import com.github.jarva.arsadditions.block.tile.WarpNexusTile;
 import com.github.jarva.arsadditions.item.EnderSourceJarItem;
 import com.github.jarva.arsadditions.registry.names.AddonBlockNames;
+import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
+import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ChainBlock;
-import net.minecraft.world.level.block.LanternBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -56,6 +57,12 @@ public class AddonBlockRegistry {
     public static RegistryObject<LanternBlock> SOURCESTONE_LANTERN;
     public static RegistryObject<LanternBlock> POLISHED_SOURCESTONE_LANTERN;
 
+    public static RegistryObject<WarpNexus> WARP_NEXUS;
+    public static RegistryObject<BlockEntityType<WarpNexusTile>> WARP_NEXUS_TILE;
+
+    public static RegistryObject<WallBlock> SOURCESTONE_WALL;
+    public static RegistryObject<WallBlock> POLISHED_SOURCESTONE_WALL;
+
     static {
         ENDER_SOURCE_JAR = registerBlockAndItem(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJar::new, (block) -> new EnderSourceJarItem(block.get(), defaultItemProperties()));
         ENDER_SOURCE_JAR_TILE = registerTile(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJarTile::new, ENDER_SOURCE_JAR);
@@ -77,6 +84,12 @@ public class AddonBlockRegistry {
         ARCHWOOD_LANTERN = registerBlockAndItem(AddonBlockNames.ARCHWOOD_LANTERN, AddonBlockRegistry::createLantern);
         SOURCESTONE_LANTERN = registerBlockAndItem(AddonBlockNames.SOURCESTONE_LANTERN, AddonBlockRegistry::createLantern);
         POLISHED_SOURCESTONE_LANTERN = registerBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_LANTERN, AddonBlockRegistry::createLantern);
+
+        WARP_NEXUS = registerBlockAndItem(AddonBlockNames.WARP_NEXUS, WarpNexus::new);
+        WARP_NEXUS_TILE = registerTile(AddonBlockNames.WARP_NEXUS, WarpNexusTile::new, WARP_NEXUS);
+
+        SOURCESTONE_WALL = registerBlockAndItem(AddonBlockNames.SOURCESTONE_WALL, () -> new WallBlock(BlockBehaviour.Properties.copy(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)).forceSolidOn()));
+        POLISHED_SOURCESTONE_WALL = registerBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_WALL, () -> new WallBlock(BlockBehaviour.Properties.copy(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)).forceSolidOn()));
     }
 
     public static LanternBlock createLantern() {

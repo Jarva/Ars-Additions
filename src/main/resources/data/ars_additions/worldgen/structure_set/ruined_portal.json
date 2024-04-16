@@ -1,4 +1,10 @@
 {
+  "forge:conditions": [
+    {
+      "type": "ars_additions:config",
+      "config": "ruined_warp_portals_enabled"
+    }
+  ],
   "placement": {
     "type": "minecraft:random_spread",
     "salt": 30981980,

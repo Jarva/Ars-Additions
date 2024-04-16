@@ -9,10 +9,14 @@ import java.util.function.Function;
 public class CommonConfig {
     public final HashMap<String, ForgeConfigSpec.ConfigValue<?>> config = new HashMap<>();
     private final ForgeConfigSpec.BooleanValue chunkloading_recipe_enabled;
+    private final ForgeConfigSpec.BooleanValue ruined_warp_portals_enabled;
 
     CommonConfig(ForgeConfigSpec.Builder builder) {
         builder.comment("Ritual of Arcane Permanence").push("chunkloading");
         chunkloading_recipe_enabled = addConfig("ritual_enabled", (name) -> builder.comment("Should the default recipe for the ritual be enabled?").define(name, false));
+        builder.pop();
+        builder.comment("Structures").push("structures");
+        ruined_warp_portals_enabled = addConfig("ruined_warp_portals_enabled", (name) -> builder.comment("Should ruined warp portals spawn in the world?").define(name, true));
         builder.pop();
     }
 

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "ars_nouveau:block/smooth_sourcestone_large_bricks"
+  }
+}

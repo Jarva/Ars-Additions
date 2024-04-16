@@ -46,6 +46,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("block.ars_additions.polished_sourcestone_magelight_lantern", "Polished Sourcestone Magelight Lantern");
         this.add("block.ars_additions.magelight_lantern", "Magelight Lantern");
         this.add("block.ars_additions.soul_magelight_lantern", "Soul Magelight Lantern");
+        this.add("block.ars_additions.sourcestone_wall", "Sourcestone Wall");
+        this.add("block.ars_additions.polished_sourcestone_wall", "Polished Sourcestone Wall");
 
         // Items
 

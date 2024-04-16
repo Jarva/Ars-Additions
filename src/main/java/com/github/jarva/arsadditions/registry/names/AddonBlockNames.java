@@ -16,4 +16,7 @@ public class AddonBlockNames {
     public static final String SOURCESTONE_LANTERN = "sourcestone_lantern";
     public static final String POLISHED_SOURCESTONE_LANTERN = "polished_sourcestone_lantern";
     public static final String ARCHWOOD_LANTERN = "archwood_lantern";
+    public static final String WARP_NEXUS = "warp_nexus";
+    public static final String SOURCESTONE_WALL = "sourcestone_wall";
+    public static final String POLISHED_SOURCESTONE_WALL = "polished_sourcestone_wall";
 }

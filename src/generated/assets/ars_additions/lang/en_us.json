@@ -47,6 +47,7 @@
   "block.ars_additions.sourcestone_lantern": "Sourcestone Lantern",
   "block.ars_additions.sourcestone_magelight_lantern": "Sourcestone Magelight Lantern",
   "block.ars_additions.sourcestone_wall": "Sourcestone Wall",
+  "block.ars_additions.warp_nexus": "Warp Nexus (WIP)",
   "chat.ars_additions.codex_entry.congratulations": "Congratulations!",
   "chat.ars_additions.codex_entry.lore": "Teaches a random Tier %s glyph",
   "chat.ars_additions.codex_entry.no_glyphs": "You've learned all this codex can teach you",

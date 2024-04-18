@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/chain",
+  "render_type": "minecraft:cutout",
   "textures": {
     "all": "ars_additions:block/sourcestone_chain",
     "particle": "ars_additions:block/sourcestone_chain"

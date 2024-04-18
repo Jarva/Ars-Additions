@@ -68,7 +68,8 @@ public class BlockStateDatagen extends BlockStateProvider {
         ResourceLocation texture = getTextureLoc(block);
         ModelFile chain = models().withExistingParent(key(block).getPath(), mcLoc(ModelProvider.BLOCK_FOLDER + "/chain"))
                 .texture("particle", texture)
-                .texture("all", texture);
+                .texture("all", texture)
+                .renderType("cutout");
         getVariantBuilder(block).forAllStatesExcept(state -> {
             Direction.Axis axis = state.getValue(ChainBlock.AXIS);
             return ConfiguredModel.builder()

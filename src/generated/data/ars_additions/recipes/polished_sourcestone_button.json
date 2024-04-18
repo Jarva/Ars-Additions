@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ars_nouveau:smooth_sourcestone"
+    }
+  ],
+  "result": {
+    "item": "ars_additions:polished_sourcestone_button"
+  }
+}

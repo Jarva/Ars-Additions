@@ -21,12 +21,15 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        Block[] decorative = getBlocks(AddonBlockNames.DECORATIVE_SOURCESTONES);
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(decorative);
+
         Block[] walls = getBlocks(AddonBlockNames.WALLS);
         this.tag(BlockTags.WALLS).add(walls);
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(walls);
 
         Block[] buttons = getBlocks(AddonBlockNames.BUTTONS);
-        this.tag(BlockTags.WALLS).add(buttons);
+        this.tag(BlockTags.BUTTONS).add(buttons);
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(buttons);
 
         Block[] lanterns = getBlocks(AddonBlockNames.LANTERNS);

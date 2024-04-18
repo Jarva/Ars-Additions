@@ -70,6 +70,15 @@ public class DefaultLootDatagen extends LootTableProvider {
             for (String lantern : AddonBlockNames.LANTERNS) {
                 registerDropSelf(getBlock(lantern));
             }
+            for (String button : AddonBlockNames.BUTTONS) {
+                registerDropSelf(getBlock(button));
+            }
+            for (String decorativeSourcestone : AddonBlockNames.DECORATIVE_SOURCESTONES) {
+                registerDropSelf(getBlock(decorativeSourcestone));
+            }
+            for (String wall : AddonBlockNames.WALLS) {
+                registerDropSelf(getBlock(wall));
+            }
         }
 
         private void registerDropSelf(Block block) {

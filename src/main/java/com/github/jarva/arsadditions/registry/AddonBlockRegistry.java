@@ -50,8 +50,8 @@ public class AddonBlockRegistry {
         ENDER_SOURCE_JAR = registerBlockAndItem(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJar::new, (block) -> new EnderSourceJarItem(block.get(), defaultItemProperties()));
         ENDER_SOURCE_JAR_TILE = registerTile(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJarTile::new, () -> new Block[]{ENDER_SOURCE_JAR.get()});
 
-//        WARP_NEXUS = registerBlockAndItem(AddonBlockNames.WARP_NEXUS, WarpNexus::new);
-//        WARP_NEXUS_TILE = registerTile(AddonBlockNames.WARP_NEXUS, WarpNexusTile::new, () -> new Block[]{WARP_NEXUS.get()});
+        WARP_NEXUS = registerBlockAndItem(AddonBlockNames.WARP_NEXUS, WarpNexus::new);
+        WARP_NEXUS_TILE = registerTile(AddonBlockNames.WARP_NEXUS, WarpNexusTile::new, () -> new Block[]{WARP_NEXUS.get()});
 
         registerChains();
         registerMagelightLanterns();

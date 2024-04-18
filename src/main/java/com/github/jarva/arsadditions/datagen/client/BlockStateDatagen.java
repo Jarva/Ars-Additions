@@ -96,7 +96,9 @@ public class BlockStateDatagen extends BlockStateProvider {
     }
 
     private ModelFile lanternModel(Block block, boolean isHanging, ResourceLocation texture) {
-        return models().singleTexture(key(block).getPath(),
+        String path = key(block).getPath();
+        String name = isHanging ? path + "_hanging" : path;
+        return models().singleTexture(name,
                 mcLoc(ModelProvider.BLOCK_FOLDER + (isHanging ? "/template_hanging_lantern" : "/template_lantern")),
                 "lantern",
                 texture

@@ -4,7 +4,7 @@
       "model": "ars_additions:block/polished_sourcestone_magelight_lantern"
     },
     "hanging=true": {
-      "model": "ars_additions:block/polished_sourcestone_magelight_lantern"
+      "model": "ars_additions:block/polished_sourcestone_magelight_lantern_hanging"
     }
   }
 }

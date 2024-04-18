@@ -58,6 +58,7 @@ public class ExplorationWarpScroll extends Item {
 
             String displayName = "Explorer's Warp Portal";
             if (BlockRegistry.PORTAL_BLOCK.get().trySpawnPortal(serverLevel, pos, data, displayName)) {
+                ANCriteriaTriggers.rewardNearbyPlayers(Triggers.FIND_RUINED_PORTAL, serverLevel, pos, 10);
                 ANCriteriaTriggers.rewardNearbyPlayers(Triggers.CREATE_RUINED_PORTAL, serverLevel, pos, 10);
                 createTeleportDecoration(stack, serverLevel, pos);
                 return true;

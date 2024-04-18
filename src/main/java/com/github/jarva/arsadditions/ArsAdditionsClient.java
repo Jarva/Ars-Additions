@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions;
 
+import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
 import com.github.jarva.arsadditions.mixin.PageRelationsAccessor;
 import com.github.jarva.arsadditions.networking.NetworkHandler;
 import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent;
@@ -51,6 +53,11 @@ public class ArsAdditionsClient {
                     return FillUtil.getFillLevel(BET.getInt("source"), BET.getInt("max_source"));
                 });
             });
+        }
+
+        @SubscribeEvent
+        public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
+            event.registerBlockEntityRenderer(AddonBlockRegistry.WARP_NEXUS_TILE.get(), WarpNexusRenderer::new);
         }
         
 //        @SubscribeEvent

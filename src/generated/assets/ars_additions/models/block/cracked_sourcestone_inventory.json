@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "ars_additions:block/cracked_sourcestone"
+  }
+}

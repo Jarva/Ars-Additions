@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.registry;
 
+import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.block.EnderSourceJar;
 import com.github.jarva.arsadditions.block.MagelightLantern;
 import com.github.jarva.arsadditions.block.WarpNexus;
@@ -10,11 +11,13 @@ import com.github.jarva.arsadditions.item.EnderSourceJarItem;
 import com.github.jarva.arsadditions.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.DeferredRegister;
@@ -36,74 +39,84 @@ public class AddonBlockRegistry {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
 
+    public static RegistryObject<BlockEntityType<MagelightLanternTile>> MAGELIGHT_LANTERN_TILE;
     public static RegistryObject<EnderSourceJar> ENDER_SOURCE_JAR;
     public static RegistryObject<BlockEntityType<EnderSourceJarTile>> ENDER_SOURCE_JAR_TILE;
-
-    public static RegistryObject<ChainBlock> ARCHWOOD_CHAIN;
-    public static RegistryObject<ChainBlock> SOURCESTONE_CHAIN;
-    public static RegistryObject<ChainBlock> POLISHED_SOURCESTONE_CHAIN;
-    public static RegistryObject<ChainBlock> GOLDEN_CHAIN;
-
-    public static RegistryObject<MagelightLantern> GOLDEN_MAGELIGHT_LANTERN;
-    public static RegistryObject<MagelightLantern> ARCHWOOD_MAGELIGHT_LANTERN;
-    public static RegistryObject<MagelightLantern> SOURCESTONE_MAGELIGHT_LANTERN;
-    public static RegistryObject<MagelightLantern> POLISHED_SOURCESTONE_MAGELIGHT_LANTERN;
-    public static RegistryObject<MagelightLantern> SOUL_MAGELIGHT_LANTERN;
-    public static RegistryObject<MagelightLantern> MAGELIGHT_LANTERN;
-    public static RegistryObject<BlockEntityType<MagelightLanternTile>> MAGELIGHT_LANTERN_TILE;
-
-    public static RegistryObject<LanternBlock> GOLDEN_LANTERN;
-    public static RegistryObject<LanternBlock> ARCHWOOD_LANTERN;
-    public static RegistryObject<LanternBlock> SOURCESTONE_LANTERN;
-    public static RegistryObject<LanternBlock> POLISHED_SOURCESTONE_LANTERN;
 
     public static RegistryObject<WarpNexus> WARP_NEXUS;
     public static RegistryObject<BlockEntityType<WarpNexusTile>> WARP_NEXUS_TILE;
 
-    public static RegistryObject<WallBlock> SOURCESTONE_WALL;
-    public static RegistryObject<WallBlock> POLISHED_SOURCESTONE_WALL;
-
     static {
         ENDER_SOURCE_JAR = registerBlockAndItem(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJar::new, (block) -> new EnderSourceJarItem(block.get(), defaultItemProperties()));
-        ENDER_SOURCE_JAR_TILE = registerTile(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJarTile::new, ENDER_SOURCE_JAR);
+        ENDER_SOURCE_JAR_TILE = registerTile(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJarTile::new, () -> new Block[]{ENDER_SOURCE_JAR.get()});
 
-        ARCHWOOD_CHAIN = registerBlockAndItem(AddonBlockNames.ARCHWOOD_CHAIN, () -> new ChainBlock(BlockBehaviour.Properties.of().forceSolidOn().requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.CHAIN).noOcclusion()));
-        SOURCESTONE_CHAIN = registerBlockAndItem(AddonBlockNames.SOURCESTONE_CHAIN, () -> new ChainBlock(BlockBehaviour.Properties.of().forceSolidOn().requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.CHAIN).noOcclusion()));
-        POLISHED_SOURCESTONE_CHAIN = registerBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_CHAIN, () -> new ChainBlock(BlockBehaviour.Properties.of().forceSolidOn().requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.CHAIN).noOcclusion()));
-        GOLDEN_CHAIN = registerBlockAndItem(AddonBlockNames.GOLDEN_CHAIN, () -> new ChainBlock(BlockBehaviour.Properties.of().forceSolidOn().requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.CHAIN).noOcclusion()));
+//        WARP_NEXUS = registerBlockAndItem(AddonBlockNames.WARP_NEXUS, WarpNexus::new);
+//        WARP_NEXUS_TILE = registerTile(AddonBlockNames.WARP_NEXUS, WarpNexusTile::new, () -> new Block[]{WARP_NEXUS.get()});
 
-        GOLDEN_MAGELIGHT_LANTERN = registerBlockAndItem(AddonBlockNames.GOLDEN_MAGELIGHT_LANTERN, MagelightLantern::new);
-        ARCHWOOD_MAGELIGHT_LANTERN = registerBlockAndItem(AddonBlockNames.ARCHWOOD_MAGELIGHT_LANTERN, MagelightLantern::new);
-        SOURCESTONE_MAGELIGHT_LANTERN = registerBlockAndItem(AddonBlockNames.SOURCESTONE_MAGELIGHT_LANTERN, MagelightLantern::new);
-        POLISHED_SOURCESTONE_MAGELIGHT_LANTERN = registerBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_MAGELIGHT_LANTERN, MagelightLantern::new);
-        SOUL_MAGELIGHT_LANTERN = registerBlockAndItem(AddonBlockNames.SOUL_MAGELIGHT_LANTERN, MagelightLantern::new);
-        MAGELIGHT_LANTERN = registerBlockAndItem(AddonBlockNames.MAGELIGHT_LANTERN, MagelightLantern::new);
-
-        MAGELIGHT_LANTERN_TILE = registerTile(AddonBlockNames.MAGELIGHT_LANTERN, MagelightLanternTile::new, GOLDEN_MAGELIGHT_LANTERN, ARCHWOOD_MAGELIGHT_LANTERN, SOURCESTONE_MAGELIGHT_LANTERN, POLISHED_SOURCESTONE_MAGELIGHT_LANTERN, SOUL_MAGELIGHT_LANTERN, MAGELIGHT_LANTERN);
-        GOLDEN_LANTERN = registerBlockAndItem(AddonBlockNames.GOLDEN_LANTERN, AddonBlockRegistry::createLantern);
-        ARCHWOOD_LANTERN = registerBlockAndItem(AddonBlockNames.ARCHWOOD_LANTERN, AddonBlockRegistry::createLantern);
-        SOURCESTONE_LANTERN = registerBlockAndItem(AddonBlockNames.SOURCESTONE_LANTERN, AddonBlockRegistry::createLantern);
-        POLISHED_SOURCESTONE_LANTERN = registerBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_LANTERN, AddonBlockRegistry::createLantern);
-
-        WARP_NEXUS = registerBlockAndItem(AddonBlockNames.WARP_NEXUS, WarpNexus::new);
-        WARP_NEXUS_TILE = registerTile(AddonBlockNames.WARP_NEXUS, WarpNexusTile::new, WARP_NEXUS);
-
-        SOURCESTONE_WALL = registerBlockAndItem(AddonBlockNames.SOURCESTONE_WALL, () -> new WallBlock(BlockBehaviour.Properties.copy(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)).forceSolidOn()));
-        POLISHED_SOURCESTONE_WALL = registerBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_WALL, () -> new WallBlock(BlockBehaviour.Properties.copy(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)).forceSolidOn()));
+        registerChains();
+        registerMagelightLanterns();
+        registerLanterns();
+        MAGELIGHT_LANTERN_TILE = registerTile(AddonBlockNames.MAGELIGHT_LANTERN, MagelightLanternTile::new, () -> getBlocks(AddonBlockNames.MAGELIGHT_LANTERNS));
+        registerWalls();
+        registerButtons();
+        registerDecorativeSourcestone();
     }
 
-    public static LanternBlock createLantern() {
-        return new LanternBlock(
-                BlockBehaviour.Properties.of()
-                        .mapColor(MapColor.METAL)
-                        .forceSolidOn()
-                        .requiresCorrectToolForDrops()
-                        .strength(3.5F)
-                        .sound(SoundType.LANTERN)
-                        .lightLevel((arg) -> 15)
-                        .noOcclusion()
-                        .pushReaction(PushReaction.DESTROY)
-        );
+    private static void registerDecorativeSourcestone() {
+        for (String sourcestone : AddonBlockNames.DECORATIVE_SOURCESTONES) {
+            registerBlockAndItem(sourcestone, () -> new Block(
+                    BlockBehaviour.Properties.copy(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE))
+            ));
+        }
+    }
+
+    private static void registerChains() {
+        for (String chain : AddonBlockNames.CHAINS) {
+            registerBlockAndItem(chain, () -> new ChainBlock(BlockBehaviour.Properties.of().forceSolidOn().requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.CHAIN).noOcclusion()));
+        }
+    }
+
+    private static void registerMagelightLanterns() {
+        for (String lantern : AddonBlockNames.MAGELIGHT_LANTERNS) {
+            registerBlockAndItem(lantern, MagelightLantern::new);
+        }
+    }
+
+    private static void registerLanterns() {
+        for (String lantern : AddonBlockNames.LANTERNS) {
+            registerBlockAndItem(lantern, () -> new LanternBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.METAL)
+                            .forceSolidOn()
+                            .requiresCorrectToolForDrops()
+                            .strength(3.5F)
+                            .sound(SoundType.LANTERN)
+                            .lightLevel((arg) -> 15)
+                            .noOcclusion()
+                            .pushReaction(PushReaction.DESTROY)
+            ));
+        }
+    }
+
+    private static void registerWalls() {
+        for (String wall : AddonBlockNames.WALLS) {
+            registerBlockAndItem(wall, () -> new WallBlock(
+                    BlockBehaviour.Properties.copy(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE))
+                            .forceSolidOn()
+            ));
+        }
+    }
+
+    private static void registerButtons() {
+        for (String button : AddonBlockNames.BUTTONS) {
+            registerBlockAndItem(button, () -> new ButtonBlock(
+                    BlockBehaviour.Properties.of()
+                            .noCollission()
+                            .strength(0.5f)
+                            .pushReaction(PushReaction.DESTROY)
+                    , BlockSetType.STONE, 20, false
+            ));
+        }
     }
 
     public static BlockItem getDefaultBlockItem(Block block) {
@@ -121,7 +134,15 @@ public class AddonBlockRegistry {
         return block;
     }
 
-    public static <T extends BlockEntity, B extends Block> RegistryObject<BlockEntityType<T>> registerTile(String regName, BlockEntityType.BlockEntitySupplier<T> tile, RegistryObject<? extends Block>... block){
-        return BLOCK_ENTITIES.register(regName, () -> BlockEntityType.Builder.of(tile, Arrays.stream(block).map(RegistryObject::get).toArray(Block[]::new)).build(null));
+    public static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerTile(String regName, BlockEntityType.BlockEntitySupplier<T> tile, Supplier<Block[]> block){
+        return BLOCK_ENTITIES.register(regName, () -> BlockEntityType.Builder.of(tile, block.get()).build(null));
+    }
+
+    public static Block getBlock(String s) {
+        return ForgeRegistries.BLOCKS.getValue(new ResourceLocation(ArsAdditions.MODID, s));
+    }
+
+    public static Block[] getBlocks(String[] names) {
+        return Arrays.stream(names).map(AddonBlockRegistry::getBlock).toList().toArray(new Block[]{});
     }
 }

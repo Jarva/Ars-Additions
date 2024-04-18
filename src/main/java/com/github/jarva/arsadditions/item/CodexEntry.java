@@ -1,6 +1,6 @@
 package com.github.jarva.arsadditions.item;
 
-import com.github.jarva.arsadditions.datagen.tags.ItemTagProvider;
+import com.github.jarva.arsadditions.datagen.tags.ItemTagDatagen;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.api.spell.SpellTier;
@@ -74,7 +74,7 @@ public class CodexEntry extends Item {
                 .values()
                 .stream()
                 .filter(Config::isGlyphEnabled)
-                .filter(glyph -> !new ItemStack(glyph.getGlyph()).is(ItemTagProvider.FORGOTTEN_KNOWLEDGE_GLYPHS))
+                .filter(glyph -> !new ItemStack(glyph.getGlyph()).is(ItemTagDatagen.FORGOTTEN_KNOWLEDGE_GLYPHS))
                 .filter(glyph -> !startingSpells.contains(glyph))
                 .filter(glyph -> !playerCap.knowsGlyph(glyph));
     }

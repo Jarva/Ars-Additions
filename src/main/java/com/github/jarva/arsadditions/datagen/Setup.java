@@ -1,7 +1,8 @@
 package com.github.jarva.arsadditions.datagen;
 
-import com.github.jarva.arsadditions.datagen.tags.BlockTagProvider;
-import com.github.jarva.arsadditions.datagen.tags.ItemTagProvider;
+import com.github.jarva.arsadditions.datagen.client.BlockStateDatagen;
+import com.github.jarva.arsadditions.datagen.tags.BlockTagDatagen;
+import com.github.jarva.arsadditions.datagen.tags.ItemTagDatagen;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,14 +20,15 @@ public class Setup {
     public static void gatherData(GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
 
-        gen.addProvider(event.includeServer(), new PatchouliProvider(gen));
+        gen.addProvider(event.includeServer(), new PatchouliDatagen(gen));
         gen.addProvider(event.includeServer(), new LangDatagen(gen.getPackOutput(), root, "en_us"));
-        gen.addProvider(event.includeServer(), new RecipeProvider(gen.getPackOutput()));
-        gen.addProvider(event.includeServer(), new EnchantingAppProvider(gen));
-        gen.addProvider(event.includeServer(), new DefaultLootProvider(gen.getPackOutput()));
-        gen.addProvider(event.includeServer(), new GlyphProvider(gen));
-        gen.addProvider(event.includeServer(), new ItemTagProvider(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
-        gen.addProvider(event.includeServer(), new BlockTagProvider(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
-        gen.addProvider(event.includeServer(), new AdvancementProvider(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new RecipeDatagen(gen.getPackOutput()));
+        gen.addProvider(event.includeServer(), new EnchantingAppDatagen(gen));
+        gen.addProvider(event.includeServer(), new DefaultLootDatagen(gen.getPackOutput()));
+        gen.addProvider(event.includeServer(), new GlyphDatagen(gen));
+        gen.addProvider(event.includeServer(), new ItemTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new BlockTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new AdvancementDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new BlockStateDatagen(gen.getPackOutput(), event.getExistingFileHelper()));
     }
 }

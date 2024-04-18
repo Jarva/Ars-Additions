@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_wall_post",
+  "textures": {
+    "wall": "ars_additions:block/cracked_polished_sourcestone"
+  }
+}

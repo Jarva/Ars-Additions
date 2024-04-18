@@ -48,6 +48,16 @@ public class LangDatagen extends LanguageProvider {
         this.add("block.ars_additions.soul_magelight_lantern", "Soul Magelight Lantern");
         this.add("block.ars_additions.sourcestone_wall", "Sourcestone Wall");
         this.add("block.ars_additions.polished_sourcestone_wall", "Polished Sourcestone Wall");
+        this.add("block.ars_additions.cracked_sourcestone_wall", "Cracked Sourcestone Wall");
+        this.add("block.ars_additions.cracked_polished_sourcestone_wall", "Cracked Polished Sourcestone Wall");
+        this.add("block.ars_additions.sourcestone_button", "Sourcestone Button");
+        this.add("block.ars_additions.polished_sourcestone_button", "Polished Sourcestone Button");
+        this.add("block.ars_additions.cracked_sourcestone", "Cracked Sourcestone");
+        this.add("block.ars_additions.cracked_polished_sourcestone", "Cracked Polished Sourcestone");
+        this.add("block.ars_additions.cracked_sourcestone_large_bricks", "Cracked Sourcestone: Large Bricks");
+        this.add("block.ars_additions.cracked_polished_sourcestone_large_bricks", "Cracked Polished Sourcestone: Large Bricks");
+        this.add("block.ars_additions.cracked_sourcestone_small_bricks", "Cracked Sourcestone: Small Bricks");
+        this.add("block.ars_additions.cracked_polished_sourcestone_small_bricks", "Cracked Polished Sourcestone: Small Bricks");
 
         // Items
 

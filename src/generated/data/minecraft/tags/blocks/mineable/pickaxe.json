@@ -1,0 +1,24 @@
+{
+  "values": [
+    "ars_additions:sourcestone_wall",
+    "ars_additions:polished_sourcestone_wall",
+    "ars_additions:cracked_sourcestone_wall",
+    "ars_additions:cracked_polished_sourcestone_wall",
+    "ars_additions:sourcestone_button",
+    "ars_additions:polished_sourcestone_button",
+    "ars_additions:golden_lantern",
+    "ars_additions:sourcestone_lantern",
+    "ars_additions:polished_sourcestone_lantern",
+    "ars_additions:archwood_lantern",
+    "ars_additions:magelight_lantern",
+    "ars_additions:golden_magelight_lantern",
+    "ars_additions:sourcestone_magelight_lantern",
+    "ars_additions:polished_sourcestone_magelight_lantern",
+    "ars_additions:archwood_magelight_lantern",
+    "ars_additions:soul_magelight_lantern",
+    "ars_additions:archwood_chain",
+    "ars_additions:sourcestone_chain",
+    "ars_additions:polished_sourcestone_chain",
+    "ars_additions:golden_chain"
+  ]
+}

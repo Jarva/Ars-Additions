@@ -20,7 +20,7 @@ loom {
     runs {
         data {
             data()
-            programArgs "--all", "--mod", "ars_additions"
+            programArgs "--all", "--mod", "ars_additions", "--existing-mod", "ars_nouveau"
             programArgs "--existing", file("src/main/resources").absolutePath
             programArgs "--output", generatedResources.absolutePath
         }

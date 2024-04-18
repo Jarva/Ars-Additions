@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/chain",
+  "textures": {
+    "all": "ars_additions:block/golden_chain",
+    "particle": "ars_additions:block/golden_chain"
+  }
+}

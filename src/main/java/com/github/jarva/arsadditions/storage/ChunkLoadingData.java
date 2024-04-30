@@ -1,5 +1,7 @@
 package com.github.jarva.arsadditions.storage;
 
+import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.config.ServerConfig;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -10,7 +12,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.ChunkSource;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
 
@@ -83,11 +84,21 @@ public class ChunkLoadingData extends SavedData {
         return getChunks(server, uuid).values().stream().map(Set::size).reduce(0, Integer::sum);
     }
 
+    private static void logInfo(boolean shouldLoad, ChunkPos pos, UUID uuid) {
+        if (!ServerConfig.SERVER.chunkloading_log_loading.get()) return;
+        if (shouldLoad) {
+            ArsAdditions.LOGGER.info("[Chunk Loader] Forceloading {} for {}", pos, uuid);
+        } else {
+            ArsAdditions.LOGGER.info("[Chunk Loader] Unloading {} for {}", pos, uuid);
+        }
+    }
+
     public static boolean updateChunk(ServerLevel level, UUID uuid, ChunkPos pos, boolean shouldLoad) {
         boolean updated = getData(level).updateChunk(uuid, pos, shouldLoad);
         boolean isLoaded = level.getForcedChunks().contains(pos.toLong());
         if (isLoaded != shouldLoad) {
-            level.getChunkSource().updateChunkForced(pos, shouldLoad);
+            logInfo(shouldLoad, pos, uuid);
+            level.setChunkForced(pos.x, pos.z, shouldLoad);
         }
         return updated;
     }
@@ -97,11 +108,11 @@ public class ChunkLoadingData extends SavedData {
             ServerLevel dim = server.getLevel(entry.getKey());
             if (dim == null) continue;
             LongSet forcedChunks = dim.getForcedChunks();
-            ChunkSource source = dim.getChunkSource();
             for (ChunkPos chunk : entry.getValue()) {
                 boolean isLoaded = forcedChunks.contains(chunk.toLong());
                 if (!isLoaded) {
-                    source.updateChunkForced(chunk, shouldLoad);
+                    logInfo(shouldLoad, chunk, uuid);
+                    dim.setChunkForced(chunk.x, chunk.z, shouldLoad);
                 }
             }
         }

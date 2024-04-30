@@ -1,0 +1,88 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ars_additions:codex_entry",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 4.0
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ars_nouveau:bombegranate_pod",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 8.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ars_nouveau:frostaya_pod",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 8.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ars_nouveau:bastion_pod",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 8.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ars_nouveau:mendosteen_pod",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "uniform",
+                "min": 1.0,
+                "max": 8.0
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ars_additions:chests/warp_nexus"
+}

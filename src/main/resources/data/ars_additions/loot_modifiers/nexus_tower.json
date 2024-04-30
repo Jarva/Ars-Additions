@@ -1,0 +1,20 @@
+{
+  "type": "ars_nouveau:dungeon_loot",
+  "common_chance": 0.8,
+  "common_rolls": 8,
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "forge:loot_table_id",
+          "loot_table_id": "ars_additions:chests/nexus_tower"
+        }
+      ]
+    }
+  ],
+  "rare_chance": 0.2,
+  "rare_rolls": 1,
+  "uncommon_chance": 0.5,
+  "uncommon_rolls": 4
+}

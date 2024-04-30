@@ -56,7 +56,7 @@ public class RitualChunkLoading extends AbstractRitual {
 
         ticksSinceStart++;
 
-        if (ticksSinceStart % 120 == 0) {
+        if (ticksSinceStart % 20 == 0) {
             setChunkLoaded(true);
         }
 
@@ -72,8 +72,8 @@ public class RitualChunkLoading extends AbstractRitual {
         int radius = getRadius();
 
         ChunkPos chunk = new ChunkPos(getPos());
-        for (int x = chunk.x - radius; x < chunk.x + radius; x++) {
-            for (int z = chunk.z - radius; z < chunk.z + radius; z++) {
+        for (int x = chunk.x - radius; x <= chunk.x + radius; x++) {
+            for (int z = chunk.z - radius; z <= chunk.z + radius; z++) {
                 chunks.add(new ChunkPos(x, z));
             }
         }
@@ -205,5 +205,14 @@ public class RitualChunkLoading extends AbstractRitual {
         if (tag.contains("activatedPlayer")) {
             activatedPlayer = tag.getUUID("activatedPlayer");
         }
+    }
+
+    @Override
+    public boolean canBeTraded() {
+        return false;
+    }
+
+    public boolean canBeLooted() {
+        return false;
     }
 }

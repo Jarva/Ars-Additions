@@ -2,7 +2,7 @@ package com.github.jarva.arsadditions;
 
 import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
 import com.github.jarva.arsadditions.mixin.PageRelationsAccessor;
-import com.github.jarva.arsadditions.networking.NetworkHandler;
+import com.github.jarva.arsadditions.networking.OpenTerminalPacket;
 import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.util.FillUtil;
 import com.hollingsworth.arsnouveau.ArsNouveau;
@@ -59,11 +59,6 @@ public class ArsAdditionsClient {
         public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
             event.registerBlockEntityRenderer(AddonBlockRegistry.WARP_NEXUS_TILE.get(), WarpNexusRenderer::new);
         }
-        
-//        @SubscribeEvent
-//        public static void registerModels(ModelEvent.RegisterAdditional evt) {
-//            evt.register(ReliquaryRenderer.MODEL_LOCATION);
-//        }
     }
 
     @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -75,7 +70,7 @@ public class ArsAdditionsClient {
                 return;
 
             if(openTerm.consumeClick()) {
-                NetworkHandler.openTerminal();
+                OpenTerminalPacket.openTerminal();
             }
         }
 

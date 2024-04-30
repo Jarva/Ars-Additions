@@ -1,0 +1,20 @@
+{
+  "forge:conditions": [
+    {
+      "type": "ars_additions:config",
+      "config": "nexus_tower_enabled"
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 41285528,
+    "separation": 15,
+    "spacing": 40
+  },
+  "structures": [
+    {
+      "structure": "ars_additions:nexus_tower",
+      "weight": 1
+    }
+  ]
+}

@@ -18,10 +18,10 @@ public class ServerConfig {
     public final ForgeConfigSpec.ConfigValue<String> chunkloading_radius_increment_item;
     public final ForgeConfigSpec.IntValue chunkloading_radius_increment_max;
     public final ForgeConfigSpec.IntValue chunkloading_player_limit;
+    public final ForgeConfigSpec.BooleanValue chunkloading_log_loading;
     public final ForgeConfigSpec.IntValue reliquary_cost_player;
     public final ForgeConfigSpec.IntValue reliquary_cost_entity;
     public final ForgeConfigSpec.IntValue reliquary_cost_location;
-    private final ForgeConfigSpec.BooleanValue chunkloading_recipe_enabled;
 
     ServerConfig(ForgeConfigSpec.Builder builder) {
         builder.comment("Ritual of Arcane Permanence").push("chunkloading");
@@ -35,7 +35,7 @@ public class ServerConfig {
         chunkloading_radius_increment_max = addConfig("radius_increment_max", (name) -> builder.comment("What's the maximum amount of augmented increases the ritual should accept?").defineInRange(name, 1, 1, Integer.MAX_VALUE));
         chunkloading_require_online = addConfig("require_online", (name) -> builder.comment("Should the ritual require the player who started it to be online?").define(name, true));
         chunkloading_player_limit = addConfig("max_rituals", (name) -> builder.comment("How many rituals should players be able to run?").defineInRange(name, Integer.MAX_VALUE, 1, Integer.MAX_VALUE));
-        chunkloading_recipe_enabled = addConfig("ritual_enabled", (name) -> builder.comment("Should the default recipe for the ritual be enabled?").define(name, false));
+        chunkloading_log_loading = addConfig("log_chunkloading", (name) -> builder.comment("Should the server log when a chunk is loaded/unloaded?").define(name, false));
         builder.pop();
 
         builder.comment("Reliquary").push("mark_and_recall");

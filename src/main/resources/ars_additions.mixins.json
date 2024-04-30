@@ -8,7 +8,8 @@
     "EffectBlinkMixin",
     "PageRelationsAccessor",
     "RitualBrazierBlockMixin",
-    "SlotMixin"
+    "SlotMixin",
+    "StructureTemplateMixin"
   ],
   "client": [],
   "injectors": {

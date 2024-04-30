@@ -1,0 +1,591 @@
+{
+  "processors": [
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:mossy_stone_bricks"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:cracked_stone_bricks"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:stone"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:andesite"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:tuff"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "minecraft:stone_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:cobblestone"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "ars_nouveau:sourcestone_large_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_additions:cracked_sourcestone_large_bricks"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "ars_nouveau:sourcestone_large_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:gilded_sourcestone_large_bricks",
+            "Properties": {
+              "facing": "north"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "ars_nouveau:sourcestone_large_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:blue_terracotta"
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "ars_nouveau:sourcestone_large_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:sourcestone_alternating"
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "minecraft:stone_brick_slab",
+              "Properties": {
+                "type": "top",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:mossy_stone_brick_slab",
+            "Properties": {
+              "type": "top",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "minecraft:stone_brick_slab",
+              "Properties": {
+                "type": "bottom",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:mossy_stone_brick_slab",
+            "Properties": {
+              "type": "bottom",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block": "ars_nouveau:sourcestone_large_bricks",
+            "predicate_type": "minecraft:random_block_match",
+            "probability": 0.2
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:sourcestone_alternating"
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_additions:warp_nexus",
+              "Properties": {
+                "half": "lower",
+                "requires_source": "true"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_additions:warp_nexus",
+            "Properties": {
+              "half": "lower",
+              "requires_source": "false"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Inventory": {
+                "Items": [
+                  {
+                    "Count": 1,
+                    "Slot": 0,
+                    "id": "ars_nouveau:stable_warp_scroll"
+                  }
+                ]
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_additions:warp_nexus",
+              "Properties": {
+                "half": "lower",
+                "requires_source": "true"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_additions:warp_nexus",
+            "Properties": {
+              "half": "lower",
+              "requires_source": "true"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "Inventory": {
+                "Items": [
+                  {
+                    "Count": 1,
+                    "Slot": 0,
+                    "id": "ars_nouveau:stable_warp_scroll"
+                  }
+                ]
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_additions:warp_nexus",
+              "Properties": {
+                "half": "lower",
+                "requires_source": "false"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_additions:warp_nexus",
+            "Properties": {
+              "half": "lower",
+              "requires_source": "false"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "itemStack": {
+                "Count": 1,
+                "id": "ars_nouveau:starbuncle_charm",
+                "tag": {
+                  "bio": "Warning: Not to leave unsupervised",
+                  "color": "gray",
+                  "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
+                }
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:scribes_table",
+              "Properties": {
+                "facing": "north",
+                "part": "head"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:scribes_table",
+            "Properties": {
+              "facing": "north",
+              "part": "head"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "itemStack": {
+                "Count": 1,
+                "id": "ars_nouveau:starbuncle_charm",
+                "tag": {
+                  "bio": "Warning: Not to leave unsupervised",
+                  "color": "gray",
+                  "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
+                }
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:scribes_table",
+              "Properties": {
+                "facing": "south",
+                "part": "head"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:scribes_table",
+            "Properties": {
+              "facing": "south",
+              "part": "head"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "itemStack": {
+                "Count": 1,
+                "id": "ars_nouveau:starbuncle_charm",
+                "tag": {
+                  "bio": "Warning: Not to leave unsupervised",
+                  "color": "gray",
+                  "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
+                }
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:scribes_table",
+              "Properties": {
+                "facing": "west",
+                "part": "head"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:scribes_table",
+            "Properties": {
+              "facing": "west",
+              "part": "head"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "itemStack": {
+                "Count": 1,
+                "id": "ars_nouveau:starbuncle_charm",
+                "tag": {
+                  "bio": "Warning: Not to leave unsupervised",
+                  "color": "gray",
+                  "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
+                }
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:scribes_table",
+              "Properties": {
+                "facing": "east",
+                "part": "head"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:scribes_table",
+            "Properties": {
+              "facing": "east",
+              "part": "head"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "itemStack": {
+                "Count": 1,
+                "id": "ars_nouveau:starbuncle_charm",
+                "tag": {
+                  "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                  "color": "pink",
+                  "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
+                }
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:scribes_table",
+              "Properties": {
+                "facing": "north",
+                "part": "head"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:scribes_table",
+            "Properties": {
+              "facing": "north",
+              "part": "head"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "itemStack": {
+                "Count": 1,
+                "id": "ars_nouveau:starbuncle_charm",
+                "tag": {
+                  "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                  "color": "pink",
+                  "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
+                }
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:scribes_table",
+              "Properties": {
+                "facing": "south",
+                "part": "head"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:scribes_table",
+            "Properties": {
+              "facing": "south",
+              "part": "head"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "itemStack": {
+                "Count": 1,
+                "id": "ars_nouveau:starbuncle_charm",
+                "tag": {
+                  "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                  "color": "pink",
+                  "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
+                }
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:scribes_table",
+              "Properties": {
+                "facing": "west",
+                "part": "head"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:scribes_table",
+            "Properties": {
+              "facing": "west",
+              "part": "head"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "itemStack": {
+                "Count": 1,
+                "id": "ars_nouveau:starbuncle_charm",
+                "tag": {
+                  "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                  "color": "pink",
+                  "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
+                }
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:scribes_table",
+              "Properties": {
+                "facing": "east",
+                "part": "head"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:scribes_table",
+            "Properties": {
+              "facing": "east",
+              "part": "head"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

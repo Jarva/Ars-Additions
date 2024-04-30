@@ -32,7 +32,7 @@ public class LangDatagen extends LanguageProvider {
         // Blocks
 
         this.add("block.ars_additions.ender_source_jar", "Ender Source Jar");
-        this.add("block.ars_additions.warp_nexus", "Warp Nexus (WIP)");
+        this.add("block.ars_additions.warp_nexus", "Warp Nexus");
         this.add("block.ars_additions.archwood_chain", "Archwood Chain");
         this.add("block.ars_additions.golden_chain", "Golden Chain");
         this.add("block.ars_additions.sourcestone_chain", "Sourcestone Chain");
@@ -68,11 +68,19 @@ public class LangDatagen extends LanguageProvider {
         this.add("item.ars_additions.lost_codex_entry", "Lost Codex Entry");
         this.add("item.ars_additions.ancient_codex_entry", "Ancient Codex Entry");
         this.add("item.ars_additions.exploration_warp_scroll", "Explorer's Warp Scroll");
+        this.add("item.ars_additions.nexus_warp_scroll", "Nexus Warp Scroll");
         this.add("item.ars_additions.unstable_reliquary", "Unstable Reliquary");
+
+        // Paintings
+
+        this.add("painting.ars_additions.snoozebuncle.title", "Snoozebuncle");
+        this.add("painting.ars_additions.snoozebuncle.author", "Gootastic");
 
         // Tooltips
 
         this.add("tooltip.ars_additions.exploration_warp_scroll.use", "Throw into the frame of a ruined warp portal or press %s to teleport.");
+        this.add("tooltip.ars_additions.exploration_warp_scroll.desc", "This ancient warp scroll is filled to the brim with unstable magic.");
+        this.add("tooltip.ars_additions.exploration_warp_scroll.locating", "Locating Structure...");
 
         this.add("tooltip.ars_additions.reliquary.marked", "%s");
         this.add("tooltip.ars_additions.reliquary.marked.name", "%s \"%s\"");

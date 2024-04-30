@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Slot.class)
-public class SlotMixin {
+public abstract class SlotMixin {
     @Shadow @Final public Container container;
 
     @Inject(method = "set", at = @At(value = "HEAD"))

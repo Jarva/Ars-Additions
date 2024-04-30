@@ -3,6 +3,7 @@ package com.github.jarva.arsadditions.datagen;
 import com.github.jarva.arsadditions.datagen.client.BlockStateDatagen;
 import com.github.jarva.arsadditions.datagen.tags.BlockTagDatagen;
 import com.github.jarva.arsadditions.datagen.tags.ItemTagDatagen;
+import com.github.jarva.arsadditions.datagen.worldgen.ProcessorDatagen;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,6 +27,7 @@ public class Setup {
         gen.addProvider(event.includeServer(), new EnchantingAppDatagen(gen));
         gen.addProvider(event.includeServer(), new DefaultLootDatagen(gen.getPackOutput()));
         gen.addProvider(event.includeServer(), new GlyphDatagen(gen));
+        gen.addProvider(event.includeServer(), new ProcessorDatagen(gen));
         gen.addProvider(event.includeServer(), new ItemTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), new BlockTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), new AdvancementDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));

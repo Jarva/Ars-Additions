@@ -1,6 +1,5 @@
 package com.github.jarva.arsadditions.loot.functions;
 
-import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.registry.AddonLootItemFunctionsRegistry;
 import com.github.jarva.arsadditions.util.LocateUtil;
@@ -68,16 +67,9 @@ public class ExplorationScrollFunction extends LootItemConditionalFunction {
         if (origin == null) return stack;
 
         ServerLevel level = context.getLevel();
-        HolderSet<Structure> holderSet = this.resource != null ? LocateUtil.getFromResource(level, this.resource) : LocateUtil.getFromTag(level, this.tag);
-        LocateUtil.locate(level, holderSet, BlockPos.containing(origin), this.searchRadius, this.skipKnownStructures, pair -> {
-            BlockPos blockPos = pair.getFirst();
-            if (blockPos != null) {
-                LocateUtil.setScrollData(level, stack, blockPos);
-            } else {
-                ArsAdditions.LOGGER.warn("Unable to locate structure: {}", this.resource != null ? this.resource.location().toString() : this.tag.location().toString());
-            }
-        });
+        HolderSet<Structure> holderSet = this.resource != null ? LocateUtil.holderFromResource(level, this.resource) : LocateUtil.holderFromTag(level, this.tag);
 
+        LocateUtil.locateWithState(stack, level, holderSet, BlockPos.containing(origin), searchRadius, skipKnownStructures);
         return stack;
     }
 

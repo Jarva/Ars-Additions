@@ -7,10 +7,13 @@ import com.github.jarva.arsadditions.block.WarpNexus;
 import com.github.jarva.arsadditions.block.tile.EnderSourceJarTile;
 import com.github.jarva.arsadditions.block.tile.MagelightLanternTile;
 import com.github.jarva.arsadditions.block.tile.WarpNexusTile;
+import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
 import com.github.jarva.arsadditions.item.EnderSourceJarItem;
 import com.github.jarva.arsadditions.registry.names.AddonBlockNames;
+import com.hollingsworth.arsnouveau.common.items.RendererBlockItem;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.*;
@@ -50,7 +53,12 @@ public class AddonBlockRegistry {
         ENDER_SOURCE_JAR = registerBlockAndItem(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJar::new, (block) -> new EnderSourceJarItem(block.get(), defaultItemProperties()));
         ENDER_SOURCE_JAR_TILE = registerTile(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJarTile::new, () -> new Block[]{ENDER_SOURCE_JAR.get()});
 
-        WARP_NEXUS = registerBlockAndItem(AddonBlockNames.WARP_NEXUS, WarpNexus::new);
+        WARP_NEXUS = registerBlockAndItem(AddonBlockNames.WARP_NEXUS, WarpNexus::new, (block) -> new RendererBlockItem(block.get(), defaultItemProperties()) {
+            @Override
+            public Supplier<BlockEntityWithoutLevelRenderer> getRenderer() {
+                return WarpNexusRenderer::getISTER;
+            }
+        });
         WARP_NEXUS_TILE = registerTile(AddonBlockNames.WARP_NEXUS, WarpNexusTile::new, () -> new Block[]{WARP_NEXUS.get()});
 
         registerChains();

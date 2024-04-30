@@ -8,4 +8,5 @@ public class AddonItemNames {
     public static final String CODEX_ENTRY_ANCIENT = "ancient_codex_entry";
     public static final String UNSTABLE_RELIQUARY = "unstable_reliquary";
     public static final String EXPLORATION_WARP_SCROLL = "exploration_warp_scroll";
+    public static final String NEXUS_WARP_SCROLL = "nexus_warp_scroll";
 }

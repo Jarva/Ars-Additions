@@ -2,6 +2,7 @@ package com.github.jarva.arsadditions.menu;
 
 import com.github.jarva.arsadditions.capability.CapabilityRegistry;
 import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.world.entity.player.Inventory;
@@ -39,7 +40,7 @@ public class WarpNexusMenu  extends AbstractContainerMenu {
                 this.addSlot(new SlotItemHandler(handler, column + row * 3, 62 + column * 18, 17 + row * 18) {
                     @Override
                     public boolean mayPlace(@NotNull ItemStack stack) {
-                        boolean isWarpScroll = stack.is(ItemsRegistry.WARP_SCROLL.get()) || stack.is(ItemsRegistry.STABLE_WARP_SCROLL.get());
+                        boolean isWarpScroll = stack.is(ItemsRegistry.WARP_SCROLL.get()) || stack.is(ItemsRegistry.STABLE_WARP_SCROLL.get()) || stack.is(AddonItemRegistry.NEXUS_WARP_SCROLL.get());
                         if (!isWarpScroll) return false;
 
                         WarpScroll.WarpScrollData data = WarpScroll.WarpScrollData.get(stack);
@@ -94,6 +95,11 @@ public class WarpNexusMenu  extends AbstractContainerMenu {
         slot.onTake(player, item);
 
         return itemStack;
+    }
+
+    @Override
+    public void sendAllDataToRemote() {
+        super.sendAllDataToRemote();
     }
 
     @Override

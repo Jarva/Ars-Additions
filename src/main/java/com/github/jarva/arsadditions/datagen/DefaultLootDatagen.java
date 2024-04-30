@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.block.WarpNexus;
 import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.registry.names.AddonBlockNames;
 import net.minecraft.data.PackOutput;
@@ -79,6 +80,19 @@ public class DefaultLootDatagen extends LootTableProvider {
             for (String wall : AddonBlockNames.WALLS) {
                 registerDropSelf(getBlock(wall));
             }
+
+            WarpNexus warpNexus = AddonBlockRegistry.WARP_NEXUS.get();
+            LootPool.Builder nexusBuilder = LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1))
+                    .add(LootItem.lootTableItem(warpNexus)
+                            .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+                            .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                                    .copy("Inventory", "BlockEntityTag.Inventory", CopyNbtFunction.MergeStrategy.REPLACE)
+                                    .copy("color", "BlockEntityTag.color", CopyNbtFunction.MergeStrategy.REPLACE)
+                            )
+                    );
+            this.list.add(warpNexus);
+            this.add(warpNexus, LootTable.lootTable().withPool(nexusBuilder));
         }
 
         private void registerDropSelf(Block block) {

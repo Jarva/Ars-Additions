@@ -1,6 +1,7 @@
 {
   "replace": false,
   "entries": [
-    "ars_additions:ruined_portal"
+    "ars_additions:ruined_portal",
+    "ars_additions:nexus_tower"
   ]
 }

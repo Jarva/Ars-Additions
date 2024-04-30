@@ -1,6 +1,8 @@
 package com.github.jarva.arsadditions.capability;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.networking.SyncNexusPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
@@ -27,8 +29,8 @@ public class CapabilityRegistry {
     public static class CapabilityEventHandler {
         @SubscribeEvent
         public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
-            if (event.getObject() instanceof Player) {
-                event.addCapability(NexusCapability.IDENTIFIER, new NexusCapability());
+            if (event.getObject() instanceof Player player) {
+                event.addCapability(NexusCapability.IDENTIFIER, new NexusCapability(player));
             }
         }
         @SubscribeEvent
@@ -42,10 +44,19 @@ public class CapabilityRegistry {
             Player old = event.getOriginal();
             old.reviveCaps();
             getNexusScrolls(old).ifPresent(oldNexus -> getNexusScrolls(event.getEntity()).ifPresent(newNexus -> {
-
+                newNexus.deserializeNBT(oldNexus.serializeNBT());
             }));
 
             old.invalidateCaps();
         }
+
+        @SubscribeEvent
+        public static void onPlayerLoginEvent(PlayerEvent.PlayerLoggedInEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player) {
+                SyncNexusPacket.syncCapability(player);
+            }
+        }
+
+
     }
 }

@@ -1,9 +1,11 @@
 package com.github.jarva.arsadditions.capability;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.networking.SyncNexusPacket;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -13,8 +15,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class NexusCapability implements INBTSerializable<CompoundTag>, ICapabilityProvider {
+    private final Player player;
+
+    public NexusCapability(Player player) {
+        this.player = player;
+    }
     public static final ResourceLocation IDENTIFIER = ArsAdditions.prefix("nexus");
-    private final ItemStackHandler inventory = new ItemStackHandler(9) {};
+    private final ItemStackHandler inventory = new ItemStackHandler(9) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            SyncNexusPacket.syncCapability(NexusCapability.this.player);
+        }
+    };
     private final LazyOptional<ItemStackHandler> optional = LazyOptional.of(() -> this.inventory);
 
     @Override

@@ -70,7 +70,14 @@ repositories {
 
     maven { url 'https://jitpack.io' }
 
-    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroupByRegex("software\\.bernie.*")
+            includeGroup("com.eliotlash.mclib")
+        }
+    }
 
     exclusiveContent {
         forRepository {
@@ -97,6 +104,7 @@ dependencies {
 
     modImplementation "com.hollingsworth.ars_nouveau:ars_nouveau-${project.minecraft_version}:${project.ars_version}"
     modImplementation "software.bernie.geckolib:geckolib-forge-${project.minecraft_version}:${project.gecko_version}"
+    forgeRuntimeLibrary "com.eliotlash.mclib:mclib:20"
     modImplementation "vazkii.patchouli:Patchouli:${project.minecraft_version}-${project.patchouli_version}"
 
     modCompileOnlyApi "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"

@@ -120,7 +120,7 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // https://modrinth.com/mod/async-locator/version/Eip0qUwF
-    modCompileOnlyApi "maven.modrinth:async-locator:Eip0qUwF"
+    modCompileOnlyApi "maven.modrinth:async-locator:${project.asynclocator_version}"
 }
 
 processResources {

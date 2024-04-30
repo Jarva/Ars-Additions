@@ -6,6 +6,7 @@ import com.github.jarva.arsadditions.networking.TeleportNexusPacket;
 import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.client.gui.Color;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
+import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -59,6 +60,13 @@ public class WarpNexusScreen extends Screen {
                 ItemStack scroll = handler.getStackInSlot(i);
                 if (scroll.is(Items.AIR)) continue;
                 filled.put(i, scroll);
+            }
+
+            if (filled.isEmpty()) {
+                this.minecraft.setScreen(null);
+                PortUtil.sendMessage(this.minecraft.player, Component.translatable("chat.ars_additions.warp_nexus.no_scrolls"));
+                PortUtil.sendMessage(this.minecraft.player, Component.translatable("chat.ars_additions.warp_nexus.no_scrolls.instruction", this.minecraft.options.keyShift.getKey().getDisplayName(), this.minecraft.options.keyUse.getKey().getDisplayName()));
+                return;
             }
 
             topStart = (height / 2) - ((8 * 2) + font.lineHeight + (filled.size() * 25) + 20) / 2;

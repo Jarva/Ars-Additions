@@ -198,22 +198,276 @@
         {
           "input_predicate": {
             "block_state": {
-              "Name": "ars_additions:warp_nexus",
+              "Name": "ars_nouveau:source_jar",
               "Properties": {
-                "half": "lower",
-                "requires_source": "true"
+                "fill": "0",
+                "waterlogged": "false"
               }
             },
-            "predicate_type": "minecraft:blockstate_match"
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
           },
           "output_state": {
-            "Name": "ars_additions:warp_nexus",
+            "Name": "ars_nouveau:source_jar",
             "Properties": {
-              "half": "lower",
-              "requires_source": "false"
+              "fill": "0",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "1",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "2",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "3",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "4",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "5",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "6",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "7",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "8",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "9",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "10",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_nouveau:source_jar",
+              "Properties": {
+                "fill": "0",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:random_blockstate_match",
+            "probability": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_nouveau:source_jar",
+            "Properties": {
+              "fill": "11",
+              "waterlogged": "false"
             }
           }
         },
@@ -249,7 +503,7 @@
             "Name": "ars_additions:warp_nexus",
             "Properties": {
               "half": "lower",
-              "requires_source": "true"
+              "requires_source": "false"
             }
           }
         },
@@ -313,7 +567,7 @@
               }
             },
             "predicate_type": "minecraft:random_blockstate_match",
-            "probability": 0.1
+            "probability": 0.5
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
@@ -350,7 +604,7 @@
               }
             },
             "predicate_type": "minecraft:random_blockstate_match",
-            "probability": 0.1
+            "probability": 0.5
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
@@ -387,7 +641,7 @@
               }
             },
             "predicate_type": "minecraft:random_blockstate_match",
-            "probability": 0.1
+            "probability": 0.5
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
@@ -424,7 +678,7 @@
               }
             },
             "predicate_type": "minecraft:random_blockstate_match",
-            "probability": 0.1
+            "probability": 0.5
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
@@ -461,7 +715,7 @@
               }
             },
             "predicate_type": "minecraft:random_blockstate_match",
-            "probability": 0.1
+            "probability": 0.5
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
@@ -498,7 +752,7 @@
               }
             },
             "predicate_type": "minecraft:random_blockstate_match",
-            "probability": 0.1
+            "probability": 0.5
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
@@ -535,7 +789,7 @@
               }
             },
             "predicate_type": "minecraft:random_blockstate_match",
-            "probability": 0.1
+            "probability": 0.5
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
@@ -572,7 +826,7 @@
               }
             },
             "predicate_type": "minecraft:random_blockstate_match",
-            "probability": 0.1
+            "probability": 0.5
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"

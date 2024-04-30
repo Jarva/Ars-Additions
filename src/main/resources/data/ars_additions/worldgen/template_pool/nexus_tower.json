@@ -2,7 +2,7 @@
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 150,
+      "weight": 30,
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "ars_additions:nexus_tower/red",
@@ -11,7 +11,7 @@
       }
     },
     {
-      "weight": 150,
+      "weight": 30,
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "ars_additions:nexus_tower/green",
@@ -20,7 +20,7 @@
       }
     },
     {
-      "weight": 150,
+      "weight": 30,
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "ars_additions:nexus_tower/blue",
@@ -29,10 +29,46 @@
       }
     },
     {
-      "weight": 150,
+      "weight": 30,
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "ars_additions:nexus_tower/purple",
+        "projection": "rigid",
+        "processors": "ars_additions:nexus_tower"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:nexus_tower/red_empty",
+        "projection": "rigid",
+        "processors": "ars_additions:nexus_tower"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:nexus_tower/green_empty",
+        "projection": "rigid",
+        "processors": "ars_additions:nexus_tower"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:nexus_tower/blue_empty",
+        "projection": "rigid",
+        "processors": "ars_additions:nexus_tower"
+      }
+    },
+    {
+      "weight": 150,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ars_additions:nexus_tower/purple_empty",
         "projection": "rigid",
         "processors": "ars_additions:nexus_tower"
       }

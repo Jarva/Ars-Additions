@@ -3,6 +3,7 @@ package com.github.jarva.arsadditions.datagen;
 import com.github.jarva.arsadditions.block.WarpNexus;
 import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.registry.names.AddonBlockNames;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -11,6 +12,7 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.RegistryObject;
@@ -90,6 +93,7 @@ public class DefaultLootDatagen extends LootTableProvider {
                                     .copy("Inventory", "BlockEntityTag.Inventory", CopyNbtFunction.MergeStrategy.REPLACE)
                                     .copy("color", "BlockEntityTag.color", CopyNbtFunction.MergeStrategy.REPLACE)
                             )
+                            .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(warpNexus).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(WarpNexus.HALF, DoubleBlockHalf.LOWER)))
                     );
             this.list.add(warpNexus);
             this.add(warpNexus, LootTable.lootTable().withPool(nexusBuilder));

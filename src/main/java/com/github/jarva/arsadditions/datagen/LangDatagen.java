@@ -108,6 +108,9 @@ public class LangDatagen extends LanguageProvider {
         this.add("chat.ars_additions.warp_index.out_of_range", "Your %s is not loaded");
         this.add("chat.ars_additions.warp_index.no_activate", "You are unable to reach the %s here");
 
+        this.add("chat.ars_additions.warp_nexus.no_scrolls", "You don't have any warp destinations available.");
+        this.add("chat.ars_additions.warp_nexus.no_scrolls.instruction", "Press %s+%s to store a Warp Scroll.");
+
         // Effects
 
         this.add("effect.ars_additions.marked", "Marked");

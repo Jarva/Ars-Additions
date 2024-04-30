@@ -5,6 +5,7 @@ import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.hollingsworth.arsnouveau.common.block.ScribesBlock;
+import com.hollingsworth.arsnouveau.common.block.SourceJar;
 import com.hollingsworth.arsnouveau.common.block.ThreePartBlock;
 import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
@@ -61,6 +62,10 @@ public class ProcessorDatagen extends SimpleDataProvider {
         warpNexus.add(randomBlockStateReplace(Blocks.STONE_BRICK_SLAB.defaultBlockState().setValue(SlabBlock.TYPE, SlabType.BOTTOM), Blocks.MOSSY_STONE_BRICK_SLAB.defaultBlockState().setValue(SlabBlock.TYPE, SlabType.BOTTOM), 0.2f));
         warpNexus.add(randomBlockReplace(an(SOURCESTONE_LARGE_BRICKS), an(SOURCESTONE_ALTERNATING), 0.2f));
 
+        for (Integer possibleValue : SourceJar.fill.getPossibleValues()) {
+            warpNexus.add(randomBlockStateReplace(an(SOURCE_JAR).defaultBlockState(), an(SOURCE_JAR).defaultBlockState().setValue(SourceJar.fill, possibleValue), 0.1f));
+        }
+
         CompoundTag nexusBlock = new CompoundTag();
         CompoundTag inventory = new CompoundTag();
         ListTag items = new ListTag();
@@ -88,7 +93,7 @@ public class ProcessorDatagen extends SimpleDataProvider {
             it.putString("bio", helper.bio());
             it.putString("color", helper.color());
             tag.put("itemStack", is.save(new CompoundTag()));
-            modifyBlockEntity(BlockRegistry.SCRIBES_BLOCK.get(), bs -> bs.getValue(ScribesBlock.PART) == ThreePartBlock.HEAD, 0.1f, new AppendStatic(tag), warpNexus);
+            modifyBlockEntity(BlockRegistry.SCRIBES_BLOCK.get(), bs -> bs.getValue(ScribesBlock.PART) == ThreePartBlock.HEAD, 0.5f, new AppendStatic(tag), warpNexus);
         }
 
         save(pOutput, warpNexus, "nexus_tower");
@@ -113,7 +118,7 @@ public class ProcessorDatagen extends SimpleDataProvider {
                                 test,
                                 AlwaysTrueTest.INSTANCE,
                                 PosAlwaysTrueTest.INSTANCE,
-                                possibleState,
+                                output.apply(possibleState),
                                 modifier
                         )
                 );

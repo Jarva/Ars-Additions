@@ -6,6 +6,15 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "ars_additions:warp_nexus",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "half": "lower"
+              }
+            }
+          ],
           "functions": [
             {
               "function": "minecraft:copy_name",

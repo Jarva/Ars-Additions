@@ -1,12 +1,13 @@
 package com.github.jarva.arsadditions.common.item;
 
 import com.github.jarva.arsadditions.datagen.tags.ItemTagDatagen;
-import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
+import com.hollingsworth.arsnouveau.ArsNouveau;
+import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.api.spell.SpellTier;
+import com.hollingsworth.arsnouveau.common.capability.CapabilityRegistry;
 import com.hollingsworth.arsnouveau.common.capability.IPlayerCap;
-import com.hollingsworth.arsnouveau.setup.config.Config;
-import com.hollingsworth.arsnouveau.setup.registry.CapabilityRegistry;
+import com.hollingsworth.arsnouveau.setup.Config;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -26,7 +27,7 @@ import java.util.stream.Stream;
 
 public class CodexEntry extends Item {
     public CodexEntry() {
-        super(new Properties().rarity(Rarity.UNCOMMON).stacksTo(1));
+        super(new Properties().rarity(Rarity.UNCOMMON).stacksTo(1).tab(ArsNouveau.itemGroup));
     }
 
     public boolean isFoil(ItemStack stack) {
@@ -67,9 +68,9 @@ public class CodexEntry extends Item {
     }
 
     public Stream<AbstractSpellPart> getPossibleGlyphs(IPlayerCap playerCap) {
-        List<AbstractSpellPart> startingSpells = GlyphRegistry.getDefaultStartingSpells();
+        List<AbstractSpellPart> startingSpells = ArsNouveauAPI.getInstance().getDefaultStartingSpells();
 
-        return GlyphRegistry
+        return ArsNouveauAPI.getInstance()
                 .getSpellpartMap()
                 .values()
                 .stream()

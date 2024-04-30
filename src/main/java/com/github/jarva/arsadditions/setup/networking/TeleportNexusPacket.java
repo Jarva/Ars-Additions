@@ -42,22 +42,22 @@ public class TeleportNexusPacket implements AbstractPacket {
         ctx.get().enqueueWork(() -> {
             Player player = ctx.get().getSender();
             if (player == null) return;
-            BlockState bs = player.level().getBlockState(pos);
+            BlockState bs = player.getLevel().getBlockState(pos);
             if (!bs.is(AddonBlockRegistry.WARP_NEXUS.get())) return;
-            if (player.blockPosition().distToCenterSqr(pos.getX(), pos.getY(), pos.getZ()) > Math.pow(player.getBlockReach(), 2)) return;
+            if (player.blockPosition().distToCenterSqr(pos.getX(), pos.getY(), pos.getZ()) > Math.pow(player.getReachDistance(), 2)) return;
             ItemStackHandler nexus = player.getCapability(CapabilityRegistry.PLAYER_NEXUS_CAPABILITY).orElse(new ItemStackHandler());
             ItemStack scroll = nexus.getStackInSlot(index);
             WarpScroll.WarpScrollData data = WarpScroll.WarpScrollData.get(scroll);
             if (player instanceof ServerPlayer serverPlayer) {
                 if (bs.getValue(WarpNexus.REQUIRES_SOURCE)) {
-                    ISpecialSourceProvider takePos = SourceUtil.takeSource(pos, serverPlayer.serverLevel(), 5, 1000);
+                    ISpecialSourceProvider takePos = SourceUtil.takeSource(pos, serverPlayer.getLevel(), 5, 1000);
                     if (takePos != null) {
-                        TeleportUtil.teleport(serverPlayer.serverLevel(), data, serverPlayer);
+                        TeleportUtil.teleport(serverPlayer.getLevel(), data, serverPlayer);
                     } else {
                         PortUtil.sendMessageNoSpam(player, Component.translatable("ars_nouveau.apparatus.nomana"));
                     }
                 } else {
-                    TeleportUtil.teleport(serverPlayer.serverLevel(), data, serverPlayer);
+                    TeleportUtil.teleport(serverPlayer.getLevel(), data, serverPlayer);
                 }
             }
         });

@@ -4,68 +4,51 @@ import com.github.jarva.arsadditions.common.block.EnchantingWixieCauldron;
 import com.github.jarva.arsadditions.common.block.WarpNexus;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
-import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.google.common.collect.ImmutableList;
+import com.hollingsworth.arsnouveau.setup.BlockRegistry;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry.getBlock;
 
 public class DefaultLootDatagen extends LootTableProvider {
-    public DefaultLootDatagen(PackOutput packOutput) {
-        super(packOutput, new HashSet<>(), List.of(new LootTableProvider.SubProviderEntry(BlockLootTableProvider::new, LootContextParamSets.BLOCK)));
+    public DefaultLootDatagen(DataGenerator packOutput) {
+        super(packOutput);
     }
 
-    public static class BlockLootTableProvider extends BlockLootSubProvider {
-        private final List<Block> list = new ArrayList<>();
-        protected BlockLootTableProvider() {
-            super(Set.of(), FeatureFlags.REGISTRY.allFlags(), new HashMap<>());
-        }
+    public static class BlockLootTableProvider extends BlockLoot {
+        public List<Block> list = new ArrayList<>();
 
         @Override
-        public void generate(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> p_249322_) {
-            this.generate();
-            Set<ResourceLocation> set = new HashSet<>();
-
-            for (Block block : list) {
-                if (block.isEnabled(this.enabledFeatures)) {
-                    ResourceLocation resourcelocation = block.getLootTable();
-                    if (resourcelocation != BuiltInLootTables.EMPTY && set.add(resourcelocation)) {
-                        LootTable.Builder loottable$builder = this.map.remove(resourcelocation);
-                        if (loottable$builder == null) {
-                            continue;
-                        }
-
-                        p_249322_.accept(resourcelocation, loottable$builder);
-                    }
-                }
-            }
-        }
-
-        @Override
-        protected void generate() {
+        public void addTables() {
             registerManaMachine(AddonBlockRegistry.ENDER_SOURCE_JAR, AddonBlockRegistry.ENDER_SOURCE_JAR_TILE);
             for (String chain : AddonBlockNames.CHAINS) {
                 registerDropSelf(getBlock(chain));
@@ -127,5 +110,26 @@ public class DefaultLootDatagen extends LootTableProvider {
                     );
             return LootTable.lootTable().withPool(builder);
         }
+
+        @Override
+        protected Iterable<Block> getKnownBlocks() {
+            return list;
+        }
+    }
+
+    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> tables = ImmutableList.of(
+            Pair.of(BlockLootTableProvider::new, LootContextParamSets.BLOCK)
+    );
+
+    @Override
+    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
+        return tables;
+    }
+
+    @Override
+    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationtracker) {
+        map.forEach((p_218436_2_, p_218436_3_) -> {
+            LootTables.validate(validationtracker, p_218436_2_, p_218436_3_);
+        });
     }
 }

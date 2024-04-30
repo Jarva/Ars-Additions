@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/button_inventory",
   "textures": {
-    "texture": "ars_nouveau:block/smooth_sourcestone"
+    "texture": "ars_nouveau:blocks/smooth_sourcestone"
   }
 }

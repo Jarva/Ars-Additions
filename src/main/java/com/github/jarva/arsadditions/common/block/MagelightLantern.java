@@ -11,21 +11,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.material.Material;
 
 public class MagelightLantern extends LanternBlock implements ITickableBlock {
     public static final Property<Integer> LIGHT_LEVEL = IntegerProperty.create("level", 0, 15);
     public MagelightLantern() {
-        super(Properties.of()
-                .mapColor(MapColor.METAL)
-                .forceSolidOn()
+        super(Properties.of(Material.METAL)
                 .requiresCorrectToolForDrops()
                 .strength(3.5F)
                 .sound(SoundType.LANTERN)
                 .lightLevel((b) -> b.getValue(LIGHT_LEVEL))
-                .noOcclusion()
-                .pushReaction(PushReaction.DESTROY));
+                .noOcclusion());
     }
 
     @Override

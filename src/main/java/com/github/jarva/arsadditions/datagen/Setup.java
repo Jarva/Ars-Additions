@@ -22,15 +22,16 @@ public class Setup {
         DataGenerator gen = event.getGenerator();
 
         gen.addProvider(event.includeServer(), new PatchouliDatagen(gen));
-        gen.addProvider(event.includeServer(), new LangDatagen(gen.getPackOutput(), root, "en_us"));
-        gen.addProvider(event.includeServer(), new RecipeDatagen(gen.getPackOutput()));
+        gen.addProvider(event.includeServer(), new LangDatagen(gen, root, "en_us"));
+        gen.addProvider(event.includeServer(), new RecipeDatagen(gen));
         gen.addProvider(event.includeServer(), new EnchantingAppDatagen(gen));
-        gen.addProvider(event.includeServer(), new DefaultLootDatagen(gen.getPackOutput()));
+        gen.addProvider(event.includeServer(), new DefaultLootDatagen(gen));
         gen.addProvider(event.includeServer(), new GlyphDatagen(gen));
         gen.addProvider(event.includeServer(), new ProcessorDatagen(gen));
-        gen.addProvider(event.includeServer(), new ItemTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
-        gen.addProvider(event.includeServer(), new BlockTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
-        gen.addProvider(event.includeServer(), new AdvancementDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
-        gen.addProvider(event.includeServer(), new BlockStateDatagen(gen.getPackOutput(), event.getExistingFileHelper()));
+        BlockTagDatagen btd = new BlockTagDatagen(gen, event.getExistingFileHelper());
+        gen.addProvider(event.includeServer(), new ItemTagDatagen(gen, btd, event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), btd);
+        gen.addProvider(event.includeServer(), new AdvancementDatagen(gen, event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new BlockStateDatagen(gen, event.getExistingFileHelper()));
     }
 }

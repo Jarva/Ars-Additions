@@ -1,4 +1,5 @@
 {
+  "name": "ars_additions:ruined_portal",
   "fallback": "minecraft:empty",
   "elements": [
     {

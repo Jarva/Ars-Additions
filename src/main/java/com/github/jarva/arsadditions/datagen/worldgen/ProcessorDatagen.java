@@ -8,13 +8,13 @@ import com.google.gson.JsonElement;
 import com.hollingsworth.arsnouveau.common.block.ScribesBlock;
 import com.hollingsworth.arsnouveau.common.block.SourceJar;
 import com.hollingsworth.arsnouveau.common.block.ThreePartBlock;
-import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
-import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
+import com.hollingsworth.arsnouveau.setup.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.ItemsRegistry;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -28,26 +28,28 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
-import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.AppendStatic;
-import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames.CRACKED_SOURCESTONE_LARGE_BRICKS;
 import static com.hollingsworth.arsnouveau.common.lib.LibBlockNames.*;
 
-public class ProcessorDatagen extends SimpleDataProvider {
+public class ProcessorDatagen implements DataProvider {
+    private final DataGenerator generator;
+
     public ProcessorDatagen(DataGenerator dataGenerator) {
-        super(dataGenerator);
+        this.generator = dataGenerator;
     }
 
     @Override
-    public void collectJsons(CachedOutput pOutput) {
+    public void run(CachedOutput pOutput) throws IOException {
         List<ProcessorRule> warpNexus = new ArrayList<>();
         warpNexus.add(randomBlockReplace(Blocks.STONE_BRICKS, Blocks.MOSSY_STONE_BRICKS, 0.5f));
         warpNexus.add(randomBlockReplace(Blocks.STONE_BRICKS, Blocks.CRACKED_STONE_BRICKS, 0.5f));
@@ -56,7 +58,6 @@ public class ProcessorDatagen extends SimpleDataProvider {
         warpNexus.add(randomBlockReplace(Blocks.STONE_BRICKS, Blocks.TUFF, 0.1f));
         warpNexus.add(randomBlockReplace(Blocks.STONE_BRICKS, Blocks.COBBLESTONE, 0.1f));
         warpNexus.add(randomBlockReplace(an(SOURCESTONE_LARGE_BRICKS), aa(CRACKED_SOURCESTONE_LARGE_BRICKS), 0.5f));
-        warpNexus.add(randomBlockReplace(an(SOURCESTONE_LARGE_BRICKS), an(GILDED_SOURCESTONE_LARGE_BRICKS), 0.2f));
         warpNexus.add(randomBlockReplace(an(SOURCESTONE_LARGE_BRICKS), Blocks.BLUE_TERRACOTTA, 0.2f));
         warpNexus.add(randomBlockReplace(an(SOURCESTONE_LARGE_BRICKS), an(SOURCESTONE_ALTERNATING), 0.2f));
         warpNexus.add(randomBlockStateReplace(Blocks.STONE_BRICK_SLAB.defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP), Blocks.MOSSY_STONE_BRICK_SLAB.defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP), 0.2f));
@@ -76,7 +77,7 @@ public class ProcessorDatagen extends SimpleDataProvider {
         inventory.put("Items", items);
         nexusBlock.put("Inventory", inventory);
 
-        modifyBlockEntity(AddonBlockRegistry.WARP_NEXUS.get(), bs -> bs.getValue(WarpNexus.HALF) == DoubleBlockHalf.LOWER, bs -> bs.setValue(WarpNexus.REQUIRES_SOURCE, false), new AppendStatic(nexusBlock), warpNexus);
+        modifyBlockEntity(AddonBlockRegistry.WARP_NEXUS.get(), bs -> bs.getValue(WarpNexus.HALF) == DoubleBlockHalf.LOWER, bs -> bs.setValue(WarpNexus.REQUIRES_SOURCE, false), Optional.of(nexusBlock), warpNexus);
 
         List<Helper> helpers = List.of(
                 new Helper("Eru", "gray", "Warning: Not to leave unsupervised"),
@@ -94,7 +95,7 @@ public class ProcessorDatagen extends SimpleDataProvider {
             it.putString("bio", helper.bio());
             it.putString("color", helper.color());
             tag.put("itemStack", is.save(new CompoundTag()));
-            modifyBlockEntity(BlockRegistry.SCRIBES_BLOCK.get(), bs -> bs.getValue(ScribesBlock.PART) == ThreePartBlock.HEAD, 0.5f, new AppendStatic(tag), warpNexus);
+            modifyBlockEntity(BlockRegistry.SCRIBES_BLOCK, bs -> bs.getValue(ScribesBlock.PART) == ThreePartBlock.HEAD, 0.5f, Optional.of(tag), warpNexus);
         }
 
         save(pOutput, warpNexus, "nexus_tower");
@@ -102,15 +103,15 @@ public class ProcessorDatagen extends SimpleDataProvider {
 
     record Helper(String name, String color, String bio) {}
 
-    private void modifyBlockEntity(Block block, Predicate<BlockState> filter, Function<BlockState, BlockState> output, RuleBlockEntityModifier modifier, List<ProcessorRule> rules) {
+    private void modifyBlockEntity(Block block, Predicate<BlockState> filter, Function<BlockState, BlockState> output, Optional<CompoundTag> modifier, List<ProcessorRule> rules) {
         modifyBlockEntity(block, filter, output, null, modifier, rules);
     }
 
-    private void modifyBlockEntity(Block block, Predicate<BlockState> filter, float probability, RuleBlockEntityModifier modifier, List<ProcessorRule> rules) {
+    private void modifyBlockEntity(Block block, Predicate<BlockState> filter, float probability, Optional<CompoundTag> modifier, List<ProcessorRule> rules) {
         modifyBlockEntity(block, filter, bs -> bs, probability, modifier, rules);
     }
 
-    private void modifyBlockEntity(Block block, Predicate<BlockState> filter, Function<BlockState, BlockState> output, Float probability, RuleBlockEntityModifier modifier, List<ProcessorRule> rules) {
+    private void modifyBlockEntity(Block block, Predicate<BlockState> filter, Function<BlockState, BlockState> output, Float probability, Optional<CompoundTag> modifier, List<ProcessorRule> rules) {
         for (BlockState possibleState : block.getStateDefinition().getPossibleStates()) {
             if (filter.test(possibleState)) {
                 RuleTest test = probability != null ? new RandomBlockStateMatchTest(possibleState, probability) : new BlockStateMatchTest(possibleState);
@@ -127,16 +128,20 @@ public class ProcessorDatagen extends SimpleDataProvider {
         }
     }
 
-    private void save(CachedOutput pOutput, List<ProcessorRule> rules, String name) {
+    private void save(CachedOutput pOutput, List<ProcessorRule> rules, String name) throws IOException {
         StructureProcessorList list = new StructureProcessorList(ImmutableList.of(new RuleProcessor(rules)));
         DataResult<JsonElement> result = StructureProcessorType.DIRECT_CODEC.encodeStart(JsonOps.INSTANCE, list);
         result.result().ifPresent(element -> {
-            saveStable(pOutput, element, getPath(name));
+            try {
+                DataProvider.saveStable(pOutput, element, getPath(name));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
     private Path getPath(String name) {
-        return output.resolve("data/ars_additions/worldgen/processor_list/" + name + ".json");
+        return this.generator.getOutputFolder().resolve("data/ars_additions/worldgen/processor_list/" + name + ".json");
     }
 
     private Block aa(String name) {

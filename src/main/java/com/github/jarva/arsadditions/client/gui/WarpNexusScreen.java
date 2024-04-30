@@ -10,10 +10,11 @@ import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +25,6 @@ import net.minecraft.world.item.Items;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class WarpNexusScreen extends Screen {
 
@@ -80,19 +80,25 @@ public class WarpNexusScreen extends Screen {
                                 TeleportNexusPacket.teleport(i, pos);
                             });
                             this.minecraft.setScreen(null);
-                        }, Supplier::get) {
+                        }) {
                             public static final ResourceLocation BUTTON_LOCATION = ArsAdditions.prefix("textures/gui/button.png");
                             @Override
-                            protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+                            public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
                                 Minecraft minecraft = Minecraft.getInstance();
-                                guiGraphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
+                                Font font = minecraft.font;
+                                RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                                RenderSystem.setShaderTexture(0, BUTTON_LOCATION);
+                                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+                                int i = getTextureY();
                                 RenderSystem.enableBlend();
+                                RenderSystem.defaultBlendFunc();
                                 RenderSystem.enableDepthTest();
-                                guiGraphics.blitNineSliced(BUTTON_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 16, 4, 200, 20, 0, this.getTextureY());
-                                guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-                                int i = this.getFGColor();
-                                this.renderString(guiGraphics, minecraft.font, i | Mth.ceil(this.alpha * 255.0F) << 24);
+                                this.blit(poseStack, this.x, this.y, 0, i, this.width, this.height);
+                                this.renderBg(poseStack, minecraft, mouseX, mouseY);
+                                int j = this.getFGColor();
+                                drawCenteredString(poseStack, font, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | Mth.ceil(this.alpha * 255.0F) << 24);
                             }
+
                             private int getTextureY() {
                                 int i = 0;
                                 if (!this.active) {
@@ -105,12 +111,6 @@ public class WarpNexusScreen extends Screen {
                             }
                         }
                 );
-//                Button.builder(getDisplayName(scroll), (button) -> {
-//                    access.execute((_level, pos) -> {
-//                        TeleportNexusPacket.teleport(i, pos);
-//                    });
-//                    this.minecraft.setScreen(null);
-//                }).bounds(leftStart + 75, topStart + (8 * 2) + font.lineHeight + (index * 25), 150, 20).build()
                 index++;
             }
         });
@@ -125,19 +125,19 @@ public class WarpNexusScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        if (access.evaluate((level, pos) -> !level.getBlockState(pos).is(AddonBlockRegistry.WARP_NEXUS.get()) || this.minecraft.player.blockPosition().distToCenterSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) > Math.pow(this.minecraft.player.getBlockReach(), 2), true)) {
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+        if (access.evaluate((level, pos) -> !level.getBlockState(pos).is(AddonBlockRegistry.WARP_NEXUS.get()) || this.minecraft.player.blockPosition().distToCenterSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) > Math.pow(this.minecraft.player.getReachDistance(), 2), true)) {
             this.minecraft.setScreen(null);
             return;
         }
-        PoseStack matrixStack = guiGraphics.pose();
+        PoseStack matrixStack = poseStack;
         matrixStack.pushPose();
         if (scaleFactor != 1) {
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
             mouseX /= scaleFactor;
             mouseY /= scaleFactor;
         }
-        renderAfterScale(guiGraphics, mouseX, mouseY, partialTick);
+        renderAfterScale(poseStack, mouseX, mouseY, partialTick);
         matrixStack.popPose();
     }
 
@@ -145,10 +145,10 @@ public class WarpNexusScreen extends Screen {
         return this.minecraft.getWindow().calculateScale(0, this.minecraft.isEnforceUnicode());
     }
     
-    public void renderAfterScale(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void renderAfterScale(PoseStack guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics);
         if (topStart >= 0) {
-            guiGraphics.drawCenteredString(this.font, Component.literal("Warp Nexus"), width / 2, topStart + 8, new Color(255, 255, 255).getRGB());
+            drawCenteredString(guiGraphics, font, Component.literal("Warp Nexus"), width / 2, topStart + 8, new Color(255, 255, 255).getRGB());
         }
         super.render(guiGraphics, mouseX, mouseY, partialTick);
     }

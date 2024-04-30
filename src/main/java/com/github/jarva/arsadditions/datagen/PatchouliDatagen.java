@@ -11,15 +11,18 @@ import com.hollingsworth.arsnouveau.api.spell.AbstractCastMethod;
 import com.hollingsworth.arsnouveau.api.spell.AbstractEffect;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
-import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.BlockRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 
-import static com.hollingsworth.arsnouveau.setup.registry.RegistryHelper.getRegistryName;
+import java.io.IOException;
+
+import static com.hollingsworth.arsnouveau.api.RegistryHelper.getRegistryName;
 
 public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datagen.PatchouliProvider {
 
@@ -30,7 +33,7 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
     public static ResourceLocation STRUCTURES = new ResourceLocation(ArsNouveau.MODID, "structures");
 
     @Override
-    public void collectJsons(CachedOutput cache) {
+    public void run(CachedOutput cache) throws IOException {
         for (AbstractSpellPart glyph : ArsNouveauRegistry.GLYPHS) {
             addGlyphPage(glyph);
         }
@@ -74,7 +77,7 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
         addBasicItem(AddonBlockRegistry.ENDER_SOURCE_JAR.get(), MACHINES, new ApparatusPage(AddonBlockRegistry.ENDER_SOURCE_JAR));
 
         for (PatchouliPage patchouliPage : pages) {
-            saveStable(cache, patchouliPage.build(), patchouliPage.path());
+            DataProvider.saveStable(cache, patchouliPage.build(), patchouliPage.path());
         }
     }
 

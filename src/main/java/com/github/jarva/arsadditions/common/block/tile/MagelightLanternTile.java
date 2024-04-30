@@ -28,7 +28,7 @@ public class MagelightLanternTile extends SconceTile {
         double centerZ = pos.getZ() + 0.5;
         double yOffset = hanging ? 0.2 : 0.1;
 
-        ParticleColor nextColor = this.color.transition((int) (level.getGameTime()*10));
+        ParticleColor nextColor = this.color.nextColor(level.random);
         for (int i = 0; i < 10; i++) {
             level.addParticle(
                     GlowParticleData.createData(nextColor),

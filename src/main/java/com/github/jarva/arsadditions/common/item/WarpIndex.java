@@ -1,11 +1,12 @@
 package com.github.jarva.arsadditions.common.item;
 
 import com.github.jarva.arsadditions.common.util.LangUtil;
-import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.ArsNouveau;
+import com.hollingsworth.arsnouveau.setup.BlockRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class WarpIndex extends Item {
     public WarpIndex() {
-        super(new Properties().stacksTo(1));
+        super(new Properties().stacksTo(1).tab(ArsNouveau.itemGroup));
     }
 
     @Override
@@ -89,7 +90,7 @@ public class WarpIndex extends Item {
         int y = stack.getTag().getInt("BindY");
         int z = stack.getTag().getInt("BindZ");
         String dim = stack.getTag().getString("BindDim");
-        Level lecternWorld = worldIn.getServer().getLevel(ResourceKey.create(Registries.DIMENSION, new ResourceLocation(dim)));
+        Level lecternWorld = worldIn.getServer().getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(dim)));
         if(lecternWorld.isLoaded(new BlockPos(x, y, z))) {
             BlockHitResult lookingAt = new BlockHitResult(new Vec3(x, y, z), Direction.UP, new BlockPos(x, y, z), true);
             BlockState state = lecternWorld.getBlockState(lookingAt.getBlockPos());
@@ -110,6 +111,6 @@ public class WarpIndex extends Item {
     }
 
     public void open(Player sender, ItemStack t) {
-        activateTerminal(sender.level(), t, sender, InteractionHand.MAIN_HAND);
+        activateTerminal(sender.getLevel(), t, sender, InteractionHand.MAIN_HAND);
     }
 }

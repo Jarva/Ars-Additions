@@ -3,9 +3,6 @@ package com.github.jarva.arsadditions.common.block.tile;
 import com.github.jarva.arsadditions.common.block.WarpNexus;
 import com.github.jarva.arsadditions.common.item.NexusWarpScroll;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
-import com.hollingsworth.arsnouveau.api.particle.ParticleColorRegistry;
-import com.hollingsworth.arsnouveau.api.util.IWololoable;
-import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.hollingsworth.arsnouveau.common.block.ITickable;
 import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
@@ -29,22 +26,23 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoBlockEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.ars_nouveau.geckolib3.core.IAnimatable;
+import software.bernie.ars_nouveau.geckolib3.core.PlayState;
+import software.bernie.ars_nouveau.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.ars_nouveau.geckolib3.core.controller.AnimationController;
+import software.bernie.ars_nouveau.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.ars_nouveau.geckolib3.core.manager.AnimationData;
+import software.bernie.ars_nouveau.geckolib3.core.manager.AnimationFactory;
+import software.bernie.ars_nouveau.geckolib3.util.GeckoLibUtil;
 
-public class WarpNexusTile extends BlockEntity implements GeoBlockEntity, ITickable, IWololoable {
-    private static final RawAnimation CLOSE = RawAnimation.begin().then("spin", Animation.LoopType.PLAY_ONCE).thenPlayAndHold("close");
-    private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("open").thenLoop("spin");
-    private static final RawAnimation CLOSED = RawAnimation.begin().thenPlayAndHold("closed");
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+public class WarpNexusTile extends BlockEntity implements IAnimatable, ITickable {
+    private static final AnimationBuilder CLOSE = new AnimationBuilder().playOnce("spin").playOnce("close").loop("closed");
+    private static final AnimationBuilder OPEN = new AnimationBuilder().playOnce("open").loop("spin");
+    private static final AnimationBuilder CLOSED = new AnimationBuilder().loop("closed");
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private boolean hasNearbyPlayer = false;
     private boolean hasOpened = false;
     public AnimationController<WarpNexusTile> controller;
-    private ParticleColor color = ParticleColor.defaultParticleColor();
     private ItemStackHandler inventory;
 
     public WarpNexusTile(BlockPos pos, BlockState blockState) {
@@ -103,14 +101,12 @@ public class WarpNexusTile extends BlockEntity implements GeoBlockEntity, ITicka
     public void load(CompoundTag tag) {
         super.load(tag);
         this.inventory.deserializeNBT(tag.getCompound("Inventory"));
-        this.color = ParticleColorRegistry.from(tag.getCompound("color"));
     }
 
     @Override
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("Inventory", this.inventory.serializeNBT());
-        tag.put("color", this.color.serialize());
     }
 
     @Override
@@ -135,35 +131,27 @@ public class WarpNexusTile extends BlockEntity implements GeoBlockEntity, ITicka
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controller = new AnimationController<>(this, this::predicate);
-        controllerRegistrar.add(controller);
+    public void registerControllers(AnimationData animationData) {
+        controller = new AnimationController<>(this, "Anim", 0, this::predicate);
+        animationData.addAnimationController(controller);
     }
 
-    private <E extends BlockEntity & GeoAnimatable> PlayState predicate(AnimationState<E> event) {
+    private PlayState predicate(AnimationEvent<WarpNexusTile> event) {
         if (event.getController().getCurrentAnimation() == null || (!hasNearbyPlayer && !hasOpened)) {
-            return event.setAndContinue(CLOSED);
+            event.getController().setAnimation(CLOSED);
+            return PlayState.CONTINUE;
         }
         if (hasNearbyPlayer) {
             this.hasOpened = true;
-            return event.setAndContinue(OPEN);
+            event.getController().setAnimation(OPEN);
+            return PlayState.CONTINUE;
         }
-        return event.setAndContinue(CLOSE);
+        event.getController().setAnimation(CLOSE);
+        return PlayState.CONTINUE;
     }
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
-    }
-
-    @Override
-    public void setColor(ParticleColor color) {
-        this.color = color;
-        this.setChanged();
-    }
-
-    @Override
-    public ParticleColor getColor() {
-        return this.color;
+    public AnimationFactory getFactory() {
+        return factory;
     }
 }

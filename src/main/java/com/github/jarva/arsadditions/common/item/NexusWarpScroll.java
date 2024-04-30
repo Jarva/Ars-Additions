@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.common.item;
 
+import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
 import net.minecraft.core.BlockPos;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class NexusWarpScroll extends StableWarpScroll {
     public NexusWarpScroll() {
-        super(new Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+        super(new Properties().stacksTo(1).rarity(Rarity.UNCOMMON).tab(ArsNouveau.itemGroup));
     }
 
     @Override

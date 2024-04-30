@@ -6,23 +6,21 @@ import com.hollingsworth.arsnouveau.api.recipe.MultiRecipeWrapper;
 import com.hollingsworth.arsnouveau.common.block.tile.WixieCauldronTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.geckolib.animatable.GeoBlockEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.ars_nouveau.geckolib3.core.IAnimatable;
+import software.bernie.ars_nouveau.geckolib3.core.PlayState;
+import software.bernie.ars_nouveau.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.ars_nouveau.geckolib3.core.controller.AnimationController;
+import software.bernie.ars_nouveau.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.ars_nouveau.geckolib3.core.manager.AnimationData;
+import software.bernie.ars_nouveau.geckolib3.core.manager.AnimationFactory;
+import software.bernie.ars_nouveau.geckolib3.util.GeckoLibUtil;
 
-public class EnchantingWixieCauldronTile extends WixieCauldronTile implements GeoBlockEntity {
-    private static final RawAnimation FLOAT = RawAnimation.begin().thenLoop("floating");
-    private static final RawAnimation CRAFT = RawAnimation.begin().thenPlay("enchanting");
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+public class EnchantingWixieCauldronTile extends WixieCauldronTile implements IAnimatable {
+    private static final AnimationBuilder FLOAT = new AnimationBuilder().loop("floating");
+    private static final AnimationBuilder CRAFT = new AnimationBuilder().playOnce("enchanting");
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public AnimationController<EnchantingWixieCauldronTile> controller;
 
     public EnchantingWixieCauldronTile(BlockPos pos, BlockState state) {
@@ -39,21 +37,23 @@ public class EnchantingWixieCauldronTile extends WixieCauldronTile implements Ge
         return EnchantingApparatusRecipeWrapper.fromStack(stack, level);
     }
 
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controller = new AnimationController<>(this, this::predicate);
-        controllerRegistrar.add(controller);
-    }
-
-    private <E extends BlockEntity & GeoAnimatable> PlayState predicate(AnimationState<E> event) {
+    private PlayState predicate(AnimationEvent<EnchantingWixieCauldronTile> event) {
         if (isCraftingDone()) {
-            return event.setAndContinue(FLOAT);
+            event.getController().setAnimation(FLOAT);
+            return PlayState.CONTINUE;
         }
-        return event.setAndContinue(CRAFT);
+        event.getController().setAnimation(CRAFT);
+        return PlayState.CONTINUE;
     }
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
+    public void registerControllers(AnimationData animationData) {
+        controller = new AnimationController<>(this, "Anim", 0, this::predicate);
+        animationData.addAnimationController(controller);
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
     }
 }

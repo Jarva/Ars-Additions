@@ -2,6 +2,7 @@ package com.github.jarva.arsadditions.setup.registry;
 
 import com.github.jarva.arsadditions.common.item.*;
 import com.github.jarva.arsadditions.setup.registry.names.AddonItemNames;
+import com.hollingsworth.arsnouveau.ArsNouveau;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -45,6 +46,6 @@ public class AddonItemRegistry {
     }
 
     public static Item.Properties defaultItemProperties() {
-        return new Item.Properties();
+        return new Item.Properties().tab(ArsNouveau.itemGroup);
     }
 }

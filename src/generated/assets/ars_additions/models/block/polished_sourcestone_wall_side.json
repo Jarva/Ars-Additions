@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/template_wall_side",
   "textures": {
-    "wall": "ars_nouveau:block/smooth_sourcestone_large_bricks"
+    "wall": "ars_nouveau:blocks/smooth_sourcestone_large_bricks"
   }
 }

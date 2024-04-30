@@ -4,14 +4,15 @@ import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.datagen.conditions.ConfigCondition;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
-import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
+import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
-import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
-import net.minecraft.data.PackOutput;
+import com.hollingsworth.arsnouveau.setup.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.ItemsRegistry;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -26,12 +27,12 @@ import java.util.function.Consumer;
 import static com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry.getBlock;
 
 public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.RecipeDatagen implements IConditionBuilder {
-    public RecipeDatagen(PackOutput packOutput) {
+    public RecipeDatagen(DataGenerator packOutput) {
         super(packOutput);
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         this.consumer = consumer;
 
         addChainRecipe(getBlock(AddonBlockNames.ARCHWOOD_CHAIN), i(BlockRegistry.ARCHWOOD_PLANK));
@@ -51,7 +52,7 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
         addLanternRecipe(getBlock(AddonBlockNames.SOURCESTONE_LANTERN), i(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)));
         addBiDirectionalRecipe(getBlock(AddonBlockNames.SOURCESTONE_LANTERN), getBlock(AddonBlockNames.POLISHED_SOURCESTONE_LANTERN));
 
-        ShapelessRecipeBuilder chunkLoadingRitual = shapelessBuilder(RitualRegistry.getRitualItemMap().get(ArsAdditions.prefix("ritual_chunk_loading")))
+        ShapelessRecipeBuilder chunkLoadingRitual = shapelessBuilder(ArsNouveauAPI.getInstance().getRitualItemMap().get(ArsAdditions.prefix("ritual_chunk_loading")))
                 .requires(BlockRegistry.CASCADING_LOG)
                 .requires(Items.NETHER_STAR)
                 .requires(ItemsRegistry.SOURCE_GEM)
@@ -118,8 +119,12 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
     }
 
     public void addBiDirectionalRecipe(ItemLike a, ItemLike b) {
-        shapelessBuilder(a).requires(b).save(consumer, RecipeBuilder.getDefaultRecipeId(a).withPrefix("reversed_"));
-        shapelessBuilder(b).requires(a).save(consumer, RecipeBuilder.getDefaultRecipeId(b).withPrefix("reversed_"));
+        shapelessBuilder(a).requires(b).save(consumer, withPrefix(RecipeBuilder.getDefaultRecipeId(a), "reversed_"));
+        shapelessBuilder(b).requires(a).save(consumer, withPrefix(RecipeBuilder.getDefaultRecipeId(b), "reversed_"));
+    }
+
+    private ResourceLocation withPrefix(ResourceLocation resource, String prefix) {
+        return new ResourceLocation(resource.getNamespace(), prefix + resource.getPath());
     }
 
     public Ingredient i(ItemLike item) {

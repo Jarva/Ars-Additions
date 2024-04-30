@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,8 +39,13 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     public static final BooleanProperty REQUIRES_SOURCE = BooleanProperty.create("requires_source");
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     public WarpNexus() {
-        super(Properties.of().sound(SoundType.STONE).strength(3.0f, 6.0f).lightLevel((b) -> 8).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE));
+        super(Properties.of(Material.STONE).sound(SoundType.STONE).strength(3.0f, 6.0f).lightLevel((b) -> 8).noOcclusion());
         this.registerDefaultState(this.stateDefinition.any().setValue(HALF, DoubleBlockHalf.LOWER).setValue(REQUIRES_SOURCE, true));
+    }
+
+    @Override
+    public PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.BLOCK;
     }
 
     @Override

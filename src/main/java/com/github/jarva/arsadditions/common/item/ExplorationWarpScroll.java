@@ -5,14 +5,15 @@ import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.client.util.KeypressUtil;
 import com.github.jarva.arsadditions.server.util.LocateUtil;
 import com.github.jarva.arsadditions.server.util.TeleportUtil;
+import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.common.advancement.ANCriteriaTriggers;
 import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
-import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.BlockRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -34,7 +35,7 @@ import java.util.List;
 
 public class ExplorationWarpScroll extends Item {
     public ExplorationWarpScroll() {
-        super(new Properties().stacksTo(1).rarity(Rarity.EPIC));
+        super(new Properties().stacksTo(1).rarity(Rarity.EPIC).tab(ArsNouveau.itemGroup));
     }
 
     @Override
@@ -52,13 +53,13 @@ public class ExplorationWarpScroll extends Item {
         }
 
         BlockPos pos = entity.blockPosition();
-        boolean isRuinedPortal = serverLevel.structureManager().getStructureWithPieceAt(pos, TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix("ruined_portals"))).isValid();
+        boolean isRuinedPortal = serverLevel.structureManager().getStructureWithPieceAt(pos, TagKey.create(Registry.STRUCTURE_REGISTRY, ArsAdditions.prefix("ruined_portals"))).isValid();
         if (isRuinedPortal) {
             WarpScroll.WarpScrollData data = WarpScroll.WarpScrollData.get(stack);
             if (!data.isValid()) return false;
 
             String displayName = "Explorer's Warp Portal";
-            if (BlockRegistry.PORTAL_BLOCK.get().trySpawnPortal(serverLevel, pos, data, displayName)) {
+            if (BlockRegistry.PORTAL_BLOCK.trySpawnPortal(serverLevel, pos, data, displayName)) {
                 ANCriteriaTriggers.rewardNearbyPlayers(Triggers.FIND_RUINED_PORTAL, serverLevel, pos, 10);
                 ANCriteriaTriggers.rewardNearbyPlayers(Triggers.CREATE_RUINED_PORTAL, serverLevel, pos, 10);
                 TeleportUtil.createTeleportDecoration(serverLevel, pos, stack);

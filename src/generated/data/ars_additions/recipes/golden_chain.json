@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "i": {
       "item": "minecraft:iron_nugget"
@@ -16,6 +15,5 @@
   ],
   "result": {
     "item": "ars_additions:golden_chain"
-  },
-  "show_notification": true
+  }
 }

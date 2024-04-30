@@ -5,12 +5,12 @@ import com.github.jarva.arsadditions.common.block.MagelightLantern;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.ArsNouveau;
-import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
+import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
 import com.hollingsworth.arsnouveau.common.items.Glyph;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
-import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.BlockRegistry;
 import net.minecraft.core.Direction;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -24,15 +24,14 @@ import java.util.function.Supplier;
 
 public class BlockStateDatagen extends BlockStateProvider {
     private final ExistingFileHelper fileHelper;
-
-    public BlockStateDatagen(PackOutput output, ExistingFileHelper exFileHelper) {
+    public BlockStateDatagen(DataGenerator output, ExistingFileHelper exFileHelper) {
         super(output, ArsAdditions.MODID, exFileHelper);
         this.fileHelper = exFileHelper;
     }
 
     @Override
     protected void registerStatesAndModels() {
-        for (Supplier<Glyph> i : GlyphRegistry.getGlyphItemMap().values()) {
+        for (Supplier<Glyph> i : ArsNouveauAPI.getInstance().getGlyphItemMap().values()) {
             ResourceLocation spellPart = i.get().spellPart.getRegistryName();
             if (!spellPart.getNamespace().equals(ArsAdditions.MODID)) continue;
             itemModels().basicItem(spellPart);
@@ -43,13 +42,13 @@ public class BlockStateDatagen extends BlockStateProvider {
             simpleBlockWithItem(block);
         }
 
-        wallBlockAndItem(AddonBlockNames.SOURCESTONE_WALL, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SOURCESTONE_LARGE_BRICKS));
-        wallBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_WALL, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SMOOTH_SOURCESTONE_LARGE_BRICKS));
+        wallBlockAndItem(AddonBlockNames.SOURCESTONE_WALL, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SOURCESTONE_LARGE_BRICKS), true);
+        wallBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_WALL, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SMOOTH_SOURCESTONE_LARGE_BRICKS), true);
         wallBlockAndItem(AddonBlockNames.CRACKED_SOURCESTONE_WALL, new ResourceLocation(ArsAdditions.MODID, AddonBlockNames.CRACKED_SOURCESTONE));
         wallBlockAndItem(AddonBlockNames.CRACKED_POLISHED_SOURCESTONE_WALL, new ResourceLocation(ArsAdditions.MODID, AddonBlockNames.CRACKED_POLISHED_SOURCESTONE));
 
-        buttonBlockAndItem(AddonBlockNames.SOURCESTONE_BUTTON, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SOURCESTONE));
-        buttonBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_BUTTON, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SMOOTH_SOURCESTONE));
+        buttonBlockAndItem(AddonBlockNames.SOURCESTONE_BUTTON, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SOURCESTONE), true);
+        buttonBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_BUTTON, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SMOOTH_SOURCESTONE), true);
 
         for (String lantern : AddonBlockNames.LANTERNS) {
             lanternAndItem(lantern);
@@ -61,14 +60,15 @@ public class BlockStateDatagen extends BlockStateProvider {
             chainAndItem(chain);
         }
 
-        ModelFile enchantingApparatus = new ModelFile.ExistingModelFile(getTextureLoc(BlockRegistry.ENCHANTING_APP_BLOCK.get()), fileHelper);
+        ModelFile enchantingApparatus = new ModelFile.ExistingModelFile(getTextureLoc(BlockRegistry.ENCHANTING_APP_BLOCK), fileHelper);
         getVariantBuilder(AddonBlockRegistry.WIXIE_ENCHANTING.get()).partialState().setModels(new ConfiguredModel(enchantingApparatus));
-        simpleBlockItem(AddonBlockRegistry.WIXIE_ENCHANTING.get(), new ModelFile.ExistingModelFile(key(BlockRegistry.ENCHANTING_APP_BLOCK.get()).withPrefix("item/"), fileHelper));
+        simpleBlockItem(AddonBlockRegistry.WIXIE_ENCHANTING.get(), new ModelFile.ExistingModelFile(withPrefix(key(BlockRegistry.ENCHANTING_APP_BLOCK),"item/"), fileHelper));
     }
 
     private void simpleBlockWithItem(Block block) {
         ModelFile model = cubeAll(block);
-        simpleBlockWithItem(block, model);
+        simpleBlock(block, model);
+        simpleBlockItem(block, model);
     }
 
     private void chainAndItem(String chainName) {
@@ -115,8 +115,12 @@ public class BlockStateDatagen extends BlockStateProvider {
     }
 
     private void wallBlockAndItem(String wallName, ResourceLocation texture) {
+        wallBlockAndItem(wallName, texture, false);
+    }
+
+    private void wallBlockAndItem(String wallName, ResourceLocation texture, boolean isArs) {
         WallBlock block = (WallBlock) AddonBlockRegistry.getBlock(wallName);
-        texture = texture.withPrefix("block/");
+        texture = withPrefix(texture, isArs ? "blocks/" : "block/");
         String name = ForgeRegistries.BLOCKS.getKey(block).toString().replace("_wall", "");
         wallBlock(block, name, texture);
         ModelFile inventory = models().wallInventory(name + "_inventory", texture);
@@ -124,12 +128,19 @@ public class BlockStateDatagen extends BlockStateProvider {
     }
 
     private void buttonBlockAndItem(String buttonName, ResourceLocation texture) {
+
+    }
+    private void buttonBlockAndItem(String buttonName, ResourceLocation texture, boolean isArs) {
         ButtonBlock block = (ButtonBlock) AddonBlockRegistry.getBlock(buttonName);
-        texture = texture.withPrefix("block/");
+        texture = withPrefix(texture, isArs ? "blocks/" : "block/");
         String name = ForgeRegistries.BLOCKS.getKey(block).toString();
         buttonBlock(block, texture);
         ModelFile inventory = models().buttonInventory(name + "_inventory", texture);
         simpleBlockItem(block, inventory);
+    }
+
+    private ResourceLocation withPrefix(ResourceLocation resource, String prefix) {
+        return new ResourceLocation(resource.getNamespace(), prefix + resource.getPath());
     }
 
     public ResourceLocation key(Block block) {
@@ -137,6 +148,6 @@ public class BlockStateDatagen extends BlockStateProvider {
     }
 
     public ResourceLocation getTextureLoc(Block block) {
-        return key(block).withPrefix("block/");
+        return withPrefix(key(block), "block/");
     }
 }

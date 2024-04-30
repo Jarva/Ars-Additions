@@ -1,4 +1,5 @@
 {
+  "name": "ars_additions:nexus_tower",
   "fallback": "minecraft:empty",
   "elements": [
     {

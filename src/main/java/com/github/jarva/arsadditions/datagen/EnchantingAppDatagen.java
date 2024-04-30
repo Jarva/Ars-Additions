@@ -4,13 +4,15 @@ import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatusRecipe;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
-import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
+import com.hollingsworth.arsnouveau.setup.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.ItemsRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 public class EnchantingAppDatagen extends ApparatusRecipeProvider {
@@ -23,11 +25,11 @@ public class EnchantingAppDatagen extends ApparatusRecipeProvider {
     }
 
     @Override
-    public void collectJsons(CachedOutput cache) {
+    public void run(CachedOutput cache) throws IOException {
         addEntries();
         for (EnchantingApparatusRecipe g : recipes) {
-            Path path = getRecipePath(output, g.getId().getPath());
-            saveStable(cache, g.asRecipe(), path);
+            Path path = getRecipePath(generator.getOutputFolder(), g.getId().getPath());
+            DataProvider.saveStable(cache, g.asRecipe(), path);
         }
     }
 

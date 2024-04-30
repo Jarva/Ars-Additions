@@ -4,8 +4,7 @@ import com.github.jarva.arsadditions.common.glyph.EffectMark;
 import com.github.jarva.arsadditions.common.glyph.MethodRecall;
 import com.github.jarva.arsadditions.common.glyph.MethodRetaliate;
 import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
-import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
-import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
+import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.api.spell.ITurretBehavior;
@@ -49,12 +48,12 @@ public class ArsNouveauRegistry {
     }
 
     private static void register(AbstractRitual ritual) {
-        RitualRegistry.registerRitual(ritual);
+        ArsNouveauAPI.getInstance().registerRitual(ritual);
         RITUALS.add(ritual);
     }
 
     private static void register(AbstractSpellPart glyph) {
-        GlyphRegistry.registerSpell(glyph);
+        ArsNouveauAPI.getInstance().registerSpell(glyph);
         GLYPHS.add(glyph);
     }
 }

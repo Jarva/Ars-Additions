@@ -33,8 +33,7 @@
           "recipes": [
             "ars_additions:ritual_chunk_loading"
           ]
-        },
-        "sends_telemetry_event": false
+        }
       },
       "conditions": [
         {

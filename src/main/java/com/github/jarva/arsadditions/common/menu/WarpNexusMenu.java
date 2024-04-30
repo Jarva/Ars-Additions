@@ -4,7 +4,7 @@ import com.github.jarva.arsadditions.common.capability.CapabilityRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
+import com.hollingsworth.arsnouveau.setup.ItemsRegistry;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -83,7 +83,7 @@ public class WarpNexusMenu  extends AbstractContainerMenu {
         }
 
         if (item.isEmpty()) {
-            slot.setByPlayer(ItemStack.EMPTY);
+            slot.set(ItemStack.EMPTY);
         } else {
             slot.setChanged();
         }

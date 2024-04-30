@@ -15,7 +15,7 @@ import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.client.renderer.tile.GenericRenderer;
 import com.hollingsworth.arsnouveau.common.items.RendererBlockItem;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
-import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.BlockRegistry;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -23,9 +23,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -93,7 +91,7 @@ public class AddonBlockRegistry {
 
     private static void registerChains() {
         for (String chain : AddonBlockNames.CHAINS) {
-            registerBlockAndItem(chain, () -> new ChainBlock(BlockBehaviour.Properties.of().forceSolidOn().requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.CHAIN).noOcclusion()));
+            registerBlockAndItem(chain, () -> new ChainBlock(BlockBehaviour.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.CHAIN).noOcclusion()));
         }
     }
 
@@ -106,15 +104,12 @@ public class AddonBlockRegistry {
     private static void registerLanterns() {
         for (String lantern : AddonBlockNames.LANTERNS) {
             registerBlockAndItem(lantern, () -> new LanternBlock(
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.METAL)
-                            .forceSolidOn()
+                    BlockBehaviour.Properties.of(Material.METAL)
                             .requiresCorrectToolForDrops()
                             .strength(3.5F)
                             .sound(SoundType.LANTERN)
                             .lightLevel((arg) -> 15)
                             .noOcclusion()
-                            .pushReaction(PushReaction.DESTROY)
             ));
         }
     }
@@ -123,19 +118,16 @@ public class AddonBlockRegistry {
         for (String wall : AddonBlockNames.WALLS) {
             registerBlockAndItem(wall, () -> new WallBlock(
                     BlockBehaviour.Properties.copy(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE))
-                            .forceSolidOn()
             ));
         }
     }
 
     private static void registerButtons() {
         for (String button : AddonBlockNames.BUTTONS) {
-            registerBlockAndItem(button, () -> new ButtonBlock(
-                    BlockBehaviour.Properties.of()
+            registerBlockAndItem(button, () -> new StoneButtonBlock(
+                    BlockBehaviour.Properties.of(Material.STONE)
                             .noCollission()
                             .strength(0.5f)
-                            .pushReaction(PushReaction.DESTROY)
-                    , BlockSetType.STONE, 20, false
             ));
         }
     }

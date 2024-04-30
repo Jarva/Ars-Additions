@@ -104,22 +104,6 @@
             "predicate_type": "minecraft:always_true"
           },
           "output_state": {
-            "Name": "ars_nouveau:gilded_sourcestone_large_bricks",
-            "Properties": {
-              "facing": "north"
-            }
-          }
-        },
-        {
-          "input_predicate": {
-            "block": "ars_nouveau:sourcestone_large_bricks",
-            "predicate_type": "minecraft:random_block_match",
-            "probability": 0.2
-          },
-          "location_predicate": {
-            "predicate_type": "minecraft:always_true"
-          },
-          "output_state": {
             "Name": "minecraft:blue_terracotta"
           }
         },
@@ -472,20 +456,6 @@
           }
         },
         {
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "Inventory": {
-                "Items": [
-                  {
-                    "Count": 1,
-                    "Slot": 0,
-                    "id": "ars_additions:nexus_warp_scroll"
-                  }
-                ]
-              }
-            }
-          },
           "input_predicate": {
             "block_state": {
               "Name": "ars_additions:warp_nexus",
@@ -499,6 +469,17 @@
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
           },
+          "output_nbt": {
+            "Inventory": {
+              "Items": [
+                {
+                  "Count": 1,
+                  "Slot": 0,
+                  "id": "ars_additions:nexus_warp_scroll"
+                }
+              ]
+            }
+          },
           "output_state": {
             "Name": "ars_additions:warp_nexus",
             "Properties": {
@@ -508,20 +489,6 @@
           }
         },
         {
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "Inventory": {
-                "Items": [
-                  {
-                    "Count": 1,
-                    "Slot": 0,
-                    "id": "ars_additions:nexus_warp_scroll"
-                  }
-                ]
-              }
-            }
-          },
           "input_predicate": {
             "block_state": {
               "Name": "ars_additions:warp_nexus",
@@ -535,6 +502,17 @@
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
           },
+          "output_nbt": {
+            "Inventory": {
+              "Items": [
+                {
+                  "Count": 1,
+                  "Slot": 0,
+                  "id": "ars_additions:nexus_warp_scroll"
+                }
+              ]
+            }
+          },
           "output_state": {
             "Name": "ars_additions:warp_nexus",
             "Properties": {
@@ -544,20 +522,6 @@
           }
         },
         {
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "itemStack": {
-                "Count": 1,
-                "id": "ars_nouveau:starbuncle_charm",
-                "tag": {
-                  "bio": "Warning: Not to leave unsupervised",
-                  "color": "gray",
-                  "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
-                }
-              }
-            }
-          },
           "input_predicate": {
             "block_state": {
               "Name": "ars_nouveau:scribes_table",
@@ -572,6 +536,17 @@
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
           },
+          "output_nbt": {
+            "itemStack": {
+              "Count": 1,
+              "id": "ars_nouveau:starbuncle_charm",
+              "tag": {
+                "bio": "Warning: Not to leave unsupervised",
+                "color": "gray",
+                "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
+              }
+            }
+          },
           "output_state": {
             "Name": "ars_nouveau:scribes_table",
             "Properties": {
@@ -581,20 +556,6 @@
           }
         },
         {
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "itemStack": {
-                "Count": 1,
-                "id": "ars_nouveau:starbuncle_charm",
-                "tag": {
-                  "bio": "Warning: Not to leave unsupervised",
-                  "color": "gray",
-                  "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
-                }
-              }
-            }
-          },
           "input_predicate": {
             "block_state": {
               "Name": "ars_nouveau:scribes_table",
@@ -609,6 +570,17 @@
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
           },
+          "output_nbt": {
+            "itemStack": {
+              "Count": 1,
+              "id": "ars_nouveau:starbuncle_charm",
+              "tag": {
+                "bio": "Warning: Not to leave unsupervised",
+                "color": "gray",
+                "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
+              }
+            }
+          },
           "output_state": {
             "Name": "ars_nouveau:scribes_table",
             "Properties": {
@@ -618,20 +590,6 @@
           }
         },
         {
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "itemStack": {
-                "Count": 1,
-                "id": "ars_nouveau:starbuncle_charm",
-                "tag": {
-                  "bio": "Warning: Not to leave unsupervised",
-                  "color": "gray",
-                  "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
-                }
-              }
-            }
-          },
           "input_predicate": {
             "block_state": {
               "Name": "ars_nouveau:scribes_table",
@@ -646,6 +604,17 @@
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
           },
+          "output_nbt": {
+            "itemStack": {
+              "Count": 1,
+              "id": "ars_nouveau:starbuncle_charm",
+              "tag": {
+                "bio": "Warning: Not to leave unsupervised",
+                "color": "gray",
+                "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
+              }
+            }
+          },
           "output_state": {
             "Name": "ars_nouveau:scribes_table",
             "Properties": {
@@ -655,20 +624,6 @@
           }
         },
         {
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "itemStack": {
-                "Count": 1,
-                "id": "ars_nouveau:starbuncle_charm",
-                "tag": {
-                  "bio": "Warning: Not to leave unsupervised",
-                  "color": "gray",
-                  "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
-                }
-              }
-            }
-          },
           "input_predicate": {
             "block_state": {
               "Name": "ars_nouveau:scribes_table",
@@ -682,6 +637,17 @@
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
+          },
+          "output_nbt": {
+            "itemStack": {
+              "Count": 1,
+              "id": "ars_nouveau:starbuncle_charm",
+              "tag": {
+                "bio": "Warning: Not to leave unsupervised",
+                "color": "gray",
+                "name": "{\"color\":\"#808080\",\"text\":\"Eru\"}"
+              }
+            }
           },
           "output_state": {
             "Name": "ars_nouveau:scribes_table",
@@ -692,20 +658,6 @@
           }
         },
         {
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "itemStack": {
-                "Count": 1,
-                "id": "ars_nouveau:starbuncle_charm",
-                "tag": {
-                  "bio": "A curious Starbuncle that likes to build and experiment with magic.",
-                  "color": "pink",
-                  "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
-                }
-              }
-            }
-          },
           "input_predicate": {
             "block_state": {
               "Name": "ars_nouveau:scribes_table",
@@ -720,6 +672,17 @@
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
           },
+          "output_nbt": {
+            "itemStack": {
+              "Count": 1,
+              "id": "ars_nouveau:starbuncle_charm",
+              "tag": {
+                "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                "color": "pink",
+                "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
+              }
+            }
+          },
           "output_state": {
             "Name": "ars_nouveau:scribes_table",
             "Properties": {
@@ -729,20 +692,6 @@
           }
         },
         {
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "itemStack": {
-                "Count": 1,
-                "id": "ars_nouveau:starbuncle_charm",
-                "tag": {
-                  "bio": "A curious Starbuncle that likes to build and experiment with magic.",
-                  "color": "pink",
-                  "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
-                }
-              }
-            }
-          },
           "input_predicate": {
             "block_state": {
               "Name": "ars_nouveau:scribes_table",
@@ -757,6 +706,17 @@
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
           },
+          "output_nbt": {
+            "itemStack": {
+              "Count": 1,
+              "id": "ars_nouveau:starbuncle_charm",
+              "tag": {
+                "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                "color": "pink",
+                "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
+              }
+            }
+          },
           "output_state": {
             "Name": "ars_nouveau:scribes_table",
             "Properties": {
@@ -766,20 +726,6 @@
           }
         },
         {
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "itemStack": {
-                "Count": 1,
-                "id": "ars_nouveau:starbuncle_charm",
-                "tag": {
-                  "bio": "A curious Starbuncle that likes to build and experiment with magic.",
-                  "color": "pink",
-                  "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
-                }
-              }
-            }
-          },
           "input_predicate": {
             "block_state": {
               "Name": "ars_nouveau:scribes_table",
@@ -794,6 +740,17 @@
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
           },
+          "output_nbt": {
+            "itemStack": {
+              "Count": 1,
+              "id": "ars_nouveau:starbuncle_charm",
+              "tag": {
+                "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                "color": "pink",
+                "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
+              }
+            }
+          },
           "output_state": {
             "Name": "ars_nouveau:scribes_table",
             "Properties": {
@@ -803,20 +760,6 @@
           }
         },
         {
-          "block_entity_modifier": {
-            "type": "minecraft:append_static",
-            "data": {
-              "itemStack": {
-                "Count": 1,
-                "id": "ars_nouveau:starbuncle_charm",
-                "tag": {
-                  "bio": "A curious Starbuncle that likes to build and experiment with magic.",
-                  "color": "pink",
-                  "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
-                }
-              }
-            }
-          },
           "input_predicate": {
             "block_state": {
               "Name": "ars_nouveau:scribes_table",
@@ -830,6 +773,17 @@
           },
           "location_predicate": {
             "predicate_type": "minecraft:always_true"
+          },
+          "output_nbt": {
+            "itemStack": {
+              "Count": 1,
+              "id": "ars_nouveau:starbuncle_charm",
+              "tag": {
+                "bio": "A curious Starbuncle that likes to build and experiment with magic.",
+                "color": "pink",
+                "name": "{\"color\":\"#FF69B4\",\"text\":\"Rozeta\"}"
+              }
+            }
           },
           "output_state": {
             "Name": "ars_nouveau:scribes_table",

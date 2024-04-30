@@ -25,6 +25,5 @@
     [
       "find_ruined_portal"
     ]
-  ],
-  "sends_telemetry_event": false
+  ]
 }

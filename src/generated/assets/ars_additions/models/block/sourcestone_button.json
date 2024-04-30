@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/button",
   "textures": {
-    "texture": "ars_nouveau:block/sourcestone"
+    "texture": "ars_nouveau:blocks/sourcestone"
   }
 }

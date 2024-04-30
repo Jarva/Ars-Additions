@@ -1,28 +1,27 @@
 package com.github.jarva.arsadditions.datagen;
 
-import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
-import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
+import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class LangDatagen extends LanguageProvider {
 
-    public LangDatagen(PackOutput output, String modid, String locale) {
+    public LangDatagen(DataGenerator output, String modid, String locale) {
         super(output, modid, locale);
     }
 
     @Override
     protected void addTranslations() {
-        for (AbstractSpellPart spell : GlyphRegistry.getSpellpartMap().values()) {
+        for (AbstractSpellPart spell : ArsNouveauAPI.getInstance().getSpellpartMap().values()) {
             ResourceLocation registry = spell.getRegistryName();
             if (!registry.getNamespace().equals(Setup.root)) continue;
             this.add(Setup.root + ".glyph_desc." + registry.getPath(), spell.getBookDescription());
             this.add(Setup.root + ".glyph_name." + registry.getPath(), spell.getName());
         }
-        for (AbstractRitual ritual : RitualRegistry.getRitualMap().values()) {
+        for (AbstractRitual ritual : ArsNouveauAPI.getInstance().getRitualMap().values()) {
             ResourceLocation registry = ritual.getRegistryName();
             if (!registry.getNamespace().equals(Setup.root)) continue;
             this.add("item." + Setup.root + "." + registry.getPath(), ritual.getLangName());

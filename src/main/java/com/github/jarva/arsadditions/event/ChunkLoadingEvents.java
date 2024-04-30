@@ -19,7 +19,7 @@ public class ChunkLoadingEvents {
         Player player = event.getEntity();
         UUID uuid = player.getUUID();
 
-        if (!(player.level() instanceof ServerLevel serverLevel)) return;
+        if (!(player.getLevel() instanceof ServerLevel serverLevel)) return;
 
         MinecraftServer server = serverLevel.getServer();
 
@@ -31,7 +31,7 @@ public class ChunkLoadingEvents {
         Player player = event.getEntity();
         UUID uuid = player.getUUID();
 
-        if (!(player.level() instanceof ServerLevel serverLevel)) return;
+        if (!(player.getLevel() instanceof ServerLevel serverLevel)) return;
         if (!ServerConfig.SERVER.chunkloading_require_online.get()) return;
 
         MinecraftServer server = serverLevel.getServer();

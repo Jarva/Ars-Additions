@@ -79,7 +79,7 @@ public class EffectMark extends AbstractEffect {
     }
 
     @Override
-    protected int getDefaultManaCost() {
+    public int getDefaultManaCost() {
         return 25;
     }
 

@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +19,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +64,7 @@ public class MethodRecall extends AbstractCastMethod {
         ItemStack reliquary = UnstableReliquary.getReliquaryFromCaster(context, caster);
         if (reliquary == null) return CastResolveType.FAILURE;
 
-        Level level = caster.level();
+        Level level = caster.getLevel();
         if (!(level instanceof ServerLevel serverLevel)) return CastResolveType.FAILURE;
 
         MarkType mark = UnstableReliquary.getMarkType(reliquary);
@@ -89,10 +89,10 @@ public class MethodRecall extends AbstractCastMethod {
         if (mark == MarkType.LOCATION) {
             BlockPos pos = NbtUtils.readBlockPos(data.getCompound("block_pos"));
             String dim = data.getString("block_dimension");
-            if (!dim.equals(caster.level().dimension().location().toString())) return CastResolveType.FAILURE;
+            if (!dim.equals(caster.getLevel().dimension().location().toString())) return CastResolveType.FAILURE;
 
-            BlockHitResult bhr = new BlockHitResult( pos.getCenter(), Direction.UP, pos, false);
-            resolver.onResolveEffect(caster.level(), bhr);
+            BlockHitResult bhr = new BlockHitResult( Vec3.atCenterOf(pos), Direction.UP, pos, false);
+            resolver.onResolveEffect(caster.getLevel(), bhr);
             UnstableReliquary.damage(mark, reliquary, caster);
             return CastResolveType.SUCCESS;
         }
@@ -100,13 +100,13 @@ public class MethodRecall extends AbstractCastMethod {
         return CastResolveType.FAILURE;
     }
 
-    @Override
-    protected void addDefaultInvalidCombos(Set<ResourceLocation> defaults) {
-        defaults.add(EffectMark.INSTANCE.getRegistryName());
-    }
+//    @Override
+//    protected void addDefaultInvalidCombos(Set<ResourceLocation> defaults) {
+//        defaults.add(EffectMark.INSTANCE.getRegistryName());
+//    }
 
     @Override
-    protected int getDefaultManaCost() {
+    public int getDefaultManaCost() {
         return 50;
     }
 

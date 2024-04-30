@@ -103,8 +103,8 @@ dependencies {
     forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
 
     modImplementation "com.hollingsworth.ars_nouveau:ars_nouveau-${project.minecraft_version}:${project.ars_version}"
-    modImplementation "software.bernie.geckolib:geckolib-forge-${project.minecraft_version}:${project.gecko_version}"
-    forgeRuntimeLibrary "com.eliotlash.mclib:mclib:20"
+    modImplementation "software.bernie.geckolib:geckolib-forge-1.19:${project.gecko_version}"
+
     modImplementation "vazkii.patchouli:Patchouli:${project.minecraft_version}-${project.patchouli_version}"
 
     modCompileOnlyApi "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"
@@ -112,7 +112,7 @@ dependencies {
 
     modRuntimeOnly("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
 
-    modImplementation "top.theillusivec4.curios:curios-forge:${project.curios_version}+${project.minecraft_version}"
+    modImplementation "top.theillusivec4.curios:curios-forge:${project.minecraft_version}-${project.curios_version}"
     modImplementation "com.github.glitchfiend:TerraBlender-forge:${project.minecraft_version}-${project.terrablender_version}"
 
     implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-common:0.2.0-beta.8"))

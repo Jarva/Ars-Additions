@@ -55,12 +55,12 @@ public class MethodRetaliate extends AbstractCastMethod {
         LivingEntity lastHurtBy = caster.getKillCredit();
         if (lastHurtBy == null) return CastResolveType.FAILURE;
 
-        resolver.onResolveEffect(caster.level(), new EntityHitResult(lastHurtBy));
+        resolver.onResolveEffect(caster.getLevel(), new EntityHitResult(lastHurtBy));
         return CastResolveType.SUCCESS;
     }
 
     @Override
-    protected int getDefaultManaCost() {
+    public int getDefaultManaCost() {
         return 25;
     }
 

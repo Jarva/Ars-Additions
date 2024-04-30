@@ -1,29 +1,23 @@
 package com.github.jarva.arsadditions.datagen.tags;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import java.util.concurrent.CompletableFuture;
-
-public class ItemTagDatagen extends IntrinsicHolderTagsProvider<Item> {
+public class ItemTagDatagen extends ItemTagsProvider {
     public static TagKey<Item> FORGOTTEN_KNOWLEDGE_GLYPHS = ItemTags.create(new ResourceLocation(ArsAdditions.MODID, "forgotten_knowledge"));
-    public ItemTagDatagen(PackOutput arg, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
-        super(arg, Registries.ITEM, future, item -> item.builtInRegistryHolder().key(), ArsAdditions.MODID, helper);
+    public ItemTagDatagen(DataGenerator arg, BlockTagsProvider p_126531_, ExistingFileHelper helper) {
+        super(arg, p_126531_, ArsAdditions.MODID, helper);
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider provider) {
-        this.tag(ItemTags.BOOKSHELF_BOOKS).add(AddonItemRegistry.CODEX_ENTRY.get(), AddonItemRegistry.CODEX_ENTRY_LOST.get(), AddonItemRegistry.CODEX_ENTRY_ANCIENT.get(), ItemsRegistry.CASTER_TOME.get());
+    protected void addTags() {
         this.tag(FORGOTTEN_KNOWLEDGE_GLYPHS);
     }
 }

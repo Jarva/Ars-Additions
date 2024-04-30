@@ -1,9 +1,10 @@
 package com.github.jarva.arsadditions.common.item;
 
+import com.github.jarva.arsadditions.server.util.MarkType;
 import com.github.jarva.arsadditions.setup.config.ServerConfig;
 import com.github.jarva.arsadditions.setup.registry.AddonEffectRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
-import com.github.jarva.arsadditions.server.util.MarkType;
+import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.item.inv.InteractType;
 import com.hollingsworth.arsnouveau.api.item.inv.InventoryManager;
 import com.hollingsworth.arsnouveau.api.item.inv.SlotReference;
@@ -31,7 +32,7 @@ import java.util.UUID;
 
 public class UnstableReliquary extends Item {
     public UnstableReliquary() {
-        super(new Properties().stacksTo(1).durability(1000));
+        super(new Properties().stacksTo(1).durability(1000).tab(ArsNouveau.itemGroup));
     }
 
 //    @Override

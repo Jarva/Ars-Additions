@@ -10,7 +10,6 @@ import com.hollingsworth.arsnouveau.common.items.WarpScroll;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.*;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -55,12 +54,12 @@ public class LocateUtil {
             CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(Duration.ofMinutes(5)).build();
 
     public static HolderSet<Structure> holderFromTag(ServerLevel level, TagKey<Structure> structureTagKey) {
-        Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        Registry<Structure> registry = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
         return registry.getTag(structureTagKey).orElseThrow();
     }
 
     public static HolderSet<Structure> holderFromResource(ServerLevel level, ResourceKey<Structure> structureResourceKey) {
-        Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        Registry<Structure> registry = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
         return registry.getHolder(structureResourceKey).map(HolderSet::direct).orElseThrow();
     }
 
@@ -122,11 +121,11 @@ public class LocateUtil {
         boolean skipKnown = ExplorationScrollFunction.DEFAULT_SKIP_EXISTING;
         if (tag != null) {
             if (tag.contains("resource")) {
-                ResourceKey<Structure> key = ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(tag.getString("resource")));
+                ResourceKey<Structure> key = ResourceKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(tag.getString("resource")));
                 holderSet = LocateUtil.holderFromResource(level, key);
             }
             if (tag.contains("tag")) {
-                TagKey<Structure> key = TagKey.create(Registries.STRUCTURE, new ResourceLocation(tag.getString("tag")));
+                TagKey<Structure> key = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(tag.getString("tag")));
                 holderSet = LocateUtil.holderFromTag(level, key);
             }
             if (tag.contains("origin")) {
@@ -143,7 +142,7 @@ public class LocateUtil {
                 skipKnown = tag.getBoolean("skip_known");
             }
         }
-        LocateUtil.locateWithState(stack, level, holderSet, BlockPos.containing(origin), searchRadius, skipKnown);
+        LocateUtil.locateWithState(stack, level, holderSet, new BlockPos(origin), searchRadius, skipKnown);
     }
 
     private static void locate(ServerLevel level, HolderSet<Structure> holderSet, BlockPos origin, int searchRadius, boolean skipKnownStructures, Consumer<Pair<BlockPos, Holder<Structure>>> consumer) {

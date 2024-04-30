@@ -6,7 +6,7 @@ import com.github.jarva.arsadditions.server.storage.ChunkLoadingData;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -112,8 +112,8 @@ public class RitualChunkLoading extends AbstractRitual {
         ResourceLocation item = ResourceLocation.tryParse(ServerConfig.SERVER.chunkloading_radius_increment_item.get());
         if (item == null) return null;
 
-        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, item);
-        Optional<? extends Holder<Item>> optional = getWorld().holderLookup(Registries.ITEM).get(key);
+        ResourceKey<Item> key = ResourceKey.create(Registry.ITEM_REGISTRY, item);
+        Optional<? extends Holder<Item>> optional = getWorld().registryAccess().registry(Registry.ITEM_REGISTRY).get().getHolder(key);
         return optional.map(Holder::get).orElse(null);
     }
 

@@ -4,27 +4,20 @@ import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.github.jarva.arsadditions.setup.config.CommonConfig;
-import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
-import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
 import com.hollingsworth.arsnouveau.api.loot.DungeonLootTables;
-import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.common.items.RitualTablet;
-import com.hollingsworth.arsnouveau.setup.registry.CreativeTabRegistry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.core.Registry;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,18 +26,7 @@ import java.util.function.Supplier;
 public class ModEvents {
     @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ServerModEvents {
-        @SubscribeEvent
-        public static void buildContents(BuildCreativeModeTabContentsEvent event) {
-            if (event.getTabKey() == CreativeTabRegistry.BLOCKS.getKey()) {
-                for (RegistryObject<Item> item : AddonItemRegistry.REGISTERED_ITEMS) {
-                    event.accept(item);
-                }
 
-                for (RegistryObject<? extends Block> block : AddonBlockRegistry.REGISTERED_BLOCKS) {
-                    event.accept(block);
-                }
-            }
-        }
     }
 
     @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -57,7 +39,7 @@ public class ModEvents {
                 if (!(stack.getItem() instanceof RitualTablet)) continue;
 
                 DungeonLootTables.UNCOMMON_LOOT.set(i, () -> {
-                    List<RitualTablet> tablets = new ArrayList<>(RitualRegistry.getRitualItemMap().values()).stream().filter(tablet -> {
+                    List<RitualTablet> tablets = new ArrayList<>(ArsNouveauAPI.getInstance().getRitualItemMap().values()).stream().filter(tablet -> {
                         if (tablet.ritual instanceof RitualChunkLoading) {
                             return (boolean) CommonConfig.COMMON.config.get("ritual_enabled").get();
                         }
@@ -74,7 +56,7 @@ public class ModEvents {
                 MinecraftServer server = event.getServer();
                 if (server.getTickCount() % 20 != 0) return;
                 for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                    boolean isRuinedPortal = player.serverLevel().structureManager().getStructureWithPieceAt(player.blockPosition(), TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix("ruined_portals"))).isValid();
+                    boolean isRuinedPortal = player.getLevel().structureManager().getStructureWithPieceAt(player.blockPosition(), TagKey.create(Registry.STRUCTURE_REGISTRY, ArsAdditions.prefix("ruined_portals"))).isValid();
                     if (isRuinedPortal) {
                         Triggers.FIND_RUINED_PORTAL.trigger(player);
                     }

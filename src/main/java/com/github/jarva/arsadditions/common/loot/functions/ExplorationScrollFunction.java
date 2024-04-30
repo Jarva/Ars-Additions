@@ -10,7 +10,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -30,7 +30,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Set;
 
 public class ExplorationScrollFunction extends LootItemConditionalFunction {
-    public static final TagKey<Structure> DEFAULT_DESTINATION = TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix("on_explorer_warp_scroll"));
+    public static final TagKey<Structure> DEFAULT_DESTINATION = TagKey.create(Registry.STRUCTURE_REGISTRY, ArsAdditions.prefix("on_explorer_warp_scroll"));
     public static final int DEFAULT_SEARCH_RADIUS = 50;
     public static final boolean DEFAULT_SKIP_EXISTING = true;
     private final TagKey<Structure> tag;
@@ -69,7 +69,7 @@ public class ExplorationScrollFunction extends LootItemConditionalFunction {
         ServerLevel level = context.getLevel();
         HolderSet<Structure> holderSet = this.resource != null ? LocateUtil.holderFromResource(level, this.resource) : LocateUtil.holderFromTag(level, this.tag);
 
-        LocateUtil.locateWithState(stack, level, holderSet, BlockPos.containing(origin), searchRadius, skipKnownStructures);
+        LocateUtil.locateWithState(stack, level, holderSet, new BlockPos(origin), searchRadius, skipKnownStructures);
         return stack;
     }
 
@@ -129,7 +129,7 @@ public class ExplorationScrollFunction extends LootItemConditionalFunction {
         private static TagKey<Structure> readTag(JsonObject jsonObject) {
             if (jsonObject.has("tag")) {
                 String string = GsonHelper.getAsString(jsonObject, "tag");
-                return TagKey.create(Registries.STRUCTURE, new ResourceLocation(string));
+                return TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(string));
             }
             return DEFAULT_DESTINATION;
         }
@@ -137,7 +137,7 @@ public class ExplorationScrollFunction extends LootItemConditionalFunction {
         private static ResourceKey<Structure> readResource(JsonObject jsonObject) {
             if (jsonObject.has("resource")) {
                 String string = GsonHelper.getAsString(jsonObject, "resource");
-                return ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(string));
+                return ResourceKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(string));
             }
             return null;
         }

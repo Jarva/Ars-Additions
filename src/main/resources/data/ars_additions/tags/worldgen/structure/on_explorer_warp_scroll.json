@@ -13,6 +13,7 @@
     "minecraft:trail_ruins",
     "#minecraft:ocean_ruin",
     "#minecraft:shipwreck",
-    "minecraft:swamp_hut"
+    "minecraft:swamp_hut",
+    "ars_additions:nexus_tower"
   ]
 }

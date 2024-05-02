@@ -7,7 +7,6 @@ import com.hollingsworth.arsnouveau.client.particle.GlowParticleData;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.hollingsworth.arsnouveau.client.particle.ParticleUtil;
 import com.hollingsworth.arsnouveau.client.renderer.item.GenericItemBlockRenderer;
-import com.hollingsworth.arsnouveau.client.renderer.tile.ArsGeoBlockRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
@@ -25,8 +24,9 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.ars_nouveau.geckolib3.core.builder.Animation;
 import software.bernie.ars_nouveau.geckolib3.core.processor.IBone;
 import software.bernie.ars_nouveau.geckolib3.model.AnimatedGeoModel;
+import software.bernie.ars_nouveau.geckolib3.renderers.geo.GeoBlockRenderer;
 
-public class WarpNexusRenderer extends ArsGeoBlockRenderer<WarpNexusTile> {
+public class WarpNexusRenderer extends GeoBlockRenderer<WarpNexusTile> {
     public static AnimatedGeoModel<WarpNexusTile> model = new GenericModel<>("warp_nexus", "block");
     public WarpNexusRenderer(BlockEntityRendererProvider.Context rendererProvider) {
         super(rendererProvider, model);

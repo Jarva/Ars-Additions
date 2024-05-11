@@ -2,8 +2,8 @@ package com.github.jarva.arsadditions.datagen;
 
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.datagen.conditions.ConfigCondition;
-import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
-import com.github.jarva.arsadditions.registry.names.AddonBlockNames;
+import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
@@ -23,7 +23,7 @@ import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 
 import java.util.function.Consumer;
 
-import static com.github.jarva.arsadditions.registry.AddonBlockRegistry.getBlock;
+import static com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry.getBlock;
 
 public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.RecipeDatagen implements IConditionBuilder {
     public RecipeDatagen(PackOutput packOutput) {

@@ -1,10 +1,11 @@
 package com.github.jarva.arsadditions;
 
+import com.github.jarva.arsadditions.client.renderers.EnchantingWixieCauldronRenderer;
 import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
+import com.github.jarva.arsadditions.common.util.FillUtil;
 import com.github.jarva.arsadditions.mixin.PageRelationsAccessor;
-import com.github.jarva.arsadditions.networking.OpenTerminalPacket;
-import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
-import com.github.jarva.arsadditions.util.FillUtil;
+import com.github.jarva.arsadditions.setup.networking.OpenTerminalPacket;
+import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
@@ -58,6 +59,7 @@ public class ArsAdditionsClient {
         @SubscribeEvent
         public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
             event.registerBlockEntityRenderer(AddonBlockRegistry.WARP_NEXUS_TILE.get(), WarpNexusRenderer::new);
+            event.registerBlockEntityRenderer(AddonBlockRegistry.WIXIE_ENCHANTING_TILE.get(), EnchantingWixieCauldronRenderer::new);
         }
     }
 

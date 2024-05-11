@@ -1,6 +1,6 @@
 package com.github.jarva.arsadditions.mixin;
 
-import com.github.jarva.arsadditions.registry.AddonItemRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.spell.SpellContext;
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;

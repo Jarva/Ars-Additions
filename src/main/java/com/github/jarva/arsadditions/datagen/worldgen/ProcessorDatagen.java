@@ -1,7 +1,7 @@
 package com.github.jarva.arsadditions.datagen.worldgen;
 
-import com.github.jarva.arsadditions.block.WarpNexus;
-import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.common.block.WarpNexus;
+import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.hollingsworth.arsnouveau.common.block.ScribesBlock;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.github.jarva.arsadditions.registry.names.AddonBlockNames.CRACKED_SOURCESTONE_LARGE_BRICKS;
+import static com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames.CRACKED_SOURCESTONE_LARGE_BRICKS;
 import static com.hollingsworth.arsnouveau.common.lib.LibBlockNames.*;
 
 public class ProcessorDatagen extends SimpleDataProvider {

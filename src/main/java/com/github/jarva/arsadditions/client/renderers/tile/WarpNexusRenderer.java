@@ -1,8 +1,8 @@
 package com.github.jarva.arsadditions.client.renderers.tile;
 
-import com.github.jarva.arsadditions.block.WarpNexus;
-import com.github.jarva.arsadditions.block.tile.WarpNexusTile;
-import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.common.block.WarpNexus;
+import com.github.jarva.arsadditions.common.block.tile.WarpNexusTile;
+import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.client.particle.GlowParticleData;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.hollingsworth.arsnouveau.client.particle.ParticleUtil;

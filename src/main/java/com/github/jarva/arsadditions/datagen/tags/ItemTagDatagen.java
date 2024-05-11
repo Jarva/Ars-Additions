@@ -1,7 +1,7 @@
 package com.github.jarva.arsadditions.datagen.tags;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.registry.AddonItemRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;

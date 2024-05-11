@@ -1,8 +1,8 @@
 package com.github.jarva.arsadditions.datagen;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.advancement.Triggers;
-import com.github.jarva.arsadditions.registry.AddonItemRegistry;
+import com.github.jarva.arsadditions.common.advancement.Triggers;
+import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.google.common.collect.ImmutableMap;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.common.datagen.advancement.ANAdvancementBuilder;

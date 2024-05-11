@@ -1,9 +1,9 @@
 package com.github.jarva.arsadditions.datagen;
 
-import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
-import com.github.jarva.arsadditions.registry.AddonItemRegistry;
-import com.github.jarva.arsadditions.registry.ArsNouveauRegistry;
-import com.github.jarva.arsadditions.registry.names.AddonBlockNames;
+import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.github.jarva.arsadditions.setup.registry.ArsNouveauRegistry;
+import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.familiar.AbstractFamiliarHolder;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;

@@ -1,7 +1,7 @@
 package com.github.jarva.arsadditions.datagen.tags;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.registry.names.AddonBlockNames;
+import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -12,7 +12,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.github.jarva.arsadditions.registry.AddonBlockRegistry.getBlocks;
+import static com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry.getBlocks;
 
 public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
     public BlockTagDatagen(PackOutput arg, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {

@@ -1,9 +1,9 @@
 package com.github.jarva.arsadditions.datagen.client;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.block.MagelightLantern;
-import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
-import com.github.jarva.arsadditions.registry.names.AddonBlockNames;
+import com.github.jarva.arsadditions.common.block.MagelightLantern;
+import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.common.items.Glyph;

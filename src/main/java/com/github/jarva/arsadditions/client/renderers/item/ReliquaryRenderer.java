@@ -1,8 +1,8 @@
 package com.github.jarva.arsadditions.client.renderers.item;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.item.UnstableReliquary;
-import com.github.jarva.arsadditions.util.MarkType;
+import com.github.jarva.arsadditions.common.item.UnstableReliquary;
+import com.github.jarva.arsadditions.server.util.MarkType;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;

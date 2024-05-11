@@ -81,6 +81,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("tooltip.ars_additions.exploration_warp_scroll.use", "Throw into the frame of a ruined warp portal or press %s to teleport.");
         this.add("tooltip.ars_additions.exploration_warp_scroll.desc", "This ancient warp scroll is filled to the brim with unstable magic.");
         this.add("tooltip.ars_additions.exploration_warp_scroll.locating", "Locating Structure...");
+        this.add("tooltip.ars_additions.exploration_warp_scroll.failed", "Unable to locate a nearby structure.");
+        this.add("tooltip.ars_additions.exploration_warp_scroll.located", "Located Structure. Good luck.");
 
         this.add("tooltip.ars_additions.reliquary.marked", "%s");
         this.add("tooltip.ars_additions.reliquary.marked.name", "%s \"%s\"");

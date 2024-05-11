@@ -1,7 +1,7 @@
 package com.github.jarva.arsadditions.datagen.conditions;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.config.CommonConfig;
+import com.github.jarva.arsadditions.setup.config.CommonConfig;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;

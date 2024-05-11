@@ -1,11 +1,11 @@
 package com.github.jarva.arsadditions;
 
-import com.github.jarva.arsadditions.advancement.Triggers;
-import com.github.jarva.arsadditions.config.CommonConfig;
-import com.github.jarva.arsadditions.config.ServerConfig;
-import com.github.jarva.arsadditions.networking.NetworkHandler;
-import com.github.jarva.arsadditions.registry.AddonSetup;
-import com.github.jarva.arsadditions.registry.ArsNouveauRegistry;
+import com.github.jarva.arsadditions.common.advancement.Triggers;
+import com.github.jarva.arsadditions.setup.config.CommonConfig;
+import com.github.jarva.arsadditions.setup.config.ServerConfig;
+import com.github.jarva.arsadditions.setup.networking.NetworkHandler;
+import com.github.jarva.arsadditions.setup.registry.AddonSetup;
+import com.github.jarva.arsadditions.setup.registry.ArsNouveauRegistry;
 import com.hollingsworth.arsnouveau.setup.config.ANModConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;

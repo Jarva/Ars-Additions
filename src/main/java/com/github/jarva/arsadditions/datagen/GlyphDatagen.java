@@ -1,8 +1,8 @@
 package com.github.jarva.arsadditions.datagen;
 
-import com.github.jarva.arsadditions.glyph.EffectMark;
-import com.github.jarva.arsadditions.glyph.MethodRecall;
-import com.github.jarva.arsadditions.glyph.MethodRetaliate;
+import com.github.jarva.arsadditions.common.glyph.EffectMark;
+import com.github.jarva.arsadditions.common.glyph.MethodRecall;
+import com.github.jarva.arsadditions.common.glyph.MethodRetaliate;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;

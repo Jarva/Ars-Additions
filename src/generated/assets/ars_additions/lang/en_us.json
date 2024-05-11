@@ -72,6 +72,8 @@
   "painting.ars_additions.snoozebuncle.author": "Gootastic",
   "painting.ars_additions.snoozebuncle.title": "Snoozebuncle",
   "tooltip.ars_additions.exploration_warp_scroll.desc": "This ancient warp scroll is filled to the brim with unstable magic.",
+  "tooltip.ars_additions.exploration_warp_scroll.failed": "Unable to locate a nearby structure.",
+  "tooltip.ars_additions.exploration_warp_scroll.located": "Located Structure. Good luck.",
   "tooltip.ars_additions.exploration_warp_scroll.locating": "Locating Structure...",
   "tooltip.ars_additions.exploration_warp_scroll.use": "Throw into the frame of a ruined warp portal or press %s to teleport.",
   "tooltip.ars_additions.reliquary.marked": "%s",

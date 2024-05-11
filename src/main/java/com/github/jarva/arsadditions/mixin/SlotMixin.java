@@ -1,7 +1,7 @@
 package com.github.jarva.arsadditions.mixin;
 
 
-import com.github.jarva.arsadditions.item.UnstableReliquary;
+import com.github.jarva.arsadditions.common.item.UnstableReliquary;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;

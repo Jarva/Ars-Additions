@@ -1,6 +1,6 @@
 package com.github.jarva.arsadditions.mixin;
 
-import com.github.jarva.arsadditions.ritual.RitualChunkLoading;
+import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.hollingsworth.arsnouveau.common.block.RitualBrazierBlock;
 import com.hollingsworth.arsnouveau.common.block.tile.RitualBrazierTile;
 import net.minecraft.core.BlockPos;

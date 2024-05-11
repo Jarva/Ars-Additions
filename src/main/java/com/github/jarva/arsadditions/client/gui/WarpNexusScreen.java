@@ -1,9 +1,9 @@
 package com.github.jarva.arsadditions.client.gui;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.capability.CapabilityRegistry;
-import com.github.jarva.arsadditions.networking.TeleportNexusPacket;
-import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.common.capability.CapabilityRegistry;
+import com.github.jarva.arsadditions.setup.networking.TeleportNexusPacket;
+import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.client.gui.Color;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;

@@ -1,8 +1,8 @@
 package com.github.jarva.arsadditions.datagen;
 
-import com.github.jarva.arsadditions.block.WarpNexus;
-import com.github.jarva.arsadditions.registry.AddonBlockRegistry;
-import com.github.jarva.arsadditions.registry.names.AddonBlockNames;
+import com.github.jarva.arsadditions.common.block.WarpNexus;
+import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-import static com.github.jarva.arsadditions.registry.AddonBlockRegistry.getBlock;
+import static com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry.getBlock;
 
 public class DefaultLootDatagen extends LootTableProvider {
     public DefaultLootDatagen(PackOutput packOutput) {

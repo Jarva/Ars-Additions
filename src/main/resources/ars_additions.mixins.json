@@ -9,7 +9,9 @@
     "PageRelationsAccessor",
     "RitualBrazierBlockMixin",
     "SlotMixin",
-    "StructureTemplateMixin"
+    "StructureTemplateMixin",
+    "WixieCauldronAccessor",
+    "WixieCharmMixin"
   ],
   "client": [],
   "injectors": {

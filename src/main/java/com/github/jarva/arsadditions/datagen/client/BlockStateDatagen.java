@@ -8,6 +8,7 @@ import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.common.items.Glyph;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
+import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -22,8 +23,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.function.Supplier;
 
 public class BlockStateDatagen extends BlockStateProvider {
+    private final ExistingFileHelper fileHelper;
+
     public BlockStateDatagen(PackOutput output, ExistingFileHelper exFileHelper) {
         super(output, ArsAdditions.MODID, exFileHelper);
+        this.fileHelper = exFileHelper;
     }
 
     @Override
@@ -56,6 +60,10 @@ public class BlockStateDatagen extends BlockStateProvider {
         for (String chain : AddonBlockNames.CHAINS) {
             chainAndItem(chain);
         }
+
+        ModelFile enchantingApparatus = new ModelFile.ExistingModelFile(getTextureLoc(BlockRegistry.ENCHANTING_APP_BLOCK.get()), fileHelper);
+        getVariantBuilder(AddonBlockRegistry.WIXIE_ENCHANTING.get()).partialState().setModels(new ConfiguredModel(enchantingApparatus));
+        simpleBlockItem(AddonBlockRegistry.WIXIE_ENCHANTING.get(), new ModelFile.ExistingModelFile(key(BlockRegistry.ENCHANTING_APP_BLOCK.get()).withPrefix("item/"), fileHelper));
     }
 
     private void simpleBlockWithItem(Block block) {

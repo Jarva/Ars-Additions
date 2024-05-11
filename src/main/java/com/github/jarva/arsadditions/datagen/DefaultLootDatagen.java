@@ -1,8 +1,10 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.common.block.EnchantingWixieCauldron;
 import com.github.jarva.arsadditions.common.block.WarpNexus;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
+import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
@@ -37,7 +39,7 @@ public class DefaultLootDatagen extends LootTableProvider {
     }
 
     public static class BlockLootTableProvider extends BlockLootSubProvider {
-        public List<Block> list = new ArrayList<>();
+        private final List<Block> list = new ArrayList<>();
         protected BlockLootTableProvider() {
             super(Set.of(), FeatureFlags.REGISTRY.allFlags(), new HashMap<>());
         }
@@ -97,6 +99,10 @@ public class DefaultLootDatagen extends LootTableProvider {
                     );
             this.list.add(warpNexus);
             this.add(warpNexus, LootTable.lootTable().withPool(nexusBuilder));
+
+            EnchantingWixieCauldron enchantingWixieCauldron = AddonBlockRegistry.WIXIE_ENCHANTING.get();
+            this.list.add(enchantingWixieCauldron);
+            dropOther(enchantingWixieCauldron, BlockRegistry.ENCHANTING_APP_BLOCK);
         }
 
         private void registerDropSelf(Block block) {

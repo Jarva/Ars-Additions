@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.datagen.tags;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -40,5 +41,7 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
 
         Block[] chains = getBlocks(AddonBlockNames.CHAINS);
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(chains);
+
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(AddonBlockRegistry.WIXIE_ENCHANTING.get());
     }
 }

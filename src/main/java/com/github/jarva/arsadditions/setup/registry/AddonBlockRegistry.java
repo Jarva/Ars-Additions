@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.setup.registry;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
 import com.github.jarva.arsadditions.common.block.EnchantingWixieCauldron;
 import com.github.jarva.arsadditions.common.block.EnderSourceJar;
 import com.github.jarva.arsadditions.common.block.MagelightLantern;
@@ -9,9 +10,9 @@ import com.github.jarva.arsadditions.common.block.tile.EnchantingWixieCauldronTi
 import com.github.jarva.arsadditions.common.block.tile.EnderSourceJarTile;
 import com.github.jarva.arsadditions.common.block.tile.MagelightLanternTile;
 import com.github.jarva.arsadditions.common.block.tile.WarpNexusTile;
-import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
 import com.github.jarva.arsadditions.common.item.EnderSourceJarItem;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
+import com.hollingsworth.arsnouveau.client.renderer.tile.GenericRenderer;
 import com.hollingsworth.arsnouveau.common.items.RendererBlockItem;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
@@ -54,7 +55,12 @@ public class AddonBlockRegistry {
     public static RegistryObject<BlockEntityType<EnchantingWixieCauldronTile>> WIXIE_ENCHANTING_TILE;
 
     static {
-        WIXIE_ENCHANTING = registerBlockAndItem(AddonBlockNames.ENCHANTING_WIXIE_CAULDRON, EnchantingWixieCauldron::new);
+        WIXIE_ENCHANTING = registerBlockAndItem(AddonBlockNames.ENCHANTING_WIXIE_CAULDRON, EnchantingWixieCauldron::new, (block) -> new RendererBlockItem(block.get(), defaultItemProperties()) {
+            @Override
+            public Supplier<BlockEntityWithoutLevelRenderer> getRenderer() {
+                return GenericRenderer.getISTER("enchanting_apparatus");
+            }
+        });
         WIXIE_ENCHANTING_TILE = registerTile(AddonBlockNames.ENCHANTING_WIXIE_CAULDRON, EnchantingWixieCauldronTile::new, () -> new Block[]{WIXIE_ENCHANTING.get()});
 
         ENDER_SOURCE_JAR = registerBlockAndItem(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJar::new, (block) -> new EnderSourceJarItem(block.get(), defaultItemProperties()));

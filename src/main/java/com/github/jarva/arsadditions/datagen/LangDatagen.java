@@ -33,6 +33,7 @@ public class LangDatagen extends LanguageProvider {
 
         this.add("block.ars_additions.ender_source_jar", "Ender Source Jar");
         this.add("block.ars_additions.warp_nexus", "Warp Nexus");
+        this.add("block.ars_additions.enchanting_wixie_cauldron", "Wixie's Enchanting Apparatus");
         this.add("block.ars_additions.archwood_chain", "Archwood Chain");
         this.add("block.ars_additions.golden_chain", "Golden Chain");
         this.add("block.ars_additions.sourcestone_chain", "Sourcestone Chain");

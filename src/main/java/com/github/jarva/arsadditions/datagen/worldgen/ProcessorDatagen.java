@@ -2,6 +2,7 @@ package com.github.jarva.arsadditions.datagen.worldgen;
 
 import com.github.jarva.arsadditions.common.block.WarpNexus;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.hollingsworth.arsnouveau.common.block.ScribesBlock;
@@ -69,7 +70,7 @@ public class ProcessorDatagen extends SimpleDataProvider {
         CompoundTag nexusBlock = new CompoundTag();
         CompoundTag inventory = new CompoundTag();
         ListTag items = new ListTag();
-        CompoundTag scroll = new ItemStack(ItemsRegistry.STABLE_WARP_SCROLL.get()).save(new CompoundTag());
+        CompoundTag scroll = new ItemStack(AddonItemRegistry.NEXUS_WARP_SCROLL.get()).save(new CompoundTag());
         scroll.putInt("Slot", 0);
         items.add(scroll);
         inventory.put("Items", items);

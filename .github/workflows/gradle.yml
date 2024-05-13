@@ -17,7 +17,7 @@ on:
         type: string
 
 env:
-  MINECRAFT_VERSION: 1.20.1
+  MINECRAFT_VERSION: 1.19.2
   JAVA_VERSION: 17
 
 permissions:

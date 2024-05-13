@@ -3,7 +3,6 @@ package com.github.jarva.arsadditions.client.renderers;
 import com.github.jarva.arsadditions.common.block.tile.EnchantingWixieCauldronTile;
 import com.github.jarva.arsadditions.mixin.WixieCauldronAccessor;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
-import com.hollingsworth.arsnouveau.client.renderer.tile.ArsGeoBlockRenderer;
 import com.hollingsworth.arsnouveau.client.renderer.tile.GenericModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,9 +14,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemStack;
 import software.bernie.ars_nouveau.geckolib3.geo.render.built.GeoBone;
 import software.bernie.ars_nouveau.geckolib3.model.AnimatedGeoModel;
+import software.bernie.ars_nouveau.geckolib3.renderers.geo.GeoBlockRenderer;
 import software.bernie.ars_nouveau.geckolib3.util.RenderUtils;
 
-public class EnchantingWixieCauldronRenderer extends ArsGeoBlockRenderer<EnchantingWixieCauldronTile> {
+public class EnchantingWixieCauldronRenderer extends GeoBlockRenderer<EnchantingWixieCauldronTile> {
     public static AnimatedGeoModel<EnchantingWixieCauldronTile> model = new GenericModel<>("enchanting_apparatus");
     public EnchantingWixieCauldronRenderer(BlockEntityRendererProvider.Context rendererProvider) {
         super(rendererProvider, model);

@@ -81,7 +81,7 @@ public class LocateUtil {
             PortUtil.sendMessageNoSpam(entity, Component.translatable("tooltip.ars_additions.exploration_warp_scroll.failed"));
             STRUCTURE_LOOKUP_CACHE.invalidate(uuid);
         } else {
-            setScrollData(level, stack, state.structure(), state.pos());
+            setScrollData(level, stack, state.pos());
             PortUtil.sendMessageNoSpam(entity, Component.translatable("tooltip.ars_additions.exploration_warp_scroll.located"));
         }
     }
@@ -168,7 +168,7 @@ public class LocateUtil {
         }
     }
 
-    public static WarpScroll.WarpScrollData setScrollData(ServerLevel level, ItemStack stack, Structure structure, BlockPos pos) {
+    public static WarpScroll.WarpScrollData setScrollData(ServerLevel level, ItemStack stack, BlockPos pos) {
         WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
 
         data.setData(pos, level.dimension().location().toString(), Vec2.ZERO);

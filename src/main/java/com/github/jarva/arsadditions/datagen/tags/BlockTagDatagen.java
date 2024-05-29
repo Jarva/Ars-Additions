@@ -52,5 +52,8 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
         Block[] trapdoors = getBlocks(AddonBlockNames.TRAPDOORS);
         this.tag(BlockTags.TRAPDOORS).add(trapdoors);
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(trapdoors);
+
+        Block[] carpets = getBlocks(AddonBlockNames.CARPETS);
+        this.tag(BlockTags.WOOL_CARPETS).add(carpets);
     }
 }

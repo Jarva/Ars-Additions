@@ -69,7 +69,8 @@ public class DefaultLootDatagen extends LootTableProvider {
             String[][] nameList = new String[][]{
                     AddonBlockNames.CHAINS, AddonBlockNames.MAGELIGHT_LANTERNS,
                     AddonBlockNames.LANTERNS, AddonBlockNames.BUTTONS, AddonBlockNames.DECORATIVE_SOURCESTONES,
-                    AddonBlockNames.WALLS, AddonBlockNames.DOORS, AddonBlockNames.TRAPDOORS
+                    AddonBlockNames.WALLS, AddonBlockNames.DOORS, AddonBlockNames.TRAPDOORS,
+                    AddonBlockNames.CARPETS
             };
             for (String[] names : nameList) {
                 for (Block block : AddonBlockRegistry.getBlocks(names)) {

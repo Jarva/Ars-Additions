@@ -34,6 +34,7 @@ public class LangDatagen extends LanguageProvider {
         this.add("block.ars_additions.ender_source_jar", "Ender Source Jar");
         this.add("block.ars_additions.warp_nexus", "Warp Nexus");
         this.add("block.ars_additions.enchanting_wixie_cauldron", "Wixie's Enchanting Apparatus");
+        this.add("block.ars_additions.source_spawner", "Source Spawner");
         this.add("block.ars_additions.archwood_chain", "Archwood Chain");
         this.add("block.ars_additions.golden_chain", "Golden Chain");
         this.add("block.ars_additions.sourcestone_chain", "Sourcestone Chain");
@@ -60,6 +61,11 @@ public class LangDatagen extends LanguageProvider {
         this.add("block.ars_additions.cracked_polished_sourcestone_large_bricks", "Cracked Polished Sourcestone: Large Bricks");
         this.add("block.ars_additions.cracked_sourcestone_small_bricks", "Cracked Sourcestone: Small Bricks");
         this.add("block.ars_additions.cracked_polished_sourcestone_small_bricks", "Cracked Polished Sourcestone: Small Bricks");
+        this.add("block.ars_additions.sourcestone_door", "Sourcestone Door");
+        this.add("block.ars_additions.polished_sourcestone_door", "Polished Sourcestone Door");
+        this.add("block.ars_additions.sourcestone_trapdoor", "Sourcestone Trapdoor");
+        this.add("block.ars_additions.polished_sourcestone_trapdoor", "Polished Sourcestone Trapdoor");
+        this.add("block.ars_additions.magebloom_carpet", "Magebloom Carpet");
 
         // Items
 
@@ -94,6 +100,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("tooltip.ars_additions.warp_index.bound", "Bound to (%s, %s, %s) in %s");
         this.add("tooltip.ars_additions.warp_index.keybind", "Press the %s key to open");
         this.add("tooltip.ars_additions.warp_index.keybind.outline", "[%s]");
+
+        this.add("tooltip.ars_additions.source_spawner.disabled", "Disabled");
 
         // Keybinds
 
@@ -142,5 +150,15 @@ public class LangDatagen extends LanguageProvider {
 
         this.add("ars_additions.page.unstable_reliquary", "Reliquaries are able to store references to entities and locations to be targeted using the Recall glyph. To store a reference in a Reliquary, hold it in your off-hand and cast a spell with the Mark glyph.");
         this.add("ars_additions.page.ender_source_jar", "The Ender Source Jar allows you to store source in an ender-connected Source Jar. Each jar you place will link to the same pool of source, allowing you to use the Source Jar from anywhere.");
+
+        this.add("ars_additions.page1.warp_nexus", "A Warp Nexus allows interdimensional travel to nine locations of your choice. Using the Warp Nexus while Sneaking will open up an inventory to store nine different Warp Scrolls. Using the Warp Nexus without Sneaking will open up a Warp menu to allow you to pick your destination.");
+        this.add("ars_additions.page2.warp_nexus", "Warp Nexus inside Nexus Towers are situated on-top of Source Leylines so they don't require any source to operate. Once moved, a Warp Nexus requires 1,000 source per teleport.");
+
+        this.add("ars_additions.page.nexus_tower", "Nexus Tower");
+        this.add("ars_additions.page1.nexus_tower", "Nexus Towers are located on converging points of Source Leylines allowing them to harness the natural source in the world to allow easier transportation around the realm.");
+        this.add("ars_additions.spotlight.warp_nexus", "These towers use this natural source via their Warp Nexus, an ancient waystone containing a Nexus Scroll bound to the towers location.");
+
+        this.add("ars_additions.page.wixie_enchanting_apparatus", "Enchanting Apparatus");
+        this.add("ars_additions.page1.wixie_enchanting_apparatus", "To create a Wixie Enchanting Apparatus, use a Wixie Charm on an Enchanting Apparatus while Sneaking. The Wixie Enchanting Apparatus works in the exact same way as the Item Crafting mentioned previously.");
     }
 }

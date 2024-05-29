@@ -26,7 +26,7 @@ public class EnchantingAppDatagen extends ApparatusRecipeProvider {
     public void collectJsons(CachedOutput cache) {
         addEntries();
         for (EnchantingApparatusRecipe g : recipes) {
-            Path path = getRecipePath(output, g.getId().getPath());
+            Path path = getRecipePath(output, g.id.getPath());
             saveStable(cache, g.asRecipe(), path);
         }
     }

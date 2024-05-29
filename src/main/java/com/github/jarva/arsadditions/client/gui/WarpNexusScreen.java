@@ -1,7 +1,6 @@
 package com.github.jarva.arsadditions.client.gui;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.common.capability.CapabilityRegistry;
 import com.github.jarva.arsadditions.setup.networking.TeleportNexusPacket;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.client.gui.Color;
@@ -21,6 +20,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,14 +29,16 @@ import java.util.function.Supplier;
 public class WarpNexusScreen extends Screen {
 
     private final ContainerLevelAccess access;
+    private final ItemStackHandler handler;
     private int maxScale;
     private float scaleFactor;
     public int leftStart;
     public int topStart = 0;
 
-    public WarpNexusScreen(ContainerLevelAccess access) {
+    public WarpNexusScreen(ContainerLevelAccess access, ItemStackHandler itemStackHandler) {
         super(Component.literal("Warp Nexus"));
         this.access = access;
+        this.handler = itemStackHandler;
     }
 
     @Override
@@ -52,68 +54,61 @@ public class WarpNexusScreen extends Screen {
 
         leftStart = (width / 2) - 150;
 
-        Minecraft.getInstance().player.getCapability(CapabilityRegistry.PLAYER_NEXUS_CAPABILITY).ifPresent(handler -> {
-            int slots = handler.getSlots();
+        int slots = handler.getSlots();
 
-            HashMap<Integer, ItemStack> filled = new HashMap<>();
-            for (int i = 0; i < slots; i++) {
-                ItemStack scroll = handler.getStackInSlot(i);
-                if (scroll.is(Items.AIR)) continue;
-                filled.put(i, scroll);
-            }
+        HashMap<Integer, ItemStack> filled = new HashMap<>();
+        for (int i = 0; i < slots; i++) {
+            ItemStack scroll = handler.getStackInSlot(i);
+            if (scroll.is(Items.AIR)) continue;
+            filled.put(i, scroll);
+        }
 
-            if (filled.isEmpty()) {
-                this.minecraft.setScreen(null);
-                PortUtil.sendMessage(this.minecraft.player, Component.translatable("chat.ars_additions.warp_nexus.no_scrolls"));
-                PortUtil.sendMessage(this.minecraft.player, Component.translatable("chat.ars_additions.warp_nexus.no_scrolls.instruction", this.minecraft.options.keyShift.getKey().getDisplayName(), this.minecraft.options.keyUse.getKey().getDisplayName()));
-                return;
-            }
+        if (filled.isEmpty()) {
+            this.minecraft.setScreen(null);
+            PortUtil.sendMessage(this.minecraft.player, Component.translatable("chat.ars_additions.warp_nexus.no_scrolls"));
+            PortUtil.sendMessage(this.minecraft.player, Component.translatable("chat.ars_additions.warp_nexus.no_scrolls.instruction", this.minecraft.options.keyShift.getKey().getDisplayName(), this.minecraft.options.keyUse.getKey().getDisplayName()));
+            return;
+        }
 
-            topStart = (height / 2) - ((8 * 2) + font.lineHeight + (filled.size() * 25) + 20) / 2;
-            int index = 0;
-            for (Map.Entry<Integer, ItemStack> entry : filled.entrySet()) {
-                int i = entry.getKey();
-                ItemStack scroll = entry.getValue();
-                addRenderableWidget(
-                        new Button(leftStart + 50, topStart + (8 * 2) + font.lineHeight + (index * 25), 200, 20, getDisplayName(scroll), (button) -> {
-                            access.execute((_level, pos) -> {
-                                TeleportNexusPacket.teleport(i, pos);
-                            });
-                            this.minecraft.setScreen(null);
-                        }, Supplier::get) {
-                            public static final ResourceLocation BUTTON_LOCATION = ArsAdditions.prefix("textures/gui/button.png");
-                            @Override
-                            protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-                                Minecraft minecraft = Minecraft.getInstance();
-                                guiGraphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
-                                RenderSystem.enableBlend();
-                                RenderSystem.enableDepthTest();
-                                guiGraphics.blitNineSliced(BUTTON_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 16, 4, 200, 20, 0, this.getTextureY());
-                                guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-                                int i = this.getFGColor();
-                                this.renderString(guiGraphics, minecraft.font, i | Mth.ceil(this.alpha * 255.0F) << 24);
-                            }
-                            private int getTextureY() {
-                                int i = 0;
-                                if (!this.active) {
-                                    i = 2;
-                                } else if (this.isHoveredOrFocused()) {
-                                    i = 1;
-                                }
-
-                                return i * 20;
-                            }
+        topStart = (height / 2) - ((8 * 2) + font.lineHeight + (filled.size() * 25) + 20) / 2;
+        int index = 0;
+        for (Map.Entry<Integer, ItemStack> entry : filled.entrySet()) {
+            int i = entry.getKey();
+            ItemStack scroll = entry.getValue();
+            addRenderableWidget(
+                    new Button(leftStart + 50, topStart + (8 * 2) + font.lineHeight + (index * 25), 200, 20, getDisplayName(scroll), (button) -> {
+                        access.execute((_level, pos) -> {
+                            TeleportNexusPacket.teleport(i, pos);
+                        });
+                        this.minecraft.setScreen(null);
+                    }, Supplier::get) {
+                        public static final ResourceLocation BUTTON_LOCATION = ArsAdditions.prefix("textures/gui/button.png");
+                        @Override
+                        protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+                            Minecraft minecraft = Minecraft.getInstance();
+                            guiGraphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
+                            RenderSystem.enableBlend();
+                            RenderSystem.enableDepthTest();
+                            guiGraphics.blitNineSliced(BUTTON_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 16, 4, 200, 20, 0, this.getTextureY());
+                            guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                            int i = this.getFGColor();
+                            this.renderString(guiGraphics, minecraft.font, i | Mth.ceil(this.alpha * 255.0F) << 24);
                         }
-                );
-//                Button.builder(getDisplayName(scroll), (button) -> {
-//                    access.execute((_level, pos) -> {
-//                        TeleportNexusPacket.teleport(i, pos);
-//                    });
-//                    this.minecraft.setScreen(null);
-//                }).bounds(leftStart + 75, topStart + (8 * 2) + font.lineHeight + (index * 25), 150, 20).build()
-                index++;
-            }
-        });
+                        private int getTextureY() {
+                            int i = 0;
+                            if (!this.active) {
+                                i = 2;
+                            } else if (this.isHoveredOrFocused()) {
+                                i = 1;
+                            }
+
+                            return i * 20;
+                        }
+                    }
+            );
+
+            index++;
+        }
     }
 
     private Component getDisplayName(ItemStack stack) {

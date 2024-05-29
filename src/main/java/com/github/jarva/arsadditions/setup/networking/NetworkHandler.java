@@ -23,7 +23,7 @@ public class NetworkHandler {
 
     public static void init() {
         INSTANCE.registerMessage(nextID(), OpenTerminalPacket.class, OpenTerminalPacket::toBytes, OpenTerminalPacket::new, OpenTerminalPacket::handleData);
-        INSTANCE.registerMessage(nextID(), SyncNexusPacket.class, SyncNexusPacket::toBytes, SyncNexusPacket::new, SyncNexusPacket::handle);
+        INSTANCE.registerMessage(nextID(), OpenNexusPacket.class, OpenNexusPacket::toBytes, OpenNexusPacket::new, OpenNexusPacket::handle);
         INSTANCE.registerMessage(nextID(), TeleportNexusPacket.class, TeleportNexusPacket::toBytes, TeleportNexusPacket::new, TeleportNexusPacket::handle);
     }
 

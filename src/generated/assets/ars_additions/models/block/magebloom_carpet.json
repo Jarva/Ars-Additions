@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/carpet",
+  "textures": {
+    "wool": "ars_additions:block/magebloom_carpet"
+  }
+}

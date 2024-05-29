@@ -1,0 +1,21 @@
+{
+  "category": "ars_nouveau:machines",
+  "icon": "ars_additions:warp_nexus",
+  "name": "block.ars_additions.warp_nexus",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.page1.warp_nexus"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.page2.warp_nexus"
+    },
+    {
+      "type": "patchouli:relations",
+      "entries": [
+        "ars_nouveau:structures/nexus_tower"
+      ]
+    }
+  ]
+}

@@ -77,6 +77,30 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
             makeStonecutter(consumer, sourcestone, block, LibBlockNames.SOURCESTONE);
             shapelessBuilder(sourcestone).requires(block).save(consumer, ArsAdditions.prefix(name + "_to_sourcestone"));
         }
+
+        addDoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_DOOR), i(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)));
+        addDoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.POLISHED_SOURCESTONE_DOOR), i(BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE)));
+
+        addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_TRAPDOOR), i(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)));
+        addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.POLISHED_SOURCESTONE_TRAPDOOR), i(BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE)));
+
+        addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.MAGEBLOOM_CARPET), i(BlockRegistry.getBlock(LibBlockNames.MAGEBLOOM_BLOCK)));
+    }
+
+    public void addTrapdoorRecipe(ItemLike result, Ingredient material) {
+        shapedBuilder(result)
+                .pattern("mm")
+                .define('m', material)
+                .save(consumer);
+    }
+
+    public void addDoorRecipe(ItemLike result, Ingredient material) {
+        shapedBuilder(result)
+                .pattern("mm")
+                .pattern("mm")
+                .pattern("mm")
+                .define('m', material)
+                .save(consumer);
     }
 
     public void addWallRecipe(ItemLike result, Ingredient material) {

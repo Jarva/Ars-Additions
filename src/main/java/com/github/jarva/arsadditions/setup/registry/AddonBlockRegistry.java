@@ -2,14 +2,8 @@ package com.github.jarva.arsadditions.setup.registry;
 
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
-import com.github.jarva.arsadditions.common.block.EnchantingWixieCauldron;
-import com.github.jarva.arsadditions.common.block.EnderSourceJar;
-import com.github.jarva.arsadditions.common.block.MagelightLantern;
-import com.github.jarva.arsadditions.common.block.WarpNexus;
-import com.github.jarva.arsadditions.common.block.tile.EnchantingWixieCauldronTile;
-import com.github.jarva.arsadditions.common.block.tile.EnderSourceJarTile;
-import com.github.jarva.arsadditions.common.block.tile.MagelightLanternTile;
-import com.github.jarva.arsadditions.common.block.tile.WarpNexusTile;
+import com.github.jarva.arsadditions.common.block.*;
+import com.github.jarva.arsadditions.common.block.tile.*;
 import com.github.jarva.arsadditions.common.item.EnderSourceJarItem;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.client.renderer.tile.GenericRenderer;
@@ -53,6 +47,8 @@ public class AddonBlockRegistry {
     public static RegistryObject<BlockEntityType<WarpNexusTile>> WARP_NEXUS_TILE;
     public static RegistryObject<EnchantingWixieCauldron> WIXIE_ENCHANTING;
     public static RegistryObject<BlockEntityType<EnchantingWixieCauldronTile>> WIXIE_ENCHANTING_TILE;
+    public static RegistryObject<SourceSpawner> SOURCE_SPAWNER;
+    public static RegistryObject<BlockEntityType<SourceSpawnerTile>> SOURCE_SPAWNER_TILE;
 
     static {
         WIXIE_ENCHANTING = registerBlockAndItem(AddonBlockNames.ENCHANTING_WIXIE_CAULDRON, EnchantingWixieCauldron::new, (block) -> new RendererBlockItem(block.get(), defaultItemProperties()) {
@@ -65,6 +61,9 @@ public class AddonBlockRegistry {
 
         ENDER_SOURCE_JAR = registerBlockAndItem(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJar::new, (block) -> new EnderSourceJarItem(block.get(), defaultItemProperties()));
         ENDER_SOURCE_JAR_TILE = registerTile(AddonBlockNames.ENDER_SOURCE_JAR, EnderSourceJarTile::new, () -> new Block[]{ENDER_SOURCE_JAR.get()});
+
+        SOURCE_SPAWNER = registerBlockAndItem(AddonBlockNames.SOURCE_SPAWNER, SourceSpawner::new);
+        SOURCE_SPAWNER_TILE = registerTile(AddonBlockNames.SOURCE_SPAWNER, SourceSpawnerTile::new, () -> new Block[]{SOURCE_SPAWNER.get()});
 
         WARP_NEXUS = registerBlockAndItem(AddonBlockNames.WARP_NEXUS, WarpNexus::new, (block) -> new RendererBlockItem(block.get(), defaultItemProperties()) {
             @Override
@@ -81,6 +80,15 @@ public class AddonBlockRegistry {
         registerWalls();
         registerButtons();
         registerDecorativeSourcestone();
+        registerDoors();
+        registerTrapdoors();
+        registerCarpets();
+    }
+
+    private static void registerCarpets() {
+        for (String carpet : AddonBlockNames.CARPETS) {
+            registerBlockAndItem(carpet, () -> new CarpetBlock(BlockBehaviour.Properties.copy(Blocks.BLACK_CARPET)));
+        }
     }
 
     private static void registerDecorativeSourcestone() {
@@ -88,6 +96,22 @@ public class AddonBlockRegistry {
             registerBlockAndItem(sourcestone, () -> new Block(
                     BlockBehaviour.Properties.copy(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE))
             ));
+        }
+    }
+
+    private static void registerTrapdoors() {
+        for (String trapdoor : AddonBlockNames.TRAPDOORS) {
+            registerBlockAndItem(trapdoor, () ->
+                    new TrapDoorBlock(BlockBehaviour.Properties.copy(BlockRegistry.getBlock(LibBlockNames.ARCHWOOD_TRAPDOOR)), BlockSetType.STONE)
+            );
+        }
+    }
+
+    private static void registerDoors() {
+        for (String door : AddonBlockNames.DOORS) {
+            registerBlockAndItem(door, () ->
+                    new DoorBlock(BlockBehaviour.Properties.copy(BlockRegistry.getBlock(LibBlockNames.ARCHWOOD_DOOR)), BlockSetType.STONE)
+            );
         }
     }
 

@@ -4,6 +4,7 @@ public class AddonBlockNames {
     public static final String ENDER_SOURCE_JAR = "ender_source_jar";
     public static final String WARP_NEXUS = "warp_nexus";
     public static final String ENCHANTING_WIXIE_CAULDRON = "enchanting_wixie_cauldron";
+    public static final String SOURCE_SPAWNER = "source_spawner";
 
     // Decorative Sourcestone
     public static final String CRACKED_SOURCESTONE = "cracked_sourcestone";
@@ -51,4 +52,18 @@ public class AddonBlockNames {
     public static final String SOURCESTONE_BUTTON = "sourcestone_button";
     public static final String POLISHED_SOURCESTONE_BUTTON = "polished_sourcestone_button";
     public static final String[] BUTTONS = new String[]{SOURCESTONE_BUTTON, POLISHED_SOURCESTONE_BUTTON};
+
+    // Doors
+    public static final String SOURCESTONE_DOOR = "sourcestone_door";
+    public static final String POLISHED_SOURCESTONE_DOOR = "polished_sourcestone_door";
+    public static final String[] DOORS = new String[]{SOURCESTONE_DOOR, POLISHED_SOURCESTONE_DOOR};
+
+    // Trapdoors
+    public static final String SOURCESTONE_TRAPDOOR = "sourcestone_trapdoor";
+    public static final String POLISHED_SOURCESTONE_TRAPDOOR = "polished_sourcestone_trapdoor";
+    public static final String[] TRAPDOORS = new String[]{SOURCESTONE_TRAPDOOR, POLISHED_SOURCESTONE_TRAPDOOR};
+
+    // Carpets
+    public static final String MAGEBLOOM_CARPET = "magebloom_carpet";
+    public static final String[] CARPETS = new String[]{MAGEBLOOM_CARPET};
 }

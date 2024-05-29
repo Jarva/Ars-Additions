@@ -89,7 +89,9 @@ public class EnchantingApparatusRecipeWrapper extends MultiRecipeWrapper {
                 return null;
             }
         }
-        items.addAll(super.getItemsNeeded(inventory, world, pos, recipe));
+        List<ItemStack> otherItems = super.getItemsNeeded(inventory, world, pos, recipe);
+        if (otherItems == null) return null;
+        items.addAll(otherItems);
         return items;
     }
 }

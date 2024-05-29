@@ -1,6 +1,5 @@
 package com.github.jarva.arsadditions.common.menu;
 
-import com.github.jarva.arsadditions.common.capability.CapabilityRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
@@ -12,7 +11,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -20,18 +18,13 @@ import org.jetbrains.annotations.NotNull;
 public class WarpNexusMenu  extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
 
-    public WarpNexusMenu(int containerId, Inventory playerInv, ContainerLevelAccess access) {
+    public WarpNexusMenu(int containerId, Inventory playerInv, ContainerLevelAccess access, ItemStackHandler inventory) {
         super(MenuType.GENERIC_3x3, containerId);
 
         this.access = access;
-
-        LazyOptional<ItemStackHandler> capability = playerInv.player.getCapability(CapabilityRegistry.PLAYER_NEXUS_CAPABILITY);
-
-        capability.ifPresent(handler -> {
-            createWarpNexusInventory(handler);
-            createPlayerInventory(playerInv);
-            createPlayerHotbar(playerInv);
-        });
+        createWarpNexusInventory(inventory);
+        createPlayerInventory(playerInv);
+        createPlayerHotbar(playerInv);
     }
 
     private void createWarpNexusInventory(ItemStackHandler handler) {

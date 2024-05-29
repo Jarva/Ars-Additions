@@ -1,0 +1,28 @@
+package com.github.jarva.arsadditions.datagen.tags;
+
+import com.github.jarva.arsadditions.ArsAdditions;
+import com.hollingsworth.arsnouveau.common.lib.EntityTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.CompletableFuture;
+
+public class EntityTypeTagDatagen extends IntrinsicHolderTagsProvider<EntityType<?>> {
+    public static TagKey<EntityType<?>> SOURCE_SPAWNER_DENYLIST = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(ArsAdditions.MODID, "source_spawner_denylist"));
+    public static TagKey<EntityType<?>> BOSSES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge", "bosses"));
+    public EntityTypeTagDatagen(PackOutput arg, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
+        super(arg, Registries.ENTITY_TYPE, future, item -> item.builtInRegistryHolder().key(), ArsAdditions.MODID, helper);
+    }
+
+    @Override
+    protected void addTags(HolderLookup.@NotNull Provider provider) {
+        this.tag(SOURCE_SPAWNER_DENYLIST).addTag(EntityTags.JAR_RELEASE_BLACKLIST).addTag(BOSSES);
+    }
+}

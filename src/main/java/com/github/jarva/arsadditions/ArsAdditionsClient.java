@@ -2,8 +2,9 @@ package com.github.jarva.arsadditions;
 
 import com.github.jarva.arsadditions.client.renderers.EnchantingWixieCauldronRenderer;
 import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
+import com.github.jarva.arsadditions.client.util.BookUtil;
 import com.github.jarva.arsadditions.common.util.FillUtil;
-import com.github.jarva.arsadditions.mixin.PageRelationsAccessor;
+import com.github.jarva.arsadditions.mixin.PageTextAccessor;
 import com.github.jarva.arsadditions.setup.networking.OpenTerminalPacket;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.ArsNouveau;
@@ -22,15 +23,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import vazkii.patchouli.api.BookContentsReloadEvent;
-import vazkii.patchouli.client.book.BookEntry;
 import vazkii.patchouli.client.book.BookPage;
-import vazkii.patchouli.client.book.page.PageRelations;
-import vazkii.patchouli.common.book.Book;
-import vazkii.patchouli.common.book.BookRegistry;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import vazkii.patchouli.client.book.page.PageText;
 
 public class ArsAdditionsClient {
     public static KeyMapping openTerm;
@@ -76,24 +70,28 @@ public class ArsAdditionsClient {
             }
         }
 
-
-        private static final ResourceLocation WORN_NOTEBOOK = new ResourceLocation(ArsNouveau.MODID, "worn_notebook");
         @SubscribeEvent
         public static void updateBookContents(BookContentsReloadEvent event) {
             ResourceLocation bookId = event.getBook();
-            if (!bookId.equals(WORN_NOTEBOOK)) return;
-            Book wornNotebook = BookRegistry.INSTANCE.books.get(WORN_NOTEBOOK);
+            if (!bookId.equals(BookUtil.WORN_NOTEBOOK)) return;
 
-            Map<ResourceLocation, BookEntry> entries = wornNotebook.getContents().entries;
-
-            BookEntry storageLectern = entries.get(new ResourceLocation(ArsNouveau.MODID, "machines/storage_lectern"));
-            if (storageLectern == null) return;
-            List<BookPage> pages = storageLectern.getPages();
-            Optional<BookPage> relationsPage = pages.stream().filter(page -> page instanceof PageRelations).findFirst();
-            if (relationsPage.isEmpty()) return;
-
-            PageRelationsAccessor relations = (PageRelationsAccessor) relationsPage.get();
-            relations.getEntries().add(entries.get(new ResourceLocation(ArsNouveau.MODID, "machines/warp_indexes")));
+            BookUtil.addRelation(
+                    new ResourceLocation(ArsNouveau.MODID, "machines/storage_lectern"),
+                    new ResourceLocation(ArsNouveau.MODID, "machines/warp_indexes")
+            );
+            BookPage wixiePage = BookUtil.newTextPage(
+                    "ars_additions.page.wixie_enchanting_apparatus",
+                    "ars_additions.page1.wixie_enchanting_apparatus"
+            );
+            BookUtil.addPage(new ResourceLocation(ArsNouveau.MODID, "automation/wixie_charm"), wixiePage, true, page -> {
+                if (page instanceof PageText text) {
+                    PageTextAccessor textAccessor = (PageTextAccessor) text;
+                    String title = textAccessor.getTitle();
+                    if (title == null) return false;
+                    return title.equals("ars_nouveau.potion_crafting");
+                }
+                return false;
+            });
         }
     }
 

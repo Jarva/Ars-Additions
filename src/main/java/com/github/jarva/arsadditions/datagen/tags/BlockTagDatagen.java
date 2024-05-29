@@ -10,6 +10,7 @@ import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,7 +22,7 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider provider) {
+    protected void addTags(HolderLookup.@NotNull Provider provider) {
         Block[] decorative = getBlocks(AddonBlockNames.DECORATIVE_SOURCESTONES);
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(decorative);
 
@@ -43,5 +44,13 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(chains);
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(AddonBlockRegistry.WIXIE_ENCHANTING.get());
+
+        Block[] doors = getBlocks(AddonBlockNames.DOORS);
+        this.tag(BlockTags.DOORS).add(doors);
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(doors);
+
+        Block[] trapdoors = getBlocks(AddonBlockNames.TRAPDOORS);
+        this.tag(BlockTags.TRAPDOORS).add(trapdoors);
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(trapdoors);
     }
 }

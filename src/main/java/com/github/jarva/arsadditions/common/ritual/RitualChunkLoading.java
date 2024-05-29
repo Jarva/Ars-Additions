@@ -118,34 +118,38 @@ public class RitualChunkLoading extends AbstractRitual {
     }
 
     @Override
-    public boolean canStart() {
+    public boolean canStart(Player player) {
         Level world = getWorld();
         BlockPos blockPos = getPos();
         if (world == null || blockPos == null) return false;
         if (world.isClientSide) return true;
 
-        if (activatedPlayer == null) {
+        if (player == null) {
             Player nearby = getWorld().getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 5, false);
             if (nearby != null) {
                 activatedPlayer = nearby.getUUID();
             } else {
                 return false;
             }
+        } else {
+            activatedPlayer = player.getUUID();
         }
 
         return ServerConfig.SERVER.chunkloading_player_limit.get() > ChunkLoadingData.countChunks(world.getServer(), activatedPlayer);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onStart(Player player) {
+        super.onStart(player);
         setNeedsSource(consumesSource());
     }
 
+    @Override
     public void onStatusChanged(boolean status) {
         setChunkLoaded(status);
     }
 
+    @Override
     public void onDestroy() {
         this.onEnd();
     }
@@ -176,9 +180,10 @@ public class RitualChunkLoading extends AbstractRitual {
         return "The Ritual of Arcane Permanence force-loads surrounding chunks when provided with a constant stream of source.";
     }
 
+    public static ResourceLocation RESOURCE_LOCATION = ArsAdditions.prefix("ritual_chunk_loading");
     @Override
     public ResourceLocation getRegistryName() {
-        return ArsAdditions.prefix("ritual_chunk_loading");
+        return RESOURCE_LOCATION;
     }
 
     private void setChunkLoaded(boolean shouldLoad) {
@@ -209,10 +214,6 @@ public class RitualChunkLoading extends AbstractRitual {
 
     @Override
     public boolean canBeTraded() {
-        return false;
-    }
-
-    public boolean canBeLooted() {
         return false;
     }
 }

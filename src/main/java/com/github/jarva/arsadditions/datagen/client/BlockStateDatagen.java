@@ -13,14 +13,16 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
+
+import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
 public class BlockStateDatagen extends BlockStateProvider {
     private final ExistingFileHelper fileHelper;
@@ -43,6 +45,8 @@ public class BlockStateDatagen extends BlockStateProvider {
             simpleBlockWithItem(block);
         }
 
+        simpleBlockWithItem(AddonBlockRegistry.SOURCE_SPAWNER.get(), "cutout");
+
         wallBlockAndItem(AddonBlockNames.SOURCESTONE_WALL, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SOURCESTONE_LARGE_BRICKS));
         wallBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_WALL, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SMOOTH_SOURCESTONE_LARGE_BRICKS));
         wallBlockAndItem(AddonBlockNames.CRACKED_SOURCESTONE_WALL, new ResourceLocation(ArsAdditions.MODID, AddonBlockNames.CRACKED_SOURCESTONE));
@@ -64,17 +68,58 @@ public class BlockStateDatagen extends BlockStateProvider {
         ModelFile enchantingApparatus = new ModelFile.ExistingModelFile(getTextureLoc(BlockRegistry.ENCHANTING_APP_BLOCK.get()), fileHelper);
         getVariantBuilder(AddonBlockRegistry.WIXIE_ENCHANTING.get()).partialState().setModels(new ConfiguredModel(enchantingApparatus));
         simpleBlockItem(AddonBlockRegistry.WIXIE_ENCHANTING.get(), new ModelFile.ExistingModelFile(key(BlockRegistry.ENCHANTING_APP_BLOCK.get()).withPrefix("item/"), fileHelper));
+
+        for (String door : AddonBlockNames.DOORS) {
+            doorAndItem(door);
+        }
+
+        for (String trapdoor : AddonBlockNames.TRAPDOORS) {
+            trapdoorAndItem(trapdoor);
+        }
+
+        for (String carpet: AddonBlockNames.CARPETS) {
+            carpetAndItem(carpet);
+        }
+    }
+
+    private void carpetAndItem(String carpetName) {
+        CarpetBlock block = (CarpetBlock) AddonBlockRegistry.getBlock(carpetName);
+        ResourceLocation loc = key(block);
+        ModelFile model = models().withExistingParent(loc.withPrefix("block/").toString(), mcLoc("block/carpet"))
+                .texture("wool", getTextureLoc(block));
+        getVariantBuilder(block).forAllStatesExcept(state -> ConfiguredModel.builder().modelFile(model).build());
+        itemModels().withExistingParent(loc.withPrefix("item/").toString(), model.getLocation());
     }
 
     private void simpleBlockWithItem(Block block) {
-        ModelFile model = cubeAll(block);
+        simpleBlockWithItem(block, (String) null);
+    }
+
+    private void simpleBlockWithItem(Block block, String renderType) {
+        BlockModelBuilder model = (BlockModelBuilder) cubeAll(block);
+        if (renderType != null) {
+            model = model.renderType(renderType);
+        }
         simpleBlockWithItem(block, model);
+    }
+
+    private void doorAndItem(String doorName) {
+        DoorBlock block = (DoorBlock) AddonBlockRegistry.getBlock(doorName);
+        doorBlockWithRenderType(block, getTextureLoc(block).withSuffix("_bottom"), getTextureLoc(block).withSuffix("_top"), "cutout");
+        itemModels().basicItem(block.asItem());
+    }
+
+    private void trapdoorAndItem(String trapdoorName) {
+        TrapDoorBlock block = (TrapDoorBlock) AddonBlockRegistry.getBlock(trapdoorName);
+        trapdoorBlockWithRenderType(block, getTextureLoc(block), true, "cutout");
+        ResourceLocation loc = key(block);
+        itemModels().withExistingParent(loc.toString(), getTextureLoc(block).withSuffix("_bottom"));
     }
 
     private void chainAndItem(String chainName) {
         ChainBlock block = (ChainBlock) AddonBlockRegistry.getBlock(chainName);
         ResourceLocation texture = getTextureLoc(block);
-        ModelFile chain = models().withExistingParent(key(block).getPath(), mcLoc(ModelProvider.BLOCK_FOLDER + "/chain"))
+        ModelFile chain = models().withExistingParent(key(block).getPath(), mcLoc(BLOCK_FOLDER + "/chain"))
                 .texture("particle", texture)
                 .texture("all", texture)
                 .renderType("cutout");
@@ -108,7 +153,7 @@ public class BlockStateDatagen extends BlockStateProvider {
         String path = key(block).getPath();
         String name = isHanging ? path + "_hanging" : path;
         return models().singleTexture(name,
-                mcLoc(ModelProvider.BLOCK_FOLDER + (isHanging ? "/template_hanging_lantern" : "/template_lantern")),
+                mcLoc(BLOCK_FOLDER + (isHanging ? "/template_hanging_lantern" : "/template_lantern")),
                 "lantern",
                 texture
         ).renderType("cutout");

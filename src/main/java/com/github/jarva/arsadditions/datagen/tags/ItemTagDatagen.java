@@ -1,7 +1,11 @@
 package com.github.jarva.arsadditions.datagen.tags;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
+import com.hollingsworth.arsnouveau.common.datagen.ItemTagProvider;
+import com.hollingsworth.arsnouveau.common.items.RitualTablet;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -25,5 +29,9 @@ public class ItemTagDatagen extends IntrinsicHolderTagsProvider<Item> {
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(ItemTags.BOOKSHELF_BOOKS).add(AddonItemRegistry.CODEX_ENTRY.get(), AddonItemRegistry.CODEX_ENTRY_LOST.get(), AddonItemRegistry.CODEX_ENTRY_ANCIENT.get(), ItemsRegistry.CASTER_TOME.get());
         this.tag(FORGOTTEN_KNOWLEDGE_GLYPHS);
+
+        RitualTablet chunkLoading = RitualRegistry.getRitualItemMap().get(RitualChunkLoading.RESOURCE_LOCATION);
+        this.tag(ItemTagProvider.RITUAL_TRADE_BLACKLIST).add(chunkLoading);
+        this.tag(ItemTagProvider.RITUAL_LOOT_BLACKLIST).add(chunkLoading);
     }
 }

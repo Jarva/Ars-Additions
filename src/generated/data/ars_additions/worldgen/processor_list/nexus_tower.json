@@ -546,6 +546,58 @@
         {
           "block_entity_modifier": {
             "type": "minecraft:append_static",
+            "data": {}
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_additions:warp_nexus",
+              "Properties": {
+                "half": "upper",
+                "requires_source": "true"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_additions:warp_nexus",
+            "Properties": {
+              "half": "upper",
+              "requires_source": "false"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {}
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_additions:warp_nexus",
+              "Properties": {
+                "half": "upper",
+                "requires_source": "false"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_additions:warp_nexus",
+            "Properties": {
+              "half": "upper",
+              "requires_source": "false"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
             "data": {
               "itemStack": {
                 "Count": 1,

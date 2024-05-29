@@ -1,8 +1,9 @@
 package com.github.jarva.arsadditions.common.block;
 
 import com.github.jarva.arsadditions.common.block.tile.WarpNexusTile;
+import com.github.jarva.arsadditions.common.capability.CapabilityRegistry;
 import com.github.jarva.arsadditions.common.menu.WarpNexusMenu;
-import com.github.jarva.arsadditions.client.util.ClientUtil;
+import com.github.jarva.arsadditions.setup.networking.OpenNexusPacket;
 import com.hollingsworth.arsnouveau.common.block.ITickableBlock;
 import com.hollingsworth.arsnouveau.common.items.SpellBook;
 import net.minecraft.core.BlockPos;
@@ -30,10 +31,11 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     public static final BooleanProperty REQUIRES_SOURCE = BooleanProperty.create("requires_source");
@@ -49,27 +51,27 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     }
 
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        BlockPos bePos = state.getValue(HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();
-        BlockEntity be = level.getBlockEntity(bePos);
-        if (be instanceof WarpNexusTile warpNexusTile) {
-            if (!warpNexusTile.getStack().isEmpty()) {
-                if (player instanceof ServerPlayer serverPlayer) {
-                   ItemStack item = warpNexusTile.extract();
-                    serverPlayer.getInventory().add(item);
-                }
-                return InteractionResult.SUCCESS;
+        WarpNexusTile be = WarpNexusTile.getWarpNexus(level, pos).orElse(null);
+
+        if (be == null) return InteractionResult.FAIL;
+
+        if (!be.getStack().isEmpty()) {
+            if (player instanceof ServerPlayer serverPlayer) {
+                ItemStack item = be.extract();
+                serverPlayer.getInventory().add(item);
             }
+            return InteractionResult.SUCCESS;
         }
+
         if (player.isSecondaryUseActive()) {
             if (player.getMainHandItem().getItem() instanceof SpellBook) {
                 return InteractionResult.SUCCESS;
             }
             if (player instanceof ServerPlayer serverPlayer) {
-                NetworkHooks.openScreen(serverPlayer, state.getMenuProvider(level, bePos));
+                NetworkHooks.openScreen(serverPlayer, state.getMenuProvider(level, be.getBlockPos()));
             }
-        } else if (level.isClientSide && be instanceof WarpNexusTile warpNexusTile && warpNexusTile.getStack().isEmpty()) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientUtil.openWarpScreen(ContainerLevelAccess.create(level, bePos)));
-            return InteractionResult.SUCCESS;
+        } else {
+            OpenNexusPacket.openNexus(player, be.getBlockPos());
         }
         return InteractionResult.CONSUME;
     }
@@ -77,9 +79,10 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     @Nullable
     @Override
     public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
-        return new SimpleMenuProvider((i, inventory, player) ->
-                new WarpNexusMenu(i, inventory, ContainerLevelAccess.create(level, pos)), Component.translatable("block.ars_additions.warp_nexus")
-        );
+        return new SimpleMenuProvider((i, inventory, player) -> {
+            Optional<ItemStackHandler> itemStackHandler = player.getCapability(CapabilityRegistry.PLAYER_NEXUS_CAPABILITY).resolve();
+            return itemStackHandler.map(handler -> new WarpNexusMenu(i, inventory, ContainerLevelAccess.create(level, pos), handler)).orElse(null);
+        }, Component.translatable("block.ars_additions.warp_nexus"));
     }
 
     @Nullable

@@ -31,8 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-import static com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry.getBlock;
-
 public class DefaultLootDatagen extends LootTableProvider {
     public DefaultLootDatagen(PackOutput packOutput) {
         super(packOutput, new HashSet<>(), List.of(new LootTableProvider.SubProviderEntry(BlockLootTableProvider::new, LootContextParamSets.BLOCK)));
@@ -67,23 +65,16 @@ public class DefaultLootDatagen extends LootTableProvider {
         @Override
         protected void generate() {
             registerManaMachine(AddonBlockRegistry.ENDER_SOURCE_JAR, AddonBlockRegistry.ENDER_SOURCE_JAR_TILE);
-            for (String chain : AddonBlockNames.CHAINS) {
-                registerDropSelf(getBlock(chain));
-            }
-            for (String magelightLantern : AddonBlockNames.MAGELIGHT_LANTERNS) {
-                registerDropSelf(getBlock(magelightLantern));
-            }
-            for (String lantern : AddonBlockNames.LANTERNS) {
-                registerDropSelf(getBlock(lantern));
-            }
-            for (String button : AddonBlockNames.BUTTONS) {
-                registerDropSelf(getBlock(button));
-            }
-            for (String decorativeSourcestone : AddonBlockNames.DECORATIVE_SOURCESTONES) {
-                registerDropSelf(getBlock(decorativeSourcestone));
-            }
-            for (String wall : AddonBlockNames.WALLS) {
-                registerDropSelf(getBlock(wall));
+
+            String[][] nameList = new String[][]{
+                    AddonBlockNames.CHAINS, AddonBlockNames.MAGELIGHT_LANTERNS,
+                    AddonBlockNames.LANTERNS, AddonBlockNames.BUTTONS, AddonBlockNames.DECORATIVE_SOURCESTONES,
+                    AddonBlockNames.WALLS, AddonBlockNames.DOORS, AddonBlockNames.TRAPDOORS
+            };
+            for (String[] names : nameList) {
+                for (Block block : AddonBlockRegistry.getBlocks(names)) {
+                    registerDropSelf(block);
+                }
             }
 
             WarpNexus warpNexus = AddonBlockRegistry.WARP_NEXUS.get();

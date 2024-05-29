@@ -77,6 +77,7 @@ public class ProcessorDatagen extends SimpleDataProvider {
         nexusBlock.put("Inventory", inventory);
 
         modifyBlockEntity(AddonBlockRegistry.WARP_NEXUS.get(), bs -> bs.getValue(WarpNexus.HALF) == DoubleBlockHalf.LOWER, bs -> bs.setValue(WarpNexus.REQUIRES_SOURCE, false), new AppendStatic(nexusBlock), warpNexus);
+        modifyBlockEntity(AddonBlockRegistry.WARP_NEXUS.get(), bs -> bs.getValue(WarpNexus.HALF) == DoubleBlockHalf.UPPER, bs -> bs.setValue(WarpNexus.REQUIRES_SOURCE, false), new AppendStatic(new CompoundTag()), warpNexus);
 
         List<Helper> helpers = List.of(
                 new Helper("Eru", "gray", "Warning: Not to leave unsupervised"),

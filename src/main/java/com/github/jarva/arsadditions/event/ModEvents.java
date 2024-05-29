@@ -63,6 +63,7 @@ public class ModEvents {
                         }
                         return true;
                     }).toList();
+                    if (tablets.isEmpty()) return ItemStack.EMPTY;
                     return new ItemStack(tablets.get(DungeonLootTables.r.nextInt(tablets.size())));
                 });
             }

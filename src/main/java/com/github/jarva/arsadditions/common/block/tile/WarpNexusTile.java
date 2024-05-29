@@ -36,6 +36,8 @@ import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.Optional;
+
 public class WarpNexusTile extends BlockEntity implements GeoBlockEntity, ITickable, IWololoable {
     private static final RawAnimation CLOSE = RawAnimation.begin().then("spin", Animation.LoopType.PLAY_ONCE).thenPlayAndHold("close");
     private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("open").thenLoop("spin");
@@ -127,11 +129,17 @@ public class WarpNexusTile extends BlockEntity implements GeoBlockEntity, ITicka
     }
 
     public ItemStack getStack() {
-        return this.inventory.getStackInSlot(0);
+        if (this.inventory.getSlots() > 0) {
+            return this.inventory.getStackInSlot(0);
+        }
+        return ItemStack.EMPTY;
     }
 
     public ItemStack extract() {
-        return this.inventory.extractItem(0, Item.MAX_STACK_SIZE, false);
+        if (this.inventory.getSlots() > 0) {
+            return this.inventory.extractItem(0, Item.MAX_STACK_SIZE, false);
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -165,5 +173,12 @@ public class WarpNexusTile extends BlockEntity implements GeoBlockEntity, ITicka
     @Override
     public ParticleColor getColor() {
         return this.color;
+    }
+
+    public static Optional<WarpNexusTile> getWarpNexus(Level level, BlockPos pos) {
+        Optional<WarpNexusTile> be = level.getBlockEntity(pos, AddonBlockRegistry.WARP_NEXUS_TILE.get());
+        return be.flatMap(tile -> tile.getBlockState().getValue(WarpNexus.HALF) == DoubleBlockHalf.UPPER
+                ? level.getBlockEntity(pos.below(), AddonBlockRegistry.WARP_NEXUS_TILE.get())
+                : Optional.of(tile));
     }
 }

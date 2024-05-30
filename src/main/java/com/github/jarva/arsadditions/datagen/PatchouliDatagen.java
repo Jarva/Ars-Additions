@@ -55,14 +55,14 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
                 getPath(STRUCTURES, "ruined_warp_portals")
         );
 
-        PatchouliPage nexus = addPage(new PatchouliBuilder(MACHINES, AddonBlockRegistry.WARP_NEXUS.get())
+        addPage(new PatchouliBuilder(MACHINES, AddonBlockRegistry.WARP_NEXUS.get())
                         .withTextPage("ars_additions.page1.warp_nexus")
                         .withTextPage("ars_additions.page2.warp_nexus")
                         .withPage(
                                 new RelationsPage()
                                         .withEntry(STRUCTURES, "nexus_tower")
                         ),
-                getPath(EQUIPMENT, "warp_nexus")
+                getPath(MACHINES, "warp_nexus")
         );
 
         addPage(new PatchouliBuilder(STRUCTURES, AddonBlockRegistry.WARP_NEXUS.get())
@@ -71,7 +71,7 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
                         .withPage(new SpotlightPage(AddonBlockRegistry.WARP_NEXUS.get()).withText("ars_additions.spotlight.warp_nexus"))
                         .withPage(
                                 new RelationsPage()
-                                        .withEntry(nexus)
+                                        .withEntry(MACHINES, "warp_nexus")
                         ),
                 getPath(STRUCTURES, "nexus_tower")
         );

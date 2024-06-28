@@ -1,0 +1,15 @@
+{
+  "category": "ars_nouveau:equipment",
+  "icon": "ars_additions:xp_jar",
+  "name": "item.ars_additions.xp_jar",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.page.xp_jar"
+    },
+    {
+      "type": "ars_nouveau:apparatus_recipe",
+      "recipe": "ars_additions:xp_jar"
+    }
+  ]
+}

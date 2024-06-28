@@ -3,15 +3,19 @@ package com.github.jarva.arsadditions.datagen.client;
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.block.MagelightLantern;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
+import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.common.items.Glyph;
+import com.hollingsworth.arsnouveau.common.items.RitualTablet;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -19,6 +23,7 @@ import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -38,6 +43,16 @@ public class BlockStateDatagen extends BlockStateProvider {
             ResourceLocation spellPart = i.get().spellPart.getRegistryName();
             if (!spellPart.getNamespace().equals(ArsAdditions.MODID)) continue;
             itemModels().basicItem(spellPart);
+        }
+
+        for (RitualTablet tablet : RitualRegistry.getRitualItemMap().values()) {
+            ResourceLocation ritualName = tablet.ritual.getRegistryName();
+            if (!ritualName.getNamespace().equals(ArsAdditions.MODID)) continue;
+            itemModels().basicItem(tablet);
+        }
+
+        for (RegistryObject<Item> item : AddonItemRegistry.DATAGEN_ITEMS) {
+            itemModels().basicItem(item.get());
         }
 
         Block[] decorativeSourcestone = AddonBlockRegistry.getBlocks(AddonBlockNames.DECORATIVE_SOURCESTONES);

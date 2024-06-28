@@ -1,0 +1,15 @@
+{
+  "category": "ars_nouveau:rituals",
+  "icon": "ars_additions:ritual_locate_structure",
+  "name": "item.ars_additions.ritual_locate_structure",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.ritual_desc.ritual_locate_structure"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "ars_additions:tablet_ritual_locate_structure"
+    }
+  ]
+}

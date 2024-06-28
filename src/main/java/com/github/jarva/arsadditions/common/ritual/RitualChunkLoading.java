@@ -211,9 +211,4 @@ public class RitualChunkLoading extends AbstractRitual {
             activatedPlayer = tag.getUUID("activatedPlayer");
         }
     }
-
-    @Override
-    public boolean canBeTraded() {
-        return false;
-    }
 }

@@ -1,0 +1,15 @@
+{
+  "type": "ars_additions:source_spawner",
+  "id": "ars_additions:default",
+  "tag_modifiers": [
+    {
+      "type": "ars_additions:remove_guaranteed_hand_drops"
+    },
+    {
+      "type": "ars_additions:remove_tag",
+      "strip_tags": [
+        "Inventory"
+      ]
+    }
+  ]
+}

@@ -8,7 +8,9 @@ import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 
 import java.nio.file.Path;
@@ -59,6 +61,15 @@ public class EnchantingAppDatagen extends ApparatusRecipeProvider {
                 .withPedestalItem(1, ItemsRegistry.CONJURATION_ESSENCE)
                 .withPedestalItem(1, ItemsRegistry.MANIPULATION_ESSENCE)
                 .withPedestalItem(1, Items.ENDER_PEARL)
+                .build()
+        );
+        this.addRecipe(this.builder().withResult(AddonItemRegistry.XP_JAR)
+                .withReagent(Items.GLASS_BOTTLE)
+                .withPedestalItem(ItemsRegistry.ALLOW_ITEM_SCROLL)
+                .withPedestalItem(Blocks.FURNACE)
+                .withPedestalItem(Blocks.COBBLESTONE)
+                .withPedestalItem(Ingredient.of(ItemTags.COALS))
+                .withPedestalItem(Items.LAPIS_LAZULI)
                 .build()
         );
     }

@@ -2,13 +2,18 @@ package com.github.jarva.arsadditions.common.util;
 
 import com.github.jarva.arsadditions.common.block.tile.SourceSpawnerTile;
 import com.github.jarva.arsadditions.common.recipe.SourceSpawnerRecipe;
+import com.github.jarva.arsadditions.common.util.codec.TagModifier;
 import com.github.jarva.arsadditions.datagen.tags.EntityTypeTagDatagen;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
+import com.github.jarva.arsadditions.setup.registry.ModifyTagRegistry;
 import com.hollingsworth.arsnouveau.common.block.tile.MobJarTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.*;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
@@ -27,14 +32,13 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class SourceSpawner extends BaseSpawner {
     private final BlockEntity blockEntity;
     public boolean disabled = false;
     public WeightedRandomList<WeightedEntry.Wrapper<SpawnData>> spawnPotentials = WeightedRandomList.create();
+    public HashMap<EntityType<?>, SourceSpawnerRecipe> recipes = new HashMap<>();
     public short spawnDelay = 20;
     public short minSpawnDelay = 200;
     public short maxSpawnDelay = 800;
@@ -96,42 +100,33 @@ public class SourceSpawner extends BaseSpawner {
         }
     }
 
-    private void removeGuaranteedDrops(CompoundTag tag, String key) {
-        if (tag.contains(key)) {
-            ListTag list = tag.getList(key, Tag.TAG_FLOAT);
-            for (int i = 0; i < list.size(); i++) {
-                float chance = list.getFloat(i);
-                if (chance == 2.0F) {
-                    list.set(i, FloatTag.valueOf(-327.67F));
-                }
-            }
-        }
-    }
-
-    private void removeAllGuaranteedDrops(CompoundTag tag) {
-        removeGuaranteedDrops(tag, "HandDropChances");
-        removeGuaranteedDrops(tag, "ArmorDropChances");
-    }
-
-    private void addSourceSpawnerTag(CompoundTag tag) {
-        ListTag tags = tag.contains("Tags") ? tag.getList("Tags", Tag.TAG_STRING) : new ListTag();
-        tags.add(StringTag.valueOf("ars_additions:source_spawner"));
-        tag.put("Tags", tags);
-    }
+    private static final ModifyTagRegistry.AppendTag APPEND_SOURCE_SPAWNER_TAG = new ModifyTagRegistry.AppendTag(Map.of("Tags", StringTag.valueOf("ars_additions:source_spawner")));
 
     private SimpleWeightedRandomList<SpawnData> getEntities(ServerLevel level, BlockPos pos) {
         SimpleWeightedRandomList.Builder<SpawnData> builder = SimpleWeightedRandomList.builder();
 
         for(BlockPos b : BlockPos.withinManhattan(pos, 10, 10, 10)){
             if(level.getBlockEntity(b) instanceof MobJarTile mobJarTile && mobJarTile.getEntity() instanceof LivingEntity livingEntity){
-                if (livingEntity.getType().is(EntityTypeTagDatagen.SOURCE_SPAWNER_DENYLIST)) {
+                EntityType<?> type = livingEntity.getType();
+                if (type.is(EntityTypeTagDatagen.SOURCE_SPAWNER_DENYLIST)) {
                     continue;
                 }
+
                 CompoundTag entityTag = new CompoundTag();
-                livingEntity.saveAsPassenger(entityTag);
+                entityTag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
+
+                 getRecipe(livingEntity).ifPresent(recipe -> {
+                    recipes.put(type, recipe);
+                    recipe.tag_modifiers().ifPresent(modifiers -> {
+                        livingEntity.saveAsPassenger(entityTag);
+                        for (TagModifier modifier : modifiers) {
+                            modifier.modify(entityTag);
+                        }
+                    });
+                });
+
                 entityTag.remove("UUID");
-                removeAllGuaranteedDrops(entityTag);
-                addSourceSpawnerTag(entityTag);
+                APPEND_SOURCE_SPAWNER_TAG.modify(entityTag);
                 builder.add(new SpawnData(entityTag, Optional.empty()), 1);
             }
         }
@@ -146,25 +141,29 @@ public class SourceSpawner extends BaseSpawner {
     }
 
     public Optional<SourceSpawnerRecipe> getRecipe(Entity entity) {
-        return entity.level().getRecipeManager().getAllRecipesFor(AddonRecipeRegistry.SOURCE_SPAWNER_TYPE.get()).stream().filter(r -> r.isMatch(entity.getType())).findFirst();
+        return AddonRecipeRegistry.SOURCE_SPAWNER_REGISTRY.getRecipes().stream().filter(r -> r.isMatch(entity.getType())).findFirst();
     }
 
     public int calculateSource(Entity entity) {
-        Optional<SourceSpawnerRecipe> optional = getRecipe(entity);
-        if (optional.isPresent()) {
-            return optional.get().source();
-        }
-        int source = 200;
         EntityType<?> type = entity.getType();
+        SourceSpawnerRecipe recipe = recipes.get(type);
+        if (recipe != null && recipe.source().isPresent()) {
+            return recipe.source().get();
+        }
+
+        int source = 200;
         if (type.is(EntityTypeTagDatagen.BOSSES)) {
             source += 10_000;
         }
+
         if (type.getCategory().isPersistent()) {
             source += 1_000;
         }
+
         if (entity instanceof Mob mob) {
             source += (int) (mob.getMaxHealth() * 50);
         }
+
         return source;
     }
 

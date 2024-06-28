@@ -1,10 +1,13 @@
 package com.github.jarva.arsadditions.datagen;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.ritual.RitualLocateStructure;
 import com.github.jarva.arsadditions.datagen.conditions.ConfigCondition;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
+import com.hollingsworth.arsnouveau.common.datagen.ItemTagProvider;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
@@ -85,6 +88,31 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
         addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.POLISHED_SOURCESTONE_TRAPDOOR), i(BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE)));
 
         addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.MAGEBLOOM_CARPET), i(BlockRegistry.getBlock(LibBlockNames.MAGEBLOOM_BLOCK)));
+
+        shapedBuilder(AddonItemRegistry.HANDY_HAVERSACK.get())
+                .pattern("sgs")
+                .pattern("mem")
+                .pattern("mmm")
+                .define('s', Items.STRING)
+                .define('g', Items.GOLD_INGOT)
+                .define('m', Items.PURPLE_WOOL)
+                .define('e', Items.ENDER_PEARL)
+                .save(consumer);
+
+        shapedBuilder(AddonItemRegistry.WAYFINDER.get())
+                .pattern(" g ")
+                .pattern("gag")
+                .pattern(" g ")
+                .define('g', Items.GOLD_INGOT)
+                .define('a', Items.AMETHYST_SHARD)
+                .save(consumer);
+
+        shapelessBuilder(RitualRegistry.getRitualItemMap().get(RitualLocateStructure.RESOURCE_LOCATION))
+                .requires(BlockRegistry.VEXING_LOG)
+                .requires(Items.COMPASS)
+                .requires(ItemTagProvider.SOURCE_GEM_TAG)
+                .requires(AddonItemRegistry.WAYFINDER.get())
+                .save(consumer);
     }
 
     public void addTrapdoorRecipe(ItemLike result, Ingredient material) {

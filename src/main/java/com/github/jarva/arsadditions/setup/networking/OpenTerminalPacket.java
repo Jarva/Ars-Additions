@@ -1,6 +1,6 @@
 package com.github.jarva.arsadditions.setup.networking;
 
-import com.github.jarva.arsadditions.common.item.WarpIndex;
+import com.github.jarva.arsadditions.common.item.curios.WarpIndex;
 import com.github.jarva.arsadditions.server.util.PlayerInvUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

@@ -77,6 +77,17 @@ public class LangDatagen extends LanguageProvider {
         this.add("item.ars_additions.exploration_warp_scroll", "Explorer's Warp Scroll");
         this.add("item.ars_additions.nexus_warp_scroll", "Nexus Warp Scroll");
         this.add("item.ars_additions.unstable_reliquary", "Unstable Reliquary");
+        this.add("item.ars_additions.xp_jar", "Jar of Miner's Wisdom");
+        this.add("item.ars_additions.handy_haversack", "Handy Haversack");
+        this.add("item.ars_additions.advanced_dominion_wand", "Advanced Dominion Wand");
+        this.add("item.ars_additions.wayfinder", "Wayfinder");
+        this.add("item.ars_additions.bound_wayfinder", "Bound Wayfinder");
+        this.add("item.ars_additions.fire_resistance_charm", "Charm of Fire Resistance");
+        this.add("item.ars_additions.undying_charm", "Charm of Undying");
+        this.add("item.ars_additions.dispel_protection_charm", "Charm of Dispel Protection");
+        this.add("item.ars_additions.fall_prevention_charm", "Charm of Fall Prevention");
+        this.add("item.ars_additions.ender_mask_charm", "Charm of Ender Masking");
+        this.add("item.ars_additions.water_breathing_charm", "Charm of Water Breathing");
 
         // Paintings
 
@@ -102,6 +113,25 @@ public class LangDatagen extends LanguageProvider {
         this.add("tooltip.ars_additions.warp_index.keybind.outline", "[%s]");
 
         this.add("tooltip.ars_additions.source_spawner.disabled", "Disabled");
+
+        this.add("tooltip.ars_additions.handy_haversack.container", "Container");
+        this.add("tooltip.ars_additions.handy_haversack.instructions", "Click items into the Handy Haversack, or click the Handy Haversack onto items");
+
+        this.add("tooltip.ars_additions.advanced_dominion_wand.mode", "Mode: %s");
+        this.add("tooltip.ars_additions.advanced_dominion_wand.mode.first", "Locked First");
+        this.add("tooltip.ars_additions.advanced_dominion_wand.mode.second", "Locked Second");
+
+        this.add("tooltip.ars_additions.ritual_locate_structure.name", "Locator");
+
+        this.add("tooltip.ars_additions.charm.charges", "Charges %s / %s");
+
+        this.add("tooltip.ars_additions.charm.desc", "Rechargeable");
+        this.add("tooltip.ars_additions.fire_resistance_charm", "Nullifies Fire Damage");
+        this.add("tooltip.ars_additions.undying_charm", "Prevents you from dying");
+        this.add("tooltip.ars_additions.dispel_protection_charm", "Prevents you from being dispelled");
+        this.add("tooltip.ars_additions.fall_prevention_charm", "Nullifies Fall Damage");
+        this.add("tooltip.ars_additions.ender_mask_charm", "Masks you from the Enderman's anger");
+        this.add("tooltip.ars_additions.water_breathing_charm", "Enables you to breath underwater");
 
         // Keybinds
 
@@ -160,5 +190,8 @@ public class LangDatagen extends LanguageProvider {
 
         this.add("ars_additions.page.wixie_enchanting_apparatus", "Enchanting Apparatus");
         this.add("ars_additions.page1.wixie_enchanting_apparatus", "To create a Wixie Enchanting Apparatus, use a Wixie Charm on an Enchanting Apparatus while Sneaking. The Wixie Enchanting Apparatus works in the exact same way as the Item Crafting mentioned previously.");
+
+        this.add("ars_additions.page.xp_jar", "A jar that can destroy items on pickup and grants a small amount of XP in return. To turn the jar on and off, use the jar while sneaking. To add or remove an item to be destroyed by the jar, use the jar with an item in the off hand, or use an item on the Scribes Table with the jar placed on it. The jar must be in your hotbar to function.");
+        this.add("ars_additions.page.handy_haversack", "After binding the Handy Haversack to a container, you can click items onto the haversack to deposit them into that container from anywhere. When the container is unloaded the haversack will close and not accept any items.");
     }
 }

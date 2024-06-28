@@ -4,6 +4,7 @@ import com.github.jarva.arsadditions.common.glyph.EffectMark;
 import com.github.jarva.arsadditions.common.glyph.MethodRecall;
 import com.github.jarva.arsadditions.common.glyph.MethodRetaliate;
 import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
+import com.github.jarva.arsadditions.common.ritual.RitualLocateStructure;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
@@ -46,6 +47,7 @@ public class ArsNouveauRegistry {
 
     private static void registerRituals() {
         register(new RitualChunkLoading());
+        register(new RitualLocateStructure());
     }
 
     private static void register(AbstractRitual ritual) {

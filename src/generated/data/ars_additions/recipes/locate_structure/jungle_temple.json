@@ -1,0 +1,12 @@
+{
+  "type": "ars_additions:locate_structure",
+  "augments": [
+    {
+      "key": "minecraft:mossy_cobblestone"
+    }
+  ],
+  "id": "ars_additions:jungle_temple",
+  "structure": {
+    "key": "minecraft:jungle_pyramid"
+  }
+}

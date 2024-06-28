@@ -1,6 +1,8 @@
 package com.github.jarva.arsadditions.datagen;
 
 import com.github.jarva.arsadditions.datagen.client.BlockStateDatagen;
+import com.github.jarva.arsadditions.datagen.recipes.LocateStructureProvider;
+import com.github.jarva.arsadditions.datagen.recipes.SourceSpawnerProvider;
 import com.github.jarva.arsadditions.datagen.tags.BlockTagDatagen;
 import com.github.jarva.arsadditions.datagen.tags.EntityTypeTagDatagen;
 import com.github.jarva.arsadditions.datagen.tags.ItemTagDatagen;
@@ -34,5 +36,7 @@ public class Setup {
         gen.addProvider(event.includeServer(), new EntityTypeTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), new AdvancementDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), new BlockStateDatagen(gen.getPackOutput(), event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new LocateStructureProvider(gen));
+        gen.addProvider(event.includeServer(), new SourceSpawnerProvider(gen));
     }
 }

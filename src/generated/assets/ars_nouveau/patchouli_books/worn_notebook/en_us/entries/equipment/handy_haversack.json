@@ -1,0 +1,15 @@
+{
+  "category": "ars_nouveau:equipment",
+  "icon": "ars_additions:handy_haversack",
+  "name": "item.ars_additions.handy_haversack",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.page.handy_haversack"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "ars_additions:handy_haversack"
+    }
+  ]
+}

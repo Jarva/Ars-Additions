@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "ars_additions:loaded": 0.0
+      },
+      "model": "ars_additions:item/handy_haversack_open"
+    },
+    {
+      "predicate": {
+        "ars_additions:loaded": 1.0
+      },
+      "model": "ars_additions:item/handy_haversack_filled"
+    }
+  ]
+}

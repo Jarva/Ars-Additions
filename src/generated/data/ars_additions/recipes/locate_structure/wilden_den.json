@@ -1,0 +1,12 @@
+{
+  "type": "ars_additions:locate_structure",
+  "augments": [
+    {
+      "key": "ars_nouveau:source_gem"
+    }
+  ],
+  "id": "ars_additions:wilden_den",
+  "structure": {
+    "tag": "ars_nouveau:wilden_den"
+  }
+}

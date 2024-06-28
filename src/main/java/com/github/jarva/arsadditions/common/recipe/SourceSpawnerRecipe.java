@@ -1,13 +1,15 @@
 package com.github.jarva.arsadditions.common.recipe;
 
+import com.github.jarva.arsadditions.common.util.codec.TagModifier;
+import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
 import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
+import com.github.jarva.arsadditions.setup.registry.ModifyTagRegistry;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -19,14 +21,20 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-public record SourceSpawnerRecipe(ResourceLocation id, EntityType<?> entity, Integer source) implements Recipe<Container> {
+import java.util.List;
+import java.util.Optional;
+
+public record SourceSpawnerRecipe(ResourceLocation id, Optional<ResourceOrTag<EntityType<?>>> entity, Optional<Integer> source, Optional<List<TagModifier>> tag_modifiers) implements Recipe<Container> {
     @Override
     public boolean matches(Container container, Level level) {
         return false;
     }
 
     public boolean isMatch(EntityType<?> entity) {
-        return entity.equals(this.entity);
+        return this.entity.map(entityTypeResourceOrTag -> entityTypeResourceOrTag.map(
+                entity::is,
+                key -> EntityType.getKey(entity).equals(key.location())
+        ).orElse(false)).orElse(true);
     }
 
     @Override
@@ -75,8 +83,9 @@ public record SourceSpawnerRecipe(ResourceLocation id, EntityType<?> entity, Int
     public static class Serializer implements RecipeSerializer<SourceSpawnerRecipe> {
         public static final Codec<SourceSpawnerRecipe> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 ResourceLocation.CODEC.fieldOf("id").forGetter(SourceSpawnerRecipe::id),
-                BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity").forGetter(SourceSpawnerRecipe::entity),
-                Codec.INT.fieldOf("source").forGetter(SourceSpawnerRecipe::source)
+                ResourceOrTag.ENTITY_TYPE_CODEC.optionalFieldOf("entity").forGetter(SourceSpawnerRecipe::entity),
+                Codec.INT.optionalFieldOf("source").forGetter(SourceSpawnerRecipe::source),
+                ModifyTagRegistry.CODEC.listOf().optionalFieldOf("tag_modifiers").forGetter(SourceSpawnerRecipe::tag_modifiers)
         ).apply(instance, SourceSpawnerRecipe::new));
 
         @Override

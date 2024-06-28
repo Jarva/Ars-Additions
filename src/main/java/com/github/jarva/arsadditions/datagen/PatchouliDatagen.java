@@ -93,6 +93,8 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
         );
 
         addBasicItem(AddonBlockRegistry.ENDER_SOURCE_JAR.get(), MACHINES, new ApparatusPage(AddonBlockRegistry.ENDER_SOURCE_JAR));
+        addBasicItem(AddonItemRegistry.XP_JAR.get(), EQUIPMENT, new ApparatusPage(AddonItemRegistry.XP_JAR));
+        addBasicItem(AddonItemRegistry.HANDY_HAVERSACK.get(), EQUIPMENT, new CraftingPage(AddonItemRegistry.HANDY_HAVERSACK));
 
         for (PatchouliPage patchouliPage : pages) {
             saveStable(cache, patchouliPage.build(), patchouliPage.path());

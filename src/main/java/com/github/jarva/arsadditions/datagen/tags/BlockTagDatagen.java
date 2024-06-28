@@ -7,7 +7,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +22,10 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
     public BlockTagDatagen(PackOutput arg, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
         super(arg, Registries.BLOCK, future, item -> item.builtInRegistryHolder().key(), ArsAdditions.MODID, helper);
     }
+
+    public static TagKey<Block> IMMOVABLE = BlockTags.create(new ResourceLocation("forge", "immovable"));
+    public static TagKey<Block> RELOCATION_NOT_SUPPORTED = BlockTags.create(new ResourceLocation("forge", "relocation_not_supported"));
+    public static TagKey<Block> CARRYON_BLACKLIST = BlockTags.create(new ResourceLocation("carryon", "block_blacklist"));
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
@@ -55,5 +61,9 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
 
         Block[] carpets = getBlocks(AddonBlockNames.CARPETS);
         this.tag(BlockTags.WOOL_CARPETS).add(carpets);
+
+        this.tag(CARRYON_BLACKLIST).add(AddonBlockRegistry.WARP_NEXUS.get());
+        this.tag(RELOCATION_NOT_SUPPORTED).add(AddonBlockRegistry.WARP_NEXUS.get());
+        this.tag(IMMOVABLE).add(AddonBlockRegistry.WARP_NEXUS.get());
     }
 }

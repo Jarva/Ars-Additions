@@ -1,0 +1,12 @@
+{
+  "type": "ars_additions:locate_structure",
+  "augments": [
+    {
+      "key": "minecraft:sandstone"
+    }
+  ],
+  "id": "ars_additions:desert_temple",
+  "structure": {
+    "key": "minecraft:desert_pyramid"
+  }
+}

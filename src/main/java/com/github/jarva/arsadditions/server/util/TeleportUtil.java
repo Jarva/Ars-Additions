@@ -1,29 +1,35 @@
 package com.github.jarva.arsadditions.server.util;
 
+import com.hollingsworth.arsnouveau.common.block.tile.PortalTile;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
 
 public class TeleportUtil {
-    public static void teleport(ServerLevel level, WarpScroll.WarpScrollData data, Player player, ItemStack stack) {
+    public static void teleport(ServerLevel level, WarpScroll.WarpScrollData data, Entity player, ItemStack stack) {
         teleport(level, data, player);
         stack.shrink(1);
     }
 
-    public static void teleport(ServerLevel level, WarpScroll.WarpScrollData data, Player player) {
+    public static void teleport(ServerLevel level, WarpScroll.WarpScrollData data, Entity player) {
         if (!data.isValid()) return;
 
-        BlockPos pos = data.getPos();
-        player.teleportToWithTicket(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-        Vec2 rotation = data.getRotation();
-        player.setXRot(rotation.x);
-        player.setYRot(rotation.y);
+        teleport(level, data.getDimension(), data.getPos(), data.getRotation(), player);
+    }
+
+    public static void teleport(ServerLevel level, String dimension, BlockPos pos, Vec2 rotation, Entity player) {
+        ServerLevel dim = PortalTile.getServerLevel(dimension, level);
+        teleport(dim, pos, rotation, player);
+    }
+
+    public static void teleport(ServerLevel level, BlockPos pos, Vec2 rotation, Entity player) {
+        PortalTile.teleportEntityTo(player, level, pos, rotation);
 
         createTeleportDecoration(level, pos);
     }

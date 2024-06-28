@@ -3,14 +3,17 @@ package com.github.jarva.arsadditions;
 import com.github.jarva.arsadditions.client.renderers.EnchantingWixieCauldronRenderer;
 import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
 import com.github.jarva.arsadditions.client.util.BookUtil;
+import com.github.jarva.arsadditions.client.util.CompassUtil;
 import com.github.jarva.arsadditions.common.util.FillUtil;
 import com.github.jarva.arsadditions.mixin.PageTextAccessor;
 import com.github.jarva.arsadditions.setup.networking.OpenTerminalPacket;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -41,11 +44,22 @@ public class ArsAdditionsClient {
         public static void init(FMLClientSetupEvent evt) {
             ArsAdditions.LOGGER.info("Running init");
             evt.enqueueWork(() -> {
-                ItemProperties.register(AddonBlockRegistry.ENDER_SOURCE_JAR.get().asItem(), ArsAdditions.prefix( "source"), (stack, level, entity, seed) -> {
+                ItemProperties.register(AddonBlockRegistry.ENDER_SOURCE_JAR.get().asItem(), ArsAdditions.prefix("source"), (stack, level, entity, seed) -> {
                     CompoundTag tag = stack.getTag();
                     if (tag == null) return 0.0F;
                     CompoundTag BET = tag.getCompound("BlockEntityTag");
                     return FillUtil.getFillLevel(BET.getInt("source"), BET.getInt("max_source"));
+                });
+                ItemProperties.register(AddonItemRegistry.HANDY_HAVERSACK.get(), ArsAdditions.prefix("loaded"), (stack, level, entity, seed) -> {
+                    CompoundTag tag = stack.getTag();
+                    if (tag == null) return 1.0F;
+                    return tag.getBoolean("loaded") ? 0.0F : 1.0F;
+                });
+                ItemProperties.register(AddonItemRegistry.WAYFINDER.get(), ArsAdditions.prefix("angle"), new CompassItemPropertyFunction(new CompassUtil()));
+                ItemProperties.register(AddonItemRegistry.WAYFINDER.get(), ArsAdditions.prefix("pos"), (stack, level, entity, seed) -> {
+                    CompoundTag tag = stack.getTag();
+                    if (tag == null) return 0.0F;
+                    return tag.contains("Structure") ? 1.0F : 0.0F;
                 });
             });
         }

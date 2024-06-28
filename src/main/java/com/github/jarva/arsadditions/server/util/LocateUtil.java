@@ -146,7 +146,7 @@ public class LocateUtil {
         LocateUtil.locateWithState(stack, level, holderSet, BlockPos.containing(origin), searchRadius, skipKnown);
     }
 
-    private static void locate(ServerLevel level, HolderSet<Structure> holderSet, BlockPos origin, int searchRadius, boolean skipKnownStructures, Consumer<Pair<BlockPos, Holder<Structure>>> consumer) {
+    public static void locate(ServerLevel level, HolderSet<Structure> holderSet, BlockPos origin, int searchRadius, boolean skipKnownStructures, Consumer<Pair<BlockPos, Holder<Structure>>> consumer) {
         if (ModList.get().isLoaded("asynclocator")) {
             AsyncLocator.locate(level, holderSet, origin, searchRadius, skipKnownStructures).then((pair) -> {
                 if (pair == null) {

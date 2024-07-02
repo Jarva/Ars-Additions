@@ -82,12 +82,16 @@ public class LangDatagen extends LanguageProvider {
         this.add("item.ars_additions.advanced_dominion_wand", "Advanced Dominion Wand");
         this.add("item.ars_additions.wayfinder", "Wayfinder");
         this.add("item.ars_additions.bound_wayfinder", "Bound Wayfinder");
-        this.add("item.ars_additions.fire_resistance_charm", "Charm of Fire Resistance");
-        this.add("item.ars_additions.undying_charm", "Charm of Undying");
-        this.add("item.ars_additions.dispel_protection_charm", "Charm of Dispel Protection");
-        this.add("item.ars_additions.fall_prevention_charm", "Charm of Fall Prevention");
-        this.add("item.ars_additions.ender_mask_charm", "Charm of Ender Masking");
-        this.add("item.ars_additions.water_breathing_charm", "Charm of Water Breathing");
+
+        this.add("item.ars_additions.fire_resistance_charm", "Charm of Emberward");
+        this.add("item.ars_additions.undying_charm", "Charm of Second Wind");
+        this.add("item.ars_additions.dispel_protection_charm", "Charm of Unyielding Magic");
+        this.add("item.ars_additions.fall_prevention_charm", "Charm of Featherlight");
+        this.add("item.ars_additions.ender_mask_charm", "Charm of Ender Serenity");
+        this.add("item.ars_additions.water_breathing_charm", "Charm of Ocean's Breath");
+        this.add("item.ars_additions.void_protection_charm", "Charm of Void's Salvation");
+        this.add("item.ars_additions.sonic_boom_protection_charm", "Charm of Resonant Shield");
+        this.add("item.ars_additions.wither_protection_charm", "Charm of Decay's End");
 
         // Paintings
 

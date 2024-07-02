@@ -20,7 +20,12 @@ public class NexusCapability implements INBTSerializable<CompoundTag>, ICapabili
         this.player = player;
     }
     public static final ResourceLocation IDENTIFIER = ArsAdditions.prefix("nexus");
-    private final ItemStackHandler inventory = new ItemStackHandler(9) {};
+    private final ItemStackHandler inventory = new ItemStackHandler(9) {
+        @Override
+        protected void onContentsChanged(int slot) {
+
+        }
+    };
     private final LazyOptional<ItemStackHandler> optional = LazyOptional.of(() -> this.inventory);
 
     @Override

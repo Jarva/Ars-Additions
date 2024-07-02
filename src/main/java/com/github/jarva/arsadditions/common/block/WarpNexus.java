@@ -55,24 +55,24 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
 
         if (be == null) return InteractionResult.FAIL;
 
-        if (!be.getStack().isEmpty()) {
-            if (player instanceof ServerPlayer serverPlayer) {
-                ItemStack item = be.extract();
-                serverPlayer.getInventory().add(item);
-            }
+    if (!be.getStack().isEmpty()) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            ItemStack item = be.extract();
+            serverPlayer.getInventory().add(item);
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    if (player.isSecondaryUseActive()) {
+        if (player.getMainHandItem().getItem() instanceof SpellBook) {
             return InteractionResult.SUCCESS;
         }
-
-        if (player.isSecondaryUseActive()) {
-            if (player.getMainHandItem().getItem() instanceof SpellBook) {
-                return InteractionResult.SUCCESS;
-            }
-            if (player instanceof ServerPlayer serverPlayer) {
-                NetworkHooks.openScreen(serverPlayer, state.getMenuProvider(level, be.getBlockPos()));
-            }
-        } else {
-            OpenNexusPacket.openNexus(player, be.getBlockPos());
+        if (player instanceof ServerPlayer serverPlayer) {
+            NetworkHooks.openScreen(serverPlayer, state.getMenuProvider(level, be.getBlockPos()));
         }
+    } else {
+        OpenNexusPacket.openNexus(player, be.getBlockPos());
+    }
         return InteractionResult.CONSUME;
     }
 

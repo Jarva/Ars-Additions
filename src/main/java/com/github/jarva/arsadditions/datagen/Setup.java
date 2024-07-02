@@ -28,6 +28,7 @@ public class Setup {
         gen.addProvider(event.includeServer(), new LangDatagen(gen.getPackOutput(), root, "en_us"));
         gen.addProvider(event.includeServer(), new RecipeDatagen(gen.getPackOutput()));
         gen.addProvider(event.includeServer(), new EnchantingAppDatagen(gen));
+        gen.addProvider(event.includeServer(), new ImbuementDatagen(gen));
         gen.addProvider(event.includeServer(), new DefaultLootDatagen(gen.getPackOutput()));
         gen.addProvider(event.includeServer(), new GlyphDatagen(gen));
         gen.addProvider(event.includeServer(), new ProcessorDatagen(gen));

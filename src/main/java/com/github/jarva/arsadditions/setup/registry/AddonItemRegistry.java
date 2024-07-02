@@ -11,7 +11,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.github.jarva.arsadditions.ArsAdditions.MODID;
@@ -35,14 +37,7 @@ public class AddonItemRegistry {
     public static final RegistryObject<Item> ADVANCED_DOMINION_WAND;
     public static final RegistryObject<Item> WAYFINDER;
 
-    // Charms
-    public static final RegistryObject<Item> FIRE_RESISTANCE_CHARM;
-    public static final RegistryObject<Item> UNDYING_CHARM;
-    public static final RegistryObject<Item> DISPEL_PROTECTION_CHARM;
-    public static final RegistryObject<Item> FALL_PREVENTION_CHARM;
-    public static final RegistryObject<Item> WATER_BREATHING_CHARM;
-    public static final RegistryObject<Item> ENDER_MASK_CHARM;
-    public static final RegistryObject<Item> VOID_PROTECTION_CHARM;
+    public static final HashMap<Charm.CharmType, RegistryObject<Item>> CHARMS = new HashMap<>();
 
     static {
         LECTERN_REMOTE = register(AddonItemNames.WARP_INDEX, WarpIndex::new);
@@ -58,13 +53,15 @@ public class AddonItemRegistry {
         ADVANCED_DOMINION_WAND = register(AddonItemNames.ADVANCED_DOMINION_WAND, AdvancedDominionWand::new);
         WAYFINDER = register(AddonItemNames.WAYFINDER, Wayfinder::new, false);
 
-        FIRE_RESISTANCE_CHARM = register(AddonItemNames.FIRE_RESISTANCE_CHARM, () -> new Charm(1000));
-        UNDYING_CHARM = register(AddonItemNames.UNDYING_CHARM, () -> new Charm(1));
-        DISPEL_PROTECTION_CHARM = register(AddonItemNames.DISPEL_PROTECTION_CHARM, () -> new Charm(1));
-        FALL_PREVENTION_CHARM = register(AddonItemNames.FALL_PREVENTION_CHARM, () -> new Charm(3));
-        WATER_BREATHING_CHARM = register(AddonItemNames.WATER_BREATHING_CHARM, () -> new Charm(1000));
-        ENDER_MASK_CHARM = register(AddonItemNames.ENDER_MASK_CHARM, () -> new Charm(100));
-        VOID_PROTECTION_CHARM = register(AddonItemNames.VOID_PROTECTION_CHARM, () -> new Charm(3));
+        registerCharms();
+    }
+
+    private static void registerCharms() {
+        for (Map.Entry<Charm.CharmType, Integer> entry : Charm.CHARMS.entrySet()) {
+            Charm.CharmType charm = entry.getKey();
+            Integer charges = entry.getValue();
+            CHARMS.put(charm, register(charm.getSerializedName(), () -> new Charm(charges)));
+        }
     }
 
     private static RegistryObject<Item> register(String name, Supplier<Item> item) {

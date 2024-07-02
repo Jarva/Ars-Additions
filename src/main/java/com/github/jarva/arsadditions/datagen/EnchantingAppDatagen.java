@@ -21,7 +21,7 @@ public class EnchantingAppDatagen extends ApparatusRecipeProvider {
     }
 
     protected static Path getRecipePath(Path pathIn, String str) {
-        return pathIn.resolve("data/" + Setup.root + "/recipes/" + str + ".json");
+        return pathIn.resolve("data/" + Setup.root + "/recipes/apparatus/" + str + ".json");
     }
 
     @Override

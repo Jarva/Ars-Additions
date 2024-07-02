@@ -1,0 +1,10 @@
+{
+  "type": "ars_nouveau:imbuement",
+  "count": 1,
+  "input": {
+    "item": "ars_additions:sonic_boom_protection_charm"
+  },
+  "output": "ars_additions:sonic_boom_protection_charm",
+  "pedestalItems": [],
+  "source": 2000
+}

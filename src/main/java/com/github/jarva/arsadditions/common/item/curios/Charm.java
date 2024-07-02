@@ -1,7 +1,6 @@
 package com.github.jarva.arsadditions.common.item.curios;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.server.util.LocateUtil;
 import com.github.jarva.arsadditions.server.util.PlayerInvUtil;
 import com.github.jarva.arsadditions.server.util.TeleportUtil;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
@@ -10,14 +9,18 @@ import com.hollingsworth.arsnouveau.api.item.ArsNouveauCurio;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
@@ -35,7 +38,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
+import top.theillusivec4.curios.api.SlotContext;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -43,6 +48,33 @@ import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Charm extends ArsNouveauCurio {
+    public enum CharmType implements StringRepresentable {
+        FIRE_RESISTANCE,
+        UNDYING,
+        DISPEL_PROTECTION,
+        FALL_PREVENTION,
+        WATER_BREATHING,
+        ENDER_MASK,
+        VOID_PROTECTION,
+        SONIC_BOOM_PROTECTION;
+
+        @Override
+        public String getSerializedName() {
+            return name().toLowerCase() + "_charm";
+        }
+    }
+    public static final HashMap<CharmType, Integer> CHARMS = new HashMap<>();
+    static {
+        CHARMS.put(CharmType.FIRE_RESISTANCE, 1000);
+        CHARMS.put(CharmType.UNDYING, 1);
+        CHARMS.put(CharmType.DISPEL_PROTECTION, 3);
+        CHARMS.put(CharmType.FALL_PREVENTION, 3);
+        CHARMS.put(CharmType.WATER_BREATHING, 1000);
+        CHARMS.put(CharmType.ENDER_MASK, 100);
+        CHARMS.put(CharmType.VOID_PROTECTION, 1);
+        CHARMS.put(CharmType.SONIC_BOOM_PROTECTION, 3);
+    }
+
     private final int uses;
 
     public Charm(int uses) {
@@ -91,6 +123,10 @@ public class Charm extends ArsNouveauCurio {
         return charges != uses;
     }
 
+    public static boolean isEnabled(CharmType type, ItemStack charm) {
+        return charm.is(AddonItemRegistry.CHARMS.get(type).get()) && isEnabled(charm);
+    }
+
     public static boolean isEnabled(ItemStack charm) {
         return Charm.getCharges(charm) > 0;
     }
@@ -118,6 +154,41 @@ public class Charm extends ArsNouveauCurio {
         return Charm.isEnabled(stack);
     }
 
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        if (entity instanceof LivingEntity livingEntity) {
+            tick(stack, livingEntity);
+        }
+    }
+
+    @Override
+    public void curioTick(SlotContext slotContext, ItemStack stack) {
+        tick(stack, slotContext.entity());
+    }
+
+    public void tick(ItemStack stack, LivingEntity entity) {
+        if (Charm.isEnabled(CharmType.VOID_PROTECTION, stack) && entity.onGround()) {
+            BlockPos below = entity.blockPosition().below();
+            boolean isSafe = entity.level().getBlockState(below).isRedstoneConductor(entity.level(), below);
+            if (!isSafe) return;
+            GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, GlobalPos.of(entity.level().dimension(), entity.blockPosition())).result().ifPresent(pos -> {
+                stack.getTag().put("Pos", pos);
+            });
+        }
+        processCharmEvent(entity, AddonItemRegistry.CHARMS.get(CharmType.FALL_PREVENTION), () -> {
+            CompoundTag tag = stack.getOrCreateTag();
+            boolean canTrigger = !tag.contains("canTrigger") || tag.getBoolean("canTrigger");
+            if (!canTrigger && entity.onGround()) {
+                tag.putBoolean("canTrigger", true);
+                return false;
+            }
+            return canTrigger && entity.fallDistance > 3.0f;
+        }, (e, curio) -> {
+            e.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 100));
+            return 1;
+        });
+    }
+
     public static int getCharges(ItemStack stack) {
         if (!stack.hasTag()) return 0;
         return stack.getOrCreateTag().getInt("charges");
@@ -143,7 +214,7 @@ public class Charm extends ArsNouveauCurio {
 
     @SubscribeEvent
     public static void handeUndying(LivingDeathEvent event) {
-        processCharmEvent(event.getEntity(), AddonItemRegistry.UNDYING_CHARM, () -> event.getEntity() instanceof Player, (entity, curio) -> {
+        processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmType.UNDYING), () -> event.getEntity() instanceof Player, (entity, curio) -> {
             entity.setHealth(1.0F);
             entity.removeAllEffects();
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 900, 1));
@@ -158,26 +229,31 @@ public class Charm extends ArsNouveauCurio {
 
     @SubscribeEvent
     public static void handleDamage(LivingAttackEvent event) {
-        processCharmEvent(event.getEntity(), AddonItemRegistry.FALL_PREVENTION_CHARM, () -> event.getSource().is(DamageTypeTags.IS_FALL), (entity, curio) -> {
+        processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmType.FIRE_RESISTANCE), () -> event.getSource().is(DamageTypeTags.IS_FIRE), (entity, curio) -> {
             event.setCanceled(true);
 
             return (int) event.getAmount();
         });
-        processCharmEvent(event.getEntity(), AddonItemRegistry.FIRE_RESISTANCE_CHARM, () -> event.getSource().is(DamageTypeTags.IS_FIRE), (entity, curio) -> {
+        processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmType.WATER_BREATHING), () -> event.getSource().is(DamageTypeTags.IS_DROWNING), (entity, curio) -> {
             event.setCanceled(true);
 
             return (int) event.getAmount();
         });
-        processCharmEvent(event.getEntity(), AddonItemRegistry.VOID_PROTECTION_CHARM, () -> event.getSource().is(DamageTypes.FELL_OUT_OF_WORLD), (entity, curio) -> {
+        processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmType.VOID_PROTECTION), () -> event.getSource().is(DamageTypes.FELL_OUT_OF_WORLD), (entity, curio) -> {
             event.setCanceled(true);
 
             if (entity.level() instanceof ServerLevel serverLevel) {
-                BlockPos ground = LocateUtil.findHighestSafeBlock(serverLevel, entity.blockPosition());
-                if (ground == null) {
-                    ground = entity.blockPosition().atY(serverLevel.getMaxBuildHeight());
-                }
-                TeleportUtil.teleport(serverLevel, ground, entity.getRotationVector(), entity);
+                CompoundTag tag = curio.getTag();
+                GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("Pos")).result().ifPresent(pos -> {
+                    TeleportUtil.teleport(serverLevel.getServer().getLevel(pos.dimension()), pos.pos(), entity.getRotationVector(), entity);
+                    entity.resetFallDistance();
+                });
             }
+
+            return 1;
+        });
+        processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmType.SONIC_BOOM_PROTECTION), () -> event.getSource().is(DamageTypes.SONIC_BOOM), (entity, curio) -> {
+            event.setCanceled(true);
 
             return 1;
         });
@@ -186,7 +262,7 @@ public class Charm extends ArsNouveauCurio {
     @SubscribeEvent
     public static void handeDispel(DispelEvent.Pre event) {
         if (event.rayTraceResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
-            processCharmEvent(livingEntity, AddonItemRegistry.DISPEL_PROTECTION_CHARM, () -> true, (entity, curio) -> {
+            processCharmEvent(livingEntity, AddonItemRegistry.CHARMS.get(CharmType.DISPEL_PROTECTION), () -> true, (entity, curio) -> {
                 event.setCanceled(true);
 
                 return 1;
@@ -196,7 +272,7 @@ public class Charm extends ArsNouveauCurio {
 
     @SubscribeEvent
     public static void handleEnderMask(EnderManAngerEvent event) {
-        processCharmEvent(event.getPlayer(), AddonItemRegistry.ENDER_MASK_CHARM, () -> {
+        processCharmEvent(event.getPlayer(), AddonItemRegistry.CHARMS.get(CharmType.ENDER_MASK), () -> {
             Player player = event.getPlayer();
             EnderMan enderMan = event.getEntity();
             Vec3 view = player.getViewVector(1.0F).normalize();

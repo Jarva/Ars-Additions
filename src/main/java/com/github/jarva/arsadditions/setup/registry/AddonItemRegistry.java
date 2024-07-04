@@ -37,7 +37,7 @@ public class AddonItemRegistry {
     public static final RegistryObject<Item> ADVANCED_DOMINION_WAND;
     public static final RegistryObject<Item> WAYFINDER;
 
-    public static final HashMap<Charm.CharmType, RegistryObject<Item>> CHARMS = new HashMap<>();
+    public static final HashMap<CharmRegistry.CharmType, RegistryObject<Item>> CHARMS = new HashMap<>();
 
     static {
         LECTERN_REMOTE = register(AddonItemNames.WARP_INDEX, WarpIndex::new);
@@ -57,10 +57,8 @@ public class AddonItemRegistry {
     }
 
     private static void registerCharms() {
-        for (Map.Entry<Charm.CharmType, Integer> entry : Charm.CHARMS.entrySet()) {
-            Charm.CharmType charm = entry.getKey();
-            Integer charges = entry.getValue();
-            CHARMS.put(charm, register(charm.getSerializedName(), () -> new Charm(charges)));
+        for (CharmRegistry.CharmType charm : CharmRegistry.CharmType.values()) {
+            CHARMS.put(charm, register(charm.getSerializedName(), () -> new Charm(charm.getCharges())));
         }
     }
 

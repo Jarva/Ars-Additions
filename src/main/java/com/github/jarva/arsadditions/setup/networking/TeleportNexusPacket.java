@@ -6,6 +6,7 @@ import com.github.jarva.arsadditions.common.capability.CapabilityRegistry;
 import com.github.jarva.arsadditions.server.util.TeleportUtil;
 import com.hollingsworth.arsnouveau.api.source.ISpecialSourceProvider;
 import com.hollingsworth.arsnouveau.api.util.SourceUtil;
+import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import net.minecraft.core.BlockPos;
@@ -48,8 +49,8 @@ public class TeleportNexusPacket implements AbstractPacket {
 
             ItemStackHandler nexus = player.getCapability(CapabilityRegistry.PLAYER_NEXUS_CAPABILITY).orElse(new ItemStackHandler());
             ItemStack scroll = nexus.getStackInSlot(index);
-            WarpScroll.WarpScrollData data = WarpScroll.WarpScrollData.get(scroll);
-
+            StableWarpScroll.StableScrollData data = new StableWarpScroll.StableScrollData(scroll);
+ 
             if (be.getBlockState().getValue(WarpNexus.REQUIRES_SOURCE)) {
                 ISpecialSourceProvider takePos = SourceUtil.takeSource(pos, player.serverLevel(), 5, 1000);
                 if (takePos != null) {

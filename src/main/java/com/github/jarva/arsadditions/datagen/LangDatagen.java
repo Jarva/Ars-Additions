@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
@@ -83,15 +84,10 @@ public class LangDatagen extends LanguageProvider {
         this.add("item.ars_additions.wayfinder", "Wayfinder");
         this.add("item.ars_additions.bound_wayfinder", "Bound Wayfinder");
 
-        this.add("item.ars_additions.fire_resistance_charm", "Charm of Emberward");
-        this.add("item.ars_additions.undying_charm", "Charm of Second Wind");
-        this.add("item.ars_additions.dispel_protection_charm", "Charm of Unyielding Magic");
-        this.add("item.ars_additions.fall_prevention_charm", "Charm of Featherlight");
-        this.add("item.ars_additions.ender_mask_charm", "Charm of Ender Serenity");
-        this.add("item.ars_additions.water_breathing_charm", "Charm of Ocean's Breath");
-        this.add("item.ars_additions.void_protection_charm", "Charm of Void's Salvation");
-        this.add("item.ars_additions.sonic_boom_protection_charm", "Charm of Resonant Shield");
-        this.add("item.ars_additions.wither_protection_charm", "Charm of Decay's End");
+        for (CharmRegistry.CharmType charm : CharmRegistry.CharmType.values()) {
+            this.add("item.ars_additions." + charm.getSerializedName(), "Charm of " + charm.getName());
+            this.add("tooltip.ars_additions." + charm.getSerializedName(), charm.getDescription());
+        }
 
         // Paintings
 
@@ -128,14 +124,7 @@ public class LangDatagen extends LanguageProvider {
         this.add("tooltip.ars_additions.ritual_locate_structure.name", "Locator");
 
         this.add("tooltip.ars_additions.charm.charges", "Charges %s / %s");
-
         this.add("tooltip.ars_additions.charm.desc", "Rechargeable");
-        this.add("tooltip.ars_additions.fire_resistance_charm", "Nullifies Fire Damage");
-        this.add("tooltip.ars_additions.undying_charm", "Prevents you from dying");
-        this.add("tooltip.ars_additions.dispel_protection_charm", "Prevents you from being dispelled");
-        this.add("tooltip.ars_additions.fall_prevention_charm", "Nullifies Fall Damage");
-        this.add("tooltip.ars_additions.ender_mask_charm", "Masks you from the Enderman's anger");
-        this.add("tooltip.ars_additions.water_breathing_charm", "Enables you to breath underwater");
 
         // Keybinds
 

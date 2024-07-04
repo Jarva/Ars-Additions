@@ -54,7 +54,7 @@ public class ExplorationWarpScroll extends Item {
         BlockPos pos = entity.blockPosition();
         boolean isRuinedPortal = serverLevel.structureManager().getStructureWithPieceAt(pos, TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix("ruined_portals"))).isValid();
         if (isRuinedPortal) {
-            WarpScroll.WarpScrollData data = WarpScroll.WarpScrollData.get(stack);
+            WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
             if (!data.isValid()) return false;
 
             String displayName = "Explorer's Warp Portal";
@@ -100,7 +100,7 @@ public class ExplorationWarpScroll extends Item {
         if (usedHand == InteractionHand.OFF_HAND) return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
         if (!(level instanceof ServerLevel serverLevel)) return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
 
-        WarpScroll.WarpScrollData data = StableWarpScroll.StableScrollData.get(stack);
+        WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
 
         if (LocateUtil.isPending(stack)) {
             PortUtil.sendMessageNoSpam(player, Component.translatable("tooltip.ars_additions.exploration_warp_scroll.locating"));

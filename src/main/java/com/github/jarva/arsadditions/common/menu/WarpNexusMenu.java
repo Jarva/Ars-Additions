@@ -2,6 +2,7 @@ package com.github.jarva.arsadditions.common.menu;
 
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.world.entity.player.Inventory;
@@ -36,7 +37,7 @@ public class WarpNexusMenu  extends AbstractContainerMenu {
                         boolean isWarpScroll = stack.is(ItemsRegistry.WARP_SCROLL.get()) || stack.is(ItemsRegistry.STABLE_WARP_SCROLL.get()) || stack.is(AddonItemRegistry.NEXUS_WARP_SCROLL.get());
                         if (!isWarpScroll) return false;
 
-                        WarpScroll.WarpScrollData data = WarpScroll.WarpScrollData.get(stack);
+                        WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
                         return data.isValid();
                     }
                 });

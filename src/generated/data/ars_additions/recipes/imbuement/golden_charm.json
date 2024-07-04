@@ -1,0 +1,10 @@
+{
+  "type": "ars_nouveau:imbuement",
+  "count": 1,
+  "input": {
+    "item": "ars_additions:golden_charm"
+  },
+  "output": "ars_additions:golden_charm",
+  "pedestalItems": [],
+  "source": 2000
+}

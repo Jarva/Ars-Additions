@@ -1,8 +1,8 @@
 package com.github.jarva.arsadditions.datagen;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.common.item.curios.Charm;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.ImbuementRecipe;
 import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
 import net.minecraft.data.CachedOutput;
@@ -31,7 +31,7 @@ public class ImbuementDatagen extends ImbuementRecipeProvider {
     }
 
     public void addEntries() {
-        for (Charm.CharmType value : Charm.CharmType.values()) {
+        for (CharmRegistry.CharmType value : CharmRegistry.CharmType.values()) {
             recipes.add(new ImbuementRecipe(ArsAdditions.prefix(value.getSerializedName()), Ingredient.of(AddonItemRegistry.CHARMS.get(value).get()), AddonItemRegistry.CHARMS.get(value).get().getDefaultInstance(), 2000, List.of()));
         }
     }

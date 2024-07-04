@@ -43,7 +43,7 @@ public class NexusWarpScroll extends StableWarpScroll {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        WarpScroll.WarpScrollData data = WarpScroll.WarpScrollData.get(stack);
+        WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
         if (data.isValid()) {
             BlockPos pos = data.getPos();
             tooltipComponents.add(Component.translatable("ars_nouveau.position", pos.getX(), pos.getY(), pos.getZ()));

@@ -16,11 +16,15 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.concurrent.CompletableFuture;
 
 public class ItemTagDatagen extends IntrinsicHolderTagsProvider<Item> {
     public static TagKey<Item> FORGOTTEN_KNOWLEDGE_GLYPHS = ItemTags.create(new ResourceLocation(ArsAdditions.MODID, "forgotten_knowledge"));
+    public static TagKey<Item> BELTS = ItemTags.create(new ResourceLocation("curios", "belt"));
+    public static TagKey<Item> CHARMS = ItemTags.create(new ResourceLocation("curios", "charm"));
+
     public ItemTagDatagen(PackOutput arg, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
         super(arg, Registries.ITEM, future, item -> item.builtInRegistryHolder().key(), ArsAdditions.MODID, helper);
     }
@@ -33,5 +37,11 @@ public class ItemTagDatagen extends IntrinsicHolderTagsProvider<Item> {
         RitualTablet chunkLoading = RitualRegistry.getRitualItemMap().get(RitualChunkLoading.RESOURCE_LOCATION);
         this.tag(ItemTagProvider.RITUAL_TRADE_BLACKLIST).add(chunkLoading);
         this.tag(ItemTagProvider.RITUAL_LOOT_BLACKLIST).add(chunkLoading);
+
+        this.tag(BELTS).add(AddonItemRegistry.LECTERN_REMOTE.get(), AddonItemRegistry.ADVANCED_LECTERN_REMOTE.get());
+
+        for (RegistryObject<Item> charm : AddonItemRegistry.CHARMS.values()) {
+            this.tag(CHARMS).add(charm.get());
+        }
     }
 }

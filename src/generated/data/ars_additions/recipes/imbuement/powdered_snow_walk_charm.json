@@ -1,0 +1,10 @@
+{
+  "type": "ars_nouveau:imbuement",
+  "count": 1,
+  "input": {
+    "item": "ars_additions:powdered_snow_walk_charm"
+  },
+  "output": "ars_additions:powdered_snow_walk_charm",
+  "pedestalItems": [],
+  "source": 2000
+}

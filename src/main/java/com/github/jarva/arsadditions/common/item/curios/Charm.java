@@ -1,9 +1,9 @@
 package com.github.jarva.arsadditions.common.item.curios;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.server.util.PlayerInvUtil;
 import com.github.jarva.arsadditions.server.util.TeleportUtil;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
 import com.hollingsworth.arsnouveau.api.event.DispelEvent;
 import com.hollingsworth.arsnouveau.api.item.ArsNouveauCurio;
 import net.minecraft.ChatFormatting;
@@ -16,7 +16,6 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -24,56 +23,23 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.event.entity.living.EnderManAngerEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.SlotContext;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Charm extends ArsNouveauCurio {
-    public enum CharmType implements StringRepresentable {
-        FIRE_RESISTANCE,
-        UNDYING,
-        DISPEL_PROTECTION,
-        FALL_PREVENTION,
-        WATER_BREATHING,
-        ENDER_MASK,
-        VOID_PROTECTION,
-        SONIC_BOOM_PROTECTION;
-
-        @Override
-        public String getSerializedName() {
-            return name().toLowerCase() + "_charm";
-        }
-    }
-    public static final HashMap<CharmType, Integer> CHARMS = new HashMap<>();
-    static {
-        CHARMS.put(CharmType.FIRE_RESISTANCE, 1000);
-        CHARMS.put(CharmType.UNDYING, 1);
-        CHARMS.put(CharmType.DISPEL_PROTECTION, 3);
-        CHARMS.put(CharmType.FALL_PREVENTION, 3);
-        CHARMS.put(CharmType.WATER_BREATHING, 1000);
-        CHARMS.put(CharmType.ENDER_MASK, 100);
-        CHARMS.put(CharmType.VOID_PROTECTION, 1);
-        CHARMS.put(CharmType.SONIC_BOOM_PROTECTION, 3);
-    }
 
     private final int uses;
 
@@ -123,17 +89,14 @@ public class Charm extends ArsNouveauCurio {
         return charges != uses;
     }
 
-    public static boolean isEnabled(CharmType type, ItemStack charm) {
-        return charm.is(AddonItemRegistry.CHARMS.get(type).get()) && isEnabled(charm);
-    }
-
-    public static boolean isEnabled(ItemStack charm) {
-        return Charm.getCharges(charm) > 0;
-    }
-
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return slotChanged;
+    }
+
+    @Override
+    public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
+        return super.canElytraFly(stack, entity);
     }
 
     @Override
@@ -151,7 +114,56 @@ public class Charm extends ArsNouveauCurio {
 
     @Override
     public boolean isDamageable(ItemStack stack) {
-        return Charm.isEnabled(stack);
+        return CharmRegistry.isEnabled(stack);
+    }
+
+    @Override
+    public boolean isEnderMask(ItemStack stack, Player player, EnderMan endermanEntity) {
+        return isEnderMask(player, endermanEntity);
+    }
+
+    @Override
+    public boolean isEnderMask(SlotContext slotContext, EnderMan enderMan, ItemStack stack) {
+        return isEnderMask(slotContext.entity(), enderMan);
+    }
+
+    public boolean isEnderMask(LivingEntity entity, EnderMan enderMan) {
+        return CharmRegistry.processCharmEvent(entity, AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.ENDER_MASK), () -> {
+            Vec3 view = entity.getViewVector(1.0F).normalize();
+            Vec3 vec = new Vec3(enderMan.getX() - entity.getX(), enderMan.getEyeY() - entity.getEyeY(), enderMan.getZ() - entity.getZ());
+            double d0 = vec.length();
+            vec = vec.normalize();
+            double d1 = view.dot(vec);
+            return d1 > 1.0 - 0.025 / d0 && entity.hasLineOfSight(enderMan);
+        }, (e, curio) -> 1);
+    }
+
+    @Override
+    public boolean makesPiglinsNeutral(SlotContext slotContext, ItemStack stack) {
+        return makesPiglinsNeutral(slotContext.entity());
+    }
+
+    @Override
+    public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
+        return makesPiglinsNeutral(wearer);
+    }
+
+    public boolean makesPiglinsNeutral(LivingEntity wearer) {
+        return CharmRegistry.processCharmEvent(wearer, AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.GOLDEN), () -> true, (entity, curio) -> 1);
+    }
+
+    @Override
+    public boolean canWalkOnPowderedSnow(ItemStack stack, LivingEntity wearer) {
+        return canWalkOnPowderedSnow(wearer);
+    }
+
+    @Override
+    public boolean canWalkOnPowderedSnow(SlotContext slotContext, ItemStack stack) {
+        return canWalkOnPowderedSnow(slotContext.entity());
+    }
+
+    public boolean canWalkOnPowderedSnow(LivingEntity wearer) {
+        return CharmRegistry.processCharmEvent(wearer, AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.POWDERED_SNOW_WALK), () -> true, (entity, curio) -> 1);
     }
 
     @Override
@@ -167,7 +179,7 @@ public class Charm extends ArsNouveauCurio {
     }
 
     public void tick(ItemStack stack, LivingEntity entity) {
-        if (Charm.isEnabled(CharmType.VOID_PROTECTION, stack) && entity.onGround()) {
+        if (CharmRegistry.isEnabled(CharmRegistry.CharmType.VOID_PROTECTION, stack) && entity.onGround()) {
             BlockPos below = entity.blockPosition().below();
             boolean isSafe = entity.level().getBlockState(below).isRedstoneConductor(entity.level(), below);
             if (!isSafe) return;
@@ -175,7 +187,7 @@ public class Charm extends ArsNouveauCurio {
                 stack.getTag().put("Pos", pos);
             });
         }
-        processCharmEvent(entity, AddonItemRegistry.CHARMS.get(CharmType.FALL_PREVENTION), () -> {
+        CharmRegistry.processCharmEvent(entity, AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.FALL_PREVENTION), () -> {
             CompoundTag tag = stack.getOrCreateTag();
             boolean canTrigger = !tag.contains("canTrigger") || tag.getBoolean("canTrigger");
             if (!canTrigger && entity.onGround()) {
@@ -189,32 +201,9 @@ public class Charm extends ArsNouveauCurio {
         });
     }
 
-    public static int getCharges(ItemStack stack) {
-        if (!stack.hasTag()) return 0;
-        return stack.getOrCreateTag().getInt("charges");
-    }
-
-    public static void setCharges(ItemStack stack, int charges) {
-        stack.getOrCreateTag().putInt("charges", Math.max(charges, 0));
-    }
-
-    private static void processCharmEvent(LivingEntity entity, RegistryObject<Item> charm, Supplier<Boolean> predicate, BiFunction<LivingEntity, ItemStack, Integer> consumer) {
-        if (!predicate.get()) return;
-
-        ItemStack curio = PlayerInvUtil.findItem(entity, stack -> stack.is(charm.get()) && Charm.isEnabled(stack), ItemStack.EMPTY, Function.identity());
-        if (curio == null || curio.isEmpty()) return;
-
-        int damage = consumer.apply(entity, curio);
-        int charges = Charm.getCharges(curio);
-        if (entity instanceof Player player && player.isCreative()) {
-            return;
-        }
-        Charm.setCharges(curio, charges - damage);
-    }
-
     @SubscribeEvent
     public static void handeUndying(LivingDeathEvent event) {
-        processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmType.UNDYING), () -> event.getEntity() instanceof Player, (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.UNDYING), () -> event.getEntity() instanceof Player, (entity, curio) -> {
             entity.setHealth(1.0F);
             entity.removeAllEffects();
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 900, 1));
@@ -229,17 +218,17 @@ public class Charm extends ArsNouveauCurio {
 
     @SubscribeEvent
     public static void handleDamage(LivingAttackEvent event) {
-        processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmType.FIRE_RESISTANCE), () -> event.getSource().is(DamageTypeTags.IS_FIRE), (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.FIRE_RESISTANCE), () -> event.getSource().is(DamageTypeTags.IS_FIRE), (entity, curio) -> {
             event.setCanceled(true);
 
             return (int) event.getAmount();
         });
-        processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmType.WATER_BREATHING), () -> event.getSource().is(DamageTypeTags.IS_DROWNING), (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.WATER_BREATHING), () -> event.getSource().is(DamageTypeTags.IS_DROWNING), (entity, curio) -> {
             event.setCanceled(true);
 
             return (int) event.getAmount();
         });
-        processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmType.VOID_PROTECTION), () -> event.getSource().is(DamageTypes.FELL_OUT_OF_WORLD), (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.VOID_PROTECTION), () -> event.getSource().is(DamageTypes.FELL_OUT_OF_WORLD), (entity, curio) -> {
             event.setCanceled(true);
 
             if (entity.level() instanceof ServerLevel serverLevel) {
@@ -252,7 +241,7 @@ public class Charm extends ArsNouveauCurio {
 
             return 1;
         });
-        processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmType.SONIC_BOOM_PROTECTION), () -> event.getSource().is(DamageTypes.SONIC_BOOM), (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.SONIC_BOOM_PROTECTION), () -> event.getSource().is(DamageTypes.SONIC_BOOM), (entity, curio) -> {
             event.setCanceled(true);
 
             return 1;
@@ -262,29 +251,11 @@ public class Charm extends ArsNouveauCurio {
     @SubscribeEvent
     public static void handeDispel(DispelEvent.Pre event) {
         if (event.rayTraceResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
-            processCharmEvent(livingEntity, AddonItemRegistry.CHARMS.get(CharmType.DISPEL_PROTECTION), () -> true, (entity, curio) -> {
+            CharmRegistry.processCharmEvent(livingEntity, AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.DISPEL_PROTECTION), () -> true, (entity, curio) -> {
                 event.setCanceled(true);
 
                 return 1;
             });
         }
-    }
-
-    @SubscribeEvent
-    public static void handleEnderMask(EnderManAngerEvent event) {
-        processCharmEvent(event.getPlayer(), AddonItemRegistry.CHARMS.get(CharmType.ENDER_MASK), () -> {
-            Player player = event.getPlayer();
-            EnderMan enderMan = event.getEntity();
-            Vec3 view = player.getViewVector(1.0F).normalize();
-            Vec3 vec = new Vec3(enderMan.getX() - player.getX(), enderMan.getEyeY() - player.getEyeY(), enderMan.getZ() - player.getZ());
-            double d0 = vec.length();
-            vec = vec.normalize();
-            double d1 = view.dot(vec);
-            return d1 > 1.0 - 0.025 / d0 && player.hasLineOfSight(enderMan);
-        }, (entity, curio) -> {
-            event.setCanceled(true);
-
-            return 1;
-        });
     }
 }

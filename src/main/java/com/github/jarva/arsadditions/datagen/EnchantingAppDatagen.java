@@ -2,13 +2,16 @@ package com.github.jarva.arsadditions.datagen;
 
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
 import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatusRecipe;
+import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeBuilder;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
@@ -72,5 +75,13 @@ public class EnchantingAppDatagen extends ApparatusRecipeProvider {
                 .withPedestalItem(Items.LAPIS_LAZULI)
                 .build()
         );
+
+        for (CharmRegistry.CharmType charmType : CharmRegistry.CharmType.values()) {
+            ApparatusRecipeBuilder builder = this.builder().withResult(AddonItemRegistry.CHARMS.get(charmType)).withReagent(Items.GLASS_BOTTLE);
+            for (Item item : charmType.getPedestalItems()) {
+                builder.withPedestalItem(item);
+            }
+            this.addRecipe(builder.build());
+        }
     }
 }

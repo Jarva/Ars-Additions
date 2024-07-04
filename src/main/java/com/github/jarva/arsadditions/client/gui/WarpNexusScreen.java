@@ -4,6 +4,7 @@ import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.setup.networking.TeleportNexusPacket;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.client.gui.Color;
+import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -113,7 +114,7 @@ public class WarpNexusScreen extends Screen {
 
     private Component getDisplayName(ItemStack stack) {
         if (stack.hasCustomHoverName()) return stack.getHoverName();
-        WarpScroll.WarpScrollData data = WarpScroll.WarpScrollData.get(stack);
+        WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
         if (!data.isValid()) return stack.getDisplayName();
         BlockPos pos = data.getPos();
         return Component.translatable("tooltip.ars_additions.reliquary.marked.location", pos.getX(), pos.getY(), pos.getZ());

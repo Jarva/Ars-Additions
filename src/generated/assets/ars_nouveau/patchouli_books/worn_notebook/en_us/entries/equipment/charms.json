@@ -9,10 +9,10 @@
     },
     {
       "type": "patchouli:spotlight",
-      "item": "ars_additions:fall_prevention_charm",
+      "item": "ars_additions:night_vision_charm",
       "link_recipe": true,
-      "text": "page.ars_additions.fall_prevention_charm.desc",
-      "title": "page.ars_additions.fall_prevention_charm.title"
+      "text": "page.ars_additions.night_vision_charm.desc",
+      "title": "page.ars_additions.night_vision_charm.title"
     },
     {
       "type": "patchouli:spotlight",
@@ -23,13 +23,6 @@
     },
     {
       "type": "patchouli:spotlight",
-      "item": "ars_additions:ender_mask_charm",
-      "link_recipe": true,
-      "text": "page.ars_additions.ender_mask_charm.desc",
-      "title": "page.ars_additions.ender_mask_charm.title"
-    },
-    {
-      "type": "patchouli:spotlight",
       "item": "ars_additions:fire_resistance_charm",
       "link_recipe": true,
       "text": "page.ars_additions.fire_resistance_charm.desc",
@@ -37,38 +30,17 @@
     },
     {
       "type": "patchouli:spotlight",
-      "item": "ars_additions:void_protection_charm",
+      "item": "ars_additions:ender_mask_charm",
       "link_recipe": true,
-      "text": "page.ars_additions.void_protection_charm.desc",
-      "title": "page.ars_additions.void_protection_charm.title"
+      "text": "page.ars_additions.ender_mask_charm.desc",
+      "title": "page.ars_additions.ender_mask_charm.title"
     },
     {
       "type": "patchouli:spotlight",
-      "item": "ars_additions:night_vision_charm",
+      "item": "ars_additions:fall_prevention_charm",
       "link_recipe": true,
-      "text": "page.ars_additions.night_vision_charm.desc",
-      "title": "page.ars_additions.night_vision_charm.title"
-    },
-    {
-      "type": "patchouli:spotlight",
-      "item": "ars_additions:undying_charm",
-      "link_recipe": true,
-      "text": "page.ars_additions.undying_charm.desc",
-      "title": "page.ars_additions.undying_charm.title"
-    },
-    {
-      "type": "patchouli:spotlight",
-      "item": "ars_additions:water_breathing_charm",
-      "link_recipe": true,
-      "text": "page.ars_additions.water_breathing_charm.desc",
-      "title": "page.ars_additions.water_breathing_charm.title"
-    },
-    {
-      "type": "patchouli:spotlight",
-      "item": "ars_additions:dispel_protection_charm",
-      "link_recipe": true,
-      "text": "page.ars_additions.dispel_protection_charm.desc",
-      "title": "page.ars_additions.dispel_protection_charm.title"
+      "text": "page.ars_additions.fall_prevention_charm.desc",
+      "title": "page.ars_additions.fall_prevention_charm.title"
     },
     {
       "type": "patchouli:spotlight",
@@ -79,6 +51,13 @@
     },
     {
       "type": "patchouli:spotlight",
+      "item": "ars_additions:water_breathing_charm",
+      "link_recipe": true,
+      "text": "page.ars_additions.water_breathing_charm.desc",
+      "title": "page.ars_additions.water_breathing_charm.title"
+    },
+    {
+      "type": "patchouli:spotlight",
       "item": "ars_additions:sonic_boom_protection_charm",
       "link_recipe": true,
       "text": "page.ars_additions.sonic_boom_protection_charm.desc",
@@ -86,10 +65,31 @@
     },
     {
       "type": "patchouli:spotlight",
+      "item": "ars_additions:undying_charm",
+      "link_recipe": true,
+      "text": "page.ars_additions.undying_charm.desc",
+      "title": "page.ars_additions.undying_charm.title"
+    },
+    {
+      "type": "patchouli:spotlight",
       "item": "ars_additions:powdered_snow_walk_charm",
       "link_recipe": true,
       "text": "page.ars_additions.powdered_snow_walk_charm.desc",
       "title": "page.ars_additions.powdered_snow_walk_charm.title"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "ars_additions:dispel_protection_charm",
+      "link_recipe": true,
+      "text": "page.ars_additions.dispel_protection_charm.desc",
+      "title": "page.ars_additions.dispel_protection_charm.title"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "ars_additions:void_protection_charm",
+      "link_recipe": true,
+      "text": "page.ars_additions.void_protection_charm.desc",
+      "title": "page.ars_additions.void_protection_charm.title"
     }
   ]
 }

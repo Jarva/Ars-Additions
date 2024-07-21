@@ -22,6 +22,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Comparator;
 import java.util.Map;
 
 import static com.hollingsworth.arsnouveau.setup.registry.RegistryHelper.getRegistryName;
@@ -105,9 +106,9 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
                 .withName("ars_additions.page.charms")
                 .withTextPage("ars_additions.page1.charms");
 
-        for (Map.Entry<CharmRegistry.CharmType, RegistryObject<Item>> charmEntry : AddonItemRegistry.CHARMS.entrySet()) {
-            CharmRegistry.CharmType charmType = charmEntry.getKey();
-            Item charm = charmEntry.getValue().get();
+        for (Map.Entry<CharmRegistry.CharmType, RegistryObject<Item>> entry : AddonItemRegistry.CHARMS.entrySet().stream().sorted(Comparator.comparing(entry -> entry.getKey().getName())).toList()) {
+            CharmRegistry.CharmType charmType = entry.getKey();
+            Item charm = entry.getValue().get();
             String name = "page.ars_additions." + charmType.getSerializedName() + ".title";
             String desc = "page.ars_additions." + charmType.getSerializedName() + ".desc";
             charmBuilder = charmBuilder

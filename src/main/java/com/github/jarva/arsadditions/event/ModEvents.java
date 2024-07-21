@@ -2,6 +2,7 @@ package com.github.jarva.arsadditions.event;
 
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.advancement.Triggers;
+import com.github.jarva.arsadditions.common.commands.SetLootTableCommand;
 import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.github.jarva.arsadditions.setup.config.CommonConfig;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
@@ -23,9 +24,9 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class ModEvents {
-    @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ServerModEvents {
         @SubscribeEvent
         public static void buildContents(BuildCreativeModeTabContentsEvent event) {
@@ -54,7 +55,7 @@ public class ModEvents {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class ServerForgeEvents {
         @SubscribeEvent
         public static void started(ServerStartedEvent _event) {
@@ -121,6 +122,11 @@ public class ModEvents {
                     }
                 }
             }
+        }
+
+        @SubscribeEvent
+        public static void commandRegister(RegisterCommandsEvent event) {
+            SetLootTableCommand.register(event.getDispatcher(), event.getBuildContext());
         }
     }
 }

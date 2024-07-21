@@ -7,6 +7,9 @@
   "pedestalItems": [
     {
       "item": "minecraft:pumpkin"
+    },
+    {
+      "item": "minecraft:chorus_fruit"
     }
   ],
   "reagent": [

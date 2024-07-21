@@ -11,7 +11,6 @@ import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.api.spell.ITurretBehavior;
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
-import com.hollingsworth.arsnouveau.common.block.BasicSpellTurret;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
@@ -21,12 +20,14 @@ import net.minecraft.world.entity.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hollingsworth.arsnouveau.common.block.BasicSpellTurret.TURRET_BEHAVIOR_MAP;
+
 public class ArsNouveauRegistry {
     public static List<AbstractSpellPart> GLYPHS = new ArrayList<>();
     public static List<AbstractRitual> RITUALS = new ArrayList<>();
 
     static {
-        BasicSpellTurret.TURRET_BEHAVIOR_MAP.put(MethodRecall.INSTANCE, new ITurretBehavior() {
+        TURRET_BEHAVIOR_MAP.put(MethodRecall.INSTANCE, new ITurretBehavior() {
             @Override
             public void onCast(SpellResolver resolver, ServerLevel serverLevel, BlockPos pos, Player fakePlayer, Position dispensePosition, Direction direction) {
                 resolver.onCast(null, serverLevel);

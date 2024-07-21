@@ -7,6 +7,12 @@
   "pedestalItems": [
     {
       "item": "minecraft:totem_of_undying"
+    },
+    {
+      "item": "minecraft:crying_obsidian"
+    },
+    {
+      "item": "minecraft:glowstone"
     }
   ],
   "reagent": [

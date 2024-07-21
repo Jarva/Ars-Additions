@@ -20,4 +20,5 @@ public class AddonItemNames {
     public static final String WATER_BREATHING_CHARM = "water_breathing_charm";
     public static final String ENDER_MASK_CHARM = "ender_mask_charm";
     public static final String VOID_PROTECTION_CHARM = "void_protection_charm";
+    public static final String IMBUED_SPELL_PARCHMENT = "imbued_spell_parchment";
 }

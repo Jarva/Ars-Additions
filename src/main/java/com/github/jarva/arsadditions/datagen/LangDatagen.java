@@ -83,8 +83,10 @@ public class LangDatagen extends LanguageProvider {
         this.add("item.ars_additions.advanced_dominion_wand", "Advanced Dominion Wand");
         this.add("item.ars_additions.wayfinder", "Wayfinder");
         this.add("item.ars_additions.bound_wayfinder", "Bound Wayfinder");
+        this.add("item.ars_additions.imbued_spell_parchment", "Imbued Spell Parchment");
 
         for (CharmRegistry.CharmType charm : CharmRegistry.CharmType.values()) {
+            this.add("page.ars_additions." + charm.getSerializedName() + ".title", charm.getName());
             this.add("item.ars_additions." + charm.getSerializedName(), "Charm of " + charm.getName());
             this.add("tooltip.ars_additions." + charm.getSerializedName(), charm.getDescription());
         }
@@ -145,6 +147,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("chat.ars_additions.warp_nexus.no_scrolls", "You don't have any warp destinations available.");
         this.add("chat.ars_additions.warp_nexus.no_scrolls.instruction", "Press %s+%s to store a Warp Scroll.");
 
+        this.add("chat.ars_additions.handy_haversack.invalid", "The Handy Haversack must be bound before scribing.");
+
         // Effects
 
         this.add("effect.ars_additions.marked", "Marked");
@@ -185,6 +189,22 @@ public class LangDatagen extends LanguageProvider {
         this.add("ars_additions.page1.wixie_enchanting_apparatus", "To create a Wixie Enchanting Apparatus, use a Wixie Charm on an Enchanting Apparatus while Sneaking. The Wixie Enchanting Apparatus works in the exact same way as the Item Crafting mentioned previously.");
 
         this.add("ars_additions.page.xp_jar", "A jar that can destroy items on pickup and grants a small amount of XP in return. To turn the jar on and off, use the jar while sneaking. To add or remove an item to be destroyed by the jar, use the jar with an item in the off hand, or use an item on the Scribes Table with the jar placed on it. The jar must be in your hotbar to function.");
-        this.add("ars_additions.page.handy_haversack", "After binding the Handy Haversack to a container, you can click items onto the haversack to deposit them into that container from anywhere. When the container is unloaded the haversack will close and not accept any items.");
+        this.add("ars_additions.page.handy_haversack", "After binding the Handy Haversack to a container, you can right-click items onto the haversack to deposit them into that container from anywhere. When the container is unloaded the haversack will close and not accept any items. You can automate the depositing of items by adding items to its filters. Use the haversack with an item in your off hand, or scribe the haversack using a Scribe's table with the item you wish to add.");
+
+        this.add("ars_additions.page.charms", "Charms");
+        this.add("ars_additions.page1.charms", "Charms are a set of curios enchanted with strong protection magics. They range from allowing you to walk on Powdered Snow, to saving you from the Warden's powerful Sonic Boom. Each charm has a specific amount of charges available to protect you. Once the charges have been depleted, pop them into an Imbuement chamber to charge them back up.");
+
+        this.add("page.ars_additions.fire_resistance_charm.desc", "This charm enables you to walk through fire and swim in lava.");
+        this.add("page.ars_additions.undying_charm.desc", "This charm provides the gift of the Second Wind, allowing you to keep going upon receiving fatal damage.");
+        this.add("page.ars_additions.dispel_protection_charm.desc", "This charm allows you to shrug off a Dispel, and keep all your powerful buffs active.");
+        this.add("page.ars_additions.fall_prevention_charm.desc", "Upon falling further than 3 blocks, this charm will activate to grant you the blessing of feather fall.");
+        this.add("page.ars_additions.water_breathing_charm.desc", "After your air bubbles have been depleted, this charm will allow you to keep breathing underwater.");
+        this.add("page.ars_additions.ender_mask_charm.desc", "This charm protects you from the angering gaze of the Enderman.");
+        this.add("page.ars_additions.void_protection_charm.desc", "Once activated this charm will activate its warp magics and teleport you back to the last safe space you were on.");
+        this.add("page.ars_additions.sonic_boom_protection_charm.desc", "Crafted by an Ancient Mage, this charm protects you from the sonic rage of the Warden.");
+        this.add("page.ars_additions.wither_protection_charm.desc", "Forged in the fires of the Nether by a Wither Skeleton mage in hopes of curing themself, this charm allows you to shrug off the the effects of Wither.");
+        this.add("page.ars_additions.golden_charm.desc", "This charm of pure gold is used to peruse Bastions and interact with Piglin Brutes without drawing aggression.");
+        this.add("page.ars_additions.night_vision_charm.desc", "This handy little charm imbues you with Night Vision when you're in a low-light environment.");
+        this.add("page.ars_additions.snowstride_charm.desc", "This charm keeps you afloat over powdered snow, allowing you to walk over it without fear.");
     }
 }

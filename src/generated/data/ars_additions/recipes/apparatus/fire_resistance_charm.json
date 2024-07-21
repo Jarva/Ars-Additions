@@ -7,6 +7,12 @@
   "pedestalItems": [
     {
       "item": "minecraft:magma_cream"
+    },
+    {
+      "item": "minecraft:lava_bucket"
+    },
+    {
+      "item": "minecraft:flint_and_steel"
     }
   ],
   "reagent": [

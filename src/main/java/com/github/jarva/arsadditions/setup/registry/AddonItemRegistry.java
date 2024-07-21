@@ -13,7 +13,6 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.github.jarva.arsadditions.ArsAdditions.MODID;
@@ -36,6 +35,7 @@ public class AddonItemRegistry {
     public static final RegistryObject<Item> HANDY_HAVERSACK;
     public static final RegistryObject<Item> ADVANCED_DOMINION_WAND;
     public static final RegistryObject<Item> WAYFINDER;
+    public static final RegistryObject<Item> IMBUED_SPELL_PARCHMENT;
 
     public static final HashMap<CharmRegistry.CharmType, RegistryObject<Item>> CHARMS = new HashMap<>();
 
@@ -52,6 +52,7 @@ public class AddonItemRegistry {
         HANDY_HAVERSACK = register(AddonItemNames.HANDY_HAVERSACK, HandyHaversack::new, false);
         ADVANCED_DOMINION_WAND = register(AddonItemNames.ADVANCED_DOMINION_WAND, AdvancedDominionWand::new);
         WAYFINDER = register(AddonItemNames.WAYFINDER, Wayfinder::new, false);
+        IMBUED_SPELL_PARCHMENT = register(AddonItemNames.IMBUED_SPELL_PARCHMENT, ImbuedSpellParchment::new);
 
         registerCharms();
     }

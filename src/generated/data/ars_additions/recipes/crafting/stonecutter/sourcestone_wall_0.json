@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "ars_additions:sourcestone_wall"
+  },
+  "result": "ars_nouveau:sourcestone"
+}

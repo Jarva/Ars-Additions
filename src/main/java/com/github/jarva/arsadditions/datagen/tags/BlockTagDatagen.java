@@ -3,6 +3,7 @@ package com.github.jarva.arsadditions.datagen.tags;
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
+import com.hollingsworth.arsnouveau.common.datagen.BlockTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -31,6 +32,7 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         Block[] decorative = getBlocks(AddonBlockNames.DECORATIVE_SOURCESTONES);
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(decorative);
+        this.tag(BlockTagProvider.DECORATIVE_AN).add(decorative);
 
         Block[] walls = getBlocks(AddonBlockNames.WALLS);
         this.tag(BlockTags.WALLS).add(walls);

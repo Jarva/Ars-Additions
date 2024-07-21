@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.datagen;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.github.jarva.arsadditions.common.ritual.RitualLocateStructure;
 import com.github.jarva.arsadditions.datagen.conditions.ConfigCondition;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
@@ -11,20 +12,21 @@ import com.hollingsworth.arsnouveau.common.datagen.ItemTagProvider;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.common.crafting.StrictNBTIngredient;
+import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 
+import java.util.HashMap;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry.getBlock;
 
@@ -37,57 +39,54 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
     protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
         this.consumer = consumer;
 
-        addChainRecipe(getBlock(AddonBlockNames.ARCHWOOD_CHAIN), i(BlockRegistry.ARCHWOOD_PLANK));
-        addChainRecipe(getBlock(AddonBlockNames.GOLDEN_CHAIN), i(Items.GOLD_INGOT));
-        addChainRecipe(getBlock(AddonBlockNames.SOURCESTONE_CHAIN), i(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)));
-        addBiDirectionalRecipe(getBlock(AddonBlockNames.SOURCESTONE_CHAIN), getBlock(AddonBlockNames.POLISHED_SOURCESTONE_CHAIN));
+        addChainRecipe(getBlock(AddonBlockNames.ARCHWOOD_CHAIN), BlockRegistry.ARCHWOOD_PLANK);
+        addChainRecipe(getBlock(AddonBlockNames.GOLDEN_CHAIN), Items.GOLD_INGOT);
+        addChainRecipe(getBlock(AddonBlockNames.SOURCESTONE_CHAIN), BlockRegistry.getBlock(LibBlockNames.SOURCESTONE), true);
+        addBiDirectionalRecipe(getBlock(AddonBlockNames.SOURCESTONE_CHAIN), getBlock(AddonBlockNames.POLISHED_SOURCESTONE_CHAIN), item -> item.withPrefix("crafting/chains/"));
+        addStonecutter(getBlock(AddonBlockNames.SOURCESTONE_CHAIN), BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE));
 
-        addMagelightLanternRecipe(getBlock(AddonBlockNames.ARCHWOOD_MAGELIGHT_LANTERN), i(BlockRegistry.ARCHWOOD_PLANK));
-        addMagelightLanternRecipe(getBlock(AddonBlockNames.GOLDEN_MAGELIGHT_LANTERN), i(Items.GOLD_NUGGET));
-        addMagelightLanternRecipe(getBlock(AddonBlockNames.SOURCESTONE_MAGELIGHT_LANTERN), i(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)));
-        addBiDirectionalRecipe(getBlock(AddonBlockNames.SOURCESTONE_MAGELIGHT_LANTERN), getBlock(AddonBlockNames.POLISHED_SOURCESTONE_MAGELIGHT_LANTERN));
-        addMagelightLanternRecipe(getBlock(AddonBlockNames.MAGELIGHT_LANTERN), i(Items.IRON_NUGGET));
-        addMagelightLanternRecipe(getBlock(AddonBlockNames.SOUL_MAGELIGHT_LANTERN), i(Items.SOUL_SAND));
+        addMagelightLanternRecipe(getBlock(AddonBlockNames.ARCHWOOD_MAGELIGHT_LANTERN), BlockRegistry.ARCHWOOD_PLANK);
+        addMagelightLanternRecipe(getBlock(AddonBlockNames.GOLDEN_MAGELIGHT_LANTERN), Items.GOLD_NUGGET);
+        addMagelightLanternRecipe(getBlock(AddonBlockNames.SOURCESTONE_MAGELIGHT_LANTERN), BlockRegistry.getBlock(LibBlockNames.SOURCESTONE));
+        addBiDirectionalRecipe(getBlock(AddonBlockNames.SOURCESTONE_MAGELIGHT_LANTERN), getBlock(AddonBlockNames.POLISHED_SOURCESTONE_MAGELIGHT_LANTERN), item -> item.withPrefix("crafting/lanterns/"));
+        addMagelightLanternRecipe(getBlock(AddonBlockNames.MAGELIGHT_LANTERN), Items.IRON_INGOT);
+        addMagelightLanternRecipe(getBlock(AddonBlockNames.SOUL_MAGELIGHT_LANTERN), Items.SOUL_SAND);
 
-        addLanternRecipe(getBlock(AddonBlockNames.ARCHWOOD_LANTERN), i(BlockRegistry.ARCHWOOD_PLANK));
-        addLanternRecipe(getBlock(AddonBlockNames.GOLDEN_LANTERN), i(Items.GOLD_NUGGET));
-        addLanternRecipe(getBlock(AddonBlockNames.SOURCESTONE_LANTERN), i(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)));
-        addBiDirectionalRecipe(getBlock(AddonBlockNames.SOURCESTONE_LANTERN), getBlock(AddonBlockNames.POLISHED_SOURCESTONE_LANTERN));
+        addLanternRecipe(getBlock(AddonBlockNames.ARCHWOOD_LANTERN), BlockRegistry.ARCHWOOD_PLANK);
+        addLanternRecipe(getBlock(AddonBlockNames.GOLDEN_LANTERN), Items.GOLD_NUGGET);
+        addLanternRecipe(getBlock(AddonBlockNames.SOURCESTONE_LANTERN), BlockRegistry.getBlock(LibBlockNames.SOURCESTONE));
+        addBiDirectionalRecipe(getBlock(AddonBlockNames.SOURCESTONE_LANTERN), getBlock(AddonBlockNames.POLISHED_SOURCESTONE_LANTERN), item -> item.withPrefix("crafting/lanterns/"));
 
-        ShapelessRecipeBuilder chunkLoadingRitual = shapelessBuilder(RitualRegistry.getRitualItemMap().get(ArsAdditions.prefix("ritual_chunk_loading")))
-                .requires(BlockRegistry.CASCADING_LOG)
-                .requires(Items.NETHER_STAR)
-                .requires(ItemsRegistry.SOURCE_GEM)
-                .requires(ItemsRegistry.EARTH_ESSENCE);
+        addRitualRecipe(RitualChunkLoading.RESOURCE_LOCATION, builder ->
+                builder.requires(BlockRegistry.CASCADING_LOG)
+                    .requires(Items.NETHER_STAR)
+                    .requires(ItemsRegistry.SOURCE_GEM)
+                    .requires(ItemsRegistry.EARTH_ESSENCE),
+                new ConfigCondition("ritual_enabled")
+        );
 
-        ConditionalRecipe.builder()
-                .addCondition(new ConfigCondition("ritual_enabled"))
-                .addRecipe(chunkLoadingRitual::save)
-                .generateAdvancement()
-                .build(consumer, ArsAdditions.prefix("ritual_chunk_loading"));
+        addButtonRecipe(getBlock(AddonBlockNames.SOURCESTONE_BUTTON), BlockRegistry.getBlock(LibBlockNames.SOURCESTONE), true);
+        addButtonRecipe(getBlock(AddonBlockNames.POLISHED_SOURCESTONE_BUTTON), BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE), true);
 
-        shapelessBuilder(AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_BUTTON)).requires(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)).save(consumer);
-        shapelessBuilder(AddonBlockRegistry.getBlock(AddonBlockNames.POLISHED_SOURCESTONE_BUTTON)).requires(BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE)).save(consumer);
-
-        addWallRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_WALL), i(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)));
-        addWallRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.CRACKED_SOURCESTONE_WALL), i(AddonBlockRegistry.getBlock(AddonBlockNames.CRACKED_SOURCESTONE)));
-        addWallRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.POLISHED_SOURCESTONE_WALL), i(BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE)));
-        addWallRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.CRACKED_POLISHED_SOURCESTONE_WALL), i(AddonBlockRegistry.getBlock(AddonBlockNames.CRACKED_POLISHED_SOURCESTONE)));
+        addWallRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_WALL), BlockRegistry.getBlock(LibBlockNames.SOURCESTONE), true);
+        addWallRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.CRACKED_SOURCESTONE_WALL), AddonBlockRegistry.getBlock(AddonBlockNames.CRACKED_SOURCESTONE), true);
+        addWallRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.POLISHED_SOURCESTONE_WALL), BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE), true);
+        addWallRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.CRACKED_POLISHED_SOURCESTONE_WALL), AddonBlockRegistry.getBlock(AddonBlockNames.CRACKED_POLISHED_SOURCESTONE), true);
 
         Block sourcestone = BlockRegistry.getBlock(LibBlockNames.SOURCESTONE);
         for (String name : AddonBlockNames.DECORATIVE_SOURCESTONES) {
             Block block = AddonBlockRegistry.getBlock(name);
-            makeStonecutter(consumer, sourcestone, block, LibBlockNames.SOURCESTONE);
-            shapelessBuilder(sourcestone).requires(block).save(consumer, ArsAdditions.prefix(name + "_to_sourcestone"));
+            addStonecutter(sourcestone, block);
+            shapelessBuilder(sourcestone).requires(block).save(consumer, getRecipeId(block, "crafting/revert/", true).withSuffix("_to_sourcestone"));
         }
 
-        addDoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_DOOR), i(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)));
-        addDoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.POLISHED_SOURCESTONE_DOOR), i(BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE)));
+        addDoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_DOOR), BlockRegistry.getBlock(LibBlockNames.SOURCESTONE), true);
+        addDoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.POLISHED_SOURCESTONE_DOOR), BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE), true);
 
-        addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_TRAPDOOR), i(BlockRegistry.getBlock(LibBlockNames.SOURCESTONE)));
-        addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.POLISHED_SOURCESTONE_TRAPDOOR), i(BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE)));
+        addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_TRAPDOOR), BlockRegistry.getBlock(LibBlockNames.SOURCESTONE), true);
+        addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.POLISHED_SOURCESTONE_TRAPDOOR), BlockRegistry.getBlock(LibBlockNames.SMOOTH_SOURCESTONE), true);
 
-        addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.MAGEBLOOM_CARPET), i(BlockRegistry.getBlock(LibBlockNames.MAGEBLOOM_BLOCK)));
+        addTrapdoorRecipe(AddonBlockRegistry.getBlock(AddonBlockNames.MAGEBLOOM_CARPET), BlockRegistry.getBlock(LibBlockNames.MAGEBLOOM_BLOCK));
 
         shapedBuilder(AddonItemRegistry.HANDY_HAVERSACK.get())
                 .pattern("sgs")
@@ -107,58 +106,117 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
                 .define('a', Items.AMETHYST_SHARD)
                 .save(consumer);
 
-        shapelessBuilder(RitualRegistry.getRitualItemMap().get(RitualLocateStructure.RESOURCE_LOCATION))
-                .requires(BlockRegistry.VEXING_LOG)
-                .requires(Items.COMPASS)
-                .requires(ItemTagProvider.SOURCE_GEM_TAG)
-                .requires(AddonItemRegistry.WAYFINDER.get())
-                .save(consumer);
+        addRitualRecipe(RitualLocateStructure.RESOURCE_LOCATION, builder ->
+                builder.requires(BlockRegistry.VEXING_LOG)
+                    .requires(Items.COMPASS)
+                    .requires(ItemTagProvider.SOURCE_GEM_TAG)
+                    .requires(AddonItemRegistry.WAYFINDER.get())
+        );
     }
 
-    public void addTrapdoorRecipe(ItemLike result, Ingredient material) {
+    public void addRitualRecipe(ResourceLocation id, Function<ShapelessRecipeBuilder, ShapelessRecipeBuilder> modifier) {
+        addRitualRecipe(id, modifier, null);
+    }
+
+    public void addRitualRecipe(ResourceLocation id, Function<ShapelessRecipeBuilder, ShapelessRecipeBuilder> modifier, ICondition condition) {
+        ShapelessRecipeBuilder ritualBuilder = modifier.apply(shapelessBuilder(RitualRegistry.getRitualItemMap().get(id)));
+
+        if (condition != null) {
+            ConditionalRecipe.builder()
+                    .addCondition(condition)
+                    .addRecipe(ritualBuilder::save)
+                    .generateAdvancement()
+                    .build(consumer, id.withPrefix("ritual/"));
+        } else {
+            ritualBuilder.save(consumer, id.withPrefix("ritual/"));
+        }
+
+    }
+
+    public void addButtonRecipe(ItemLike result, ItemLike material) {
+        addButtonRecipe(result, material, false);
+    }
+
+    public void addButtonRecipe(ItemLike result, ItemLike material, boolean stonecutter) {
+        shapelessBuilder(result).requires(material).save(consumer, getRecipeId(result, "crafting/buttons/"));
+
+        if (stonecutter) {
+            addStonecutter(result, material);
+        }
+    }
+
+    public void addTrapdoorRecipe(ItemLike result, ItemLike material) {
+        addTrapdoorRecipe(result, material, false);
+    }
+
+    public void addTrapdoorRecipe(ItemLike result, ItemLike material, boolean stonecutter) {
         shapedBuilder(result)
                 .pattern("mm")
                 .define('m', material)
-                .save(consumer);
+                .save(consumer, getRecipeId(result, "crafting/trapdoors/"));
+        if (stonecutter) {
+            addStonecutter(result, material);
+        }
     }
 
-    public void addDoorRecipe(ItemLike result, Ingredient material) {
+    public void addDoorRecipe(ItemLike result, ItemLike material) {
+        addDoorRecipe(result, material, false);
+    }
+
+    public void addDoorRecipe(ItemLike result, ItemLike material, boolean stonecutter) {
         shapedBuilder(result)
                 .pattern("mm")
                 .pattern("mm")
                 .pattern("mm")
                 .define('m', material)
-                .save(consumer);
+                .save(consumer, getRecipeId(result, "crafting/doors/"));
+        if (stonecutter) {
+            addStonecutter(result, material);
+        }
     }
 
-    public void addWallRecipe(ItemLike result, Ingredient material) {
-        shapedBuilder(result)
+    public void addWallRecipe(ItemLike result, ItemLike material) {
+        addWallRecipe(result, material, false);
+    }
+
+    public void addWallRecipe(ItemLike result, ItemLike material, boolean stonecutter) {
+        shapedBuilder(result, 6)
                 .pattern("   ")
                 .pattern("mmm")
                 .pattern("mmm")
                 .define('m', material)
-                .save(consumer);
+                .save(consumer, RecipeBuilder.getDefaultRecipeId(result).withPrefix("crafting/walls/"));
+        if (stonecutter) {
+            addStonecutter(result, material);
+        }
     }
 
-    public void addChainRecipe(ItemLike result, Ingredient material) {
+    public void addChainRecipe(ItemLike result, ItemLike material) {
+        addChainRecipe(result, material, false);
+    }
+
+    public void addChainRecipe(ItemLike result, ItemLike material, boolean stonecutter) {
         shapedBuilder(result)
                 .pattern("i")
                 .pattern("m")
                 .pattern("i")
                 .define('i', Items.IRON_NUGGET)
                 .define('m', material)
-                .save(consumer);
+                .save(consumer, getRecipeId(result, "crafting/chains/"));
+        if (stonecutter) {
+            addStonecutter(result, material);
+        }
     }
 
-    public void addMagelightLanternRecipe(ItemLike result, Ingredient material) {
-        addLanternRecipe(result, material, i(ItemsRegistry.SOURCE_GEM));
+    public void addMagelightLanternRecipe(ItemLike result, ItemLike material) {
+        addLanternRecipe(result, material, ItemsRegistry.SOURCE_GEM);
     }
 
-    public void addLanternRecipe(ItemLike result, Ingredient material) {
-        addLanternRecipe(result, material, i(Items.TORCH));
+    public void addLanternRecipe(ItemLike result, ItemLike material) {
+        addLanternRecipe(result, material, Items.TORCH);
     }
 
-    public void addLanternRecipe(ItemLike result, Ingredient material, Ingredient center) {
+    public void addLanternRecipe(ItemLike result, ItemLike material, ItemLike center) {
         shapedBuilder(result)
                 .pattern("imi")
                 .pattern("msm")
@@ -166,18 +224,37 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
                 .define('i', Items.IRON_NUGGET)
                 .define('m', material)
                 .define('s', center)
-                .save(consumer);
+                .save(consumer, getRecipeId(result, "crafting/lanterns/"));
     }
 
     public void addBiDirectionalRecipe(ItemLike a, ItemLike b) {
-        shapelessBuilder(a).requires(b).save(consumer, RecipeBuilder.getDefaultRecipeId(a).withPrefix("reversed_"));
-        shapelessBuilder(b).requires(a).save(consumer, RecipeBuilder.getDefaultRecipeId(b).withPrefix("reversed_"));
+        addBiDirectionalRecipe(a, b, (item) -> item);
     }
 
-    public Ingredient i(ItemLike item) {
-        return Ingredient.of(item);
+    public void addBiDirectionalRecipe(ItemLike a, ItemLike b, Function<ResourceLocation, ResourceLocation> applicator) {
+        shapelessBuilder(a).requires(b).save(consumer, applicator.apply(getRecipeId(a, "reversed_")));
+        shapelessBuilder(b).requires(a).save(consumer, applicator.apply(getRecipeId(b, "reversed_")));
     }
-    public Ingredient i(ItemStack item) {
-        return StrictNBTIngredient.of(item);
+
+    private final HashMap<ResourceLocation, Integer> STONECUTTER_COUNTER = new HashMap<>();
+
+    public void addStonecutter(ItemLike input, ItemLike output) {
+        ResourceLocation location = getRecipeId(input, "crafting/stonecutter/", true);
+        int counter = STONECUTTER_COUNTER.getOrDefault(location, 0);
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(input), RecipeCategory.DECORATIONS, output).unlockedBy("has_journal", InventoryChangeTrigger.TriggerInstance.hasItems(ItemsRegistry.WORN_NOTEBOOK)).save(consumer, location.withSuffix("_" + counter));
+        STONECUTTER_COUNTER.put(location, counter + 1);
+    }
+
+    public ResourceLocation getRecipeId(ItemLike input) {
+        return getRecipeId(input, "", false);
+    }
+
+    public ResourceLocation getRecipeId(ItemLike input, String prefix) {
+        return getRecipeId(input, prefix, false);
+    }
+
+    public ResourceLocation getRecipeId(ItemLike input, String prefix, boolean convert) {
+        ResourceLocation loc = RecipeBuilder.getDefaultRecipeId(input).withPrefix(prefix);
+        return convert? ArsAdditions.prefix(loc.getPath()) : loc;
     }
 }

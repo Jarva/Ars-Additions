@@ -1,6 +1,6 @@
 {
   "type": "minecraft:jigsaw",
-  "biomes": "ars_nouveau:archwood_forest",
+  "biomes": "#ars_additions:has_structure/ruined_portal_large",
   "step": "surface_structures",
   "spawn_overrides": {},
   "terrain_adaptation": "beard_thin",

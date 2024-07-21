@@ -7,6 +7,12 @@
   "pedestalItems": [
     {
       "item": "minecraft:sculk"
+    },
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "item": "minecraft:white_wool"
     }
   ],
   "reagent": [

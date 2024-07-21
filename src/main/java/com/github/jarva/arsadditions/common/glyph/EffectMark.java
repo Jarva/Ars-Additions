@@ -2,6 +2,7 @@ package com.github.jarva.arsadditions.common.glyph;
 
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.item.UnstableReliquary;
+import com.github.jarva.arsadditions.setup.config.ServerConfig;
 import com.github.jarva.arsadditions.setup.registry.AddonEffectRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonGlyphNames;
 import com.github.jarva.arsadditions.server.util.MarkType;
@@ -62,7 +63,7 @@ public class EffectMark extends AbstractEffect {
 
         if (marked && entity instanceof Player player) {
             data.putString("entity_name", Component.Serializer.toJson(player.getDisplayName()));
-            player.addEffect(new MobEffectInstance(AddonEffectRegistry.MARKED_EFFECT.get(), 60 * 20 * 5));
+            player.addEffect(new MobEffectInstance(AddonEffectRegistry.MARKED_EFFECT.get(), ServerConfig.SERVER.reliquary_effect_duration.get() * 20));
         }
     }
 

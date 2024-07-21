@@ -7,6 +7,9 @@
   "pedestalItems": [
     {
       "item": "minecraft:leather_boots"
+    },
+    {
+      "item": "minecraft:powder_snow_bucket"
     }
   ],
   "reagent": [

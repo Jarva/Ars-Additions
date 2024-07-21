@@ -6,7 +6,10 @@
   },
   "pedestalItems": [
     {
-      "item": "minecraft:ender_pearl"
+      "item": "ars_nouveau:stable_warp_scroll"
+    },
+    {
+      "item": "minecraft:end_stone_bricks"
     }
   ],
   "reagent": [

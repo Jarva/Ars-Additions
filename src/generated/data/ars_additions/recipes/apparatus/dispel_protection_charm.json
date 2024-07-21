@@ -7,6 +7,15 @@
   "pedestalItems": [
     {
       "item": "minecraft:milk_bucket"
+    },
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "item": "minecraft:spider_eye"
+    },
+    {
+      "item": "minecraft:wither_rose"
     }
   ],
   "reagent": [

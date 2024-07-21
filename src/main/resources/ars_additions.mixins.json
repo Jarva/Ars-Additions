@@ -10,7 +10,8 @@
     "EffectBlinkMixin",
     "PageRelationsAccessor",
     "PageTextAccessor",
-    "SlotMixin",
+    "PiglinAiMixin",
+    "PiglinBruteAiMixin",
     "StructureTemplateMixin",
     "WixieCauldronAccessor",
     "WixieCharmMixin"

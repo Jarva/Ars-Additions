@@ -3,6 +3,7 @@ package com.github.jarva.arsadditions.datagen;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.ArsNouveauRegistry;
+import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.familiar.AbstractFamiliarHolder;
@@ -15,9 +16,13 @@ import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Map;
 
 import static com.hollingsworth.arsnouveau.setup.registry.RegistryHelper.getRegistryName;
 
@@ -95,6 +100,26 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
         addBasicItem(AddonBlockRegistry.ENDER_SOURCE_JAR.get(), MACHINES, new ApparatusPage(AddonBlockRegistry.ENDER_SOURCE_JAR));
         addBasicItem(AddonItemRegistry.XP_JAR.get(), EQUIPMENT, new ApparatusPage(AddonItemRegistry.XP_JAR));
         addBasicItem(AddonItemRegistry.HANDY_HAVERSACK.get(), EQUIPMENT, new CraftingPage(AddonItemRegistry.HANDY_HAVERSACK));
+
+        PatchouliBuilder charmBuilder = new PatchouliBuilder(EQUIPMENT, AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.FIRE_RESISTANCE))
+                .withName("ars_additions.page.charms")
+                .withTextPage("ars_additions.page1.charms");
+
+        for (Map.Entry<CharmRegistry.CharmType, RegistryObject<Item>> charmEntry : AddonItemRegistry.CHARMS.entrySet()) {
+            CharmRegistry.CharmType charmType = charmEntry.getKey();
+            Item charm = charmEntry.getValue().get();
+            String name = "page.ars_additions." + charmType.getSerializedName() + ".title";
+            String desc = "page.ars_additions." + charmType.getSerializedName() + ".desc";
+            charmBuilder = charmBuilder
+                    .withPage(
+                            new SpotlightPage(charm)
+                                    .withTitle(name)
+                                    .withText(desc)
+                                    .linkRecipe(true)
+                    );
+        }
+
+        addPage(charmBuilder, getPath(EQUIPMENT, "charms"));
 
         for (PatchouliPage patchouliPage : pages) {
             saveStable(cache, patchouliPage.build(), patchouliPage.path());

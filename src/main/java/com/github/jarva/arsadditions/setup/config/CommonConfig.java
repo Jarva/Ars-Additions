@@ -11,6 +11,7 @@ public class CommonConfig {
     private final ForgeConfigSpec.BooleanValue chunkloading_recipe_enabled;
     private final ForgeConfigSpec.BooleanValue ruined_warp_portals_enabled;
     private final ForgeConfigSpec.BooleanValue nexus_tower_enabled;
+    private final ForgeConfigSpec.BooleanValue arcane_library_enabled;
 
     CommonConfig(ForgeConfigSpec.Builder builder) {
         builder.comment("Ritual of Arcane Permanence").push("chunkloading");
@@ -19,6 +20,7 @@ public class CommonConfig {
         builder.comment("Structures").push("structures");
         ruined_warp_portals_enabled = addConfig("ruined_warp_portals_enabled", (name) -> builder.comment("Should ruined warp portals spawn in the world?").define(name, true));
         nexus_tower_enabled = addConfig("nexus_tower_enabled", (name) -> builder.comment("Should nexus towers spawn in the world?").define(name, true));
+        arcane_library_enabled = addConfig("arcane_library_enabled", (name) -> builder.comment("Should arcane libraries spawn in the world?").define(name, false));
         builder.pop();
     }
 

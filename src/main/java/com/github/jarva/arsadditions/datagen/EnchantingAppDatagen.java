@@ -11,9 +11,9 @@ import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 
 import java.nio.file.Path;
@@ -75,10 +75,23 @@ public class EnchantingAppDatagen extends ApparatusRecipeProvider {
                 .withPedestalItem(Items.LAPIS_LAZULI)
                 .build()
         );
+        this.addRecipe(this.builder().withResult(AddonItemRegistry.ADVANCED_DOMINION_WAND)
+                .withReagent(ItemsRegistry.DOMINION_ROD)
+                .withPedestalItem(Items.AMETHYST_BLOCK)
+                .withPedestalItem(Items.GOLD_INGOT)
+                .withPedestalItem(Items.GOLD_INGOT)
+                .build()
+        );
+        this.addRecipe(this.builder().withResult(AddonBlockRegistry.SOURCE_SPAWNER.get())
+                .withReagent(ItemsRegistry.DRYGMY_CHARM)
+                .withPedestalItem(ItemsRegistry.SUMMONING_FOCUS)
+                .withPedestalItem(ItemsRegistry.CONJURATION_ESSENCE)
+                .build()
+        );
 
         for (CharmRegistry.CharmType charmType : CharmRegistry.CharmType.values()) {
             ApparatusRecipeBuilder builder = this.builder().withResult(AddonItemRegistry.CHARMS.get(charmType)).withReagent(Items.GLASS_BOTTLE);
-            for (Item item : charmType.getPedestalItems()) {
+            for (ItemLike item : charmType.getPedestalItems()) {
                 builder.withPedestalItem(item);
             }
             this.addRecipe(builder.build());

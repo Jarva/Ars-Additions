@@ -34,18 +34,6 @@ public class UnstableReliquary extends Item {
         super(new Properties().stacksTo(1).durability(1000));
     }
 
-//    @Override
-//    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-//        super.initializeClient(consumer);
-//        consumer.accept(new IClientItemExtensions() {
-//            ReliquaryRenderer renderer = new ReliquaryRenderer();
-//            @Override
-//            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-//                return renderer;
-//            }
-//        });
-//    }
-
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         CompoundTag tag = stack.getTag();

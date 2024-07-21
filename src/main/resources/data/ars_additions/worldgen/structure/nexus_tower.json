@@ -1,6 +1,6 @@
 {
   "type": "minecraft:jigsaw",
-  "biomes": "#minecraft:has_structure/ruined_portal_standard",
+  "biomes": "#ars_additions:has_structure/nexus_tower",
   "step": "surface_structures",
   "spawn_overrides": {},
   "terrain_adaptation": "beard_thin",

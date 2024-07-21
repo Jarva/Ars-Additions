@@ -7,6 +7,12 @@
   "pedestalItems": [
     {
       "item": "minecraft:pufferfish"
+    },
+    {
+      "item": "minecraft:ink_sac"
+    },
+    {
+      "item": "minecraft:kelp"
     }
   ],
   "reagent": [

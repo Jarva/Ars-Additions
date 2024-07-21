@@ -32,7 +32,7 @@ public class ImbuementDatagen extends ImbuementRecipeProvider {
 
     public void addEntries() {
         for (CharmRegistry.CharmType value : CharmRegistry.CharmType.values()) {
-            recipes.add(new ImbuementRecipe(ArsAdditions.prefix(value.getSerializedName()), Ingredient.of(AddonItemRegistry.CHARMS.get(value).get()), AddonItemRegistry.CHARMS.get(value).get().getDefaultInstance(), 2000, List.of()));
+            recipes.add(new ImbuementRecipe(ArsAdditions.prefix(value.getSerializedName()).withPrefix("charms/"), Ingredient.of(AddonItemRegistry.CHARMS.get(value).get()), AddonItemRegistry.CHARMS.get(value).get().getDefaultInstance(), 2000, List.of()));
         }
     }
 }

@@ -1,15 +1,16 @@
 {
   "values": [
-    "ars_additions:undying_charm",
-    "ars_additions:dispel_protection_charm",
-    "ars_additions:ender_mask_charm",
-    "ars_additions:sonic_boom_protection_charm",
-    "ars_additions:powdered_snow_walk_charm",
-    "ars_additions:wither_protection_charm",
-    "ars_additions:water_breathing_charm",
-    "ars_additions:fire_resistance_charm",
-    "ars_additions:golden_charm",
     "ars_additions:fall_prevention_charm",
-    "ars_additions:void_protection_charm"
+    "ars_additions:wither_protection_charm",
+    "ars_additions:ender_mask_charm",
+    "ars_additions:fire_resistance_charm",
+    "ars_additions:void_protection_charm",
+    "ars_additions:night_vision_charm",
+    "ars_additions:undying_charm",
+    "ars_additions:water_breathing_charm",
+    "ars_additions:dispel_protection_charm",
+    "ars_additions:golden_charm",
+    "ars_additions:sonic_boom_protection_charm",
+    "ars_additions:powdered_snow_walk_charm"
   ]
 }

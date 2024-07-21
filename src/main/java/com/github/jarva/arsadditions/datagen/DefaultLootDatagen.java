@@ -69,13 +69,19 @@ public class DefaultLootDatagen extends LootTableProvider {
             String[][] nameList = new String[][]{
                     AddonBlockNames.CHAINS, AddonBlockNames.MAGELIGHT_LANTERNS,
                     AddonBlockNames.LANTERNS, AddonBlockNames.BUTTONS, AddonBlockNames.DECORATIVE_SOURCESTONES,
-                    AddonBlockNames.WALLS, AddonBlockNames.DOORS, AddonBlockNames.TRAPDOORS,
+                    AddonBlockNames.WALLS, AddonBlockNames.TRAPDOORS,
                     AddonBlockNames.CARPETS
             };
             for (String[] names : nameList) {
                 for (Block block : AddonBlockRegistry.getBlocks(names)) {
                     registerDropSelf(block);
                 }
+            }
+
+            String[] doors = AddonBlockNames.DOORS;
+            for (Block door : AddonBlockRegistry.getBlocks(doors)) {
+                this.list.add(door);
+                this.add(door, createDoorTable(door));
             }
 
             WarpNexus warpNexus = AddonBlockRegistry.WARP_NEXUS.get();

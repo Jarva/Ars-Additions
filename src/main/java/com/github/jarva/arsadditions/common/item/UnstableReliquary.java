@@ -35,6 +35,11 @@ public class UnstableReliquary extends Item {
     }
 
     @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         CompoundTag tag = stack.getTag();
         if (tag == null) return;

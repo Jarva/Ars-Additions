@@ -24,7 +24,7 @@ public class WixieCharmMixin {
         if (blockState.getBlock() instanceof EnchantingApparatusBlock) {
             world.setBlockAndUpdate(pos, AddonBlockRegistry.WIXIE_ENCHANTING.get().defaultBlockState());
             cir.setReturnValue(InteractionResult.SUCCESS);
-            Triggers.WIXIE_ENCHANTING_APPARATUS.trigger(player);
+            Triggers.WIXIE_ENCHANTING_APPARATUS.get().trigger(player);
         }
     }
 }

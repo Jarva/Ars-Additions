@@ -13,6 +13,7 @@ import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -20,24 +21,23 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
 import java.util.HashMap;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 import static com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry.getBlock;
 
 public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.RecipeDatagen implements IConditionBuilder {
-    public RecipeDatagen(PackOutput packOutput) {
-        super(packOutput);
+    public RecipeDatagen(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> pRegistries) {
+        super(packOutput, pRegistries);
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
-        this.consumer = consumer;
+    protected void buildRecipes(RecipeOutput pRecipeOutput) {
+        this.consumer = pRecipeOutput;
 
         addChainRecipe(getBlock(AddonBlockNames.ARCHWOOD_CHAIN), BlockRegistry.ARCHWOOD_PLANK);
         addChainRecipe(getBlock(AddonBlockNames.GOLDEN_CHAIN), Items.GOLD_INGOT);
@@ -122,11 +122,8 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
         ShapelessRecipeBuilder ritualBuilder = modifier.apply(shapelessBuilder(RitualRegistry.getRitualItemMap().get(id)));
 
         if (condition != null) {
-            ConditionalRecipe.builder()
-                    .addCondition(condition)
-                    .addRecipe(ritualBuilder::save)
-                    .generateAdvancement()
-                    .build(consumer, id.withPrefix("ritual/"));
+            RecipeOutput conditional = consumer.withConditions(condition);
+            ritualBuilder.save(conditional, id.withPrefix("ritual/"));
         } else {
             ritualBuilder.save(consumer, id.withPrefix("ritual/"));
         }

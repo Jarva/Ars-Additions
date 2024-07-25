@@ -8,6 +8,7 @@ import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
 import com.github.jarva.arsadditions.setup.registry.ModifyTagRegistry;
 import com.hollingsworth.arsnouveau.common.block.tile.MobJarTile;
+import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
@@ -127,7 +129,7 @@ public class SourceSpawner extends BaseSpawner {
 
                 entityTag.remove("UUID");
                 APPEND_SOURCE_SPAWNER_TAG.modify(entityTag);
-                builder.add(new SpawnData(entityTag, Optional.empty()), 1);
+                builder.add(new SpawnData(entityTag, Optional.empty(), Optional.empty()), 1);
             }
         }
 
@@ -141,7 +143,7 @@ public class SourceSpawner extends BaseSpawner {
     }
 
     public Optional<SourceSpawnerRecipe> getRecipe(Entity entity) {
-        return AddonRecipeRegistry.SOURCE_SPAWNER_REGISTRY.getRecipes().stream().filter(r -> r.isMatch(entity.getType())).findFirst();
+        return AddonRecipeRegistry.SOURCE_SPAWNER_REGISTRY.getRecipes().stream().filter(r -> r.value().isMatch(entity.getType())).findFirst().map(RecipeHolder::value);
     }
 
     public int calculateSource(Entity entity) {
@@ -206,7 +208,7 @@ public class SourceSpawner extends BaseSpawner {
                 this.delay(level, pos);
                 return;
             }
-            SpawnData spawnData = wrappedSpawnData.getData();
+            SpawnData spawnData = wrappedSpawnData.data();
 
             CompoundTag entityTag = spawnData.getEntityToSpawn();
             Optional<EntityType<?>> entityTypeOptional = EntityType.by(entityTag);
@@ -220,7 +222,7 @@ public class SourceSpawner extends BaseSpawner {
             double y = pos.getY() + randomSource.nextInt(3) - 1;
             double z = pos.getZ() + (randomSource.nextDouble() - randomSource.nextDouble()) * this.spawnRange + 0.5;
 
-            if (!level.noCollision(entityType.getAABB(x, y, z))) continue;
+            if (!level.noCollision(entityType.getSpawnAABB(x, y, z))) continue;
 
             if (!entityType.getCategory().isFriendly() && level.getDifficulty() == Difficulty.PEACEFUL) {
                 removeEntry(wrappedSpawnData);
@@ -292,9 +294,8 @@ public class SourceSpawner extends BaseSpawner {
         }
     }
 
-    @Nullable
     @Override
-    public BlockEntity getSpawnerBlockEntity() {
-        return this.blockEntity;
+    public @Nullable Either<BlockEntity, Entity> getOwner() {
+        return Either.left(blockEntity);
     }
 }

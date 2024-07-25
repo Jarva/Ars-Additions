@@ -1,21 +1,20 @@
 package com.github.jarva.arsadditions.common.block.tile;
 
+import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.block.WarpNexus;
 import com.github.jarva.arsadditions.common.item.NexusWarpScroll;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
-import com.hollingsworth.arsnouveau.api.particle.ParticleColorRegistry;
+import com.hollingsworth.arsnouveau.api.registry.ParticleColorRegistry;
 import com.hollingsworth.arsnouveau.api.util.IWololoable;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.hollingsworth.arsnouveau.common.block.ITickable;
-import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
-import com.hollingsworth.arsnouveau.common.items.WarpScroll;
+import com.hollingsworth.arsnouveau.common.block.tile.SingleItemTile;
+import com.hollingsworth.arsnouveau.common.items.data.WarpScrollData;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -23,22 +22,19 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.Vec2;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Optional;
 
-public class WarpNexusTile extends BlockEntity implements GeoBlockEntity, ITickable, IWololoable {
+public class WarpNexusTile extends SingleItemTile implements GeoBlockEntity, ITickable, IWololoable {
     private static final RawAnimation CLOSE = RawAnimation.begin().then("spin", Animation.LoopType.PLAY_ONCE).thenPlayAndHold("close");
     private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("open").thenLoop("spin");
     private static final RawAnimation CLOSED = RawAnimation.begin().thenPlayAndHold("closed");
@@ -58,8 +54,10 @@ public class WarpNexusTile extends BlockEntity implements GeoBlockEntity, ITicka
              public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
                  ItemStack scroll = super.extractItem(slot, amount, simulate);
                  if (!(scroll.getItem() instanceof NexusWarpScroll)) return scroll;
-                 WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(scroll);
-                 data.setData(pos.north(), level.dimension().location().toString(), Vec2.ZERO);
+
+                 scroll.update(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true), (data) ->
+                         data.setPos(pos.north(), level.dimension().location().toString()).setRotation(Vec2.ZERO)
+                 );
                  return scroll;
              }
 
@@ -88,58 +86,28 @@ public class WarpNexusTile extends BlockEntity implements GeoBlockEntity, ITicka
         }
     }
 
-    private final LazyOptional<ItemStackHandler> optional = LazyOptional.of(() -> this.inventory);
+    public static final BlockCapability<IItemHandler, Void> ITEM_HANDLER =
+            BlockCapability.createVoid(
+                    ArsAdditions.prefix("warp_nexus_scroll"),
+                    IItemHandler.class);
 
     @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap) {
-        return cap == ForgeCapabilities.ITEM_HANDLER ? optional.cast() : super.getCapability(cap);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        this.optional.invalidate();
-    }
-
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        this.inventory.deserializeNBT(tag.getCompound("Inventory"));
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.color = ParticleColorRegistry.from(tag.getCompound("color"));
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.put("Inventory", this.inventory.serializeNBT());
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider pRegistries) {
+        super.saveAdditional(tag, pRegistries);
         tag.put("color", this.color.serialize());
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag tag = super.getUpdateTag();
-        saveAdditional(tag);
+    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries) {
+        CompoundTag tag = super.getUpdateTag(pRegistries);
+        saveAdditional(tag, pRegistries);
         return tag;
-    }
-
-    @Nullable
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    public ItemStack getStack() {
-        if (this.inventory.getSlots() > 0) {
-            return this.inventory.getStackInSlot(0);
-        }
-        return ItemStack.EMPTY;
-    }
-
-    public ItemStack extract() {
-        if (this.inventory.getSlots() > 0) {
-            return this.inventory.extractItem(0, Item.MAX_STACK_SIZE, false);
-        }
-        return ItemStack.EMPTY;
     }
 
     @Override

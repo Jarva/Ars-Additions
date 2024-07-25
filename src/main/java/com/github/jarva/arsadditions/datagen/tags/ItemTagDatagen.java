@@ -6,6 +6,7 @@ import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.common.datagen.ItemTagProvider;
 import com.hollingsworth.arsnouveau.common.items.RitualTablet;
+import com.hollingsworth.arsnouveau.setup.registry.ItemRegistryWrapper;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -15,15 +16,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
 public class ItemTagDatagen extends IntrinsicHolderTagsProvider<Item> {
-    public static TagKey<Item> FORGOTTEN_KNOWLEDGE_GLYPHS = ItemTags.create(new ResourceLocation(ArsAdditions.MODID, "forgotten_knowledge"));
-    public static TagKey<Item> BELTS = ItemTags.create(new ResourceLocation("curios", "belt"));
-    public static TagKey<Item> CHARMS = ItemTags.create(new ResourceLocation("curios", "charm"));
+    public static TagKey<Item> FORGOTTEN_KNOWLEDGE_GLYPHS = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsAdditions.MODID, "forgotten_knowledge"));
+    public static TagKey<Item> BELTS = ItemTags.create(ResourceLocation.fromNamespaceAndPath("curios", "belt"));
+    public static TagKey<Item> CHARMS = ItemTags.create(ResourceLocation.fromNamespaceAndPath("curios", "charm"));
 
     public ItemTagDatagen(PackOutput arg, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
         super(arg, Registries.ITEM, future, item -> item.builtInRegistryHolder().key(), ArsAdditions.MODID, helper);
@@ -40,7 +40,7 @@ public class ItemTagDatagen extends IntrinsicHolderTagsProvider<Item> {
 
         this.tag(BELTS).add(AddonItemRegistry.LECTERN_REMOTE.get(), AddonItemRegistry.ADVANCED_LECTERN_REMOTE.get());
 
-        for (RegistryObject<Item> charm : AddonItemRegistry.CHARMS.values()) {
+        for (ItemRegistryWrapper<Item> charm : AddonItemRegistry.CHARMS.values()) {
             this.tag(CHARMS).add(charm.get());
         }
     }

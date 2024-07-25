@@ -19,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -38,7 +37,7 @@ public class CodexEntry extends Item {
         if (level.isClientSide || !(level instanceof ServerLevel serverLevel))
             return super.use(level, player, usedHand);
 
-        IPlayerCap playerCap = CapabilityRegistry.getPlayerDataCap(player).orElse(null);
+        IPlayerCap playerCap = CapabilityRegistry.getPlayerDataCap(player);
         if (playerCap == null)
             return super.use(level, player, usedHand);
 
@@ -84,8 +83,8 @@ public class CodexEntry extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         tooltipComponents.add(Component.translatable("chat.ars_additions.codex_entry.lore", getTier().value));
     }
 

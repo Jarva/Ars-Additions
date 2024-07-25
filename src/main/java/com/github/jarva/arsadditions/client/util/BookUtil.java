@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class BookUtil {
-    public static final ResourceLocation WORN_NOTEBOOK = new ResourceLocation(ArsNouveau.MODID, "worn_notebook");
+    public static final ResourceLocation WORN_NOTEBOOK = ArsNouveau.prefix("worn_notebook");
 
     public static void addRelation(ResourceLocation bookEntry, ResourceLocation relation) {
         Map<ResourceLocation, BookEntry> entries = getEntries();

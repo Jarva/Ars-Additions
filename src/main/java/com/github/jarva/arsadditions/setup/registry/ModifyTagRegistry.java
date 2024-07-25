@@ -1,57 +1,35 @@
 package com.github.jarva.arsadditions.setup.registry;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.util.codec.RegistryDispatcher;
 import com.github.jarva.arsadditions.common.util.codec.TagModifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.*;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.*;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = ArsAdditions.MODID)
 public class ModifyTagRegistry {
-    private static final Codec<Codec<? extends TagModifier>> DIRECT_CODEC = ResourceLocation.CODEC.xmap(
-            id -> getTagModifierRegistry().getValue(id),
-            codec -> getTagModifierRegistry().getKey(codec)
-    );
-    public static final Codec<TagModifier> CODEC = DIRECT_CODEC.dispatch(TagModifier::type, Function.identity());
+    public static final RegistryDispatcher<TagModifier> TAG_MODIFIER_DISPATCHER = RegistryDispatcher.makeDispatchForgeRegistry(
+            ArsAdditions.prefix("tag_modifier"),
+            TagModifier::type,
+            builder->{});
 
-    public static final ResourceKey<Registry<Codec<? extends TagModifier>>> TAG_MODIFIER_KEY = ResourceKey.createRegistryKey(ArsAdditions.prefix("tag_modifier"));
-    public static DeferredRegister<Codec<? extends TagModifier>> TAG_MODIFIER_DEFERRED = DeferredRegister.create(TAG_MODIFIER_KEY, ArsAdditions.MODID);
-
-    private static IForgeRegistry<Codec<? extends TagModifier>> tagModifierRegistry;
-    public static IForgeRegistry<Codec<? extends TagModifier>> getTagModifierRegistry() {
-        return tagModifierRegistry;
-    }
-
-    @SubscribeEvent
-    public static void AddRegistryEvent(NewRegistryEvent event) {
-        event.create(new RegistryBuilder<Codec<? extends TagModifier>>()
-                .setName(TAG_MODIFIER_KEY.location())
-                .disableSaving()
-                .allowModification(), (b) -> tagModifierRegistry = b);
-    }
-
-    private static final RegistryObject<Codec<RemoveGuaranteedHandDrops>> REMOVE_GUARANTEED_HAND_DROPS = TAG_MODIFIER_DEFERRED.register("remove_guaranteed_hand_drops", () -> RemoveGuaranteedHandDrops.CODEC);
-    private static final RegistryObject<Codec<RemoveTag>> REMOVE_TAG = TAG_MODIFIER_DEFERRED.register("remove_tag", () -> RemoveTag.CODEC);
-    private static final RegistryObject<Codec<SetTag>> SET_TAG = TAG_MODIFIER_DEFERRED.register("set_tag", () -> SetTag.CODEC);
-    private static final RegistryObject<Codec<AppendTag>> APPEND_TAG = TAG_MODIFIER_DEFERRED.register("append_tag", () -> AppendTag.CODEC);
+    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<RemoveGuaranteedHandDrops>> REMOVE_GUARANTEED_HAND_DROPS = TAG_MODIFIER_DISPATCHER.defreg().register("remove_guaranteed_hand_drops", () -> RemoveGuaranteedHandDrops.CODEC);
+    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<RemoveTag>> REMOVE_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("remove_tag", () -> RemoveTag.CODEC);
+    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<SetTag>> SET_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("set_tag", () -> SetTag.CODEC);
+    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<AppendTag>> APPEND_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("append_tag", () -> AppendTag.CODEC);
 
     public record RemoveGuaranteedHandDrops() implements TagModifier {
-        public static Codec<RemoveGuaranteedHandDrops> CODEC = Codec.unit(RemoveGuaranteedHandDrops::new);
+        public static MapCodec<RemoveGuaranteedHandDrops> CODEC = MapCodec.unit(RemoveGuaranteedHandDrops::new);
 
         @Override
-        public Codec<RemoveGuaranteedHandDrops> type() {
+        public MapCodec<RemoveGuaranteedHandDrops> type() {
             return REMOVE_GUARANTEED_HAND_DROPS.get();
         }
 
@@ -75,12 +53,12 @@ public class ModifyTagRegistry {
     }
 
     public record RemoveTag(List<String> strip) implements TagModifier {
-        public static Codec<RemoveTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        public static MapCodec<RemoveTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.STRING.listOf().fieldOf("strip_tags").forGetter(RemoveTag::strip)
         ).apply(instance, RemoveTag::new));
 
         @Override
-        public Codec<RemoveTag> type() {
+        public MapCodec<RemoveTag> type() {
             return REMOVE_TAG.get();
         }
 
@@ -106,12 +84,12 @@ public class ModifyTagRegistry {
 
     public record SetTag(Map<String, Tag> set) implements TagModifier {
         private static final Codec<Tag> TAG_CODEC = Codec.PASSTHROUGH.xmap(dynamic -> dynamic.convert(NbtOps.INSTANCE).getValue(), tag -> new Dynamic<>(NbtOps.INSTANCE, tag));
-        public static final Codec<SetTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        public static final MapCodec<SetTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.unboundedMap(Codec.STRING, TAG_CODEC).fieldOf("set").forGetter(SetTag::set)
         ).apply(instance, SetTag::new));
 
         @Override
-        public Codec<SetTag> type() {
+        public MapCodec<SetTag> type() {
             return SET_TAG.get();
         }
 
@@ -138,12 +116,12 @@ public class ModifyTagRegistry {
 
     public record AppendTag(Map<String, Tag> append) implements TagModifier {
         private static final Codec<Tag> TAG_CODEC = Codec.PASSTHROUGH.xmap(dynamic -> dynamic.convert(NbtOps.INSTANCE).getValue(), tag -> new Dynamic<>(NbtOps.INSTANCE, tag));
-        public static final Codec<AppendTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        public static final MapCodec<AppendTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.unboundedMap(Codec.STRING, TAG_CODEC).fieldOf("append").forGetter(AppendTag::append)
         ).apply(instance, AppendTag::new));
 
         @Override
-        public Codec<AppendTag> type() {
+        public MapCodec<AppendTag> type() {
             return APPEND_TAG.get();
         }
 

@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.setup.registry;
 
+import com.github.jarva.arsadditions.common.item.data.CharmData;
 import com.github.jarva.arsadditions.server.util.PlayerInvUtil;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.util.StringRepresentable;
@@ -78,12 +79,12 @@ public class CharmRegistry {
     }
 
     public static int getCharges(ItemStack stack) {
-        if (!stack.hasTag()) return 0;
-        return stack.getOrCreateTag().getInt("charges");
+        return CharmData.getOrDefault(stack).charges();
     }
 
-    public static void setCharges(ItemStack stack, int charges) {
-        stack.getOrCreateTag().putInt("charges", Math.max(charges, 0));
+    public static void useCharges(ItemStack stack, int charges) {
+        CharmData data = CharmData.getOrDefault(stack).use(0);
+        stack.set(AddonDataComponentRegistry.CHARM_DATA, data);
     }
 
     public static ItemStack getCharm(LivingEntity entity, CharmType charm) {
@@ -101,7 +102,7 @@ public class CharmRegistry {
             return true;
         }
         if (damage > 0) {
-            setCharges(curio, getCharges(curio) - damage);
+            useCharges(curio, damage);
         }
         return true;
     }

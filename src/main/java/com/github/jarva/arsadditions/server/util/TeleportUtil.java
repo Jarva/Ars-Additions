@@ -1,7 +1,7 @@
 package com.github.jarva.arsadditions.server.util;
 
 import com.hollingsworth.arsnouveau.common.block.tile.PortalTile;
-import com.hollingsworth.arsnouveau.common.items.WarpScroll;
+import com.hollingsworth.arsnouveau.common.items.data.WarpScrollData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -12,15 +12,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
 
 public class TeleportUtil {
-    public static void teleport(ServerLevel level, WarpScroll.WarpScrollData data, Entity player, ItemStack stack) {
+    public static void teleport(ServerLevel level, WarpScrollData data, Entity player, ItemStack stack) {
         teleport(level, data, player);
         stack.shrink(1);
     }
 
-    public static void teleport(ServerLevel level, WarpScroll.WarpScrollData data, Entity player) {
+    public static void teleport(ServerLevel level, WarpScrollData data, Entity player) {
         if (!data.isValid()) return;
 
-        teleport(level, data.getDimension(), data.getPos(), data.getRotation(), player);
+        teleport(level, data.dimension(), data.pos(), data.rotation(), player);
     }
 
     public static void teleport(ServerLevel level, String dimension, BlockPos pos, Vec2 rotation, Entity player) {

@@ -1,15 +1,15 @@
 package com.github.jarva.arsadditions.common.item;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.client.util.KeypressUtil;
+import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.server.util.LocateUtil;
 import com.github.jarva.arsadditions.server.util.TeleportUtil;
 import com.hollingsworth.arsnouveau.common.advancement.ANCriteriaTriggers;
-import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
-import com.hollingsworth.arsnouveau.common.items.WarpScroll;
+import com.hollingsworth.arsnouveau.common.items.data.WarpScrollData;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -28,7 +28,6 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -54,13 +53,13 @@ public class ExplorationWarpScroll extends Item {
         BlockPos pos = entity.blockPosition();
         boolean isRuinedPortal = serverLevel.structureManager().getStructureWithPieceAt(pos, TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix("ruined_portals"))).isValid();
         if (isRuinedPortal) {
-            WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
+            WarpScrollData data = stack.getOrDefault(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true));
             if (!data.isValid()) return false;
 
             String displayName = "Explorer's Warp Portal";
             if (BlockRegistry.PORTAL_BLOCK.get().trySpawnPortal(serverLevel, pos, data, displayName)) {
-                ANCriteriaTriggers.rewardNearbyPlayers(Triggers.FIND_RUINED_PORTAL, serverLevel, pos, 10);
-                ANCriteriaTriggers.rewardNearbyPlayers(Triggers.CREATE_RUINED_PORTAL, serverLevel, pos, 10);
+                ANCriteriaTriggers.rewardNearbyPlayers(Triggers.FIND_RUINED_PORTAL.get(), serverLevel, pos, 10);
+                ANCriteriaTriggers.rewardNearbyPlayers(Triggers.CREATE_RUINED_PORTAL.get(), serverLevel, pos, 10);
                 TeleportUtil.createTeleportDecoration(serverLevel, pos, stack);
                 return true;
             }
@@ -78,8 +77,8 @@ public class ExplorationWarpScroll extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         tooltipComponents.add(Component.translatable("tooltip.ars_additions.exploration_warp_scroll.desc"));
 
         if (LocateUtil.isPending(stack)) {
@@ -100,7 +99,7 @@ public class ExplorationWarpScroll extends Item {
         if (usedHand == InteractionHand.OFF_HAND) return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
         if (!(level instanceof ServerLevel serverLevel)) return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
 
-        WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
+        WarpScrollData data = stack.getOrDefault(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true));
 
         if (LocateUtil.isPending(stack)) {
             PortUtil.sendMessageNoSpam(player, Component.translatable("tooltip.ars_additions.exploration_warp_scroll.locating"));

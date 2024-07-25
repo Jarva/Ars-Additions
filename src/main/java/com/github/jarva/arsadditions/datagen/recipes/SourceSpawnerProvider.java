@@ -4,8 +4,10 @@ import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.recipe.SourceSpawnerRecipe;
 import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
 import com.github.jarva.arsadditions.common.util.codec.TagModifier;
+import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
 import com.github.jarva.arsadditions.setup.registry.ModifyTagRegistry;
 import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.entity.EntityType;
@@ -27,8 +29,10 @@ public class SourceSpawnerProvider extends SimpleDataProvider {
     public void collectJsons(CachedOutput pOutput) {
         addEntries();
         for (SourceSpawnerRecipe recipe : recipes) {
-            Path path = getRecipePath(output, recipe.getId().getPath());
-            saveStable(pOutput, recipe.asRecipe(), path);
+            Path path = getRecipePath(output, AddonRecipeRegistry.SOURCE_SPAWNER_TYPE.getId().getPath());
+            SourceSpawnerRecipe.CODEC.encodeStart(JsonOps.INSTANCE, recipe).result().ifPresent(json -> {
+                saveStable(pOutput, json, path);
+            });
         }
     }
 

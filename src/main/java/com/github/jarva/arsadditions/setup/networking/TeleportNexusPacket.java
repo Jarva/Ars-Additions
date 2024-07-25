@@ -1,71 +1,72 @@
 package com.github.jarva.arsadditions.setup.networking;
 
+import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.block.WarpNexus;
 import com.github.jarva.arsadditions.common.block.tile.WarpNexusTile;
 import com.github.jarva.arsadditions.common.capability.CapabilityRegistry;
 import com.github.jarva.arsadditions.server.util.TeleportUtil;
 import com.hollingsworth.arsnouveau.api.source.ISpecialSourceProvider;
 import com.hollingsworth.arsnouveau.api.util.SourceUtil;
-import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
-import com.hollingsworth.arsnouveau.common.items.WarpScroll;
+import com.hollingsworth.arsnouveau.common.items.data.WarpScrollData;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.function.Supplier;
+public record TeleportNexusPacket(BlockPos pos, int index) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<TeleportNexusPacket> TYPE = new CustomPacketPayload.Type<>(ArsAdditions.prefix("teleport_nexus"));
 
-public class TeleportNexusPacket implements AbstractPacket {
-    private final BlockPos pos;
-    int index;
-    public TeleportNexusPacket(FriendlyByteBuf buf) {
-        index = buf.readInt();
-        pos = buf.readBlockPos();
+    public static final StreamCodec<ByteBuf, TeleportNexusPacket> STREAM_CODEC = StreamCodec.composite(
+            BlockPos.STREAM_CODEC, TeleportNexusPacket::pos,
+            ByteBufCodecs.VAR_INT, TeleportNexusPacket::index,
+            TeleportNexusPacket::new
+    );
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
-        buf.writeInt(index);
-        buf.writeBlockPos(pos);
-    }
-
-    public TeleportNexusPacket(int index, BlockPos pos) {
-        this.index = index;
-        this.pos = pos;
-    }
-
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
+    public void handleData(IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            if (!(player instanceof ServerPlayer serverPlayer)) return;
 
             WarpNexusTile be = WarpNexusTile.getWarpNexus(player.level(), pos).orElse(null);
             if (be == null) return;
 
-            if (player.blockPosition().distToCenterSqr(pos.getX(), pos.getY(), pos.getZ()) > Math.pow(player.getBlockReach(), 2)) return;
+            if (player.blockPosition().distToCenterSqr(pos.getX(), pos.getY(), pos.getZ()) > Math.pow(player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 2)) return;
 
-            ItemStackHandler nexus = player.getCapability(CapabilityRegistry.PLAYER_NEXUS_CAPABILITY).orElse(new ItemStackHandler());
+            ItemStackHandler nexus = player.getCapability(CapabilityRegistry.PLAYER_NEXUS);
+            if (nexus == null) return;
+
             ItemStack scroll = nexus.getStackInSlot(index);
-            StableWarpScroll.StableScrollData data = new StableWarpScroll.StableScrollData(scroll);
- 
+            WarpScrollData data = scroll.getOrDefault(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true));
+
             if (be.getBlockState().getValue(WarpNexus.REQUIRES_SOURCE)) {
-                ISpecialSourceProvider takePos = SourceUtil.takeSource(pos, player.serverLevel(), 5, 1000);
+                ISpecialSourceProvider takePos = SourceUtil.takeSource(pos, serverPlayer.serverLevel(), 5, 1000);
                 if (takePos != null) {
-                    TeleportUtil.teleport(player.serverLevel(), data, player);
+                    TeleportUtil.teleport(serverPlayer.serverLevel(), data, player);
                 } else {
                     PortUtil.sendMessageNoSpam(player, Component.translatable("ars_nouveau.apparatus.nomana"));
                 }
             } else {
-                TeleportUtil.teleport(player.serverLevel(), data, player);
+                TeleportUtil.teleport(serverPlayer.serverLevel(), data, player);
             }
         });
-        ctx.get().setPacketHandled(true);
     }
 
     public static void teleport(int index, BlockPos pos) {
-        NetworkHandler.sendToServer(new TeleportNexusPacket(index, pos));
+        NetworkHandler.sendToServer(new TeleportNexusPacket(pos, index));
     }
 }

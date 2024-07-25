@@ -55,11 +55,17 @@ public class UnstableReliquary extends Item {
                     UnstableReliquary.breakReliquary(stack);
                     return;
                 }
-                if (found instanceof ServerPlayer player && !player.hasEffect(AddonEffectRegistry.MARKED_EFFECT.get())) {
+                if (found instanceof ServerPlayer player && !player.hasEffect(AddonEffectRegistry.MARKED_EFFECT)) {
                     UnstableReliquary.breakReliquary(stack);
                 }
             }
         }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+
     }
 
     @Override

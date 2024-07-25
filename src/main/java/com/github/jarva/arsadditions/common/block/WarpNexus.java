@@ -31,8 +31,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -68,7 +67,7 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
                 return InteractionResult.SUCCESS;
             }
             if (player instanceof ServerPlayer serverPlayer) {
-                NetworkHooks.openScreen(serverPlayer, state.getMenuProvider(level, be.getBlockPos()));
+                serverPlayer.openMenu(state.getMenuProvider(level, be.getBlockPos()));
             }
         } else {
             OpenNexusPacket.openNexus(player, be.getBlockPos());
@@ -80,7 +79,7 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     @Override
     public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         return new SimpleMenuProvider((i, inventory, player) -> {
-            Optional<ItemStackHandler> itemStackHandler = player.getCapability(CapabilityRegistry.PLAYER_NEXUS_CAPABILITY).resolve();
+            Optional<ItemStackHandler> itemStackHandler = player.getCapability(CapabilityRegistry.PLAYER_NEXUS_CAPABILITY);
             return itemStackHandler.map(handler -> new WarpNexusMenu(i, inventory, ContainerLevelAccess.create(level, pos), handler)).orElse(null);
         }, Component.translatable("block.ars_additions.warp_nexus"));
     }

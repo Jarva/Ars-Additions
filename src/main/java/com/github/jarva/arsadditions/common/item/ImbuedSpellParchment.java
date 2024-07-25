@@ -2,8 +2,8 @@ package com.github.jarva.arsadditions.common.item;
 
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.ANFakePlayer;
+import com.hollingsworth.arsnouveau.api.spell.AbstractCaster;
 import com.hollingsworth.arsnouveau.api.spell.EntitySpellResolver;
-import com.hollingsworth.arsnouveau.api.spell.ISpellCaster;
 import com.hollingsworth.arsnouveau.api.spell.Spell;
 import com.hollingsworth.arsnouveau.api.spell.SpellContext;
 import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.LivingCaster;
@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayer;
 
 public class ImbuedSpellParchment extends SpellParchment {
     public ImbuedSpellParchment() {
@@ -24,7 +24,7 @@ public class ImbuedSpellParchment extends SpellParchment {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return getSpellCaster(stack).getSpell().getCost();
     }
 
@@ -42,7 +42,7 @@ public class ImbuedSpellParchment extends SpellParchment {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
-        ISpellCaster caster = getSpellCaster(stack);
+        AbstractCaster<?> caster = getSpellCaster(stack);
         Spell spell = caster.getSpell();
 
         if (level instanceof ServerLevel serverLevel) {

@@ -1,23 +1,22 @@
 package com.github.jarva.arsadditions.common.util;
 
 import com.hollingsworth.arsnouveau.common.items.ExperienceGem;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
-import org.jetbrains.annotations.NotNull;
 
 public class DispenserExperienceGemBehavior extends DefaultDispenseItemBehavior {
     @Override
-    protected @NotNull ItemStack execute(BlockSource source, ItemStack stack) {
-        Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
+    protected ItemStack execute(BlockSource source, ItemStack stack) {
+        Direction direction = source.state().getValue(DispenserBlock.FACING);
         Position position = DispenserBlock.getDispensePosition(source);
         ItemStack itemStack = stack.split(1);
-        spawnItem(source.getLevel(), itemStack, 6, direction, position);
+        spawnItem(source.level(), itemStack, 6, direction, position);
         return stack;
     }
 

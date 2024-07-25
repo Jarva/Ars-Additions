@@ -21,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -56,14 +58,14 @@ public class EffectMark extends AbstractEffect {
         data.putUUID("entity_uuid", entity.getUUID());
         data.putString("entity_type", EntityType.getKey(entity.getType()).toString());
         if (entity.hasCustomName()) {
-            data.putString("entity_name", Component.Serializer.toJson(entity.getCustomName()));
+            data.putString("entity_name", Component.Serializer.toJson(entity.getCustomName(), world.registryAccess()));
         }
 
         boolean marked = saveMark(spellContext, shooter, MarkType.ENTITY, data);
 
         if (marked && entity instanceof Player player) {
-            data.putString("entity_name", Component.Serializer.toJson(player.getDisplayName()));
-            player.addEffect(new MobEffectInstance(AddonEffectRegistry.MARKED_EFFECT.get(), ServerConfig.SERVER.reliquary_effect_duration.get() * 20));
+            data.putString("entity_name", Component.Serializer.toJson(player.getDisplayName(), world.registryAccess()));
+            player.addEffect(new MobEffectInstance(AddonEffectRegistry.MARKED_EFFECT, ServerConfig.SERVER.reliquary_effect_duration.get() * 20));
         }
     }
 
@@ -90,7 +92,7 @@ public class EffectMark extends AbstractEffect {
     }
 
     @Override
-    public void buildConfig(ForgeConfigSpec.Builder builder) {
+    public void buildConfig(ModConfigSpec.Builder builder) {
         super.buildConfig(builder);
         PER_SPELL_LIMIT = builder.comment("The maximum number of times this glyph may appear in a single spell").defineInRange("per_spell_limit", 1, 1, 1);
     }

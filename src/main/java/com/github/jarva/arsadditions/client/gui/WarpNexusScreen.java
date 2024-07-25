@@ -4,9 +4,9 @@ import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.setup.networking.TeleportNexusPacket;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.client.gui.Color;
-import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
-import com.hollingsworth.arsnouveau.common.items.WarpScroll;
+import com.hollingsworth.arsnouveau.common.items.data.WarpScrollData;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -15,13 +15,15 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -90,7 +92,7 @@ public class WarpNexusScreen extends Screen {
                             guiGraphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
                             RenderSystem.enableBlend();
                             RenderSystem.enableDepthTest();
-                            guiGraphics.blitNineSliced(BUTTON_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 16, 4, 200, 20, 0, this.getTextureY());
+                            guiGraphics.blit(BUTTON_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 16, 4, 200, 20, 0, this.getTextureY());
                             guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
                             int i = this.getFGColor();
                             this.renderString(guiGraphics, minecraft.font, i | Mth.ceil(this.alpha * 255.0F) << 24);
@@ -113,16 +115,16 @@ public class WarpNexusScreen extends Screen {
     }
 
     private Component getDisplayName(ItemStack stack) {
-        if (stack.hasCustomHoverName()) return stack.getHoverName();
-        WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
+        if (stack.has(DataComponents.CUSTOM_NAME)) return stack.getHoverName();
+        WarpScrollData data = stack.getOrDefault(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true));
         if (!data.isValid()) return stack.getDisplayName();
-        BlockPos pos = data.getPos();
+        BlockPos pos = data.pos();
         return Component.translatable("tooltip.ars_additions.reliquary.marked.location", pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        if (access.evaluate((level, pos) -> !level.getBlockState(pos).is(AddonBlockRegistry.WARP_NEXUS.get()) || this.minecraft.player.blockPosition().distToCenterSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) > Math.pow(this.minecraft.player.getBlockReach(), 2), true)) {
+        if (access.evaluate((level, pos) -> !level.getBlockState(pos).is(AddonBlockRegistry.WARP_NEXUS.get()) || this.minecraft.player.blockPosition().distToCenterSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) > Math.pow(this.minecraft.player.getAttribute(Attributes.BLOCK_INTERACTION_RANGE).getValue(), 2), true)) {
             this.minecraft.setScreen(null);
             return;
         }
@@ -142,7 +144,7 @@ public class WarpNexusScreen extends Screen {
     }
     
     public void renderAfterScale(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(guiGraphics);
+        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         if (topStart >= 0) {
             guiGraphics.drawCenteredString(this.font, Component.literal("Warp Nexus"), width / 2, topStart + 8, new Color(255, 255, 255).getRGB());
         }

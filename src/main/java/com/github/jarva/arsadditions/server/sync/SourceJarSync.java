@@ -30,7 +30,7 @@ public class SourceJarSync {
             for (BlockPos p : positions) {
                 if (!world.isLoaded(p)) continue;
 
-                BlockEntity entity = world.getExistingBlockEntity(p);
+                BlockEntity entity = world.getBlockEntity(p);
                 if (entity instanceof EnderSourceJarTile tile) {
                     if (!tile.getOwner().equals(uuid)) continue;
                     if (tile.getSource() == source) continue;

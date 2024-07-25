@@ -1,18 +1,15 @@
 package com.github.jarva.arsadditions.common.item;
 
+import com.github.jarva.arsadditions.common.item.data.AdvancedDominionData;
 import com.github.jarva.arsadditions.common.util.LangUtil;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.item.IWandable;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -25,11 +22,9 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.apache.commons.lang3.tuple.Triple;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 
 public class AdvancedDominionWand extends Item {
     public AdvancedDominionWand() {
@@ -86,7 +81,7 @@ public class AdvancedDominionWand extends Item {
 
             BlockEntity be = serverLevel.getBlockEntity(pos);
 
-            AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
+            AdvancedDominionData data = stack.get(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA, AdvancedDominionData.DEFAULT_DATA);
             if (data.getPos() == null && data.getEntityId() == null) {
                 data.setData(pos, serverLevel.dimension());
                 data.write(stack);
@@ -166,112 +161,6 @@ public class AdvancedDominionWand extends Item {
             tooltip.add(Component.translatable("tooltip.ars_additions.warp_index.bound", data.pos.getX(), data.pos.getY(), data.pos.getZ(), data.level.location().toString()));
         } else {
             tooltip.add(Component.translatable("chat.ars_additions.warp_index.unbound", Component.keybind("key.sneak"), Component.keybind("key.use"), LangUtil.container()));
-        }
-    }
-
-    public static class AdvancedDominionData {
-
-        enum Mode implements StringRepresentable {
-            LOCK_FIRST("tooltip.ars_additions.advanced_dominion_wand.mode.first"),
-            LOCK_SECOND("tooltip.ars_additions.advanced_dominion_wand.mode.second");
-
-            private final String translatable;
-
-            Mode(String translatable) {
-                this.translatable = translatable;
-            }
-
-            @Override
-            public @NotNull String getSerializedName() {
-                return name().toLowerCase();
-            }
-
-            public Component getTranslatable() {
-                return Component.translatable(translatable);
-            }
-        }
-
-        public static AdvancedDominionData DEFAULT_DATA = new AdvancedDominionData(Mode.LOCK_FIRST);
-        private Mode mode;
-        private ResourceKey<Level> level;
-        private BlockPos pos;
-        private Integer entityId;
-
-        private AdvancedDominionData(Optional<BlockPos> pos, Optional<ResourceKey<Level>> level, Optional<Integer> entityId, Mode mode) {
-            this.pos = pos.orElse(null);
-            this.level = level.orElse(null);
-            this.entityId = entityId.orElse(null);
-            this.mode = mode;
-        }
-
-        private AdvancedDominionData(Mode mode) {
-            this.pos = null;
-            this.level = null;
-            this.entityId = null;
-            this.mode = mode;
-        }
-
-        public static final String TAG_KEY = "advanced_dominion";
-
-        public static final Codec<AdvancedDominionData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                BlockPos.CODEC.optionalFieldOf("StoredPos").forGetter(AdvancedDominionData::pos),
-                Level.RESOURCE_KEY_CODEC.optionalFieldOf("StoredDim").forGetter(AdvancedDominionData::level),
-                Codec.INT.optionalFieldOf("StoredEntity").forGetter(AdvancedDominionData::entityId),
-                StringRepresentable.fromEnum(Mode::values).fieldOf("Mode").forGetter(AdvancedDominionData::mode)
-        ).apply(instance, AdvancedDominionData::new));
-
-        public static AdvancedDominionData fromItemStack(ItemStack stack) {
-            return CODEC.parse(NbtOps.INSTANCE, stack.getOrCreateTag().getCompound(TAG_KEY)).result().orElse(DEFAULT_DATA);
-        }
-
-        public void write(ItemStack stack) {
-            CODEC.encodeStart(NbtOps.INSTANCE, this).result().ifPresent(tag -> {
-                stack.getOrCreateTag().put(TAG_KEY, tag);
-            });
-        }
-
-        private Optional<BlockPos> pos() {
-            return Optional.ofNullable(pos);
-        }
-
-        private BlockPos getPos() {
-            return pos;
-        }
-
-        private Optional<ResourceKey<Level>> level() {
-            return Optional.ofNullable(level);
-        }
-
-        private ResourceKey<Level> getLevel() {
-            return level;
-        }
-
-        private Optional<Integer> entityId() {
-            return Optional.ofNullable(entityId);
-        }
-
-        private Integer getEntityId() {
-            return entityId;
-        }
-
-        public void setData(BlockPos pos, ResourceKey<Level> level) {
-            this.pos = pos;
-            this.level = level;
-            this.entityId = null;
-        }
-
-        public void setData(Integer entityId, ResourceKey<Level> level) {
-            this.entityId = entityId;
-            this.level = level;
-            this.pos = null;
-        }
-
-        private Mode mode() {
-            return mode;
-        }
-
-        public void toggleMode() {
-            mode = mode == Mode.LOCK_FIRST ? Mode.LOCK_SECOND : Mode.LOCK_FIRST;
         }
     }
 }

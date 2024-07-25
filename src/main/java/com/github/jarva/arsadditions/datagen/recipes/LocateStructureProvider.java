@@ -4,9 +4,11 @@ import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.loot.functions.ExplorationScrollFunction;
 import com.github.jarva.arsadditions.common.recipe.LocateStructureRecipe;
 import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
+import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
 import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
 import com.hollingsworth.arsnouveau.common.datagen.StructureTagProvider;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceKey;
@@ -32,8 +34,10 @@ public class LocateStructureProvider extends SimpleDataProvider {
     public void collectJsons(CachedOutput pOutput) {
         addEntries();
         for (LocateStructureRecipe recipe : recipes) {
-            Path path = getRecipePath(output, recipe.getId().getPath());
-            saveStable(pOutput, recipe.asRecipe(), path);
+            Path path = getRecipePath(output, AddonRecipeRegistry.LOCATE_STRUCTURE_TYPE.getId().getPath());
+            LocateStructureRecipe.CODEC.encodeStart(JsonOps.INSTANCE, recipe).result().ifPresent(json -> {
+                saveStable(pOutput, json, path);
+            });
         }
     }
 

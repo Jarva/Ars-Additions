@@ -1,9 +1,6 @@
 package com.github.jarva.arsadditions.common.commands;
 
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
-import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
-import com.hollingsworth.arsnouveau.common.capability.IPlayerCap;
-import com.hollingsworth.arsnouveau.setup.registry.CapabilityRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -21,14 +18,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.commands.LootCommand;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 public class SetLootTableCommand {
     private static final SuggestionProvider<CommandSourceStack> sugg = (ctx, builder) -> SharedSuggestionProvider.suggestResource(GlyphRegistry.getSpellpartMap().keySet(), builder);
@@ -63,9 +56,11 @@ public class SetLootTableCommand {
             BlockState bs = level.getBlockState(pos);
             BlockEntity be = level.getBlockEntity(pos);
 
-            CompoundTag tag = be.saveWithFullMetadata();
+            if (be == null) continue;
+
+            CompoundTag tag = be.saveWithFullMetadata(level.registryAccess());
             tag.putString("LootTable", loot.toString());
-            be.load(tag);
+            be.loadCustomOnly(tag, level.registryAccess());
             be.setChanged();
             be.getLevel().sendBlockUpdated(pos, bs, bs, 3);
             counter++;
@@ -74,33 +69,6 @@ public class SetLootTableCommand {
         if (context.getSource().getPlayer() != null) {
             Player player = context.getSource().getPlayer();
             player.sendSystemMessage(Component.literal("Updated " + counter + " loot tables"));
-        }
-
-        return 1;
-    }
-
-    private static int learnGlyph(CommandSourceStack source, Collection<ServerPlayer> players, @Nullable ResourceLocation glyph) {
-        if (source.getPlayer() == null) return 0;
-
-        for (ServerPlayer player : players) {
-            IPlayerCap playerCap = CapabilityRegistry.getPlayerDataCap(player).orElse(null);
-
-            if (glyph == null) {
-                if (playerCap == null) continue;
-                playerCap.setKnownGlyphs(GlyphRegistry.getSpellpartMap().values().stream().filter(g -> !g.defaultedStarterGlyph()).toList());
-                player.sendSystemMessage(Component.literal("Unlocked all glyphs"));
-            } else {
-                AbstractSpellPart spellPart = GlyphRegistry.getSpellPart(glyph);
-                if (spellPart.defaultedStarterGlyph()) continue;
-                boolean learned = playerCap.unlockGlyph(spellPart);
-                if (learned) {
-                    player.sendSystemMessage(Component.literal("Unlocked " + spellPart.getName()));
-                } else {
-                    player.sendSystemMessage(Component.literal("Glyph already known"));
-                }
-            }
-
-            CapabilityRegistry.EventHandler.syncPlayerCap(player);
         }
 
         return 1;

@@ -1,37 +1,44 @@
 package com.github.jarva.arsadditions.setup.networking;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
+@EventBusSubscriber(modid = ArsAdditions.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class NetworkHandler {
-    private static int ID = 0;
     private static final String PROTOCOL_VERSION = "1";
 
-    public static int nextID() {
-        return ID++;
+    @SubscribeEvent
+    public static void registerPayloads(final RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar(PROTOCOL_VERSION);
+
+        registrar.playToServer(
+                TeleportNexusPacket.TYPE,
+                TeleportNexusPacket.STREAM_CODEC,
+                TeleportNexusPacket::handleData
+        );
+        registrar.playToClient(
+                OpenNexusPacket.TYPE,
+                OpenNexusPacket.STREAM_CODEC,
+                OpenNexusPacket::handleData
+        );
+        registrar.playToServer(
+                OpenTerminalPacket.TYPE,
+                OpenTerminalPacket.STREAM_CODEC,
+                OpenTerminalPacket::handleData
+        );
     }
 
-    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            ArsAdditions.prefix( "main"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
-
-    public static void init() {
-        INSTANCE.registerMessage(nextID(), OpenTerminalPacket.class, OpenTerminalPacket::toBytes, OpenTerminalPacket::new, OpenTerminalPacket::handleData);
-        INSTANCE.registerMessage(nextID(), OpenNexusPacket.class, OpenNexusPacket::toBytes, OpenNexusPacket::new, OpenNexusPacket::handle);
-        INSTANCE.registerMessage(nextID(), TeleportNexusPacket.class, TeleportNexusPacket::toBytes, TeleportNexusPacket::new, TeleportNexusPacket::handle);
+    public static void sendToPlayerClient(CustomPacketPayload msg, ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player, msg);
     }
 
-    public static void sendToPlayerClient(Object msg, ServerPlayer player) {
-        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), msg);
-    }
-
-    public static void sendToServer(Object msg) {
-        INSTANCE.sendToServer(msg);
+    public static void sendToServer(CustomPacketPayload msg) {
+        PacketDistributor.sendToServer(msg);
     }
 }

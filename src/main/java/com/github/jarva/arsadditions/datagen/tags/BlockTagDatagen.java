@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -24,9 +24,9 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
         super(arg, Registries.BLOCK, future, item -> item.builtInRegistryHolder().key(), ArsAdditions.MODID, helper);
     }
 
-    public static TagKey<Block> IMMOVABLE = BlockTags.create(new ResourceLocation("forge", "immovable"));
-    public static TagKey<Block> RELOCATION_NOT_SUPPORTED = BlockTags.create(new ResourceLocation("forge", "relocation_not_supported"));
-    public static TagKey<Block> CARRYON_BLACKLIST = BlockTags.create(new ResourceLocation("carryon", "block_blacklist"));
+    public static TagKey<Block> IMMOVABLE = BlockTags.create(ResourceLocation.fromNamespaceAndPath("forge", "immovable"));
+    public static TagKey<Block> RELOCATION_NOT_SUPPORTED = BlockTags.create(ResourceLocation.fromNamespaceAndPath("forge", "relocation_not_supported"));
+    public static TagKey<Block> CARRYON_BLACKLIST = BlockTags.create(ResourceLocation.fromNamespaceAndPath("carryon", "block_blacklist"));
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {

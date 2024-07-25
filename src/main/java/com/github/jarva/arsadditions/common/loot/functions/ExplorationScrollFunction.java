@@ -27,6 +27,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.Set;
 
 public class ExplorationScrollFunction extends LootItemConditionalFunction {
@@ -38,7 +39,7 @@ public class ExplorationScrollFunction extends LootItemConditionalFunction {
     private final int searchRadius;
     private final boolean skipKnownStructures;
 
-    protected ExplorationScrollFunction(LootItemCondition[] predicates, TagKey<Structure> tagKey, ResourceKey<Structure> resourceKey, int searchRadius, boolean skipKnownStructures) {
+    protected ExplorationScrollFunction(List<LootItemCondition> predicates, TagKey<Structure> tagKey, ResourceKey<Structure> resourceKey, int searchRadius, boolean skipKnownStructures) {
         super(predicates);
         this.tag = tagKey;
         this.resource = resourceKey;

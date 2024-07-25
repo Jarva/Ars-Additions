@@ -4,22 +4,21 @@ import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.common.util.DispenserExperienceGemBehavior;
 import com.github.jarva.arsadditions.setup.config.CommonConfig;
 import com.github.jarva.arsadditions.setup.config.ServerConfig;
-import com.github.jarva.arsadditions.setup.networking.NetworkHandler;
 import com.github.jarva.arsadditions.setup.registry.AddonSetup;
 import com.github.jarva.arsadditions.setup.registry.ArsNouveauRegistry;
-import com.hollingsworth.arsnouveau.setup.config.ANModConfig;
+import com.github.jarva.arsadditions.setup.registry.recipes.GenericRecipeRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,29 +27,28 @@ public class ArsAdditions {
     public static final String MODID = "ars_additions";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public ArsAdditions() {
-        ANModConfig commonConfig = new ANModConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_SPEC, ModLoadingContext.get().getActiveContainer(), MODID + "-common");
-        ModLoadingContext.get().getActiveContainer().addConfig(commonConfig);
-        ANModConfig serverConfig = new ANModConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_SPEC, ModLoadingContext.get().getActiveContainer(), MODID + "-server");
-        ModLoadingContext.get().getActiveContainer().addConfig(serverConfig);
+    public ArsAdditions(IEventBus modEventBus, ModContainer modContainer) {
+        AddonSetup.registers(modEventBus);
+        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_SPEC);
 
-        IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
-        AddonSetup.registers(modbus);
         ArsNouveauRegistry.init();
-        modbus.addListener(this::common);
-        modbus.addListener(this::client);
-        modbus.addListener(this::post);
-        MinecraftForge.EVENT_BUS.register(this);
+        modEventBus.addListener(this::common);
+        modEventBus.addListener(this::client);
+        modEventBus.addListener(this::post);
+        NeoForge.EVENT_BUS.register(this);
 
         Triggers.init();
     }
 
     public static ResourceLocation prefix(String path){
-        return new ResourceLocation(MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 
     private void common(final FMLCommonSetupEvent event) {
-        NetworkHandler.init();
+        NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> {
+            GenericRecipeRegistry.reloadAll(e.getServer().getRecipeManager());
+        });
     }
 
     private void client(final FMLClientSetupEvent event) {

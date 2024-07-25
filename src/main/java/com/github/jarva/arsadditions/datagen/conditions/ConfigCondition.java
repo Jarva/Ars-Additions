@@ -1,20 +1,15 @@
 package com.github.jarva.arsadditions.datagen.conditions;
 
-import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.setup.config.CommonConfig;
-import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.neoforged.neoforge.common.conditions.ICondition;
 
-public class ConfigCondition implements ICondition {
-    private static final ResourceLocation NAME = ArsAdditions.prefix("config");
-    private final String configPath;
-
-    public ConfigCondition(String configPath) {
-        this.configPath = configPath;
-    }
+public record ConfigCondition(String configPath) implements ICondition {
+    public static final MapCodec<ConfigCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.STRING.fieldOf("config").forGetter(ConfigCondition::configPath)
+    ).apply(instance, ConfigCondition::new));
 
     @Override
     public String toString() {
@@ -22,31 +17,12 @@ public class ConfigCondition implements ICondition {
     }
 
     @Override
-    public ResourceLocation getID() {
-        return NAME;
-    }
-
-    @Override
     public boolean test(IContext iContext) {
         return (boolean) CommonConfig.COMMON.config.get(this.configPath).get();
     }
 
-    public static class Serializer implements IConditionSerializer<ConfigCondition> {
-        public static final Serializer INSTANCE = new Serializer();
-
-        @Override
-        public void write(JsonObject jsonObject, ConfigCondition iCondition) {
-            jsonObject.addProperty("config", iCondition.configPath);
-        }
-
-        @Override
-        public ConfigCondition read(JsonObject jsonObject) {
-            return new ConfigCondition(GsonHelper.getAsString(jsonObject, "config"));
-        }
-
-        @Override
-        public ResourceLocation getID() {
-            return ConfigCondition.NAME;
-        }
+    @Override
+    public MapCodec<ConfigCondition> codec() {
+        return CODEC;
     }
 }

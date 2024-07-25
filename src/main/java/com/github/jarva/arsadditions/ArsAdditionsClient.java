@@ -5,8 +5,10 @@ import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
 import com.github.jarva.arsadditions.client.util.BookUtil;
 import com.github.jarva.arsadditions.client.util.CompassUtil;
 import com.github.jarva.arsadditions.common.util.FillUtil;
+import com.github.jarva.arsadditions.mixin.PageTextAccessor;
 import com.github.jarva.arsadditions.setup.networking.OpenTerminalPacket;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -16,21 +18,22 @@ import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import vazkii.patchouli.api.BookContentsReloadEvent;
 import vazkii.patchouli.client.book.BookPage;
+import vazkii.patchouli.client.book.page.PageText;
 
 public class ArsAdditionsClient {
     public static KeyMapping openTerm;
 
-    @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = ArsAdditions.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void initKeybinds(RegisterKeyMappingsEvent evt) {
@@ -55,9 +58,7 @@ public class ArsAdditionsClient {
                 });
                 ItemProperties.register(AddonItemRegistry.WAYFINDER.get(), ArsAdditions.prefix("angle"), new CompassItemPropertyFunction(new CompassUtil()));
                 ItemProperties.register(AddonItemRegistry.WAYFINDER.get(), ArsAdditions.prefix("pos"), (stack, level, entity, seed) -> {
-                    CompoundTag tag = stack.getTag();
-                    if (tag == null) return 0.0F;
-                    return tag.contains("Structure") ? 1.0F : 0.0F;
+                    return stack.has(AddonDataComponentRegistry.WAYFINDER_DATA) ? 1.0F : 0.0F;
                 });
             });
         }
@@ -69,12 +70,12 @@ public class ArsAdditionsClient {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = ArsAdditions.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
     public static class ClientForgeEvents {
 
         @SubscribeEvent
-        public static void clientTick(TickEvent.ClientTickEvent evt) {
-            if (Minecraft.getInstance().player == null || evt.phase == TickEvent.Phase.START)
+        public static void clientTick(ClientTickEvent.Post evt) {
+            if (Minecraft.getInstance().player == null)
                 return;
 
             if(openTerm.consumeClick()) {
@@ -88,21 +89,30 @@ public class ArsAdditionsClient {
             if (!bookId.equals(BookUtil.WORN_NOTEBOOK)) return;
 
             BookUtil.addRelation(
-                    new ResourceLocation(ArsNouveau.MODID, "machines/storage_lectern"),
-                    new ResourceLocation(ArsNouveau.MODID, "machines/warp_indexes")
+                    ArsNouveau.prefix("machines/storage_lectern"),
+                    ArsNouveau.prefix("machines/warp_indexes")
             );
             BookPage wixiePage = BookUtil.newTextPage(
                     "ars_additions.page.wixie_enchanting_apparatus",
                     "ars_additions.page1.wixie_enchanting_apparatus"
             );
-            BookUtil.addPage(new ResourceLocation(ArsNouveau.MODID, "automation/wixie_charm"), wixiePage,
+            BookUtil.addPage(ArsNouveau.prefix("automation/wixie_charm"), wixiePage, true, page -> {
+                if (page instanceof PageText text) {
+                    PageTextAccessor textAccessor = (PageTextAccessor) text;
+                    String title = textAccessor.getTitle();
+                    if (title == null) return false;
+                    return title.equals("ars_nouveau.potion_crafting");
+                }
+                return false;
+            });
+            BookUtil.addPage(ArsNouveau.prefix("automation/wixie_charm"), wixiePage,
                     true, page -> BookUtil.isTextPage(page, "ars_nouveau.potion_crafting"));
 
             BookPage bulkScribing = BookUtil.newTextPage(
                     "ars_additions.page.bulk_scribing",
                     "ars_additions.page1.bulk_scribing"
             );
-            BookUtil.addPage(new ResourceLocation(ArsNouveau.MODID, "machines/scribes_block"), bulkScribing,
+            BookUtil.addPage(ArsNouveau.prefix("machines/scribes_block"), bulkScribing,
                     true, page -> BookUtil.isTextPage(page, "ars_nouveau.scribing"));
         }
     }

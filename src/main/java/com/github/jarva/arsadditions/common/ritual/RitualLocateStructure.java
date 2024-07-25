@@ -1,25 +1,26 @@
 package com.github.jarva.arsadditions.common.ritual;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.item.data.WayfinderData;
 import com.github.jarva.arsadditions.common.recipe.LocateStructureRecipe;
 import com.github.jarva.arsadditions.common.util.LangUtil;
 import com.github.jarva.arsadditions.server.util.LocateUtil;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
-import com.github.jarva.arsadditions.setup.registry.recipes.LocateStructureRegistry;
-import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.LodestoneTracker;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +31,7 @@ public class RitualLocateStructure extends AbstractRitual {
     @Nullable private Optional<LocateStructureRecipe> recipe;
 
     private Optional<LocateStructureRecipe> getRecipe() {
-        return LocateStructureRegistry.INSTANCE.getRecipes().stream().filter(r -> r.matches(getConsumedItems())).findFirst();
+        return AddonRecipeRegistry.LOCATE_STRUCTURE_REGISTRY.getRecipes().stream().filter(r -> r.value().matches(getConsumedItems())).findFirst().map(RecipeHolder::value);
     }
 
     @Override
@@ -64,14 +65,11 @@ public class RitualLocateStructure extends AbstractRitual {
             BlockPos pos = pair.getFirst();
             Holder<Structure> structure = pair.getSecond();
             ItemStack wayfinder = new ItemStack(AddonItemRegistry.WAYFINDER.get(), 1);
-            CompoundTag wayfinderTag = wayfinder.getOrCreateTag();
             structure.unwrapKey().map(key -> LangUtil.toTitleCase(key.location().getPath())).ifPresent(component -> {
-                wayfinderTag.putString("Structure", Component.Serializer.toJson(component));
+                wayfinder.set(AddonDataComponentRegistry.WAYFINDER_DATA, new WayfinderData(component));
             });
             GlobalPos global = GlobalPos.of(serverLevel.dimension(), pos);
-            GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, global).result().ifPresent(tag ->   {
-                wayfinderTag.put("Locator", tag);
-            });
+            wayfinder.set(DataComponents.LODESTONE_TRACKER, new LodestoneTracker(Optional.of(global), false));
 
             dispenseItem(world, wayfinder, getPos());
             setFinished();

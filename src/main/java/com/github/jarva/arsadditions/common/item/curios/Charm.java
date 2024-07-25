@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.common.item.curios;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.item.data.CharmData;
 import com.github.jarva.arsadditions.server.util.TeleportUtil;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
@@ -10,9 +11,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -23,24 +23,25 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.LodestoneTracker;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
+import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = ArsAdditions.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class Charm extends ArsNouveauCurio {
 
     private final int uses;
@@ -51,25 +52,16 @@ public class Charm extends ArsNouveauCurio {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext context, List<Component> tooltip2, TooltipFlag flagIn) {
+        super.appendHoverText(stack, context, tooltip2, flagIn);
+
         tooltip.add(Component.translatable("tooltip.ars_additions.charm.desc").withStyle(ChatFormatting.GRAY));
 
-        int charges = stack.hasTag() ? stack.getTag().getInt("charges") : uses;
+        int charges = CharmData.getOrDefault(stack, uses).charges();
         tooltip.add(Component.translatable("tooltip.ars_additions.charm.charges", charges, uses).withStyle(ChatFormatting.GOLD));
 
         String descKey = Util.makeDescriptionId("tooltip", BuiltInRegistries.ITEM.getKey(this));
         tooltip.add(Component.translatable(descKey).withStyle(ChatFormatting.GRAY));
-
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-    }
-
-    @Override
-    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains("charges")) {
-            tag.putInt("charges", uses);
-        }
-        return super.initCapabilities(stack, nbt);
     }
 
     @Override
@@ -79,15 +71,12 @@ public class Charm extends ArsNouveauCurio {
 
     @Override
     public int getDamage(ItemStack stack) {
-        if (!stack.hasTag()) return 0;
-        int charges = stack.getOrCreateTag().getInt("charges");
-        return uses - charges;
+        return uses - CharmData.getOrDefault(stack, uses).charges();
     }
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        if (!stack.hasTag()) return false;
-        int charges = stack.getOrCreateTag().getInt("charges");
+        int charges = CharmData.getOrDefault(stack, uses).charges();
         return charges != uses;
     }
 
@@ -200,9 +189,9 @@ public class Charm extends ArsNouveauCurio {
             BlockPos below = entity.blockPosition().below();
             return entity.level().getBlockState(below).isRedstoneConductor(entity.level(), below);
         }, (e, curio) -> {
-            GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, GlobalPos.of(e.level().dimension(), e.blockPosition())).result().ifPresent(pos -> {
-                curio.getTag().put("Pos", pos);
-            });
+            GlobalPos pos = GlobalPos.of(e.level().dimension(), e.blockPosition());
+            LodestoneTracker tracker = new LodestoneTracker(Optional.of(pos), false);
+            curio.set(DataComponents.LODESTONE_TRACKER, tracker);
             return 0;
         });
     }
@@ -223,36 +212,38 @@ public class Charm extends ArsNouveauCurio {
     }
 
     @SubscribeEvent
-    public static void handleDamage(LivingAttackEvent event) {
+    public static void handleDamage(LivingDamageEvent.Pre event) {
         CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.FIRE_RESISTANCE, () -> event.getSource().is(DamageTypeTags.IS_FIRE), (entity, curio) -> {
-            event.setCanceled(true);
+            event.setNewDamage(0);
 
             if (event.getSource().is(DamageTypes.LAVA)) {
-                return CharmRegistry.every(10, entity, (int) event.getAmount());
+                return CharmRegistry.every(10, entity, (int) event.getOriginalDamage());
             }
 
-            return (int) event.getAmount();
+            return (int) event.getOriginalDamage();
         });
         CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.WATER_BREATHING, () -> event.getSource().is(DamageTypeTags.IS_DROWNING), (entity, curio) -> {
-            event.setCanceled(true);
+            event.setNewDamage(0);
 
-            return (int) event.getAmount();
+            return (int) event.getOriginalDamage();
         });
         CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.VOID_PROTECTION, () -> event.getSource().is(DamageTypes.FELL_OUT_OF_WORLD), (entity, curio) -> {
-            event.setCanceled(true);
+            event.setNewDamage(0);
 
             if (entity.level() instanceof ServerLevel serverLevel) {
-                CompoundTag tag = curio.getTag();
-                GlobalPos.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("Pos")).result().ifPresent(pos -> {
-                    TeleportUtil.teleport(serverLevel.getServer().getLevel(pos.dimension()), pos.pos(), entity.getRotationVector(), entity);
-                    entity.resetFallDistance();
-                });
+                LodestoneTracker tracker = curio.get(DataComponents.LODESTONE_TRACKER);
+                if (tracker != null) {
+                    tracker.target().ifPresent(pos -> {
+                        TeleportUtil.teleport(serverLevel.getServer().getLevel(pos.dimension()), pos.pos(), entity.getRotationVector(), entity);
+                        entity.resetFallDistance();
+                    });
+                }
             }
 
             return 1;
         });
         CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.SONIC_BOOM_PROTECTION, () -> event.getSource().is(DamageTypes.SONIC_BOOM), (entity, curio) -> {
-            event.setCanceled(true);
+            event.setNewDamage(0);
 
             return 1;
         });
@@ -261,7 +252,7 @@ public class Charm extends ArsNouveauCurio {
     @SubscribeEvent
     public static void denyMobEffects(MobEffectEvent.Applicable event) {
         CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.WITHER_PROTECTION, () -> event.getEffectInstance().getEffect().equals(MobEffects.WITHER), (entity, curio) -> {
-            event.setResult(Event.Result.DENY);
+            event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
             return CharmRegistry.every(2, entity, 1);
         });
     }

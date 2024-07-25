@@ -1,30 +1,30 @@
 package com.github.jarva.arsadditions.setup.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.function.Function;
 
 public class ServerConfig {
-    public final HashMap<String, ForgeConfigSpec.ConfigValue<?>> config = new HashMap<>();
-    public final ForgeConfigSpec.IntValue chunkloading_cost;
-    public final ForgeConfigSpec.BooleanValue chunkloading_has_cost;
-    public final ForgeConfigSpec.BooleanValue chunkloading_repeat_cost;
-    public final ForgeConfigSpec.IntValue chunkloading_cost_interval;
-    public final ForgeConfigSpec.BooleanValue chunkloading_require_online;
-    public final ForgeConfigSpec.IntValue chunkloading_initial_radius;
-    public final ForgeConfigSpec.BooleanValue chunkloading_radius_incremental;
-    public final ForgeConfigSpec.ConfigValue<String> chunkloading_radius_increment_item;
-    public final ForgeConfigSpec.IntValue chunkloading_radius_increment_max;
-    public final ForgeConfigSpec.IntValue chunkloading_player_limit;
-    public final ForgeConfigSpec.BooleanValue chunkloading_log_loading;
-    public final ForgeConfigSpec.IntValue reliquary_cost_player;
-    public final ForgeConfigSpec.IntValue reliquary_cost_entity;
-    public final ForgeConfigSpec.IntValue reliquary_cost_location;
-    public final ForgeConfigSpec.IntValue reliquary_effect_duration;
+    public final HashMap<String, ModConfigSpec.ConfigValue<?>> config = new HashMap<>();
+    public final ModConfigSpec.IntValue chunkloading_cost;
+    public final ModConfigSpec.BooleanValue chunkloading_has_cost;
+    public final ModConfigSpec.BooleanValue chunkloading_repeat_cost;
+    public final ModConfigSpec.IntValue chunkloading_cost_interval;
+    public final ModConfigSpec.BooleanValue chunkloading_require_online;
+    public final ModConfigSpec.IntValue chunkloading_initial_radius;
+    public final ModConfigSpec.BooleanValue chunkloading_radius_incremental;
+    public final ModConfigSpec.ConfigValue<String> chunkloading_radius_increment_item;
+    public final ModConfigSpec.IntValue chunkloading_radius_increment_max;
+    public final ModConfigSpec.IntValue chunkloading_player_limit;
+    public final ModConfigSpec.BooleanValue chunkloading_log_loading;
+    public final ModConfigSpec.IntValue reliquary_cost_player;
+    public final ModConfigSpec.IntValue reliquary_cost_entity;
+    public final ModConfigSpec.IntValue reliquary_cost_location;
+    public final ModConfigSpec.IntValue reliquary_effect_duration;
 
-    ServerConfig(ForgeConfigSpec.Builder builder) {
+    ServerConfig(ModConfigSpec.Builder builder) {
         builder.comment("Ritual of Arcane Permanence").push("chunkloading");
         chunkloading_has_cost = addConfig( "has_cost", (name) -> builder.comment("Should the ritual cost source?").define(name, true));
         chunkloading_repeat_cost = addConfig("repeat_cost", (name) -> builder.comment("Should the ritual cost be continuous?").define(name, true));
@@ -46,17 +46,17 @@ public class ServerConfig {
         reliquary_effect_duration = addConfig("effect_duration", (name) -> builder.comment("How long should the Marked effect last (in seconds) when Mark is cast on a player?").defineInRange(name, 300, 0, 900));
     }
 
-    public <T extends ForgeConfigSpec.ConfigValue<?>> T addConfig(String name, Function<String, T> consumer) {
+    public <T extends ModConfigSpec.ConfigValue<?>> T addConfig(String name, Function<String, T> consumer) {
         T value = consumer.apply(name);
         config.put(name, value);
         return value;
     }
 
     public static final ServerConfig SERVER;
-    public static final ForgeConfigSpec SERVER_SPEC;
+    public static final ModConfigSpec SERVER_SPEC;
 
     static {
-        Pair<ServerConfig, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
+        Pair<ServerConfig, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(ServerConfig::new);
         SERVER_SPEC = pair.getRight();
         SERVER = pair.getLeft();
     }

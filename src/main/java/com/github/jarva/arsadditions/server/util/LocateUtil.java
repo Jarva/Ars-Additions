@@ -7,7 +7,9 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
 import com.hollingsworth.arsnouveau.common.items.WarpScroll;
+import com.hollingsworth.arsnouveau.common.items.data.WarpScrollData;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
@@ -25,7 +27,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
@@ -122,11 +124,11 @@ public class LocateUtil {
         boolean skipKnown = ExplorationScrollFunction.DEFAULT_SKIP_EXISTING;
         if (tag != null) {
             if (tag.contains("resource")) {
-                ResourceKey<Structure> key = ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(tag.getString("resource")));
+                ResourceKey<Structure> key = ResourceKey.create(Registries.STRUCTURE, ResourceLocation.withDefaultNamespace(tag.getString("resource")));
                 holderSet = LocateUtil.holderFromResource(level, key);
             }
             if (tag.contains("tag")) {
-                TagKey<Structure> key = TagKey.create(Registries.STRUCTURE, new ResourceLocation(tag.getString("tag")));
+                TagKey<Structure> key = TagKey.create(Registries.STRUCTURE, ResourceLocation.withDefaultNamespace(tag.getString("tag")));
                 holderSet = LocateUtil.holderFromTag(level, key);
             }
             if (tag.contains("origin")) {
@@ -153,7 +155,7 @@ public class LocateUtil {
                     level.getServer().submit(() -> consumer.accept(null));
                     return;
                 }
-                Pair<BlockPos, Holder<Structure>> modified = pair.mapFirst(pos -> findBlockPos(level, pair.getSecond().get(), pos));
+                Pair<BlockPos, Holder<Structure>> modified = pair.mapFirst(pos -> findBlockPos(level, pair.getSecond().value(), pos));
                 level.getServer().submit(() -> consumer.accept(modified));
             });
         } else {
@@ -163,16 +165,15 @@ public class LocateUtil {
                 consumer.accept(null);
                 return;
             }
-            Pair<BlockPos, Holder<Structure>> modified = pair.mapFirst(pos -> findBlockPos(level, pair.getSecond().get(), pos));
+            Pair<BlockPos, Holder<Structure>> modified = pair.mapFirst(pos -> findBlockPos(level, pair.getSecond().value(), pos));
             consumer.accept(modified);
         }
     }
 
-    public static WarpScroll.WarpScrollData setScrollData(ServerLevel level, ItemStack stack, BlockPos pos) {
-        WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
-
-        data.setData(pos, level.dimension().location().toString(), Vec2.ZERO);
-        return data;
+    public static WarpScrollData setScrollData(ServerLevel level, ItemStack stack, BlockPos pos) {
+        return stack.update(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true), (data) ->
+            data.setPos(pos, level.dimension().location().toString()).setRotation(Vec2.ZERO)
+        );
     }
 
     public static BlockPos findBlockPos(ServerLevel level, Structure structure, BlockPos pos) {

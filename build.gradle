@@ -1,36 +1,5 @@
 plugins {
-    id "dev.architectury.loom" version "1.6-SNAPSHOT"
-    id "maven-publish"
-}
-
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = project.archives_base_name
-version = "${project.minecraft_version}-${new File('version').text.trim()}"
-group = project.maven_group
-
-def generatedResources = file("src/generated")
-sourceSets {
-    main {
-        resources.srcDir generatedResources
-    }
-}
-
-loom {
-    runs {
-        data {
-            data()
-            programArgs "--all", "--mod", "ars_additions", "--existing-mod", "ars_nouveau"
-            programArgs "--existing", file("src/main/resources").absolutePath
-            programArgs "--output", generatedResources.absolutePath
-        }
-    }
-
-    forge {
-        mixinConfigs = [
-                "ars_additions.mixins.json"
-        ]
-    }
+    id 'net.neoforged.moddev' version '1.0.14'
 }
 
 repositories {
@@ -39,46 +8,43 @@ repositories {
             includeGroup "com.hollingsworth.ars_nouveau"
         }
     }
-
     maven {
         name = 'ParchmentMC'
         url = 'https://maven.parchmentmc.org'
     }
-
-    maven { url = 'https://files.minecraftforge.net/maven/' }
-
-    maven {
-        url = "https://maven.theillusivec4.top/"
-    }
-    maven {
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
-    maven {
-        url = "https://maven.blamejared.com"
-    }
-    maven {
-        url = "https://www.cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-
-    maven { url 'https://jitpack.io' }
-
     maven {
         name = 'GeckoLib'
         url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
         content {
-            includeGroupByRegex("software\\.bernie.*")
-            includeGroup("com.eliotlash.mclib")
+            includeGroup("software.bernie.geckolib")
         }
     }
-
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        name = 'Forge'
+        url = "https://maven.minecraftforge.net"
+    }
+    maven {
+        name = "OctoStudios"
+        url = uri("https://maven.octo-studios.com/releases")
+    }
+    maven {
+        name = "Illusive Soulworks maven"
+        url = "https://maven.theillusivec4.top/"
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
     exclusiveContent {
         forRepository {
             maven {
@@ -93,79 +59,45 @@ repositories {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    implementation "com.hollingsworth.ars_nouveau:ars_nouveau-${project.minecraft_version}:${project.ars_version}"
+    implementation "software.bernie.geckolib:geckolib-neoforge-${project.mc_version}:${project.gecko_version}"
+    implementation "vazkii.patchouli:Patchouli:${project.mc_version}-${project.patchouli_version}"
 
-    mappings loom.layered() {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_mappings}@zip")
-    }
+    compileOnly "mezz.jei:jei-${project.mc_version}-neoforge-api:${project.jei_version}"
+    implementation "mezz.jei:jei-${project.mc_version}-neoforge:${project.jei_version}"
 
-    forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
+    implementation "top.theillusivec4.curios:curios-neoforge:${project.curios_version}+${project.mc_version}"
+    implementation "com.github.glitchfiend:TerraBlender-forge:${project.mc_version}-${project.terrablender_version}"
 
-    modImplementation "com.hollingsworth.ars_nouveau:ars_nouveau-${project.minecraft_version}:${project.ars_version}"
-    modImplementation "software.bernie.geckolib:geckolib-forge-${project.minecraft_version}:${project.gecko_version}"
-    forgeRuntimeLibrary "com.eliotlash.mclib:mclib:20"
-    modImplementation "vazkii.patchouli:Patchouli:${project.minecraft_version}-${project.patchouli_version}"
-
-    modCompileOnlyApi "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"
-    modCompileOnlyApi "mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}"
-
-    modRuntimeOnly("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
-
-    modImplementation "top.theillusivec4.curios:curios-forge:${project.curios_version}+${project.minecraft_version}"
-    modImplementation "com.github.glitchfiend:TerraBlender-forge:${project.minecraft_version}-${project.terrablender_version}"
-
-    implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-common:0.2.0-beta.8"))
-    implementation("com.github.llamalad7.mixinextras:mixinextras-forge:0.2.0-beta.8")
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
-    // https://modrinth.com/mod/async-locator/version/Eip0qUwF
-    modCompileOnlyApi "maven.modrinth:async-locator:${project.asynclocator_version}"
+    compileOnly "maven.modrinth:async-locator:${project.asynclocator_version}"
 }
 
-processResources {
-    inputs.property "version", project.version
+neoForge {
+    version = project.neoforge_version
 
-    filesMatching("META-INF/mods.toml") {
-        expand "version": project.version
-    }
-}
+    validateAccessTransformers = true
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-    options.release = 17
-}
-
-java {
-    withSourcesJar()
-}
-
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : project.mod_id,
-                "Specification-Vendor"    : project.mod_author,
-                "Specification-Version"   : "1",
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : version,
-                "Implementation-Vendor"   : project.mod_author,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-// configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+    runs {
+        client {
+            client()
+        }
+        data {
+            data()
+            programArguments.addAll("--all", "--mod", "ars_additions", "--existing-mod", "ars_nouveau", "--existing", file("src/main/resources").absolutePath, "--output", file("src/generated").absolutePath)
+        }
+        server {
+            server()
         }
     }
 
-    repositories {}
+    mods {
+        ars_additions {
+            sourceSet sourceSets.main
+        }
+    }
+
+    parchment {
+        minecraftVersion = project.mc_version
+        mappingsVersion = project.parchment_mappings
+    }
 }

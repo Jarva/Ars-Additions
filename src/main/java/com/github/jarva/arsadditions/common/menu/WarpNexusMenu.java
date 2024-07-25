@@ -2,8 +2,8 @@ package com.github.jarva.arsadditions.common.menu;
 
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
-import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
-import com.hollingsworth.arsnouveau.common.items.WarpScroll;
+import com.hollingsworth.arsnouveau.common.items.data.WarpScrollData;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,8 +12,8 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class WarpNexusMenu  extends AbstractContainerMenu {
@@ -37,7 +37,7 @@ public class WarpNexusMenu  extends AbstractContainerMenu {
                         boolean isWarpScroll = stack.is(ItemsRegistry.WARP_SCROLL.get()) || stack.is(ItemsRegistry.STABLE_WARP_SCROLL.get()) || stack.is(AddonItemRegistry.NEXUS_WARP_SCROLL.get());
                         if (!isWarpScroll) return false;
 
-                        WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
+                        WarpScrollData data = stack.getOrDefault(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true));
                         return data.isValid();
                     }
                 });

@@ -6,6 +6,7 @@ import com.github.jarva.arsadditions.server.storage.ChunkLoadingData;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -114,7 +115,7 @@ public class RitualChunkLoading extends AbstractRitual {
 
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, item);
         Optional<? extends Holder<Item>> optional = getWorld().holderLookup(Registries.ITEM).get(key);
-        return optional.map(Holder::get).orElse(null);
+        return optional.map(Holder::value).orElse(null);
     }
 
     @Override
@@ -198,8 +199,8 @@ public class RitualChunkLoading extends AbstractRitual {
     }
 
     @Override
-    public void write(CompoundTag tag) {
-        super.write(tag);
+    public void write(HolderLookup.Provider provider, CompoundTag tag) {
+        super.write(provider, tag);
         tag.putInt("ticksSinceStart", ticksSinceStart);
         if (activatedPlayer != null) {
             tag.putUUID("activatedPlayer", activatedPlayer);
@@ -207,8 +208,8 @@ public class RitualChunkLoading extends AbstractRitual {
     }
 
     @Override
-    public void read(CompoundTag tag) {
-        super.read(tag);
+    public void read(HolderLookup.Provider provider, CompoundTag tag) {
+        super.read(provider, tag);
         ticksSinceStart = tag.getInt("ticksSinceStart");
         if (tag.contains("activatedPlayer")) {
             activatedPlayer = tag.getUUID("activatedPlayer");

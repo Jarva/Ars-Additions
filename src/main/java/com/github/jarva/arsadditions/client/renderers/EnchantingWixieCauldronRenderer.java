@@ -12,9 +12,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.util.RenderUtils;
+import software.bernie.geckolib.util.RenderUtil;
 
 public class EnchantingWixieCauldronRenderer extends ArsGeoBlockRenderer<EnchantingWixieCauldronTile> {
     public static GeoModel<EnchantingWixieCauldronTile> model = new GenericModel<>("enchanting_apparatus");
@@ -23,8 +24,8 @@ public class EnchantingWixieCauldronRenderer extends ArsGeoBlockRenderer<Enchant
     }
 
     @Override
-    public void renderFinal(PoseStack poseStack, EnchantingWixieCauldronTile animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        super.renderFinal(poseStack, animatable, model, bufferSource, buffer, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderFinal(PoseStack poseStack, EnchantingWixieCauldronTile animatable, BakedGeoModel model, MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, int colour) {
+        super.renderFinal(poseStack, animatable, model, bufferSource, buffer, partialTick, packedLight, packedOverlay, colour);
 
         WixieCauldronAccessor wixie = (WixieCauldronAccessor) animatable;
         ItemStack stack = wixie.getStackBeingCrafted();
@@ -32,7 +33,7 @@ public class EnchantingWixieCauldronRenderer extends ArsGeoBlockRenderer<Enchant
 
         model.getBone("frame_all").ifPresent(frame -> {
             poseStack.pushPose();
-            RenderUtils.translateMatrixToBone(poseStack, frame);
+            RenderUtil.translateMatrixToBone(poseStack, frame);
             poseStack.translate(0.5, +0.5, 0.5);
             poseStack.scale(0.75f, 0.75f, 0.75f);
             Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, poseStack, bufferSource, animatable.getLevel(), (int) animatable.getBlockPos().asLong());

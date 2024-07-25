@@ -6,6 +6,7 @@ import com.github.jarva.arsadditions.server.storage.EnderSourceData;
 import com.hollingsworth.arsnouveau.common.block.ITickable;
 import com.hollingsworth.arsnouveau.common.block.tile.SourceJarTile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,24 +46,19 @@ public class EnderSourceJarTile extends SourceJarTile implements ITickable {
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        super.handleUpdateTag(tag);
-    }
-
-    @Override
-    public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider pRegistries) {
+        super.saveAdditional(tag, pRegistries);
         if (getOwner() != null) {
             tag.putUUID(OWNER_UUID_TAG, getOwner());
         }
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider pRegistries) {
         if (tag.hasUUID(OWNER_UUID_TAG)) {
             this.setOwner(tag.getUUID(OWNER_UUID_TAG));
         }
-        super.load(tag);
+        super.loadAdditional(tag, pRegistries);
     }
 
     @Override

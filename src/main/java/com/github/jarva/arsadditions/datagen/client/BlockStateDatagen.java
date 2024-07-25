@@ -12,22 +12,22 @@ import com.hollingsworth.arsnouveau.common.items.Glyph;
 import com.hollingsworth.arsnouveau.common.items.RitualTablet;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.registry.ItemRegistryWrapper;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.function.Supplier;
 
-import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
+import static net.neoforged.neoforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
 public class BlockStateDatagen extends BlockStateProvider {
     private final ExistingFileHelper fileHelper;
@@ -51,7 +51,7 @@ public class BlockStateDatagen extends BlockStateProvider {
             itemModels().basicItem(tablet);
         }
 
-        for (RegistryObject<Item> item : AddonItemRegistry.DATAGEN_ITEMS) {
+        for (ItemRegistryWrapper<Item> item : AddonItemRegistry.DATAGEN_ITEMS) {
             itemModels().basicItem(item.get());
         }
 
@@ -62,13 +62,13 @@ public class BlockStateDatagen extends BlockStateProvider {
 
         simpleBlockWithItem(AddonBlockRegistry.SOURCE_SPAWNER.get(), "cutout");
 
-        wallBlockAndItem(AddonBlockNames.SOURCESTONE_WALL, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SOURCESTONE_LARGE_BRICKS));
-        wallBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_WALL, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SMOOTH_SOURCESTONE_LARGE_BRICKS));
-        wallBlockAndItem(AddonBlockNames.CRACKED_SOURCESTONE_WALL, new ResourceLocation(ArsAdditions.MODID, AddonBlockNames.CRACKED_SOURCESTONE));
-        wallBlockAndItem(AddonBlockNames.CRACKED_POLISHED_SOURCESTONE_WALL, new ResourceLocation(ArsAdditions.MODID, AddonBlockNames.CRACKED_POLISHED_SOURCESTONE));
+        wallBlockAndItem(AddonBlockNames.SOURCESTONE_WALL, ArsNouveau.prefix(LibBlockNames.SOURCESTONE_LARGE_BRICKS));
+        wallBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_WALL, ArsNouveau.prefix(LibBlockNames.SMOOTH_SOURCESTONE_LARGE_BRICKS));
+        wallBlockAndItem(AddonBlockNames.CRACKED_SOURCESTONE_WALL, ArsAdditions.prefix(AddonBlockNames.CRACKED_SOURCESTONE));
+        wallBlockAndItem(AddonBlockNames.CRACKED_POLISHED_SOURCESTONE_WALL, ArsAdditions.prefix(AddonBlockNames.CRACKED_POLISHED_SOURCESTONE));
 
-        buttonBlockAndItem(AddonBlockNames.SOURCESTONE_BUTTON, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SOURCESTONE));
-        buttonBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_BUTTON, new ResourceLocation(ArsNouveau.MODID, LibBlockNames.SMOOTH_SOURCESTONE));
+        buttonBlockAndItem(AddonBlockNames.SOURCESTONE_BUTTON, ArsNouveau.prefix(LibBlockNames.SOURCESTONE));
+        buttonBlockAndItem(AddonBlockNames.POLISHED_SOURCESTONE_BUTTON, ArsNouveau.prefix(LibBlockNames.SMOOTH_SOURCESTONE));
 
         for (String lantern : AddonBlockNames.LANTERNS) {
             lanternAndItem(lantern);
@@ -177,7 +177,7 @@ public class BlockStateDatagen extends BlockStateProvider {
     private void wallBlockAndItem(String wallName, ResourceLocation texture) {
         WallBlock block = (WallBlock) AddonBlockRegistry.getBlock(wallName);
         texture = texture.withPrefix("block/");
-        String name = ForgeRegistries.BLOCKS.getKey(block).toString().replace("_wall", "");
+        String name = key(block).toString().replace("_wall", "");
         wallBlock(block, name, texture);
         ModelFile inventory = models().wallInventory(name + "_inventory", texture);
         simpleBlockItem(block, inventory);
@@ -186,14 +186,14 @@ public class BlockStateDatagen extends BlockStateProvider {
     private void buttonBlockAndItem(String buttonName, ResourceLocation texture) {
         ButtonBlock block = (ButtonBlock) AddonBlockRegistry.getBlock(buttonName);
         texture = texture.withPrefix("block/");
-        String name = ForgeRegistries.BLOCKS.getKey(block).toString();
+        String name = key(block).toString();
         buttonBlock(block, texture);
         ModelFile inventory = models().buttonInventory(name + "_inventory", texture);
         simpleBlockItem(block, inventory);
     }
 
     public ResourceLocation key(Block block) {
-        return ForgeRegistries.BLOCKS.getKey(block);
+        return BuiltInRegistries.BLOCK.getKey(block);
     }
 
     public ResourceLocation getTextureLoc(Block block) {

@@ -1,25 +1,19 @@
 package com.github.jarva.arsadditions.common.item;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.item.data.HaversackData;
 import com.github.jarva.arsadditions.common.util.LangUtil;
 import com.github.jarva.arsadditions.server.util.PlayerInvUtil;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
-import com.google.common.collect.Lists;
 import com.hollingsworth.arsnouveau.api.item.IScribeable;
 import com.hollingsworth.arsnouveau.api.item.inv.FilterableItemHandler;
 import com.hollingsworth.arsnouveau.api.item.inv.InventoryManager;
-import com.hollingsworth.arsnouveau.api.util.InvUtil;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -35,15 +29,12 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +42,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@Mod.EventBusSubscriber(modid = ArsAdditions.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = ArsAdditions.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class HandyHaversack extends Item implements IScribeable {
     public HandyHaversack() {
         super(new Properties().stacksTo(1));
@@ -64,11 +55,9 @@ public class HandyHaversack extends Item implements IScribeable {
         if (level.getGameTime() % 10 == 0) return;
 
         HaversackData.fromItemStack(stack).ifPresent(data -> {
-            CompoundTag tag = stack.getOrCreateTag();
-            boolean curr = tag.contains("loaded") && tag.getBoolean("loaded");
-            boolean loaded = level.isLoaded(data.pos);
-            if (curr != loaded) {
-                tag.putBoolean("loaded", loaded);
+            boolean loaded = level.getServer().getLevel(data.level()).isLoaded(data.pos());
+            if (data.loaded() != loaded) {
+                data.toggleLoaded();
             }
         });
     }
@@ -81,7 +70,7 @@ public class HandyHaversack extends Item implements IScribeable {
         ItemStack stack = player.getItemInHand(usedHand);
         return HaversackData.fromItemStack(stack).map(data -> {
             if (player.isShiftKeyDown()) {
-                if (data.toggle(stack)) {
+                if (data.toggle().active()) {
                     PortUtil.sendMessage(player, Component.translatable("ars_nouveau.on"));
                 } else {
                     PortUtil.sendMessage(player, Component.translatable("ars_nouveau.off"));
@@ -103,11 +92,11 @@ public class HandyHaversack extends Item implements IScribeable {
         BlockEntity be = context.getLevel().getBlockEntity(pos);
         if (be == null) return InteractionResult.PASS;
 
-        IItemHandler handler = be.getCapability(ForgeCapabilities.ITEM_HANDLER, null).orElse(null);
+        IItemHandler handler = context.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, pos, null);
         if (handler != null) {
             ItemStack stack = context.getItemInHand();
 
-            HaversackData data = new HaversackData(pos, context.getClickedFace(), context.getLevel().dimension(), true, new ArrayList<>());
+            HaversackData data = new HaversackData(pos, context.getClickedFace(), context.getLevel().dimension(), true, new ArrayList<>(), false);
             data.write(stack);
 
             if (context.getPlayer() != null) {
@@ -135,7 +124,7 @@ public class HandyHaversack extends Item implements IScribeable {
         }
         return false;
     }
-    
+
     public boolean transportItem(ItemStack haversack, ItemStack other, Player player, Consumer<ItemStack> update) {
         if (player.isCreative()) return true;
 
@@ -154,9 +143,9 @@ public class HandyHaversack extends Item implements IScribeable {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
         HaversackData.fromItemStack(stack).ifPresentOrElse(data -> {
-            tooltip.add(Component.translatable("tooltip.ars_additions.warp_index.bound", data.pos.getX(), data.pos.getY(), data.pos.getZ(), data.level.location().toString()));
+            tooltip.add(Component.translatable("tooltip.ars_additions.warp_index.bound", data.pos().getX(), data.pos().getY(), data.pos().getZ(), data.level().location().toString()));
             if (!data.items().isEmpty()) {
                 if (data.active()) {
                     tooltip.add(Component.translatable("ars_nouveau.on"));
@@ -219,73 +208,11 @@ public class HandyHaversack extends Item implements IScribeable {
     }
 
     @SubscribeEvent
-    public static void entityPickup(EntityItemPickupEvent event) {
-        Player player = event.getEntity();
-        ItemStack pickedUp = event.getItem().getItem();
-        tryStoreStack(player, pickedUp, (remainder) -> {
-            pickedUp.setCount(remainder.getCount());
-            event.setResult(Event.Result.ALLOW);
-        });
-    }
-
-    @SubscribeEvent
-    public static void playerPickup(PlayerEvent.ItemPickupEvent event) {
-        Player player = event.getEntity();
-        ItemStack pickedUp = event.getStack();
+    public static void entityPickup(ItemEntityPickupEvent.Pre event) {
+        Player player = event.getPlayer();
+        ItemStack pickedUp = event.getItemEntity().getItem();
         tryStoreStack(player, pickedUp, (remainder) -> {
             pickedUp.setCount(remainder.getCount());
         });
-    }
-
-    public record HaversackData(BlockPos pos, Direction side, ResourceKey<Level> level, Boolean active, ArrayList<ItemStack> items) {
-        public static final String TAG_KEY = "haversack";
-
-        public static final Codec<HaversackData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            BlockPos.CODEC.fieldOf("BindPos").forGetter(HaversackData::pos),
-            Direction.CODEC.optionalFieldOf("BindDirection", Direction.UP).forGetter(HaversackData::side),
-            Level.RESOURCE_KEY_CODEC.fieldOf("BindDim").forGetter(HaversackData::level),
-            Codec.BOOL.optionalFieldOf("Active", false).forGetter(HaversackData::active),
-            ItemStack.CODEC.listOf().optionalFieldOf("Items", List.of()).xmap(Lists::newArrayList, list -> list).forGetter(HaversackData::items)
-        ).apply(instance, HaversackData::new));
-
-        public static Optional<HaversackData> fromItemStack(ItemStack stack) {
-            return CODEC.parse(NbtOps.INSTANCE, stack.getOrCreateTag().getCompound(TAG_KEY)).result();
-        }
-
-        public boolean toggle(ItemStack stack) {
-            HaversackData toggled = new HaversackData(pos, side, level, !active, items);
-            toggled.write(stack);
-            return toggled.active;
-        }
-
-        public void write(ItemStack stack) {
-            CODEC.encodeStart(NbtOps.INSTANCE, this).result().ifPresent(tag -> {
-                stack.getOrCreateTag().put(TAG_KEY, tag);
-            });
-        }
-
-        public boolean add(ItemStack stack) {
-            return items.add(stack.copy());
-        }
-
-        public boolean remove(ItemStack stack) {
-            return items.removeIf(s -> ItemStack.isSameItem(s, stack));
-        }
-
-        public boolean containsStack(ItemStack stack) {
-            return items.stream().anyMatch(s -> ItemStack.isSameItem(s, stack));
-        }
-
-        @Nullable
-        public FilterableItemHandler getItemHandler(Level level) {
-            if (!level.isLoaded(pos)) return null;
-
-            BlockEntity be = level.getBlockEntity(pos);
-            if (be == null) return null;
-
-            return be.getCapability(ForgeCapabilities.ITEM_HANDLER, side)
-                    .map(cap -> new FilterableItemHandler(cap, InvUtil.filtersOnTile(be)))
-                    .orElse(null);
-        }
     }
 }

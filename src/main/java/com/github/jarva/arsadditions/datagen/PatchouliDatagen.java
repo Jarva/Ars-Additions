@@ -13,15 +13,13 @@ import com.hollingsworth.arsnouveau.api.spell.AbstractEffect;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.registry.ItemRegistryWrapper;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -34,7 +32,7 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
         super(generatorIn);
     }
 
-    public static ResourceLocation STRUCTURES = new ResourceLocation(ArsNouveau.MODID, "structures");
+    public static ResourceLocation STRUCTURES = ArsNouveau.prefix("structures");
 
     @Override
     public void collectJsons(CachedOutput cache) {
@@ -107,7 +105,7 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
                 .withName("ars_additions.page.charms")
                 .withTextPage("ars_additions.page1.charms");
 
-        for (Map.Entry<CharmRegistry.CharmType, RegistryObject<Item>> entry : AddonItemRegistry.CHARMS.entrySet().stream().sorted(Comparator.comparing(entry -> entry.getKey().getName())).toList()) {
+        for (Map.Entry<CharmRegistry.CharmType, ItemRegistryWrapper<Item>> entry : AddonItemRegistry.CHARMS.entrySet().stream().sorted(Comparator.comparing(entry -> entry.getKey().getName())).toList()) {
             CharmRegistry.CharmType charmType = entry.getKey();
             Item charm = entry.getValue().get();
             String name = "page.ars_additions." + charmType.getSerializedName() + ".title";
@@ -163,17 +161,6 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
                 .withPage(new CraftingPage(Setup.root + ":tablet_" + ritual.getRegistryName().getPath()));
 
         this.pages.add(new PatchouliPage(builder, getPath(RITUALS, ritual.getRegistryName().getPath())));
-    }
-
-    public void addEnchantmentPage(Enchantment enchantment) {
-        PatchouliBuilder builder = new PatchouliBuilder(ENCHANTMENTS, enchantment.getDescriptionId())
-                .withIcon(getRegistryName(Items.ENCHANTED_BOOK).toString())
-                .withTextPage(Setup.root + ".enchantment_desc." + getRegistryName(enchantment).getPath());
-
-        for (int i = enchantment.getMinLevel(); i <= enchantment.getMaxLevel(); i++) {
-            builder.withPage(new EnchantingPage(Setup.root + ":" + getRegistryName(enchantment).getPath() + "_" + i));
-        }
-        this.pages.add(new PatchouliPage(builder, getPath(ENCHANTMENTS, getRegistryName(enchantment).getPath())));
     }
 
     public void addGlyphPage(AbstractSpellPart spellPart) {

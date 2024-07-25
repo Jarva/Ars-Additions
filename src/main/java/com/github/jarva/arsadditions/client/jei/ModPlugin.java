@@ -14,7 +14,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 
 import java.util.ArrayList;
@@ -40,8 +40,8 @@ public class ModPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         List<LocateStructureRecipe> locateStructureRecipes = new ArrayList<>();
         RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
-        for (Recipe<?> i : manager.getRecipes()) {
-            if (i instanceof LocateStructureRecipe recipe) {
+        for (RecipeHolder<?> i : manager.getRecipes()) {
+            if (i.value() instanceof LocateStructureRecipe recipe) {
                 locateStructureRecipes.add(recipe);
             }
         }

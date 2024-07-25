@@ -3,13 +3,12 @@ package com.github.jarva.arsadditions.common.item;
 import com.github.jarva.arsadditions.server.util.LocateUtil;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
-import com.hollingsworth.arsnouveau.common.items.WarpScroll;
-import net.minecraft.core.BlockPos;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -42,16 +41,8 @@ public class NexusWarpScroll extends StableWarpScroll {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        WarpScroll.WarpScrollData data = new StableWarpScroll.StableScrollData(stack);
-        if (data.isValid()) {
-            BlockPos pos = data.getPos();
-            tooltipComponents.add(Component.translatable("ars_nouveau.position", pos.getX(), pos.getY(), pos.getZ()));
-            String dimId = data.getDimension();
-            if(dimId != null) {
-                ResourceLocation resourceLocation = new ResourceLocation(dimId);
-                tooltipComponents.add(Component.translatable(resourceLocation.getPath() + "." + resourceLocation.getNamespace() + ".name"));
-            }
-        }
+    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext context, List<Component> tooltip2, TooltipFlag flagIn) {
+        super.appendHoverText(stack, context, tooltip2, flagIn);
+        stack.addToTooltip(DataComponentRegistry.WARP_SCROLL, context, tooltip2::add, flagIn);
     }
 }

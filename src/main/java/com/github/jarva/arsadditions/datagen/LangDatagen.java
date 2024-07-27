@@ -128,6 +128,9 @@ public class LangDatagen extends LanguageProvider {
         this.add("tooltip.ars_additions.charm.charges", "Charges %s / %s");
         this.add("tooltip.ars_additions.charm.desc", "Rechargeable");
 
+        this.add("tooltip.ars_additions.charm.charging", "Charging: %s");
+        this.add("tooltip.ars_additions.charm.charging_progress", "Charging Progress: %s");
+
         // Keybinds
 
         this.add("key.ars_additions.open_lectern", "[Ars Additions] Activate Warp Index");
@@ -148,6 +151,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("chat.ars_additions.warp_nexus.no_scrolls.instruction", "Press %s+%s to store a Warp Scroll.");
 
         this.add("chat.ars_additions.handy_haversack.invalid", "The Handy Haversack must be bound before scribing.");
+
+        this.add("chat.ars_additions.charm.charging_started", "Charging %s. Add source nearby to increase charge speed.");
 
         // Effects
 

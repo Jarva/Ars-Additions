@@ -5,7 +5,7 @@ import com.github.jarva.arsadditions.common.recipe.LocateStructureRecipe;
 import com.github.jarva.arsadditions.common.util.LangUtil;
 import com.github.jarva.arsadditions.server.util.LocateUtil;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
-import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
+import com.github.jarva.arsadditions.setup.registry.recipes.LocateStructureRegistry;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,7 +29,7 @@ public class RitualLocateStructure extends AbstractRitual {
     @Nullable private Optional<LocateStructureRecipe> recipe;
 
     private Optional<LocateStructureRecipe> getRecipe() {
-        return AddonRecipeRegistry.LOCATE_STRUCTURE_REGISTRY.getRecipes().stream().filter(r -> r.matches(getConsumedItems())).findFirst();
+        return LocateStructureRegistry.INSTANCE.getRecipes().stream().filter(r -> r.matches(getConsumedItems())).findFirst();
     }
 
     @Override

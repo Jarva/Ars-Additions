@@ -5,8 +5,8 @@ import com.github.jarva.arsadditions.common.recipe.SourceSpawnerRecipe;
 import com.github.jarva.arsadditions.common.util.codec.TagModifier;
 import com.github.jarva.arsadditions.datagen.tags.EntityTypeTagDatagen;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
-import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
 import com.github.jarva.arsadditions.setup.registry.ModifyTagRegistry;
+import com.github.jarva.arsadditions.setup.registry.recipes.SourceSpawnerRegistry;
 import com.hollingsworth.arsnouveau.common.block.tile.MobJarTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -141,7 +141,7 @@ public class SourceSpawner extends BaseSpawner {
     }
 
     public Optional<SourceSpawnerRecipe> getRecipe(Entity entity) {
-        return AddonRecipeRegistry.SOURCE_SPAWNER_REGISTRY.getRecipes().stream().filter(r -> r.isMatch(entity.getType())).findFirst();
+        return SourceSpawnerRegistry.INSTANCE.getRecipes().stream().filter(r -> r.isMatch(entity.getType())).findFirst();
     }
 
     public int calculateSource(Entity entity) {

@@ -7,9 +7,6 @@ import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.github.jarva.arsadditions.setup.config.CommonConfig;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
-import com.github.jarva.arsadditions.setup.registry.recipes.RecipeRegistry;
-import com.hollingsworth.arsnouveau.api.event.EventQueue;
-import com.hollingsworth.arsnouveau.api.event.ITimedEvent;
 import com.hollingsworth.arsnouveau.api.loot.DungeonLootTables;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.common.items.RitualTablet;
@@ -17,14 +14,10 @@ import com.hollingsworth.arsnouveau.setup.registry.CreativeTabRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -75,39 +68,6 @@ public class ModEvents {
                     return new ItemStack(tablets.get(DungeonLootTables.r.nextInt(tablets.size())));
                 });
             }
-        }
-
-        @SubscribeEvent(priority = EventPriority.LOWEST)
-        public static void resourceLoadEvent(AddReloadListenerEvent event) {
-            event.addListener(new SimplePreparableReloadListener<>() {
-                @Override
-                protected Object prepare(ResourceManager resourceManager, ProfilerFiller profiler) {
-                    return null;
-                }
-
-                @Override
-                protected void apply(Object object, ResourceManager resourceManager, ProfilerFiller profiler) {
-                    EventQueue.getServerInstance().addEvent(new ITimedEvent() {
-                        boolean expired;
-
-                        @Override
-                        public void tickEvent(TickEvent event) {
-                            if (event instanceof TickEvent.ServerTickEvent serverTickEvent) {
-                                RecipeRegistry.reloadAll(serverTickEvent.getServer().getRecipeManager());
-                            }
-                            expired = true;
-                        }
-
-                        @Override
-                        public void tick(boolean serverSide) {}
-
-                        @Override
-                        public boolean isExpired() {
-                            return expired;
-                        }
-                    });
-                }
-            });
         }
 
         @SubscribeEvent(priority = EventPriority.LOWEST)

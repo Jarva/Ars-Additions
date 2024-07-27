@@ -7,13 +7,11 @@ import com.github.jarva.arsadditions.setup.config.ServerConfig;
 import com.github.jarva.arsadditions.setup.networking.NetworkHandler;
 import com.github.jarva.arsadditions.setup.registry.AddonSetup;
 import com.github.jarva.arsadditions.setup.registry.ArsNouveauRegistry;
-import com.github.jarva.arsadditions.setup.registry.recipes.RecipeRegistry;
 import com.hollingsworth.arsnouveau.setup.config.ANModConfig;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -53,9 +51,6 @@ public class ArsAdditions {
 
     private void common(final FMLCommonSetupEvent event) {
         NetworkHandler.init();
-        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent e) -> {
-            RecipeRegistry.reloadAll(e.getServer().getRecipeManager());
-        });
     }
 
     private void client(final FMLClientSetupEvent event) {

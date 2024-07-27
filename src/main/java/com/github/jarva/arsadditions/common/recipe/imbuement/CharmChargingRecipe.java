@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.common.recipe.imbuement;
 
+import com.github.jarva.arsadditions.common.item.curios.Charm;
 import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
 import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
 import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
@@ -28,7 +29,9 @@ public record CharmChargingRecipe(ResourceLocation id, ResourceOrTag<Item> input
     @Override
     public boolean isMatch(ImbuementTile imbuementTile) {
         ItemStack reagent = imbuementTile.stack;
-        if (!reagent.isDamaged()) return false;
+        if (reagent.getItem() instanceof Charm charm) {
+            if (charm.getDamage(reagent) == 0) return false;
+        }
         return input.map(Ingredient::of, key -> Ingredient.of(BuiltInRegistries.ITEM.get(key)))
             .map(ingredient -> ingredient.test(imbuementTile.stack)).orElse(false);
     }

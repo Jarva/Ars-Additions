@@ -25,7 +25,7 @@ public class ImbuedSpellParchment extends SpellParchment {
     public int getUseDuration(ItemStack stack) {
         int cost = getSpellCaster(stack).getSpell().getCost();
         int seconds = -Math.floorDiv(-cost, 100);
-        return seconds * 20;
+        return seconds * 10;
     }
 
     @Override
@@ -55,13 +55,8 @@ public class ImbuedSpellParchment extends SpellParchment {
 
     @SubscribeEvent
     public static void calcSpellCost(SpellCostCalcEvent event) {
-        LivingEntity entity = event.context.getUnwrappedCaster();
-        ItemStack scroll = entity.getItemInHand(InteractionHand.MAIN_HAND);
-        if (scroll.getItem() instanceof ImbuedSpellParchment imbuedSpellParchment) {
-            ISpellCaster caster = imbuedSpellParchment.getSpellCaster(scroll);
-            if (caster.getSpell().serialize().equals(event.context.getSpell().serialize())) {
-                event.currentCost = 0;
-            }
+        if (event.context.getCasterTool().getItem() instanceof ImbuedSpellParchment) {
+            event.currentCost = 0;
         }
     }
 }

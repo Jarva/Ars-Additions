@@ -211,5 +211,13 @@ public class LangDatagen extends LanguageProvider {
         this.add("page.ars_additions.golden_charm.desc", "This charm of pure gold is used to peruse Bastions and interact with Piglin Brutes without drawing aggression.");
         this.add("page.ars_additions.night_vision_charm.desc", "This handy little charm imbues you with Night Vision when you're in a low-light environment.");
         this.add("page.ars_additions.snowstride_charm.desc", "This charm keeps you afloat over powdered snow, allowing you to walk over it without fear.");
+
+        this.add("ars_additions.page.bulk_scribing", "Bulk Scribing");
+        this.add("ars_additions.page1.bulk_scribing", "It's also possible to scribe items in bulk by placing a Spell Book or scribed Spell Parchment on a pedestal next to an imbuement chamber and then placing the blank parchment or other item to be scribed inside the imbuement chamber.");
+
+        this.add("ars_additions.page.imbued_spell_parchment", "You can imbue source into a spell parchment to allow you to cast that spell without consuming mana. To cast with an imbued spell parchment, you need to hold use to gather up all the source in the parchment ready to release. It takes about half a second to gather up 100 mana worth of source from the parchment, so bigger spells will take a longer time to cast.");
+
+        this.add("ars_additions.page.arcane_library", "Arcane Library");
+        this.add("ars_additions.page1.arcane_library", "Arcane Libraries are a rare structure found in Archwood Forests, they are the remnants of an ancient magic civilization long left behind. Find treasures to fulfil all your magical needs, but beware of the Wilden roaming the halls.");
     }
 }

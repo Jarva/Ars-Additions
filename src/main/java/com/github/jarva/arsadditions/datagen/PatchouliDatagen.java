@@ -20,6 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Comparator;
@@ -119,8 +120,15 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
                                     .linkRecipe(true)
                     );
         }
-
         addPage(charmBuilder, getPath(EQUIPMENT, "charms"));
+
+        addBasicItem(AddonItemRegistry.IMBUED_SPELL_PARCHMENT.get(), EQUIPMENT, null);
+
+        addPage(new PatchouliBuilder(STRUCTURES, Blocks.BOOKSHELF)
+                        .withName("ars_additions.page.arcane_library")
+                        .withTextPage("ars_additions.page1.arcane_library"),
+                getPath(STRUCTURES, "arcane_library")
+        );
 
         for (PatchouliPage patchouliPage : pages) {
             saveStable(cache, patchouliPage.build(), patchouliPage.path());
@@ -131,8 +139,10 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
     public PatchouliPage addBasicItem(ItemLike item, ResourceLocation category, IPatchouliPage recipePage) {
         PatchouliBuilder builder = new PatchouliBuilder(category, item.asItem().getDescriptionId())
                 .withIcon(item.asItem())
-                .withPage(new TextPage(Setup.root + ".page." + getRegistryName(item.asItem()).getPath()))
-                .withPage(recipePage);
+                .withPage(new TextPage(Setup.root + ".page." + getRegistryName(item.asItem()).getPath()));
+        if (recipePage != null) {
+            builder = builder.withPage(recipePage);
+        }
         PatchouliPage page = new PatchouliPage(builder, getPath(category, getRegistryName(item.asItem()).getPath()));
         this.pages.add(page);
         return page;

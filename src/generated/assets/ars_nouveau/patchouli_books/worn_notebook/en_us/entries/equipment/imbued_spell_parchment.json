@@ -1,0 +1,11 @@
+{
+  "category": "ars_nouveau:equipment",
+  "icon": "ars_additions:imbued_spell_parchment",
+  "name": "item.ars_additions.imbued_spell_parchment",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.page.imbued_spell_parchment"
+    }
+  ]
+}

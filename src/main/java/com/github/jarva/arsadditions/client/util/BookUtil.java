@@ -74,6 +74,16 @@ public class BookUtil {
         return page;
     }
 
+    public static boolean isTextPage(BookPage page, String pageTitle) {
+        if (page instanceof PageText text) {
+            PageTextAccessor textAccessor = (PageTextAccessor) text;
+            String title = textAccessor.getTitle();
+            if (title == null) return false;
+            return title.equals(pageTitle);
+        }
+        return false;
+    }
+
     private static Map<ResourceLocation, BookEntry> getEntries() {
         Book wornNotebook = BookRegistry.INSTANCE.books.get(WORN_NOTEBOOK);
 

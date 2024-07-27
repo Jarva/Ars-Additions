@@ -63,7 +63,7 @@ side="BOTH"
 [[dependencies.ars_additions]]
 modId="ars_nouveau"
 mandatory=true
-versionRange="[4.10.0,)"
+versionRange="[4.12.3,)"
 ordering="AFTER"
 side="BOTH"
 

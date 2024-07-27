@@ -3,6 +3,7 @@ package com.github.jarva.arsadditions.datagen.tags;
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.common.datagen.ItemTagProvider;
 import com.hollingsworth.arsnouveau.common.items.RitualTablet;
@@ -18,6 +19,8 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Comparator;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ItemTagDatagen extends IntrinsicHolderTagsProvider<Item> {
@@ -40,8 +43,8 @@ public class ItemTagDatagen extends IntrinsicHolderTagsProvider<Item> {
 
         this.tag(BELTS).add(AddonItemRegistry.LECTERN_REMOTE.get(), AddonItemRegistry.ADVANCED_LECTERN_REMOTE.get());
 
-        for (RegistryObject<Item> charm : AddonItemRegistry.CHARMS.values()) {
-            this.tag(CHARMS).add(charm.get());
+        for (Map.Entry<CharmRegistry.CharmType, RegistryObject<Item>> entry : AddonItemRegistry.CHARMS.entrySet().stream().sorted(Comparator.comparing(entry -> entry.getKey().getName())).toList()) {
+            this.tag(CHARMS).add(entry.getValue().get());
         }
     }
 }

@@ -17,8 +17,10 @@ import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -121,6 +123,26 @@ public record BulkScribingRecipe(ResourceLocation id) implements IImbuementRecip
     @Override
     public RecipeType<?> getType() {
         return AddonRecipeRegistry.BULK_SCRIBING_TYPE.get();
+    }
+
+    @Override
+    public Component getCraftingStartedText(ImbuementTile imbuementTile) {
+        return Component.translatable("chat.ars_additions.imbued_spell_parchment.scribing_started", getResult(imbuementTile).getHoverName());
+    }
+
+    @Override
+    public Component getCraftingText(ImbuementTile imbuementTile) {
+        ItemStack result = getResult(imbuementTile);
+        Optional<ItemStack> scriber = findScriber(imbuementTile);
+        if (scriber.isPresent() && scriber.get().getItem() instanceof ISpellCasterProvider provider) {
+            return Component.translatable("tooltip.ars_additions.imbued_spell_parchment.scribing", provider.getSpellCaster(scriber.get()).getSpell().getDisplayString());
+        }
+        return Component.translatable("tooltip.ars_additions.imbued_spell_parchment.scribing", getResult(imbuementTile).getHoverName());
+    }
+
+    @Override
+    public Component getCraftingProgressText(ImbuementTile imbuementTile, int progress) {
+        return Component.translatable("tooltip.ars_additions.imbued_spell_parchment.scribing_progress", progress).withStyle(ChatFormatting.GOLD);
     }
 
     public JsonElement asRecipe() {

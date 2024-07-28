@@ -112,6 +112,8 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
                     .requires(ItemTagProvider.SOURCE_GEM_TAG)
                     .requires(AddonItemRegistry.WAYFINDER.get())
         );
+
+        shapelessBuilder(AddonItemRegistry.ADVANCED_DOMINION_WAND.get()).requires(AddonItemRegistry.ADVANCED_DOMINION_WAND.get()).save(consumer);
     }
 
     public void addRitualRecipe(ResourceLocation id, Function<ShapelessRecipeBuilder, ShapelessRecipeBuilder> modifier) {

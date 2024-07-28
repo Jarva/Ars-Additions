@@ -262,7 +262,7 @@ public class Charm extends ArsNouveauCurio {
     public static void denyMobEffects(MobEffectEvent.Applicable event) {
         CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.WITHER_PROTECTION, () -> event.getEffectInstance().getEffect().equals(MobEffects.WITHER), (entity, curio) -> {
             event.setResult(Event.Result.DENY);
-            return CharmRegistry.every(10, entity, 1);
+            return CharmRegistry.every(2, entity, 1);
         });
     }
 

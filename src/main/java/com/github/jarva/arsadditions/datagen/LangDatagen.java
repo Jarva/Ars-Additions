@@ -131,6 +131,9 @@ public class LangDatagen extends LanguageProvider {
         this.add("tooltip.ars_additions.charm.charging", "Charging: %s");
         this.add("tooltip.ars_additions.charm.charging_progress", "Charging Progress: %s");
 
+        this.add("tooltip.ars_additions.imbued_spell_parchment.scribing", "Scribing: %s");
+        this.add("tooltip.ars_additions.imbued_spell_parchment.scribing_progress", "Scribing Progress: %s");
+
         // Keybinds
 
         this.add("key.ars_additions.open_lectern", "[Ars Additions] Activate Warp Index");
@@ -153,6 +156,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("chat.ars_additions.handy_haversack.invalid", "The Handy Haversack must be bound before scribing.");
 
         this.add("chat.ars_additions.charm.charging_started", "Charging %s. Add source nearby to increase charge speed.");
+
+        this.add("chat.ars_additions.imbued_spell_parchment.scribing_started", "Scribing %s. Add source nearby to increase scribe speed.");
 
         // Effects
 
@@ -210,7 +215,7 @@ public class LangDatagen extends LanguageProvider {
         this.add("page.ars_additions.wither_protection_charm.desc", "Forged in the fires of the Nether by a Wither Skeleton mage in hopes of curing themself, this charm allows you to shrug off the the effects of Wither.");
         this.add("page.ars_additions.golden_charm.desc", "This charm of pure gold is used to peruse Bastions and interact with Piglin Brutes without drawing aggression.");
         this.add("page.ars_additions.night_vision_charm.desc", "This handy little charm imbues you with Night Vision when you're in a low-light environment.");
-        this.add("page.ars_additions.snowstride_charm.desc", "This charm keeps you afloat over powdered snow, allowing you to walk over it without fear.");
+        this.add("page.ars_additions.powdered_snow_walk_charm.desc", "This charm keeps you afloat over powdered snow, allowing you to walk over it without fear.");
 
         this.add("ars_additions.page.bulk_scribing", "Bulk Scribing");
         this.add("ars_additions.page1.bulk_scribing", "It's also possible to scribe items in bulk by placing a Spell Book or scribed Spell Parchment on a pedestal next to an imbuement chamber and then placing the blank parchment or other item to be scribed inside the imbuement chamber.");

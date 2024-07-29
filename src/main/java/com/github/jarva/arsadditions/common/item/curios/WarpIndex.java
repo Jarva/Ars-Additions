@@ -111,6 +111,6 @@ public class WarpIndex extends Item {
     }
 
     public void open(Player sender, ItemStack t) {
-        activateTerminal(sender.level(), t, sender, InteractionHand.OFF_HAND);
+        activateTerminal(sender.level(), t, sender, InteractionHand.MAIN_HAND);
     }
 }

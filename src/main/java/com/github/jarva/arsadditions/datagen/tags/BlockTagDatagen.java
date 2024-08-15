@@ -24,8 +24,7 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
         super(arg, Registries.BLOCK, future, item -> item.builtInRegistryHolder().key(), ArsAdditions.MODID, helper);
     }
 
-    public static TagKey<Block> IMMOVABLE = BlockTags.create(ResourceLocation.fromNamespaceAndPath("forge", "immovable"));
-    public static TagKey<Block> RELOCATION_NOT_SUPPORTED = BlockTags.create(ResourceLocation.fromNamespaceAndPath("forge", "relocation_not_supported"));
+    public static TagKey<Block> RELOCATION_NOT_SUPPORTED = BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", "relocation_not_supported"));
     public static TagKey<Block> CARRYON_BLACKLIST = BlockTags.create(ResourceLocation.fromNamespaceAndPath("carryon", "block_blacklist"));
 
     @Override
@@ -66,6 +65,5 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
 
         this.tag(CARRYON_BLACKLIST).add(AddonBlockRegistry.WARP_NEXUS.get());
         this.tag(RELOCATION_NOT_SUPPORTED).add(AddonBlockRegistry.WARP_NEXUS.get());
-        this.tag(IMMOVABLE).add(AddonBlockRegistry.WARP_NEXUS.get());
     }
 }

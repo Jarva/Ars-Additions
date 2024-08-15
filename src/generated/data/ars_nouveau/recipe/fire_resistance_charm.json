@@ -1,0 +1,23 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "minecraft:magma_cream"
+    },
+    {
+      "item": "minecraft:lava_bucket"
+    },
+    {
+      "item": "minecraft:flint_and_steel"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:glass_bottle"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_additions:fire_resistance_charm"
+  },
+  "sourceCost": 0
+}

@@ -11,14 +11,19 @@ import com.hollingsworth.arsnouveau.common.block.ScribesBlock;
 import com.hollingsworth.arsnouveau.common.block.SourceJar;
 import com.hollingsworth.arsnouveau.common.block.ThreePartBlock;
 import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
+import com.hollingsworth.arsnouveau.common.entity.goal.carbuncle.StarbyTransportBehavior;
+import com.hollingsworth.arsnouveau.common.items.data.StarbuncleCharmData;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.DyeColor;
@@ -37,6 +42,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -44,8 +51,11 @@ import static com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames
 import static com.hollingsworth.arsnouveau.common.lib.LibBlockNames.*;
 
 public class ProcessorDatagen extends SimpleDataProvider {
-    public ProcessorDatagen(DataGenerator dataGenerator) {
+    private final CompletableFuture<HolderLookup.Provider> lookupProvider;
+
+    public ProcessorDatagen(DataGenerator dataGenerator, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(dataGenerator);
+        this.lookupProvider = lookupProvider;
     }
 
     @Override
@@ -70,22 +80,23 @@ public class ProcessorDatagen extends SimpleDataProvider {
 
         List<Helper> helpers = List.of(
                 new Helper("Eru", "gray", "Warning: Not to leave unsupervised"),
-                new Helper("Rozeta", "pink", "A curious Starbuncle that likes to build and experiment with magic.")
+                new Helper("Rozeta", "pink", "A curious Starbuncle that likes to build and experiment with magic."),
+                new Helper("Pug", "green", "A Starbuncle that sells the magic it salvages.")
         );
         HashMap<String, Integer> dyeMap = new HashMap<>();
         for (DyeColor value : DyeColor.values()) {
             dyeMap.put(value.getName(), value.getTextColor());
         }
-        for (Helper helper : helpers) {
-            CompoundTag tag = new CompoundTag();
-            ItemStack is = new ItemStack(ItemsRegistry.STARBUNCLE_CHARM);
-            CompoundTag it = is.getOrCreateTag();
-            it.putString("name", Component.Serializer.toJson(Component.literal(helper.name()).withStyle(Style.EMPTY.withColor(dyeMap.get(helper.color())))));
-            it.putString("bio", helper.bio());
-            it.putString("color", helper.color());
-            tag.put("itemStack", is.save(new CompoundTag()));
-            modifyBlockEntity(BlockRegistry.SCRIBES_BLOCK.get(), bs -> bs.getValue(ScribesBlock.PART) == ThreePartBlock.HEAD, 0.5f, new AppendStatic(tag), nexusTower);
-        }
+
+        lookupProvider.thenAccept(provider -> {
+            for (Helper helper : helpers) {
+                CompoundTag tag = new CompoundTag();
+                ItemStack is = new ItemStack(ItemsRegistry.STARBUNCLE_CHARM);
+                is.set(DataComponentRegistry.STARBUNCLE_DATA, new StarbuncleCharmData(Optional.of(Component.literal(helper.name()).withStyle(Style.EMPTY.withColor(dyeMap.get(helper.color())))), helper.color(), Optional.empty(), Optional.empty(), StarbyTransportBehavior.TRANSPORT_ID, new CompoundTag(), "", helper.bio()));
+                tag.put("itemStack", is.save(provider, new CompoundTag()));
+                modifyBlockEntity(BlockRegistry.SCRIBES_BLOCK.get(), bs -> bs.getValue(ScribesBlock.PART) == ThreePartBlock.HEAD, 0.5f, new AppendStatic(tag), nexusTower);
+            }
+        });
 
         save(pOutput, nexusTower, "nexus_tower");
 
@@ -109,12 +120,10 @@ public class ProcessorDatagen extends SimpleDataProvider {
     private void setupWarpNexus(List<ProcessorRule> rules) {
         CompoundTag nexusBlock = new CompoundTag();
         CompoundTag inventory = new CompoundTag();
-        ListTag items = new ListTag();
-        CompoundTag scroll = new ItemStack(AddonItemRegistry.NEXUS_WARP_SCROLL.get()).save(new CompoundTag());
-        scroll.putInt("Slot", 0);
-        items.add(scroll);
-        inventory.put("Items", items);
-        nexusBlock.put("Inventory", inventory);
+        ItemStack stack = new ItemStack(AddonItemRegistry.NEXUS_WARP_SCROLL.get());
+        lookupProvider.thenAccept(provider ->
+                inventory.put("itemStack", ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, stack).getOrThrow())
+        );
 
         modifyBlockEntity(AddonBlockRegistry.WARP_NEXUS.get(), bs -> bs.getValue(WarpNexus.HALF) == DoubleBlockHalf.LOWER, bs -> bs.setValue(WarpNexus.REQUIRES_SOURCE, false), new AppendStatic(nexusBlock), rules);
         modifyBlockEntity(AddonBlockRegistry.WARP_NEXUS.get(), bs -> bs.getValue(WarpNexus.HALF) == DoubleBlockHalf.UPPER, bs -> bs.setValue(WarpNexus.REQUIRES_SOURCE, false), new AppendStatic(new CompoundTag()), rules);

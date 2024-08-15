@@ -6,6 +6,7 @@ import com.hollingsworth.arsnouveau.api.client.ITooltipProvider;
 import com.hollingsworth.arsnouveau.common.block.ITickable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -35,14 +36,14 @@ public class SourceSpawnerTile extends BlockEntity implements ITickable, IToolti
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(tag, provider);
         this.spawner.load(this.level, this.worldPosition, tag);
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
+        super.saveAdditional(tag, provider);
         this.spawner.save(tag);
     }
 
@@ -51,8 +52,8 @@ public class SourceSpawnerTile extends BlockEntity implements ITickable, IToolti
         return (int) Math.ceil(percentage * 15);
     }
 
-    public CompoundTag getUpdateTag() {
-        CompoundTag compoundtag = this.saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.@NotNull Provider provider) {
+        CompoundTag compoundtag = this.saveWithoutMetadata(provider);
         compoundtag.remove("SpawnPotentials");
         return compoundtag;
     }
@@ -64,9 +65,9 @@ public class SourceSpawnerTile extends BlockEntity implements ITickable, IToolti
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        super.onDataPacket(net, pkt);
-        handleUpdateTag(pkt.getTag() == null ? new CompoundTag() : pkt.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider) {
+        super.onDataPacket(net, pkt, provider);
+        handleUpdateTag(pkt.getTag() == null ? new CompoundTag() : pkt.getTag(), provider);
     }
 
     @Override

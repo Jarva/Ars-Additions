@@ -4,7 +4,6 @@ import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.common.util.DispenserExperienceGemBehavior;
 import com.github.jarva.arsadditions.setup.config.CommonConfig;
 import com.github.jarva.arsadditions.setup.config.ServerConfig;
-import com.github.jarva.arsadditions.setup.networking.NetworkHandler;
 import com.github.jarva.arsadditions.setup.registry.AddonSetup;
 import com.github.jarva.arsadditions.setup.registry.ArsNouveauRegistry;
 import com.github.jarva.arsadditions.setup.registry.recipes.GenericRecipeRegistry;
@@ -37,7 +36,6 @@ public class ArsAdditions {
         modEventBus.addListener(this::common);
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::post);
-        NeoForge.EVENT_BUS.register(this);
 
         Triggers.init();
     }

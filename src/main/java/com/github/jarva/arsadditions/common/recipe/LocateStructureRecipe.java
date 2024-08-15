@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.common.recipe;
 
+import com.github.jarva.arsadditions.common.item.data.ExplorationScrollData;
 import com.github.jarva.arsadditions.common.loot.functions.ExplorationScrollFunction;
 import com.github.jarva.arsadditions.common.util.LangUtil;
 import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
@@ -132,8 +133,8 @@ public class LocateStructureRecipe implements Recipe<RecipeInput> {
                 ResourceLocation.CODEC.fieldOf("id").forGetter(LocateStructureRecipe::getId),
                 ResourceOrTag.ITEM_CODEC.listOf().fieldOf("augments").forGetter(LocateStructureRecipe::getAugments),
                 ResourceOrTag.STRUCTURE_CODEC.fieldOf("structure").forGetter(LocateStructureRecipe::getStructure),
-                Codec.INT.optionalFieldOf("radius", ExplorationScrollFunction.DEFAULT_SEARCH_RADIUS).forGetter(LocateStructureRecipe::getRadius),
-                Codec.BOOL.optionalFieldOf("skip_known_structures", ExplorationScrollFunction.DEFAULT_SKIP_EXISTING).forGetter(LocateStructureRecipe::getSkipExisting)
+                Codec.INT.optionalFieldOf("radius", ExplorationScrollData.DEFAULT_SEARCH_RADIUS).forGetter(LocateStructureRecipe::getRadius),
+                Codec.BOOL.optionalFieldOf("skip_known_structures", ExplorationScrollData.DEFAULT_SKIP_EXISTING).forGetter(LocateStructureRecipe::getSkipExisting)
         ).apply(instance, LocateStructureRecipe::new));
 
         @Override

@@ -462,17 +462,7 @@
         {
           "block_entity_modifier": {
             "type": "minecraft:append_static",
-            "data": {
-              "Inventory": {
-                "Items": [
-                  {
-                    "Count": 1,
-                    "Slot": 0,
-                    "id": "ars_additions:nexus_warp_scroll"
-                  }
-                ]
-              }
-            }
+            "data": {}
           },
           "input_predicate": {
             "block_state": {
@@ -498,17 +488,7 @@
         {
           "block_entity_modifier": {
             "type": "minecraft:append_static",
-            "data": {
-              "Inventory": {
-                "Items": [
-                  {
-                    "Count": 1,
-                    "Slot": 0,
-                    "id": "ars_additions:nexus_warp_scroll"
-                  }
-                ]
-              }
-            }
+            "data": {}
           },
           "input_predicate": {
             "block_state": {

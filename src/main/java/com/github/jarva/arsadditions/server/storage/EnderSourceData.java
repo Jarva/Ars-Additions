@@ -32,7 +32,7 @@ public class EnderSourceData extends SavedData {
         return new EnderSourceData();
     }
 
-    public static EnderSourceData load(CompoundTag tag) {
+    public static EnderSourceData load(CompoundTag tag, HolderLookup.@NotNull Provider provider) {
         EnderSourceData data = EnderSourceData.create();
         List<UUID> uuids = tag.getAllKeys().stream().map(UUID::fromString).toList();
         for (UUID uuid : uuids) {
@@ -42,12 +42,10 @@ public class EnderSourceData extends SavedData {
     }
 
     public static EnderSourceData getData(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent()
-        return server.overworld().getDataStorage().computeIfAbsent(EnderSourceData::loadData, "ender_source_data");
+        return server.overworld().getDataStorage().computeIfAbsent(new Factory<>(EnderSourceData::create, EnderSourceData::load), "ender_source_data");
     }
 
     public static int getSource(MinecraftServer server, UUID uuid) {
-        server.overworld().getData()
         return EnderSourceData.getData(server).source.computeIfAbsent(uuid, k -> 0);
     }
 

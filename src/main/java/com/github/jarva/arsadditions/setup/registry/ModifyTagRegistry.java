@@ -8,7 +8,10 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.*;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -24,6 +27,10 @@ public class ModifyTagRegistry {
     private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<RemoveTag>> REMOVE_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("remove_tag", () -> RemoveTag.CODEC);
     private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<SetTag>> SET_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("set_tag", () -> SetTag.CODEC);
     private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<AppendTag>> APPEND_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("append_tag", () -> AppendTag.CODEC);
+
+    public static void init() {
+
+    }
 
     public record RemoveGuaranteedHandDrops() implements TagModifier {
         public static MapCodec<RemoveGuaranteedHandDrops> CODEC = MapCodec.unit(RemoveGuaranteedHandDrops::new);

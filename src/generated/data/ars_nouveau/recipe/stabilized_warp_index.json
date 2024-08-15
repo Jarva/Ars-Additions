@@ -1,0 +1,23 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
+      "item": "minecraft:ender_chest"
+    }
+  ],
+  "reagent": {
+    "item": "ars_additions:warp_index"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_additions:stabilized_warp_index"
+  },
+  "sourceCost": 0
+}

@@ -1,0 +1,26 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "ars_nouveau:enchanters_eye"
+    },
+    {
+      "item": "ars_nouveau:scryers_crystal"
+    },
+    {
+      "item": "ars_nouveau:starbuncle_charm"
+    },
+    {
+      "item": "ars_nouveau:bookwyrm_charm"
+    }
+  ],
+  "reagent": {
+    "item": "ars_nouveau:mundane_belt"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_additions:warp_index"
+  },
+  "sourceCost": 0
+}

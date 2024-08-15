@@ -86,11 +86,6 @@ public class WarpNexusTile extends SingleItemTile implements GeoBlockEntity, ITi
         }
     }
 
-    public static final BlockCapability<IItemHandler, Void> ITEM_HANDLER =
-            BlockCapability.createVoid(
-                    ArsAdditions.prefix("warp_nexus_scroll"),
-                    IItemHandler.class);
-
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);

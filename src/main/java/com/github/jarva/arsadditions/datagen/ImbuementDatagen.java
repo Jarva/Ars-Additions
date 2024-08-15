@@ -16,7 +16,7 @@ public class ImbuementDatagen extends ImbuementRecipeProvider {
     }
 
     protected static Path getRecipePath(Path pathIn, String str) {
-        return pathIn.resolve("data/" + Setup.root + "/recipes/imbuement/" + str + ".json");
+        return pathIn.resolve("data/" + Setup.root + "/recipe/imbuement/" + str + ".json");
     }
 
     public void addEntries() {

@@ -21,7 +21,4 @@ public class AddonAttachmentRegistry {
     private static final Supplier<AttachmentType<ParticleColor>> PARTICLE_COLOR = ATTACHMENT_TYPES.register(
             "particle_color", () -> AttachmentType.builder(ParticleColor::defaultParticleColor).serialize(ParticleColor.CODEC.codec()).build()
     );
-    private static final Supplier<AttachmentType<ParticleColor>> PARTICLE_COLOR = ATTACHMENT_TYPES.register(
-            "particle_color", () -> AttachmentType.builder(ParticleColor::defaultParticleColor).serialize(ParticleColor.CODEC.codec()).build()
-    );
 }

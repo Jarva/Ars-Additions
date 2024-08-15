@@ -19,8 +19,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import software.bernie.geckolib.animation.AnimationProcessor;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.core.animation.AnimationProcessor;
 import software.bernie.geckolib.model.GeoModel;
 
 public class WarpNexusRenderer extends ArsGeoBlockRenderer<WarpNexusTile> {
@@ -30,23 +30,23 @@ public class WarpNexusRenderer extends ArsGeoBlockRenderer<WarpNexusTile> {
     }
 
     @Override
-    public void preRender(PoseStack poseStack, WarpNexusTile animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void preRender(PoseStack poseStack, WarpNexusTile animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
         if (animatable.getLevel().getBlockState(animatable.getBlockPos()).getBlock() != AddonBlockRegistry.WARP_NEXUS.get()) return;
         if (animatable.getLevel().getBlockState(animatable.getBlockPos()).getValue(WarpNexus.HALF) != DoubleBlockHalf.LOWER) return;
 
-        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
     }
 
     @Override
-    public void actuallyRender(PoseStack poseStack, WarpNexusTile animatable, BakedGeoModel model, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void actuallyRender(PoseStack poseStack, WarpNexusTile animatable, BakedGeoModel model, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
         if (animatable.getLevel().getBlockState(animatable.getBlockPos()).getBlock() != AddonBlockRegistry.WARP_NEXUS.get()) return;
         if (animatable.getLevel().getBlockState(animatable.getBlockPos()).getValue(WarpNexus.HALF) != DoubleBlockHalf.LOWER) return;
 
-        super.actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+        super.actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
     }
 
     @Override
-    public void renderFinal(PoseStack poseStack, WarpNexusTile animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderFinal(PoseStack poseStack, WarpNexusTile animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, int color) {
         if (animatable.getLevel().getBlockState(animatable.getBlockPos()).getBlock() != AddonBlockRegistry.WARP_NEXUS.get()) return;
         if (animatable.getLevel().getBlockState(animatable.getBlockPos()).getValue(WarpNexus.HALF) != DoubleBlockHalf.LOWER) return;
 

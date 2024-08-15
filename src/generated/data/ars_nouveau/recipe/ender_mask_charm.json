@@ -1,0 +1,20 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "minecraft:pumpkin"
+    },
+    {
+      "item": "minecraft:chorus_fruit"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:glass_bottle"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_additions:ender_mask_charm"
+  },
+  "sourceCost": 0
+}

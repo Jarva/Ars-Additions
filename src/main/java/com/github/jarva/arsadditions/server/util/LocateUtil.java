@@ -2,11 +2,10 @@ package com.github.jarva.arsadditions.server.util;
 
 import brightspark.asynclocator.AsyncLocator;
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.common.loot.functions.ExplorationScrollFunction;
+import com.github.jarva.arsadditions.common.item.data.ExplorationScrollData;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
-import com.hollingsworth.arsnouveau.common.items.WarpScroll;
 import com.hollingsworth.arsnouveau.common.items.data.WarpScrollData;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
@@ -16,7 +15,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -66,19 +64,16 @@ public class LocateUtil {
         return registry.getHolder(structureResourceKey).map(HolderSet::direct).orElseThrow();
     }
 
-    public static final String STRUCTURE_LOOKUP_KEY = "async-lookup.uuid";
-
     public static void resolveUUID(ServerLevel level, Vec3 position, ItemStack stack, @Nullable Entity entity) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains(STRUCTURE_LOOKUP_KEY)) return;
-        UUID uuid = tag.getUUID(STRUCTURE_LOOKUP_KEY);
+        if (!stack.has(AddonDataComponentRegistry.STRUCTURE_LOOKUP_DATA)) return;
+        UUID uuid = stack.get(AddonDataComponentRegistry.STRUCTURE_LOOKUP_DATA);
         LocateState state = STRUCTURE_LOOKUP_CACHE.getIfPresent(uuid);
         if (state == null) {
             ArsAdditions.LOGGER.warn("Found Exploration Warp Scroll with no pending structure lookup.");
             locateFromStack(level, position, stack);
         }
         if (state == null || state.status() == Status.PENDING) return;
-        stack.removeTagKey(STRUCTURE_LOOKUP_KEY);
+        stack.remove(AddonDataComponentRegistry.STRUCTURE_LOOKUP_DATA);
         if (state.status() == Status.FAILURE) {
             PortUtil.sendMessageNoSpam(entity, Component.translatable("tooltip.ars_additions.exploration_warp_scroll.failed"));
             STRUCTURE_LOOKUP_CACHE.invalidate(uuid);
@@ -89,15 +84,15 @@ public class LocateUtil {
     }
 
     public static boolean isPending(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().contains(STRUCTURE_LOOKUP_KEY);
+        return stack.has(AddonDataComponentRegistry.STRUCTURE_LOOKUP_DATA);
     }
 
     public static void locateWithState(ItemStack itemStack, ServerLevel level, HolderSet<Structure> holderSet, BlockPos origin, int searchRadius, boolean skipKnownStructures) {
         UUID uuid = UUID.randomUUID();
-        if (itemStack.hasTag() && itemStack.getTag().contains(STRUCTURE_LOOKUP_KEY)) {
-            uuid = itemStack.getTag().getUUID(STRUCTURE_LOOKUP_KEY);
+        if (itemStack.has(AddonDataComponentRegistry.STRUCTURE_LOOKUP_DATA)) {
+            uuid = itemStack.get(AddonDataComponentRegistry.STRUCTURE_LOOKUP_DATA);
         } else {
-            itemStack.getOrCreateTag().putUUID(STRUCTURE_LOOKUP_KEY, uuid);
+            itemStack.set(AddonDataComponentRegistry.STRUCTURE_LOOKUP_DATA, uuid);
         }
 
         STRUCTURE_LOOKUP_CACHE.put(uuid, LocateState.pending());
@@ -117,34 +112,11 @@ public class LocateUtil {
     }
 
     public static void locateFromStack(ServerLevel level, Vec3 position, ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        HolderSet<Structure> holderSet = LocateUtil.holderFromTag(level, ExplorationScrollFunction.DEFAULT_DESTINATION);
-        Vec3 origin = position;
-        int searchRadius = ExplorationScrollFunction.DEFAULT_SEARCH_RADIUS;
-        boolean skipKnown = ExplorationScrollFunction.DEFAULT_SKIP_EXISTING;
-        if (tag != null) {
-            if (tag.contains("resource")) {
-                ResourceKey<Structure> key = ResourceKey.create(Registries.STRUCTURE, ResourceLocation.withDefaultNamespace(tag.getString("resource")));
-                holderSet = LocateUtil.holderFromResource(level, key);
-            }
-            if (tag.contains("tag")) {
-                TagKey<Structure> key = TagKey.create(Registries.STRUCTURE, ResourceLocation.withDefaultNamespace(tag.getString("tag")));
-                holderSet = LocateUtil.holderFromTag(level, key);
-            }
-            if (tag.contains("origin")) {
-                CompoundTag originTag = tag.getCompound("origin");
-                double x = originTag.getDouble("x");
-                double y = originTag.getDouble("y");
-                double z = originTag.getDouble("z");
-                origin = new Vec3(x, y, z);
-            }
-            if (tag.contains("search_radius")) {
-                searchRadius = tag.getInt("search_radius");
-            }
-            if (tag.contains("skip_known")) {
-                skipKnown = tag.getBoolean("skip_known");
-            }
-        }
+        ExplorationScrollData data = stack.getOrDefault(AddonDataComponentRegistry.EXPLORATION_SCROLL_DATA, ExplorationScrollData.DEFAULT);
+        HolderSet<Structure> holderSet = LocateUtil.holderFromTag(level, ExplorationScrollData.DEFAULT_DESTINATION);
+        Vec3 origin = data.pos().orElse(position);
+        int searchRadius = ExplorationScrollData.DEFAULT_SEARCH_RADIUS;
+        boolean skipKnown = ExplorationScrollData.DEFAULT_SKIP_EXISTING;
         LocateUtil.locateWithState(stack, level, holderSet, BlockPos.containing(origin), searchRadius, skipKnown);
     }
 

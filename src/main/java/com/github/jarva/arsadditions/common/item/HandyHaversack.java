@@ -13,6 +13,7 @@ import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -55,7 +56,7 @@ public class HandyHaversack extends Item implements IScribeable {
         if (level.getGameTime() % 10 == 0) return;
 
         HaversackData.fromItemStack(stack).ifPresent(data -> {
-            boolean loaded = level.getServer().getLevel(data.level()).isLoaded(data.pos());
+            boolean loaded = level.getServer().getLevel(data.pos().dimension()).isLoaded(data.pos().pos());
             if (data.loaded() != loaded) {
                 data.toggleLoaded();
             }
@@ -96,7 +97,7 @@ public class HandyHaversack extends Item implements IScribeable {
         if (handler != null) {
             ItemStack stack = context.getItemInHand();
 
-            HaversackData data = new HaversackData(pos, context.getLevel().dimension(), true, new ArrayList<>(), false);
+            HaversackData data = new HaversackData(new GlobalPos(context.getLevel().dimension(), pos), true, new ArrayList<>(), false);
             stack.set(AddonDataComponentRegistry.HAVERSACK_DATA, data);
 
             if (context.getPlayer() != null) {
@@ -145,7 +146,7 @@ public class HandyHaversack extends Item implements IScribeable {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
         HaversackData.fromItemStack(stack).ifPresentOrElse(data -> {
-            tooltip.add(Component.translatable("tooltip.ars_additions.warp_index.bound", data.pos().getX(), data.pos().getY(), data.pos().getZ(), data.level().location().toString()));
+            tooltip.add(Component.translatable("tooltip.ars_additions.warp_index.bound", data.pos().pos().getX(), data.pos().pos().getY(), data.pos().pos().getZ(), data.pos().dimension().location().toString()));
             if (!data.items().isEmpty()) {
                 if (data.active()) {
                     tooltip.add(Component.translatable("ars_nouveau.on"));

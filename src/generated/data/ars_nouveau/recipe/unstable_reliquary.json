@@ -1,0 +1,23 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "ars_nouveau:conjuration_essence"
+    },
+    {
+      "item": "ars_nouveau:manipulation_essence"
+    },
+    {
+      "item": "minecraft:ender_pearl"
+    }
+  ],
+  "reagent": {
+    "item": "ars_nouveau:mob_jar"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_additions:unstable_reliquary"
+  },
+  "sourceCost": 0
+}

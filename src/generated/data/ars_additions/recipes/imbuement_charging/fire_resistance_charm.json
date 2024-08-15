@@ -1,8 +1,0 @@
-{
-  "type": "ars_additions:charm_charging",
-  "costPerDamage": 5,
-  "id": "ars_additions:fire_resistance_charm",
-  "item": {
-    "key": "ars_additions:fire_resistance_charm"
-  }
-}

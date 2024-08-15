@@ -1,0 +1,27 @@
+{
+  "parent": "ars_nouveau:find_ruined_portal",
+  "criteria": {
+    "create_ruined_portal": {
+      "trigger": "ars_additions:create_ruined_portal"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_additions.adv.desc.create_ruined_portal"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "ars_additions:exploration_warp_scroll"
+    },
+    "title": {
+      "translate": "ars_additions.adv.title.create_ruined_portal"
+    }
+  },
+  "requirements": [
+    [
+      "create_ruined_portal"
+    ]
+  ]
+}

@@ -31,7 +31,7 @@ public class Setup {
         gen.addProvider(event.includeServer(), new ImbuementDatagen(gen));
         gen.addProvider(event.includeServer(), new DefaultLootDatagen(gen.getPackOutput(), event.getLookupProvider()));
         gen.addProvider(event.includeServer(), new GlyphDatagen(gen, event.getLookupProvider()));
-        gen.addProvider(event.includeServer(), new ProcessorDatagen(gen));
+        gen.addProvider(event.includeServer(), new ProcessorDatagen(gen, event.getLookupProvider()));
         gen.addProvider(event.includeServer(), new ItemTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), new StructureTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), new BlockTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));

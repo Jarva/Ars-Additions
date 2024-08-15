@@ -7,6 +7,8 @@ import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.item.IWandable;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -25,8 +27,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 
 public class AdvancedDominionWand extends Item {
     public AdvancedDominionWand() {
@@ -35,19 +35,18 @@ public class AdvancedDominionWand extends Item {
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity interactionTarget, InteractionHand usedHand) {
-        if (!(player.level() instanceof ServerLevel serverLevel) || player == null) {
+        if (!(player.level() instanceof ServerLevel serverLevel)) {
             return super.interactLivingEntity(stack, player, interactionTarget, usedHand);
         }
 
         if (player.isShiftKeyDown()) {
-            AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
-            if (data.getPos() == null && data.getEntityId() == null) {
-                data.setData(interactionTarget.getId(), serverLevel.dimension());
-                data.write(stack);
+            if (!stack.has(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA)) {
+                stack.set(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA, AdvancedDominionData.fromEntity(serverLevel.dimension(), interactionTarget));
                 PortUtil.sendMessageNoSpam(player, Component.translatable("ars_nouveau.dominion_wand.stored_entity"));
                 return InteractionResult.SUCCESS;
             }
 
+            AdvancedDominionData data = stack.get(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA);
             IWandable wandable = interactionTarget instanceof IWandable wand ? wand : null;
             return attemptConnection(serverLevel.getServer(), data, player, Triple.of(wandable, interactionTarget, null));
         }
@@ -60,11 +59,13 @@ public class AdvancedDominionWand extends Item {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
 
         if (!pPlayer.isShiftKeyDown()) {
-            AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
-            data.toggleMode();
-            data.write(stack);
-            PortUtil.sendMessageNoSpam(pPlayer, Component.translatable("chat.ars_additions.advanced_dominion_wand.mode", data.mode.getTranslatable()));
-            return InteractionResultHolder.success(stack);
+            if (stack.has(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA)) {
+                AdvancedDominionData data = stack.get(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA);
+                data.toggleMode();
+                data.write(stack);
+                PortUtil.sendMessageNoSpam(pPlayer, Component.translatable("chat.ars_additions.advanced_dominion_wand.mode", data.mode.getTranslatable()));
+                return InteractionResultHolder.success(stack);
+            }
         }
 
         return super.use(pLevel, pPlayer, pUsedHand);
@@ -84,14 +85,13 @@ public class AdvancedDominionWand extends Item {
 
             BlockEntity be = serverLevel.getBlockEntity(pos);
 
-            AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
-            if (data.getPos() == null && data.getEntityId() == null) {
-                data.setData(pos, serverLevel.dimension());
-                data.write(stack);
+            if (stack.has(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA)) {
+                stack.set(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA, AdvancedDominionData.fromPos(pos, serverLevel.dimension()));
                 PortUtil.sendMessage(player, Component.translatable("ars_nouveau.dominion_wand.position_set"));
                 return InteractionResult.SUCCESS;
             }
 
+            AdvancedDominionData data = stack.get(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA);
             IWandable wandable = be instanceof IWandable wand ? wand : null;
             return attemptConnection(serverLevel.getServer(), data, player, Triple.of(wandable, null, pos));
         }
@@ -100,19 +100,19 @@ public class AdvancedDominionWand extends Item {
     }
 
     private InteractionResult attemptConnection(MinecraftServer server, AdvancedDominionData data, Player player, Triple<IWandable, LivingEntity, BlockPos> target) {
-        ServerLevel origin = server.getLevel(data.getLevel());
+        ServerLevel origin = server.getLevel(data.pos().dimension());
 
         IWandable targetWandable = target.getLeft();
         LivingEntity targetLivingEntity = target.getMiddle();
         BlockPos targetBlock = target.getRight();
 
-        Triple<IWandable, LivingEntity, BlockPos> stored = getWandable(origin, data.getPos(), data.getEntityId());
+        Triple<IWandable, LivingEntity, BlockPos> stored = getWandable(origin, data.pos().pos(), data.entityId());
 
         IWandable storedWandable = stored.getLeft();
         LivingEntity storedLivingEntity = stored.getMiddle();
         BlockPos storedBlock = stored.getRight();
 
-        switch (data.mode) {
+        switch (data.mode()) {
             case LOCK_FIRST -> {
                 if (storedWandable != null) {
                     storedWandable.onFinishedConnectionFirst(targetBlock, null, targetLivingEntity, player);
@@ -155,120 +155,17 @@ public class AdvancedDominionWand extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
-        AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag isAdvanced) {
+        if (!stack.has(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA))
+            return;
 
-        tooltip.add(Component.translatable("tooltip.ars_additions.advanced_dominion_wand.mode", data.mode.getTranslatable()));
+        AdvancedDominionData data = stack.get(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA);
+        tooltip.add(Component.translatable("tooltip.ars_additions.advanced_dominion_wand.mode", data.mode().getTranslatable()));
 
-        if (data.getPos() != null) {
-            tooltip.add(Component.translatable("tooltip.ars_additions.warp_index.bound", data.pos.getX(), data.pos.getY(), data.pos.getZ(), data.level.location().toString()));
+        if (data.pos().pos() != null) {
+            tooltip.add(Component.translatable("tooltip.ars_additions.warp_index.bound", data.pos().pos().getX(), data.pos().pos().getY(), data.pos().pos().getZ(), data.pos().dimension().location().toString()));
         } else {
             tooltip.add(Component.translatable("chat.ars_additions.warp_index.unbound", Component.keybind("key.sneak"), Component.keybind("key.use"), LangUtil.container()));
-        }
-    }
-
-    public static class AdvancedDominionData {
-
-        enum Mode implements StringRepresentable {
-            LOCK_FIRST("tooltip.ars_additions.advanced_dominion_wand.mode.first"),
-            LOCK_SECOND("tooltip.ars_additions.advanced_dominion_wand.mode.second");
-
-            private final String translatable;
-
-            Mode(String translatable) {
-                this.translatable = translatable;
-            }
-
-            @Override
-            public @NotNull String getSerializedName() {
-                return name().toLowerCase(Locale.ENGLISH);
-            }
-
-            public Component getTranslatable() {
-                return Component.translatable(translatable);
-            }
-        }
-
-        private Mode mode;
-        private ResourceKey<Level> level;
-        private BlockPos pos;
-        private Integer entityId;
-
-        private AdvancedDominionData(Optional<BlockPos> pos, Optional<ResourceKey<Level>> level, Optional<Integer> entityId, Mode mode) {
-            this.pos = pos.orElse(null);
-            this.level = level.orElse(null);
-            this.entityId = entityId.orElse(null);
-            this.mode = mode;
-        }
-
-        private AdvancedDominionData(Mode mode) {
-            this.pos = null;
-            this.level = null;
-            this.entityId = null;
-            this.mode = mode;
-        }
-
-        public static final String TAG_KEY = "advanced_dominion";
-
-        public static final Codec<AdvancedDominionData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                BlockPos.CODEC.optionalFieldOf("StoredPos").forGetter(AdvancedDominionData::pos),
-                Level.RESOURCE_KEY_CODEC.optionalFieldOf("StoredDim").forGetter(AdvancedDominionData::level),
-                Codec.INT.optionalFieldOf("StoredEntity").forGetter(AdvancedDominionData::entityId),
-                StringRepresentable.fromEnum(Mode::values).fieldOf("Mode").forGetter(AdvancedDominionData::mode)
-        ).apply(instance, AdvancedDominionData::new));
-
-        public static AdvancedDominionData fromItemStack(ItemStack stack) {
-            return CODEC.parse(NbtOps.INSTANCE, stack.getOrCreateTag().getCompound(TAG_KEY)).result().orElse(new AdvancedDominionData(Mode.LOCK_FIRST));
-        }
-
-        public void write(ItemStack stack) {
-            CODEC.encodeStart(NbtOps.INSTANCE, this).result().ifPresent(tag -> {
-                stack.getOrCreateTag().put(TAG_KEY, tag);
-            });
-        }
-
-        private Optional<BlockPos> pos() {
-            return Optional.ofNullable(pos);
-        }
-
-        private BlockPos getPos() {
-            return pos;
-        }
-
-        private Optional<ResourceKey<Level>> level() {
-            return Optional.ofNullable(level);
-        }
-
-        private ResourceKey<Level> getLevel() {
-            return level;
-        }
-
-        private Optional<Integer> entityId() {
-            return Optional.ofNullable(entityId);
-        }
-
-        private Integer getEntityId() {
-            return entityId;
-        }
-
-        public void setData(BlockPos pos, ResourceKey<Level> level) {
-            this.pos = pos;
-            this.level = level;
-            this.entityId = null;
-        }
-
-        public void setData(Integer entityId, ResourceKey<Level> level) {
-            this.entityId = entityId;
-            this.level = level;
-            this.pos = null;
-        }
-
-        private Mode mode() {
-            return mode;
-        }
-
-        public void toggleMode() {
-            mode = mode == Mode.LOCK_FIRST ? Mode.LOCK_SECOND : Mode.LOCK_FIRST;
         }
     }
 }

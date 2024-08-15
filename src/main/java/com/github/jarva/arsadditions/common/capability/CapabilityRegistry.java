@@ -3,6 +3,7 @@ package com.github.jarva.arsadditions.common.capability;
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -18,8 +19,7 @@ public class CapabilityRegistry {
             ItemStackHandler.class
     );
 
-    @SuppressWarnings(value = "unused")
-    @EventBusSubscriber(modid = ArsAdditions.MODID)
+    @EventBusSubscriber(modid = ArsAdditions.MODID, bus = EventBusSubscriber.Bus.MOD)
     public static class CapabilityEventHandler {
         @SubscribeEvent
         public static void registerCapabilities(final RegisterCapabilitiesEvent event) {
@@ -34,6 +34,11 @@ public class CapabilityRegistry {
                     (player, context) -> new ItemStackHandler(9)
             );
         }
+    }
+
+    @SuppressWarnings(value = "unused")
+    @EventBusSubscriber(modid = ArsAdditions.MODID)
+    public static class CapabilityCloneEventHandler {
         @SubscribeEvent
         public static void playerClone(final PlayerEvent.Clone event) {
             RegistryAccess access = event.getEntity().registryAccess();

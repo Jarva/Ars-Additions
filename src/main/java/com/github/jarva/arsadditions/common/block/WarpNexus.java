@@ -17,6 +17,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -31,10 +32,9 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     public static final BooleanProperty REQUIRES_SOURCE = BooleanProperty.create("requires_source");
@@ -56,7 +56,7 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
 
         if (!be.getStack().isEmpty()) {
             if (player instanceof ServerPlayer serverPlayer) {
-                ItemStack item = be.extract();
+                ItemStack item = Capabilities.ItemHandler.BLOCK.getCapability(level, pos, state, be, null).extractItem(0, Item.ABSOLUTE_MAX_STACK_SIZE, false);
                 serverPlayer.getInventory().add(item);
             }
             return InteractionResult.SUCCESS;
@@ -79,8 +79,8 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     @Override
     public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         return new SimpleMenuProvider((i, inventory, player) -> {
-            Optional<ItemStackHandler> itemStackHandler = player.getCapability(CapabilityRegistry.PLAYER_NEXUS_CAPABILITY);
-            return itemStackHandler.map(handler -> new WarpNexusMenu(i, inventory, ContainerLevelAccess.create(level, pos), handler)).orElse(null);
+            ItemStackHandler itemStackHandler = player.getCapability(CapabilityRegistry.PLAYER_NEXUS);
+            return new WarpNexusMenu(i, inventory, ContainerLevelAccess.create(level, pos), itemStackHandler);
         }, Component.translatable("block.ars_additions.warp_nexus"));
     }
 

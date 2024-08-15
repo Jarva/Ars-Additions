@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.datagen.recipes;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.item.data.ExplorationScrollData;
 import com.github.jarva.arsadditions.common.loot.functions.ExplorationScrollFunction;
 import com.github.jarva.arsadditions.common.recipe.LocateStructureRecipe;
 import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
@@ -36,7 +37,7 @@ public class LocateStructureProvider extends SimpleDataProvider {
     public void collectJsons(CachedOutput pOutput) {
         addEntries();
         for (LocateStructureRecipe recipe : recipes) {
-            Path path = getRecipePath(output, AddonRecipeRegistry.LOCATE_STRUCTURE_TYPE.getId().getPath());
+            Path path = getRecipePath(output, recipe.getId().getPath());
             LocateStructureRecipe.CODEC.encodeStart(JsonOps.INSTANCE, recipe).result().ifPresent(json -> {
                 saveStable(pOutput, json, path);
             });
@@ -67,11 +68,11 @@ public class LocateStructureProvider extends SimpleDataProvider {
     }
 
     private void addEntry(String id, ResourceOrTag<Structure> structure, ResourceOrTag<Item> ...augments) {
-        recipes.add(new LocateStructureRecipe(ArsAdditions.prefix(id), List.of(augments), structure, ExplorationScrollFunction.DEFAULT_SEARCH_RADIUS, ExplorationScrollFunction.DEFAULT_SKIP_EXISTING));
+        recipes.add(new LocateStructureRecipe(ArsAdditions.prefix(id), List.of(augments), structure, ExplorationScrollData.DEFAULT_SEARCH_RADIUS, ExplorationScrollData.DEFAULT_SKIP_EXISTING));
     }
 
     protected static Path getRecipePath(Path path, String id) {
-        return path.resolve("data/ars_additions/recipes/locate_structure/" + id + ".json");
+        return path.resolve("data/ars_additions/recipe/locate_structure/" + id + ".json");
     }
 
     /**

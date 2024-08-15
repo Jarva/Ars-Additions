@@ -2,6 +2,11 @@ plugins {
     id 'net.neoforged.moddev' version '1.0.14'
 }
 
+
+archivesBaseName = project.archives_base_name
+version = "${project.minecraft_version}-${new File('version').text.trim()}"
+group = project.maven_group
+
 repositories {
     mavenLocal() {
         content {
@@ -67,7 +72,7 @@ dependencies {
     implementation "mezz.jei:jei-${project.mc_version}-neoforge:${project.jei_version}"
 
     implementation "top.theillusivec4.curios:curios-neoforge:${project.curios_version}+${project.mc_version}"
-    implementation "com.github.glitchfiend:TerraBlender-forge:${project.mc_version}-${project.terrablender_version}"
+    implementation "com.github.glitchfiend:TerraBlender-neoforge:${project.mc_version}-${project.terrablender_version}"
 
     compileOnly "maven.modrinth:async-locator:${project.asynclocator_version}"
 }

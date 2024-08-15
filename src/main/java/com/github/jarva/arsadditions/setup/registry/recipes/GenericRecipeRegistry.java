@@ -8,9 +8,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class GenericRecipeRegistry<C extends RecipeInput, T extends Recipe<C>> {
-    private final DeferredHolder<? extends RecipeType<?>, ? extends RecipeType<? extends T>> type;
+    private final DeferredHolder<RecipeType<?>, RecipeType<T>> type;
 
-    public GenericRecipeRegistry(DeferredHolder<? extends RecipeType<?>, ? extends RecipeType<? extends T>> type) {
+    public GenericRecipeRegistry(DeferredHolder<RecipeType<?>, RecipeType<T>> type) {
         this.type = type;
         REGISTRIES.add(this);
     }

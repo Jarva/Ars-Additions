@@ -2,29 +2,28 @@ package com.github.jarva.arsadditions.common.glyph;
 
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.item.UnstableReliquary;
+import com.github.jarva.arsadditions.common.item.data.mark.EntityMarkData;
+import com.github.jarva.arsadditions.common.item.data.mark.LocationMarkData;
 import com.github.jarva.arsadditions.setup.config.ServerConfig;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonEffectRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonGlyphNames;
-import com.github.jarva.arsadditions.server.util.MarkType;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.Set;
 
 public class EffectMark extends AbstractEffect {
@@ -41,44 +40,29 @@ public class EffectMark extends AbstractEffect {
 
     @Override
     public void onResolveBlock(BlockHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
-        CompoundTag data = new CompoundTag();
+        ItemStack reliquary = UnstableReliquary.getReliquaryFromCaster(spellContext, shooter);
+        if (reliquary == null) return;
 
         BlockPos pos = rayTraceResult.getBlockPos();
-        data.put("block_pos", NbtUtils.writeBlockPos(pos));
-        data.putString("block_dimension", world.dimension().location().toString());
 
-        saveMark(spellContext, shooter, MarkType.LOCATION, data);
+        reliquary.set(AddonDataComponentRegistry.MARK_DATA, new LocationMarkData(new GlobalPos(world.dimension(), pos)));
     }
 
     @Override
     public void onResolveEntity(EntityHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
-        CompoundTag data = new CompoundTag();
+        ItemStack reliquary = UnstableReliquary.getReliquaryFromCaster(spellContext, shooter);
+        if (reliquary == null)
+            return;
 
         Entity entity = rayTraceResult.getEntity();
-        data.putUUID("entity_uuid", entity.getUUID());
-        data.putString("entity_type", EntityType.getKey(entity.getType()).toString());
-        if (entity.hasCustomName()) {
-            data.putString("entity_name", Component.Serializer.toJson(entity.getCustomName(), world.registryAccess()));
-        }
+        Optional<Component> name = Optional.empty();
 
-        boolean marked = saveMark(spellContext, shooter, MarkType.ENTITY, data);
-
-        if (marked && entity instanceof Player player) {
-            data.putString("entity_name", Component.Serializer.toJson(player.getDisplayName(), world.registryAccess()));
+        if (entity instanceof Player player) {
+            name = Optional.ofNullable(player.getDisplayName());
             player.addEffect(new MobEffectInstance(AddonEffectRegistry.MARKED_EFFECT, ServerConfig.SERVER.reliquary_effect_duration.get() * 20));
         }
-    }
 
-    private boolean saveMark(SpellContext context, LivingEntity caster, MarkType type, CompoundTag tag) {
-        ItemStack reliquary = UnstableReliquary.getReliquaryFromCaster(context, caster);
-        if (reliquary == null) return false;
-
-        CompoundTag itemTag = reliquary.getOrCreateTag();
-
-        itemTag.putString("mark_type", type.name());
-        itemTag.put("mark_data", tag);
-
-        return true;
+        reliquary.set(AddonDataComponentRegistry.MARK_DATA, new EntityMarkData(entity.getUUID(), entity.getType().builtInRegistryHolder(), name));
     }
 
     @Override

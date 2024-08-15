@@ -3,6 +3,7 @@ package com.github.jarva.arsadditions.server.storage;
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.setup.config.ServerConfig;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongTag;
@@ -33,7 +34,7 @@ public class ChunkLoadingData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider provider) {
         for (Map.Entry<UUID, Set<ChunkPos>> entry : chunks.entrySet()) {
             ListTag chunkList = new ListTag();
             List<LongTag> tags = entry.getValue()
@@ -51,7 +52,7 @@ public class ChunkLoadingData extends SavedData {
         return new ChunkLoadingData();
     }
 
-    public static ChunkLoadingData load(CompoundTag tag) {
+    public static ChunkLoadingData load(CompoundTag tag, HolderLookup.@NotNull Provider provider) {
         ChunkLoadingData data = ChunkLoadingData.create();
         List<UUID> uuids = tag.getAllKeys().stream().map(UUID::fromString).toList();
         for (UUID uuid : uuids) {
@@ -68,7 +69,7 @@ public class ChunkLoadingData extends SavedData {
     }
 
     public static ChunkLoadingData getData(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(ChunkLoadingData::load, ChunkLoadingData::create, "chunkloading_data");
+        return level.getDataStorage().computeIfAbsent(new Factory<>(ChunkLoadingData::create, ChunkLoadingData::load), "chunkloading_data");
     }
 
     public static Map<ResourceKey<Level>, Set<ChunkPos>> getChunks(MinecraftServer server, UUID uuid) {

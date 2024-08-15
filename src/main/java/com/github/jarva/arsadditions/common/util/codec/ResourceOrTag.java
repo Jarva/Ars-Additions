@@ -5,6 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -26,6 +29,14 @@ public record ResourceOrTag<T>(Optional<TagKey<T>> tag, Optional<ResourceKey<T>>
             TagKey.codec(registry).optionalFieldOf("tag").forGetter(rec -> rec.tag),
             ResourceKey.codec(registry).optionalFieldOf("key").forGetter(rec -> rec.key)
         ).apply(instance, ResourceOrTag::new));
+    }
+
+    public static <T> StreamCodec<RegistryFriendlyByteBuf, ResourceOrTag<T>> createStreamCodec(ResourceKey<Registry<T>> registry) {
+        return StreamCodec.composite(
+                ByteBufCodecs.optional(ByteBufCodecs.fromCodec(TagKey.codec(registry))), ResourceOrTag::tag,
+                ByteBufCodecs.optional(ResourceKey.streamCodec(registry)), ResourceOrTag::key,
+                ResourceOrTag::new
+        );
     }
 
     public void apply(Consumer<TagKey<T>> tagConsumer, Consumer<ResourceKey<T>> keyConsumer) {

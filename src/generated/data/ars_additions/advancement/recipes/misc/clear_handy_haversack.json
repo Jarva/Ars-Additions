@@ -1,0 +1,40 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_journal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_nouveau:worn_notebook"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+<<<<<<<< HEAD:src/generated/data/ars_additions/advancement/recipes/misc/clear_handy_haversack.json
+        "recipe": "ars_additions:clear_handy_haversack"
+========
+        "recipe": "ars_additions:crafting/stonecutter/cracked_sourcestone_wall_0"
+>>>>>>>> ad7a304 (feat: (mostly) finish 1.21 port):src/generated/data/ars_additions/advancement/recipes/decorations/crafting/stonecutter/cracked_sourcestone_wall_0.json
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_journal"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+<<<<<<<< HEAD:src/generated/data/ars_additions/advancement/recipes/misc/clear_handy_haversack.json
+      "ars_additions:clear_handy_haversack"
+========
+      "ars_additions:crafting/stonecutter/cracked_sourcestone_wall_0"
+>>>>>>>> ad7a304 (feat: (mostly) finish 1.21 port):src/generated/data/ars_additions/advancement/recipes/decorations/crafting/stonecutter/cracked_sourcestone_wall_0.json
+    ]
+  }
+}

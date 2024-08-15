@@ -36,7 +36,6 @@ public class ArsAdditions {
         modEventBus.addListener(this::common);
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::post);
-        NeoForge.EVENT_BUS.register(this);
 
         Triggers.init();
     }

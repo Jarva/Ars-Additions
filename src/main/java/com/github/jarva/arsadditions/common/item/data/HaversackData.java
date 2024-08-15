@@ -7,6 +7,7 @@ import com.hollingsworth.arsnouveau.api.util.InvUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -22,18 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record HaversackData(BlockPos pos, ResourceKey<Level> level, Boolean active, ArrayList<ItemStack> items, Boolean loaded) {
+public record HaversackData(GlobalPos pos, Boolean active, ArrayList<ItemStack> items, Boolean loaded) {
     public static final Codec<HaversackData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            BlockPos.CODEC.fieldOf("BindPos").forGetter(HaversackData::pos),
-            ResourceKey.codec(Registries.DIMENSION).fieldOf("BindDim").forGetter(HaversackData::level),
-            Codec.BOOL.optionalFieldOf("Active", false).forGetter(HaversackData::active),
-            ItemStack.CODEC.listOf().optionalFieldOf("Items", List.of()).xmap(Lists::newArrayList, list -> list).forGetter(HaversackData::items),
+            GlobalPos.CODEC.fieldOf("bind_pos").forGetter(HaversackData::pos),
+            Codec.BOOL.optionalFieldOf("active", false).forGetter(HaversackData::active),
+            ItemStack.CODEC.listOf().optionalFieldOf("items", List.of()).xmap(Lists::newArrayList, list -> list).forGetter(HaversackData::items),
             Codec.BOOL.optionalFieldOf("Loaded", false).forGetter(HaversackData::loaded)
     ).apply(instance, HaversackData::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, HaversackData> STREAM_CODEC = StreamCodec.composite(
-            BlockPos.STREAM_CODEC, HaversackData::pos,
-            ResourceKey.streamCodec(Registries.DIMENSION), HaversackData::level,
+            GlobalPos.STREAM_CODEC, HaversackData::pos,
             ByteBufCodecs.BOOL, HaversackData::active,
             ItemStack.LIST_STREAM_CODEC.map(Lists::newArrayList, list -> list), HaversackData::items,
             ByteBufCodecs.BOOL, HaversackData::loaded,
@@ -45,11 +44,11 @@ public record HaversackData(BlockPos pos, ResourceKey<Level> level, Boolean acti
     }
 
     public HaversackData toggle() {
-        return new HaversackData(pos, level, !active, items, loaded);
+        return new HaversackData(pos, !active, items, loaded);
     }
 
     public void toggleLoaded() {
-        new HaversackData(pos, level, active, items, !loaded);
+        new HaversackData(pos, active, items, !loaded);
     }
 
     public boolean add(ItemStack stack) {
@@ -66,11 +65,11 @@ public record HaversackData(BlockPos pos, ResourceKey<Level> level, Boolean acti
 
     @Nullable
     public FilterableItemHandler getItemHandler(Level level) {
-        if (!level.isLoaded(pos)) return null;
+        if (!level.isLoaded(pos.pos())) return null;
 
-        BlockEntity be = level.getBlockEntity(pos);
+        BlockEntity be = level.getBlockEntity(pos.pos());
         if (be == null) return null;
 
-        return new FilterableItemHandler(level.getCapability(Capabilities.ItemHandler.BLOCK, pos, null), InvUtil.filtersOnTile(be));
+        return new FilterableItemHandler(level.getCapability(Capabilities.ItemHandler.BLOCK, pos.pos(), null), InvUtil.filtersOnTile(be));
     }
 }

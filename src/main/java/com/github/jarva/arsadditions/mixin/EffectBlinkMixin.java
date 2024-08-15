@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EffectBlink.class)
 public class EffectBlinkMixin {
-    @Inject(method = "onResolveEntity", at = @At(value = "INVOKE", target = "Lcom/hollingsworth/arsnouveau/common/spell/effect/EffectBlink;warpEntity(Lnet/minecraft/world/entity/Entity;Lcom/hollingsworth/arsnouveau/common/items/WarpScroll$WarpScrollData;)V", shift = At.Shift.BEFORE), cancellable = true, remap = false)
+    @Inject(method = "onResolveEntity", at = @At(value = "INVOKE", target = "Lcom/hollingsworth/arsnouveau/common/spell/effect/EffectBlink;warpEntity(Lnet/minecraft/world/entity/Entity;Lcom/hollingsworth/arsnouveau/common/items/data/WarpScrollData;)V", shift = At.Shift.BEFORE), cancellable = true, remap = false)
     private void dontWarpExplorer(EntityHitResult rayTraceResult, Level world, LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver, CallbackInfo ci) {
         if (shooter.getOffhandItem().is(AddonItemRegistry.EXPLORATION_WARP_SCROLL.get())) {
             ci.cancel();

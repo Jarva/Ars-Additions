@@ -1,8 +1,6 @@
 package com.github.jarva.arsadditions.common.recipe.wixie;
 
 import com.hollingsworth.arsnouveau.api.ANFakePlayer;
-import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatusRecipe;
-import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantmentRecipe;
 import com.hollingsworth.arsnouveau.api.item.inv.FilterableItemHandler;
 import com.hollingsworth.arsnouveau.api.item.inv.InteractType;
 import com.hollingsworth.arsnouveau.api.item.inv.InventoryManager;
@@ -11,23 +9,33 @@ import com.hollingsworth.arsnouveau.api.recipe.MultiRecipeWrapper;
 import com.hollingsworth.arsnouveau.api.recipe.SingleRecipe;
 import com.hollingsworth.arsnouveau.api.util.InvUtil;
 import com.hollingsworth.arsnouveau.common.block.tile.WixieCauldronTile;
+import com.hollingsworth.arsnouveau.common.crafting.recipes.ApparatusRecipeInput;
+import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantingApparatusRecipe;
+import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantmentRecipe;
+import com.mojang.datafixers.kinds.App;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class EnchantingApparatusRecipeWrapper extends MultiRecipeWrapper {
     public static Map<Item, MultiRecipeWrapper> RECIPE_CACHE = new HashMap<>();
@@ -40,20 +48,23 @@ public class EnchantingApparatusRecipeWrapper extends MultiRecipeWrapper {
         MultiRecipeWrapper wrapper = new EnchantingApparatusRecipeWrapper();
         if (level.getServer() == null) return wrapper;
 
-        for (Recipe<?> recipe : level.getServer().getRecipeManager().getRecipes()) {
-            if (recipe instanceof EnchantingApparatusRecipe apparatusRecipe) {
-                List<Ingredient> ingredients = new ArrayList<>(apparatusRecipe.pedestalItems);
-                ItemStack result = apparatusRecipe.result;
-                if (recipe instanceof EnchantmentRecipe enchantmentRecipe) {
-                    Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-                    if (!enchantments.containsKey(enchantmentRecipe.enchantment) || enchantments.get(enchantmentRecipe.enchantment) != enchantmentRecipe.enchantLevel)
+        for (RecipeHolder<?> recipe : level.getServer().getRecipeManager().getRecipes()) {
+            if (recipe.value() instanceof EnchantingApparatusRecipe apparatusRecipe) {
+                List<Ingredient> ingredients = new ArrayList<>(apparatusRecipe.pedestalItems());
+                ItemStack result = apparatusRecipe.result();
+                if (apparatusRecipe instanceof EnchantmentRecipe enchantmentRecipe) {
+                    ItemEnchantments enchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack);
+                    Optional<Holder.Reference<Enchantment>> enchantment = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(enchantmentRecipe.enchantmentKey);
+                    if (enchantment.isEmpty() || !enchantment.get().isBound())
+                        continue;
+                    if (enchantments.getLevel(enchantment.get()) != enchantmentRecipe.enchantLevel)
                         continue;
                 } else {
                     if (result.getItem() != stack.getItem())
                         continue;
-                    ingredients.add(apparatusRecipe.reagent);
+                    ingredients.add(apparatusRecipe.reagent());
                 }
-                wrapper.addRecipe(ingredients, result, recipe);
+                wrapper.addRecipe(ingredients, result, recipe.value());
             }
         }
 
@@ -71,19 +82,24 @@ public class EnchantingApparatusRecipeWrapper extends MultiRecipeWrapper {
                 for (BlockPos p : cauldronTile.getInventories()) {
                     BlockEntity be = world.getBlockEntity(p);
                     if (be == null) continue;
-                    filterables.add(InvUtil.getFilteredHandler(be));
+                    filterables.add(new FilterableItemHandler(serverLevel.getCapability(Capabilities.ItemHandler.BLOCK, pos, serverLevel.getBlockState(pos), be, null)));
                 }
                 InventoryManager inventoryManager = new InventoryManager(filterables);
-                SlotReference slot = inventoryManager.findItem(is -> is.is(Items.BOOK) || enchantmentRecipe.doesReagentMatch(is, ANFakePlayer.getPlayer(serverLevel)), InteractType.EXTRACT);
+                Player fakePlayer = ANFakePlayer.getPlayer(serverLevel);
+                // TODO: Update Aparatus Input.
+                SlotReference slot = inventoryManager.findItem(is -> is.is(Items.BOOK) || enchantmentRecipe.doesReagentMatch(new ApparatusRecipeInput(is, List.of(), fakePlayer), serverLevel, fakePlayer), InteractType.EXTRACT);
                 if (slot.isEmpty()) return null;
 
                 ItemStack found = slot.getHandler().getStackInSlot(slot.getSlot()).copy();
                 items.add(found);
 
                 ItemStack output = found.getItem() == Items.BOOK ? new ItemStack(Items.ENCHANTED_BOOK) : found.copy();
-                Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(output);
-                enchantments.put(enchantmentRecipe.enchantment, enchantmentRecipe.enchantLevel);
-                EnchantmentHelper.setEnchantments(enchantments, output);
+                ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(output));
+                Optional<Holder.Reference<Enchantment>> enchantment = world.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(enchantmentRecipe.enchantmentKey);
+                if (enchantment.isEmpty() || !enchantment.get().isBound())
+                    return null;
+                enchantments.set(enchantment.get(), enchantmentRecipe.enchantLevel);
+                EnchantmentHelper.setEnchantments(output, enchantments.toImmutable());
                 recipe.outputStack = output;
             } else {
                 return null;

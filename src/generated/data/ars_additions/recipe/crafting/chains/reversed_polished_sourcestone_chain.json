@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ars_additions:sourcestone_chain"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "ars_additions:polished_sourcestone_chain"
+  }
+}

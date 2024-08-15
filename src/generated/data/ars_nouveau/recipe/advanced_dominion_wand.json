@@ -1,0 +1,23 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "minecraft:amethyst_block"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  ],
+  "reagent": {
+    "item": "ars_nouveau:dominion_wand"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_additions:advanced_dominion_wand"
+  },
+  "sourceCost": 0
+}

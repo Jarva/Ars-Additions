@@ -3,10 +3,12 @@ package com.github.jarva.arsadditions.common.item;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.server.storage.EnderSourceData;
 import com.github.jarva.arsadditions.common.util.FillUtil;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
@@ -21,9 +23,8 @@ public class EnderSourceJarItem extends BlockItem {
 
         if (level.getGameTime() % 10 != 0) return;
 
-        CompoundTag BET = getBlockEntityData(stack);
-        if (BET == null) {
-            BET = new CompoundTag();
+        CompoundTag BET = stack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY).copyTag();
+        if (BET.isEmpty()) {
             BET.putInt("max_source", FillUtil.getMaxSource());
         }
 

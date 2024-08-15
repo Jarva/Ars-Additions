@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class EntityTypeTagDatagen extends IntrinsicHolderTagsProvider<EntityType<?>> {
     public static TagKey<EntityType<?>> SOURCE_SPAWNER_DENYLIST = TagKey.create(Registries.ENTITY_TYPE, ArsAdditions.prefix("source_spawner_denylist"));
-    public static TagKey<EntityType<?>> BOSSES = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("forge", "bosses"));
+    public static TagKey<EntityType<?>> BOSSES = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("c", "bosses"));
     public EntityTypeTagDatagen(PackOutput arg, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
         super(arg, Registries.ENTITY_TYPE, future, item -> item.builtInRegistryHolder().key(), ArsAdditions.MODID, helper);
     }

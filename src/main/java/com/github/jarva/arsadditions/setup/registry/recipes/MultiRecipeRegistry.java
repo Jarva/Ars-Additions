@@ -13,7 +13,7 @@ import java.util.List;
 public class MultiRecipeRegistry<C extends RecipeInput, T extends Recipe<C>> {
     public final List<GenericRecipeRegistry<C, T>> recipeRegistries = new ArrayList<>();
 
-    public <R extends T> void addRecipeType(DeferredHolder<RecipeType<?>, ? extends RecipeType<R>> recipeType) {
+    public void addRecipeType(DeferredHolder<RecipeType<?>, RecipeType<T>> recipeType) {
         recipeRegistries.add(new GenericRecipeRegistry<>(recipeType));
     }
 

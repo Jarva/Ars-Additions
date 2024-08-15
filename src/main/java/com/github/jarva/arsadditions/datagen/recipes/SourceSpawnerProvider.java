@@ -53,7 +53,7 @@ public class SourceSpawnerProvider extends SimpleDataProvider {
     }
 
     protected static Path getRecipePath(Path path, String id) {
-        return path.resolve("data/ars_additions/recipes/source_spawner/" + id + ".json");
+        return path.resolve("data/ars_additions/recipe/source_spawner/" + id + ".json");
     }
 
     /**

@@ -1,7 +1,9 @@
 package com.github.jarva.arsadditions.client.jei;
 
+import com.github.jarva.arsadditions.common.item.data.WayfinderData;
 import com.github.jarva.arsadditions.common.recipe.LocateStructureRecipe;
 import com.github.jarva.arsadditions.common.ritual.RitualLocateStructure;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.client.jei.MultiInputCategory;
@@ -18,7 +20,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -71,9 +72,8 @@ public class LocateStructureRecipeCategory implements IRecipeCategory<LocateStru
         }
 
         ItemStack wayfinder = new ItemStack(AddonItemRegistry.WAYFINDER.get());
-        CompoundTag nbt = wayfinder.getOrCreateTag();
         Component name = recipe.getName();
-        nbt.putString("Structure", Component.Serializer.toJson(name));
+        wayfinder.set(AddonDataComponentRegistry.WAYFINDER_DATA, new WayfinderData(name));
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 86, 10).addIngredient(VanillaTypes.ITEM_STACK, wayfinder);
     }

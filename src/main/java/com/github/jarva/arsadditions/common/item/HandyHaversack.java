@@ -167,7 +167,7 @@ public class HandyHaversack extends Item implements IScribeable {
     }
 
     public boolean writeStack(Player player, ItemStack haversack, ItemStack write) {
-        return HaversackData.fromItemStack(haversack).map(data -> {
+        return HaversackData.fromItemStack(haversack).map(data -> { 
             if (write.isEmpty()) {
                 return false;
             }

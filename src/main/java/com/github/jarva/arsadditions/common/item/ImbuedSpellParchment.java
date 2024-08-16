@@ -2,12 +2,10 @@ package com.github.jarva.arsadditions.common.item;
 
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.ANFakePlayer;
-import com.hollingsworth.arsnouveau.api.spell.AbstractCaster;
-import com.hollingsworth.arsnouveau.api.spell.EntitySpellResolver;
-import com.hollingsworth.arsnouveau.api.spell.Spell;
-import com.hollingsworth.arsnouveau.api.spell.SpellContext;
+import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.LivingCaster;
 import com.hollingsworth.arsnouveau.common.items.SpellParchment;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -20,7 +18,7 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 
 public class ImbuedSpellParchment extends SpellParchment {
     public ImbuedSpellParchment() {
-        super(AddonItemRegistry.defaultItemProperties());
+        super(AddonItemRegistry.defaultItemProperties().component(DataComponentRegistry.SPELL_CASTER, new SpellCaster()));
     }
 
     @Override
@@ -51,8 +49,8 @@ public class ImbuedSpellParchment extends SpellParchment {
             player.setXRot(livingEntity.getXRot());
             player.setYRot(livingEntity.getYRot());
             EntitySpellResolver resolver = new EntitySpellResolver(new SpellContext(level, spell, player, LivingCaster.from(livingEntity)));
-            if (resolver.onCast(stack, level) && !(livingEntity instanceof Player p && p.isCreative())) {
-                stack.shrink(1);
+            if (resolver.onCast(stack, level)) {
+                stack.consume(1, livingEntity);
             }
         }
 

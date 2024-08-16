@@ -36,13 +36,13 @@ public class AdvancementDatagen extends AdvancementProvider {
                     .display(BlockRegistry.getBlock(LibBlockNames.GILDED_SOURCESTONE_LARGE_BRICKS), AdvancementType.TASK)
                     .addCriterion(new Criterion<>(Triggers.FIND_RUINED_PORTAL.get(), new PlayerTrigger.TriggerInstance(Optional.empty())))
                     .parent(dummy("root"))
-                    .save(consumer);
+                    .save(consumer, ArsAdditions.prefix("find_ruined_portal"));
 
             AdvancementHolder createWarpPortal = ANAdvancementBuilder.builder(ArsAdditions.MODID, "create_ruined_portal")
                     .display(AddonItemRegistry.EXPLORATION_WARP_SCROLL.get(), AdvancementType.CHALLENGE, true)
                     .addCriterion(new Criterion<>(Triggers.CREATE_RUINED_PORTAL.get(), new PlayerTrigger.TriggerInstance(Optional.empty())))
                     .parent(findRuinedPortal)
-                    .save(consumer);
+                    .save(consumer, ArsAdditions.prefix("create_ruined_portal"));
         }
     }
 }

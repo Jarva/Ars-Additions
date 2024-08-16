@@ -1,23 +1,19 @@
 package com.github.jarva.arsadditions.common.recipe.wixie;
 
-import com.hollingsworth.arsnouveau.api.ANFakePlayer;
 import com.hollingsworth.arsnouveau.api.item.inv.FilterableItemHandler;
 import com.hollingsworth.arsnouveau.api.item.inv.InteractType;
 import com.hollingsworth.arsnouveau.api.item.inv.InventoryManager;
 import com.hollingsworth.arsnouveau.api.item.inv.SlotReference;
 import com.hollingsworth.arsnouveau.api.recipe.MultiRecipeWrapper;
 import com.hollingsworth.arsnouveau.api.recipe.SingleRecipe;
-import com.hollingsworth.arsnouveau.api.util.InvUtil;
 import com.hollingsworth.arsnouveau.common.block.tile.WixieCauldronTile;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.ApparatusRecipeInput;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantingApparatusRecipe;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantmentRecipe;
-import com.mojang.datafixers.kinds.App;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -31,11 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class EnchantingApparatusRecipeWrapper extends MultiRecipeWrapper {
     public static Map<Item, MultiRecipeWrapper> RECIPE_CACHE = new HashMap<>();
@@ -85,9 +77,7 @@ public class EnchantingApparatusRecipeWrapper extends MultiRecipeWrapper {
                     filterables.add(new FilterableItemHandler(serverLevel.getCapability(Capabilities.ItemHandler.BLOCK, pos, serverLevel.getBlockState(pos), be, null)));
                 }
                 InventoryManager inventoryManager = new InventoryManager(filterables);
-                Player fakePlayer = ANFakePlayer.getPlayer(serverLevel);
-                // TODO: Update Aparatus Input.
-                SlotReference slot = inventoryManager.findItem(is -> is.is(Items.BOOK) || enchantmentRecipe.doesReagentMatch(new ApparatusRecipeInput(is, List.of(), fakePlayer), serverLevel, fakePlayer), InteractType.EXTRACT);
+                SlotReference slot = inventoryManager.findItem(is -> is.is(Items.BOOK) || enchantmentRecipe.doesReagentMatch(new ApparatusRecipeInput(is, List.of(), null), serverLevel, null), InteractType.EXTRACT);
                 if (slot.isEmpty()) return null;
 
                 ItemStack found = slot.getHandler().getStackInSlot(slot.getSlot()).copy();

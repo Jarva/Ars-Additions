@@ -1,0 +1,12 @@
+{
+  "type": "ars_nouveau:imbuement",
+  "input": {
+    "item": "ars_additions:dispel_protection_charm"
+  },
+  "output": {
+    "count": 1,
+    "id": "ars_additions:dispel_protection_charm"
+  },
+  "pedestalItems": [],
+  "source": 2000
+}

@@ -57,7 +57,7 @@ public class CodexEntry extends Item {
             player.sendSystemMessage(Component.literal("Unlocked " + glyph.getName()));
         }
 
-        player.getItemInHand(usedHand).shrink(1);
+        player.getItemInHand(usedHand).consume(1, player);
         return super.use(level, player, usedHand);
     }
 

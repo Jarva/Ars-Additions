@@ -18,6 +18,7 @@ public class AddonSetup {
         AddonDataComponentRegistry.DATA.register(modEventBus);
         AddonAttachmentRegistry.ATTACHMENT_TYPES.register(modEventBus);
         AddonConditionRegistry.CONDITION_CODECS.register(modEventBus);
+        AddonCreativeTabRegistry.TABS.register(modEventBus);
         Triggers.TRIGGERS.register(modEventBus);
         ModifyTagRegistry.init();
         MarkDataRegistry.init();

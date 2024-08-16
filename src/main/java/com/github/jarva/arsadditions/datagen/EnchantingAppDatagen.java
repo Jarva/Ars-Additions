@@ -3,10 +3,12 @@ package com.github.jarva.arsadditions.datagen;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
+import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantingApparatusRecipe;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeBuilder;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
@@ -23,6 +25,15 @@ public class EnchantingAppDatagen extends ApparatusRecipeProvider {
 
     protected static Path getRecipePath(Path pathIn, String str) {
         return pathIn.resolve("data/" + Setup.root + "/recipe/apparatus/" + str + ".json");
+    }
+
+    public void collectJsons(CachedOutput pOutput) {
+        this.addEntries();
+
+        for (ApparatusRecipeBuilder.RecipeWrapper<? extends EnchantingApparatusRecipe> recipe : this.recipes) {
+            Path path = getRecipePath(this.output, recipe.id().getPath());
+            this.saveStable(pOutput, recipe.serialize(), path);
+        }
     }
 
     @Override

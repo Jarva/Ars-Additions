@@ -1,13 +1,13 @@
 package com.github.jarva.arsadditions.datagen.client;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.common.block.MagelightLantern;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
+import com.hollingsworth.arsnouveau.common.block.SconceBlock;
 import com.hollingsworth.arsnouveau.common.items.Glyph;
 import com.hollingsworth.arsnouveau.common.items.RitualTablet;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
@@ -160,7 +160,7 @@ public class BlockStateDatagen extends BlockStateProvider {
             return ConfiguredModel.builder()
                     .modelFile(hanging ? lanternHanging : lantern)
                     .build();
-        }, LanternBlock.WATERLOGGED, MagelightLantern.LIGHT_LEVEL);
+        }, LanternBlock.WATERLOGGED, SconceBlock.LIGHT_LEVEL);
         itemModels().basicItem(block.asItem());
     }
 

@@ -6,6 +6,7 @@ import com.github.jarva.arsadditions.common.commands.SetLootTableCommand;
 import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.github.jarva.arsadditions.setup.config.CommonConfig;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonCreativeTabRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.recipes.GenericRecipeRegistry;
 import com.hollingsworth.arsnouveau.api.event.EventQueue;
@@ -14,7 +15,6 @@ import com.hollingsworth.arsnouveau.api.loot.DungeonLootTables;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.common.items.RitualTablet;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistryWrapper;
-import com.hollingsworth.arsnouveau.setup.registry.CreativeTabRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemRegistryWrapper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
@@ -44,7 +44,7 @@ public class ModEvents {
     public static class ServerModEvents {
         @SubscribeEvent
         public static void buildContents(BuildCreativeModeTabContentsEvent event) {
-            if (event.getTabKey() == CreativeTabRegistry.BLOCKS.getKey()) {
+            if (event.getTabKey() == AddonCreativeTabRegistry.ADDITIONS_TAB.getKey()) {
                 for (ItemRegistryWrapper<Item> item : AddonItemRegistry.REGISTERED_ITEMS) {
                     event.accept(item);
                 }

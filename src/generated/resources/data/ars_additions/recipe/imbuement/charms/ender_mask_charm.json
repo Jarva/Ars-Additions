@@ -1,0 +1,12 @@
+{
+  "type": "ars_nouveau:imbuement",
+  "input": {
+    "item": "ars_additions:ender_mask_charm"
+  },
+  "output": {
+    "count": 1,
+    "id": "ars_additions:ender_mask_charm"
+  },
+  "pedestalItems": [],
+  "source": 2000
+}

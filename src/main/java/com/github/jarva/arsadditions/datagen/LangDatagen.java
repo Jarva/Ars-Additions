@@ -175,6 +175,10 @@ public class LangDatagen extends LanguageProvider {
         this.add("ars_additions.adv.title.create_ruined_portal", "How does this still work?");
         this.add("ars_additions.adv.desc.create_ruined_portal", "Activate a ruined warp portal");
 
+        // Creative Tab
+
+        this.add("itemGroup.ars_additions", "Ars Additions");
+
         // Patchouli
 
         this.add("ars_additions.page.warp_indexes", "Warp Indexes");

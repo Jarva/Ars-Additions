@@ -12,15 +12,14 @@ import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.ArsNouveau;
+import com.hollingsworth.arsnouveau.common.items.data.BlockFillContents;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.component.CustomData;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -50,19 +49,16 @@ public class ArsAdditionsClient {
             evt.enqueueWork(() -> {
                 ItemProperties.register(AddonBlockRegistry.ENDER_SOURCE_JAR.get().asItem(), ArsAdditions.prefix("source"), (stack, level, entity, seed) -> {
                     if (!stack.has(DataComponents.BLOCK_ENTITY_DATA)) return 0.0F;
-                    CustomData data = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-                    CompoundTag BET = data.copyTag();
-                    return FillUtil.getFillLevel(BET.getInt("source"), BET.getInt("max_source"));
+                    int source = BlockFillContents.get(stack);
+                    return FillUtil.getFillLevel(source);
                 });
                 ItemProperties.register(AddonItemRegistry.HANDY_HAVERSACK.get(), ArsAdditions.prefix("loaded"), (stack, level, entity, seed) -> {
                     if (!stack.has(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA)) return 1.0F;
                     HaversackData data = stack.get(AddonDataComponentRegistry.HAVERSACK_DATA);
-                    return data.loaded() ? 0.0F : 1.0F;
+                    return data != null && data.loaded() ? 0.0F : 1.0F;
                 });
                 ItemProperties.register(AddonItemRegistry.WAYFINDER.get(), ArsAdditions.prefix("angle"), new CompassItemPropertyFunction(new CompassUtil()));
-                ItemProperties.register(AddonItemRegistry.WAYFINDER.get(), ArsAdditions.prefix("pos"), (stack, level, entity, seed) -> {
-                    return stack.has(AddonDataComponentRegistry.WAYFINDER_DATA) ? 1.0F : 0.0F;
-                });
+                ItemProperties.register(AddonItemRegistry.WAYFINDER.get(), ArsAdditions.prefix("pos"), (stack, level, entity, seed) -> stack.has(AddonDataComponentRegistry.WAYFINDER_DATA) ? 1.0F : 0.0F);
             });
         }
 

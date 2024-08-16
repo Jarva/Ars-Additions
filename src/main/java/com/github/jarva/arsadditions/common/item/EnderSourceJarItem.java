@@ -1,14 +1,11 @@
 package com.github.jarva.arsadditions.common.item;
 
-import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.server.storage.EnderSourceData;
-import com.github.jarva.arsadditions.common.util.FillUtil;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
+import com.hollingsworth.arsnouveau.common.items.data.BlockFillContents;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
@@ -23,18 +20,11 @@ public class EnderSourceJarItem extends BlockItem {
 
         if (level.getGameTime() % 10 != 0) return;
 
-        CompoundTag BET = stack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY).copyTag();
-        if (BET.isEmpty()) {
-            BET.putInt("max_source", FillUtil.getMaxSource());
-        }
-
+        int itemSource = BlockFillContents.get(stack);
         int source = EnderSourceData.getSource(level.getServer(), entity.getUUID());
-        if (BET.contains("source") && BET.getInt("source") == source) {
-            return;
+
+        if (itemSource != source) {
+            stack.set(DataComponentRegistry.BLOCK_FILL_CONTENTS, new BlockFillContents(source));
         }
-
-        BET.putInt("source", source);
-
-        setBlockEntityData(stack, AddonBlockRegistry.ENDER_SOURCE_JAR_TILE.get(), BET);
     }
 }

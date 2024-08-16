@@ -55,13 +55,13 @@ public class Charm extends ArsNouveauCurio {
     public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext context, List<Component> tooltip2, TooltipFlag flagIn) {
         super.appendHoverText(stack, context, tooltip2, flagIn);
 
-        tooltip.add(Component.translatable("tooltip.ars_additions.charm.desc").withStyle(ChatFormatting.GRAY));
+        tooltip2.add(Component.translatable("tooltip.ars_additions.charm.desc").withStyle(ChatFormatting.GRAY));
 
         int charges = CharmData.getOrDefault(stack, uses).charges();
-        tooltip.add(Component.translatable("tooltip.ars_additions.charm.charges", charges, uses).withStyle(ChatFormatting.GOLD));
+        tooltip2.add(Component.translatable("tooltip.ars_additions.charm.charges", charges, uses).withStyle(ChatFormatting.GOLD));
 
         String descKey = Util.makeDescriptionId("tooltip", BuiltInRegistries.ITEM.getKey(this));
-        tooltip.add(Component.translatable(descKey).withStyle(ChatFormatting.GRAY));
+        tooltip2.add(Component.translatable(descKey).withStyle(ChatFormatting.GRAY));
     }
 
     @Override

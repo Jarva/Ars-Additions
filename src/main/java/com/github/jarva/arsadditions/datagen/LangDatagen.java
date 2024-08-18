@@ -159,6 +159,8 @@ public class LangDatagen extends LanguageProvider {
 
         this.add("chat.ars_additions.imbued_spell_parchment.scribing_started", "Scribing %s. Add source nearby to increase scribe speed.");
 
+        this.add("chat.ars_additions.advanced_dominion_wand.mode", "Set mode: %s");
+
         // Effects
 
         this.add("effect.ars_additions.marked", "Marked");

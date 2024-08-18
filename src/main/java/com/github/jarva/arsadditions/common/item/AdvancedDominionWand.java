@@ -47,7 +47,7 @@ public class AdvancedDominionWand extends Item {
             if (data.getPos() == null && data.getEntityId() == null) {
                 data.setData(interactionTarget.getId(), serverLevel.dimension());
                 data.write(stack);
-                PortUtil.sendMessage(player, Component.translatable("ars_nouveau.dominion_wand.stored_entity"));
+                PortUtil.sendMessageNoSpam(player, Component.translatable("ars_nouveau.dominion_wand.stored_entity"));
                 return InteractionResult.SUCCESS;
             }
 
@@ -66,6 +66,7 @@ public class AdvancedDominionWand extends Item {
             AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
             data.toggleMode();
             data.write(stack);
+            PortUtil.sendMessageNoSpam(pPlayer, Component.translatable("chat.ars_additions.advanced_dominion_wand.mode", data.mode.getTranslatable()));
             return InteractionResultHolder.success(stack);
         }
 
@@ -191,7 +192,6 @@ public class AdvancedDominionWand extends Item {
             }
         }
 
-        public static AdvancedDominionData DEFAULT_DATA = new AdvancedDominionData(Mode.LOCK_FIRST);
         private Mode mode;
         private ResourceKey<Level> level;
         private BlockPos pos;
@@ -221,7 +221,7 @@ public class AdvancedDominionWand extends Item {
         ).apply(instance, AdvancedDominionData::new));
 
         public static AdvancedDominionData fromItemStack(ItemStack stack) {
-            return CODEC.parse(NbtOps.INSTANCE, stack.getOrCreateTag().getCompound(TAG_KEY)).result().orElse(DEFAULT_DATA);
+            return CODEC.parse(NbtOps.INSTANCE, stack.getOrCreateTag().getCompound(TAG_KEY)).result().orElse(new AdvancedDominionData(Mode.LOCK_FIRST));
         }
 
         public void write(ItemStack stack) {

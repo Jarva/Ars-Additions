@@ -6,7 +6,7 @@ import com.hollingsworth.arsnouveau.api.registry.GenericRecipeRegistry;
 import net.minecraft.world.Container;
 
 public class LocateStructureRegistry extends GenericRecipeRegistry<Container, LocateStructureRecipe> {
-    public static LocateStructureRegistry INSTANCE = new LocateStructureRegistry();
+    public static LocateStructureRegistry INSTANCE;
 
     public LocateStructureRegistry() {
         super(AddonRecipeRegistry.LOCATE_STRUCTURE_TYPE);

@@ -67,5 +67,7 @@ public class BlockTagDatagen extends IntrinsicHolderTagsProvider<Block> {
         this.tag(CARRYON_BLACKLIST).add(AddonBlockRegistry.WARP_NEXUS.get());
         this.tag(RELOCATION_NOT_SUPPORTED).add(AddonBlockRegistry.WARP_NEXUS.get());
         this.tag(IMMOVABLE).add(AddonBlockRegistry.WARP_NEXUS.get());
+
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(AddonBlockRegistry.SOURCE_SPAWNER.get());
     }
 }

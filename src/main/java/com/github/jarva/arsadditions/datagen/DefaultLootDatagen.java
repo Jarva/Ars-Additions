@@ -84,7 +84,9 @@ public class DefaultLootDatagen extends LootTableProvider {
                 this.add(door, createDoorTable(door));
             }
 
-            WarpNexus warpNexus = AddonBlockRegistry.WARP_NEXUS.get();
+            registerDropSelf(AddonBlockRegistry.SOURCE_SPAWNER.get());
+
+            WarpNexus warpNexus = AddonBlockRegistry.WARP_NEXUS.get();          
             LootPool.Builder nexusBuilder = LootPool.lootPool()
                     .setRolls(ConstantValue.exactly(1))
                     .add(LootItem.lootTableItem(warpNexus)

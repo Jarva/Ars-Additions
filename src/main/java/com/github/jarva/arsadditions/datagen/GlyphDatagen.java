@@ -61,6 +61,6 @@ public class GlyphDatagen extends GlyphRecipeProvider {
     }
 
     protected static Path getScribeGlyphPath(Path pathIn, Item glyph) {
-        return pathIn.resolve("data/" + Setup.root + "/recipes/glyph/" + getRegistryName(glyph).getPath() + ".json");
+        return pathIn.resolve("data/" + Setup.root + "/recipes/" + getRegistryName(glyph).getPath() + ".json");
     }
 }

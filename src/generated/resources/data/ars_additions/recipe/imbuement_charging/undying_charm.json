@@ -1,0 +1,8 @@
+{
+  "type": "ars_additions:charm_charging",
+  "costPerDamage": 2000,
+  "id": "ars_additions:undying_charm",
+  "item": {
+    "key": "ars_additions:undying_charm"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ars_additions:advanced_dominion_wand"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "ars_additions:advanced_dominion_wand"
+  }
+}

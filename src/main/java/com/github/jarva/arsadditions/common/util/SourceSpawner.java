@@ -5,8 +5,8 @@ import com.github.jarva.arsadditions.common.recipe.SourceSpawnerRecipe;
 import com.github.jarva.arsadditions.common.util.codec.TagModifier;
 import com.github.jarva.arsadditions.datagen.tags.EntityTypeTagDatagen;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
-import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
 import com.github.jarva.arsadditions.setup.registry.ModifyTagRegistry;
+import com.github.jarva.arsadditions.setup.registry.recipes.SourceSpawnerRegistry;
 import com.hollingsworth.arsnouveau.common.block.tile.MobJarTile;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
@@ -25,6 +25,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
@@ -142,7 +143,7 @@ public class SourceSpawner extends BaseSpawner {
     }
 
     public Optional<SourceSpawnerRecipe> getRecipe(Entity entity) {
-        return AddonRecipeRegistry.SOURCE_SPAWNER_REGISTRY.getRecipes().stream().filter(r -> r.value().isMatch(entity.getType())).findFirst().map(RecipeHolder::value);
+        return SourceSpawnerRegistry.INSTANCE.getRecipes().stream().filter(r -> r.value().isMatch(entity.getType())).findFirst().map(RecipeHolder::value);
     }
 
     public int calculateSource(Entity entity) {

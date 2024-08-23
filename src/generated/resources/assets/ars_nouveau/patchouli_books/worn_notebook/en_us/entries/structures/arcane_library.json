@@ -1,0 +1,11 @@
+{
+  "category": "ars_nouveau:structures",
+  "icon": "minecraft:bookshelf",
+  "name": "ars_additions.page.arcane_library",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_additions.page1.arcane_library"
+    }
+  ]
+}

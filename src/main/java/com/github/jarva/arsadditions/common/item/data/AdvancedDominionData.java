@@ -46,7 +46,9 @@ public record AdvancedDominionData(Optional<BlockPos> pos, Optional<ResourceKey<
         }
     }
 
-    public static AdvancedDominionData DEFAULT_DATA = new AdvancedDominionData(Optional.empty(), Optional.empty(), Optional.empty(), AdvancedDominionData.Mode.LOCK_FIRST);
+    public static AdvancedDominionData fromItemStack(ItemStack stack) {
+        return stack.getOrDefault(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA.get(), new AdvancedDominionData(Optional.empty(), Optional.empty(), Optional.empty(), AdvancedDominionData.Mode.LOCK_FIRST));
+    }
 
     public static final Codec<AdvancedDominionData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BlockPos.CODEC.optionalFieldOf("Pos").forGetter(AdvancedDominionData::pos),

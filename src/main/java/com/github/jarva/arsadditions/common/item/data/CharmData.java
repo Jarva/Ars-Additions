@@ -17,14 +17,16 @@ public record CharmData(int charges) {
             ByteBufCodecs.INT, CharmData::charges, CharmData::new
     );
 
-    public static CharmData DEFAULT_DATA = new CharmData(0);
-
     public CharmData use(int charges) {
         return new CharmData(Math.max(this.charges - charges, 0));
     }
 
+    public CharmData set(int charges) {
+        return new CharmData(Math.max(charges, 0));
+    }
+
     public static CharmData getOrDefault(ItemStack stack) {
-        return stack.getOrDefault(AddonDataComponentRegistry.CHARM_DATA, DEFAULT_DATA);
+        return stack.getOrDefault(AddonDataComponentRegistry.CHARM_DATA, new CharmData(0));
     }
 
     public static CharmData getOrDefault(ItemStack stack, int charges) {

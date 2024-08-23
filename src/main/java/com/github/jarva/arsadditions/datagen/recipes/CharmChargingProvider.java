@@ -6,10 +6,11 @@ import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
 import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
+import com.hollingsworth.arsnouveau.setup.registry.ItemRegistryWrapper;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -27,13 +28,15 @@ public class CharmChargingProvider extends SimpleDataProvider {
     public void collectJsons(CachedOutput pOutput) {
         addEntries();
         for (CharmChargingRecipe recipe : recipes) {
-            Path path = getRecipePath(output, recipe.getId().getPath());
-            saveStable(pOutput, recipe.asRecipe(), path);
+            Path path = getRecipePath(output, recipe.id().getPath());
+            CharmChargingRecipe.CODEC.encodeStart(JsonOps.INSTANCE, recipe).result().ifPresent(json -> {
+                saveStable(pOutput, json, path);
+            });
         }
     }
 
     protected void addEntries() {
-        for (Map.Entry<CharmRegistry.CharmType, RegistryObject<Item>> entry : AddonItemRegistry.CHARMS.entrySet()) {
+        for (Map.Entry<CharmRegistry.CharmType, ItemRegistryWrapper<Item>> entry : AddonItemRegistry.CHARMS.entrySet()) {
             CharmRegistry.CharmType type = entry.getKey();
             addEntry(type.getSerializedName(), ResourceOrTag.item(entry.getValue().get()), type.getCostPerCharge());
         }
@@ -44,7 +47,7 @@ public class CharmChargingProvider extends SimpleDataProvider {
     }
 
     protected static Path getRecipePath(Path path, String id) {
-        return path.resolve("data/ars_additions/recipes/imbuement_charging/" + id + ".json");
+        return path.resolve("data/ars_additions/recipe/imbuement_charging/" + id + ".json");
     }
 
     /**

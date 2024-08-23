@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AdvancedDominionWand extends Item {
     public AdvancedDominionWand() {
@@ -37,7 +38,7 @@ public class AdvancedDominionWand extends Item {
         }
 
         if (player.isShiftKeyDown()) {
-            AdvancedDominionData data = stack.getOrDefault(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA, AdvancedDominionData.DEFAULT_DATA);
+            AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
             if (data.pos().isEmpty() && data.entityId().isEmpty()) {
                 stack.set(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA, AdvancedDominionData.fromEntity(serverLevel.dimension(), interactionTarget));
                 PortUtil.sendMessageNoSpam(player, Component.translatable("ars_nouveau.dominion_wand.stored_entity"));
@@ -59,6 +60,7 @@ public class AdvancedDominionWand extends Item {
 
         if (!pPlayer.isShiftKeyDown()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (stack.has(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA)) {
                 AdvancedDominionData data = stack.get(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA);
                 data.toggleMode();
@@ -68,8 +70,11 @@ public class AdvancedDominionWand extends Item {
             }
 =======
             AdvancedDominionData data = stack.getOrDefault(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA, AdvancedDominionData.DEFAULT_DATA);
+=======
+            AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
+>>>>>>> 67efe82 (fix: rebase 1.20.1 changes)
             data.toggleMode().write(stack);
-            PortUtil.sendMessageNoSpam(pPlayer, Component.translatable("chat.ars_additions.advanced_dominion_wand.mode", data.mode.getTranslatable()));
+            PortUtil.sendMessageNoSpam(pPlayer, Component.translatable("chat.ars_additions.advanced_dominion_wand.mode", data.mode().getTranslatable()));
             return InteractionResultHolder.success(stack);
 >>>>>>> b6c67b2 (fix: update datagen and fix bugs)
         }
@@ -91,7 +96,7 @@ public class AdvancedDominionWand extends Item {
 
             BlockEntity be = serverLevel.getBlockEntity(pos);
 
-            AdvancedDominionData data = stack.getOrDefault(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA, AdvancedDominionData.DEFAULT_DATA);
+            AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
             if (data.pos().isEmpty() && data.entityId().isEmpty()) {
                 stack.set(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA, AdvancedDominionData.fromPos(pos, serverLevel.dimension()));
                 PortUtil.sendMessage(player, Component.translatable("ars_nouveau.dominion_wand.position_set"));

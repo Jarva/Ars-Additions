@@ -6,6 +6,7 @@ import com.github.jarva.arsadditions.common.glyph.MethodRetaliate;
 import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.github.jarva.arsadditions.common.ritual.RitualLocateStructure;
 import com.github.jarva.arsadditions.setup.registry.recipes.LocateStructureRegistry;
+import com.github.jarva.arsadditions.setup.registry.recipes.SourceSpawnerRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.registry.ImbuementRecipeRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
@@ -42,6 +43,7 @@ public class ArsNouveauRegistry {
         registerGlyphs();
 
         LocateStructureRegistry.INSTANCE = new LocateStructureRegistry();
+        SourceSpawnerRegistry.INSTANCE = new SourceSpawnerRegistry();
         ImbuementRecipeRegistry.INSTANCE.addRecipeType(AddonRecipeRegistry.CHARM_CHARGING_TYPE);
         ImbuementRecipeRegistry.INSTANCE.addRecipeType(AddonRecipeRegistry.BULK_SCRIBING_TYPE);
         ImbuementRecipeRegistry.INSTANCE.addRecipeType(AddonRecipeRegistry.IMBUE_SCROLL_TYPE);

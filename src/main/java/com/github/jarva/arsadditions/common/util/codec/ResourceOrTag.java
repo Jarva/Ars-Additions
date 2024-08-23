@@ -1,6 +1,6 @@
 package com.github.jarva.arsadditions.common.util.codec;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,12 +20,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public record ResourceOrTag<T>(Optional<TagKey<T>> tag, Optional<ResourceKey<T>> key) {
-    public static final Codec<ResourceOrTag<EntityType<?>>> ENTITY_TYPE_CODEC = createCodec(Registries.ENTITY_TYPE);
-    public static final Codec<ResourceOrTag<Item>> ITEM_CODEC = createCodec(Registries.ITEM);
-    public static final Codec<ResourceOrTag<Structure>> STRUCTURE_CODEC = createCodec(Registries.STRUCTURE);
+    public static final MapCodec<ResourceOrTag<EntityType<?>>> ENTITY_TYPE_CODEC = createCodec(Registries.ENTITY_TYPE);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ResourceOrTag<EntityType<?>>> ENTITY_TYPE_STREAM_CODEC = createStreamCodec(Registries.ENTITY_TYPE);
+    public static final MapCodec<ResourceOrTag<Item>> ITEM_CODEC = createCodec(Registries.ITEM);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ResourceOrTag<Item>> ITEM_STREAM_CODEC = createStreamCodec(Registries.ITEM);
+    public static final MapCodec<ResourceOrTag<Structure>> STRUCTURE_CODEC = createCodec(Registries.STRUCTURE);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ResourceOrTag<Structure>> STRUCTURE_STREAM_CODEC = createStreamCodec(Registries.STRUCTURE);
 
-    public static <T> Codec<ResourceOrTag<T>> createCodec(ResourceKey<Registry<T>> registry) {
-        return RecordCodecBuilder.create(instance -> instance.group(
+    public static <T> MapCodec<ResourceOrTag<T>> createCodec(ResourceKey<Registry<T>> registry) {
+        return RecordCodecBuilder.mapCodec(instance -> instance.group(
             TagKey.codec(registry).optionalFieldOf("tag").forGetter(rec -> rec.tag),
             ResourceKey.codec(registry).optionalFieldOf("key").forGetter(rec -> rec.key)
         ).apply(instance, ResourceOrTag::new));

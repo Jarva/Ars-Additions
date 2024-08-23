@@ -69,7 +69,7 @@ public record SourceSpawnerRecipe(ResourceLocation id, Optional<ResourceOrTag<En
     public static class Serializer implements RecipeSerializer<SourceSpawnerRecipe> {
         public static final MapCodec<SourceSpawnerRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 ResourceLocation.CODEC.fieldOf("id").forGetter(SourceSpawnerRecipe::id),
-                ResourceOrTag.ENTITY_TYPE_CODEC.optionalFieldOf("entity").forGetter(SourceSpawnerRecipe::entity),
+                ResourceOrTag.ENTITY_TYPE_CODEC.codec().optionalFieldOf("entity").forGetter(SourceSpawnerRecipe::entity),
                 Codec.INT.optionalFieldOf("source").forGetter(SourceSpawnerRecipe::source),
                 ModifyTagRegistry.TAG_MODIFIER_DISPATCHER.dispatchedCodec().listOf().optionalFieldOf("tag_modifiers").forGetter(SourceSpawnerRecipe::tag_modifiers)
         ).apply(instance, SourceSpawnerRecipe::new));

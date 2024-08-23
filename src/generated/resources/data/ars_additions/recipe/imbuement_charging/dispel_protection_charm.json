@@ -1,0 +1,8 @@
+{
+  "type": "ars_additions:charm_charging",
+  "costPerDamage": 1000,
+  "id": "ars_additions:dispel_protection_charm",
+  "item": {
+    "key": "ars_additions:dispel_protection_charm"
+  }
+}

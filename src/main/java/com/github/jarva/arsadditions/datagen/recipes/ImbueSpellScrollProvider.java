@@ -3,6 +3,7 @@ package com.github.jarva.arsadditions.datagen.recipes;
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.recipe.imbuement.ImbueSpellScrollRecipe;
 import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 
@@ -21,8 +22,10 @@ public class ImbueSpellScrollProvider extends SimpleDataProvider {
     public void collectJsons(CachedOutput pOutput) {
         addEntries();
         for (ImbueSpellScrollRecipe recipe : recipes) {
-            Path path = getRecipePath(output, recipe.getId().getPath());
-            saveStable(pOutput, recipe.asRecipe(), path);
+            Path path = getRecipePath(output, recipe.id().getPath());
+            ImbueSpellScrollRecipe.CODEC.encodeStart(JsonOps.INSTANCE, recipe).result().ifPresent(json -> {
+                saveStable(pOutput, json, path);
+            });
         }
     }
 
@@ -35,7 +38,7 @@ public class ImbueSpellScrollProvider extends SimpleDataProvider {
     }
 
     protected static Path getRecipePath(Path path, String id) {
-        return path.resolve("data/ars_additions/recipes/imbue_spell_scroll/" + id + ".json");
+        return path.resolve("data/ars_additions/recipe/imbue_spell_scroll/" + id + ".json");
     }
 
     /**

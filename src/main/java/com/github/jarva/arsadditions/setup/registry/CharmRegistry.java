@@ -94,6 +94,11 @@ public class CharmRegistry {
         stack.set(AddonDataComponentRegistry.CHARM_DATA, data);
     }
 
+    public static void setCharges(ItemStack stack, int charges) {
+        CharmData data = CharmData.getOrDefault(stack).set(charges);
+        stack.set(AddonDataComponentRegistry.CHARM_DATA, data);
+    }
+
     public static ItemStack getCharm(LivingEntity entity, CharmType charm) {
         return PlayerInvUtil.findItem(entity, stack -> isEnabled(charm, stack), ItemStack.EMPTY, Function.identity());
     }

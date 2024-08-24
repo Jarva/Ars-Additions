@@ -16,5 +16,7 @@ public class CuriosDatagen extends CuriosDataProvider {
     @Override
     public void generate(HolderLookup.Provider registries, ExistingFileHelper fileHelper) {
         this.createSlot("charm").size(3);
+
+        this.createEntities("ars_additions").addPlayer().addSlots("belt", "charm");
     }
 }

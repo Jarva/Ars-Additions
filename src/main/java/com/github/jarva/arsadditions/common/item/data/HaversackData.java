@@ -6,13 +6,10 @@ import com.hollingsworth.arsnouveau.api.item.inv.FilterableItemHandler;
 import com.hollingsworth.arsnouveau.api.util.InvUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -51,12 +48,22 @@ public record HaversackData(GlobalPos pos, Boolean active, ArrayList<ItemStack> 
         new HaversackData(pos, active, items, !loaded);
     }
 
-    public boolean add(ItemStack stack) {
-        return items.add(stack.copy());
+    public HaversackData add(ItemStack stack) {
+        if (items.add(stack.copy())) {
+            return new HaversackData(pos, active, items, loaded);
+        }
+        return this;
     }
 
-    public boolean remove(ItemStack stack) {
-        return items.removeIf(s -> ItemStack.isSameItem(s, stack));
+    public HaversackData remove(ItemStack stack) {
+        if (items.removeIf(s -> ItemStack.isSameItem(s, stack))) {
+            return new HaversackData(pos, active, items, loaded);
+        }
+        return this;
+    }
+
+    public HaversackData write(ItemStack stack) {
+        return stack.set(AddonDataComponentRegistry.HAVERSACK_DATA, this);
     }
 
     public boolean containsStack(ItemStack stack) {

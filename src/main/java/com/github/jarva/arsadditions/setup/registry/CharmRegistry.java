@@ -90,13 +90,11 @@ public class CharmRegistry {
     }
 
     public static void useCharges(ItemStack stack, int charges) {
-        CharmData data = CharmData.getOrDefault(stack).use(0);
-        stack.set(AddonDataComponentRegistry.CHARM_DATA, data);
+            CharmData.getOrDefault(stack).use(charges).write(stack);
     }
 
     public static void setCharges(ItemStack stack, int charges) {
-        CharmData data = CharmData.getOrDefault(stack).set(charges);
-        stack.set(AddonDataComponentRegistry.CHARM_DATA, data);
+        CharmData.getOrDefault(stack).set(charges).write(stack);
     }
 
     public static ItemStack getCharm(LivingEntity entity, CharmType charm) {

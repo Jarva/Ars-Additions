@@ -167,7 +167,7 @@ public class HandyHaversack extends Item implements IScribeable {
     }
 
     public boolean writeStack(Player player, ItemStack haversack, ItemStack write) {
-        return HaversackData.fromItemStack(haversack).map(data -> { 
+        return HaversackData.fromItemStack(haversack).map(data -> {
             if (write.isEmpty()) {
                 return false;
             }
@@ -183,7 +183,9 @@ public class HandyHaversack extends Item implements IScribeable {
                 data.write(haversack);
                 return true;
             }
-            return false;
+            data.add(write).write(haversack);
+            PortUtil.sendMessage(player, Component.translatable("ars_nouveau.scribe.item_added"));
+            return true;
         }).orElseGet(() -> {
             PortUtil.sendMessage(player, Component.translatable("chat.ars_additions.handy_haversack.invalid"));
             return false;

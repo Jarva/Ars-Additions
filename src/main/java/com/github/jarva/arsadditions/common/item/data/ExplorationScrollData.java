@@ -1,9 +1,9 @@
 package com.github.jarva.arsadditions.common.item.data;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
@@ -12,6 +12,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.Vec3;
 
@@ -21,7 +22,10 @@ public record ExplorationScrollData(Optional<HolderSet<Structure>> structure, Op
     public static final TagKey<Structure> DEFAULT_DESTINATION = TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix("on_explorer_warp_scroll"));
     public static final int DEFAULT_SEARCH_RADIUS = 50;
     public static final boolean DEFAULT_SKIP_EXISTING = true;
-    public static final ExplorationScrollData DEFAULT = new ExplorationScrollData(Optional.empty(), Optional.empty(), DEFAULT_SEARCH_RADIUS, DEFAULT_SKIP_EXISTING);
+
+    public static ExplorationScrollData fromItemStack(ItemStack stack) {
+        return stack.getOrDefault(AddonDataComponentRegistry.EXPLORATION_SCROLL_DATA, new ExplorationScrollData(Optional.empty(), Optional.empty(), DEFAULT_SEARCH_RADIUS, DEFAULT_SKIP_EXISTING));
+    }
 
     public static final Codec<ExplorationScrollData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             RegistryCodecs.homogeneousList(Registries.STRUCTURE).optionalFieldOf("structure").forGetter(ExplorationScrollData::structure),

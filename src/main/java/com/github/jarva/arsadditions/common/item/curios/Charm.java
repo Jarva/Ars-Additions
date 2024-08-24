@@ -3,6 +3,7 @@ package com.github.jarva.arsadditions.common.item.curios;
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.item.data.CharmData;
 import com.github.jarva.arsadditions.server.util.TeleportUtil;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
 import com.hollingsworth.arsnouveau.api.event.DispelEvent;
@@ -47,7 +48,7 @@ public class Charm extends ArsNouveauCurio {
     private final int uses;
 
     public Charm(int uses) {
-        super(AddonItemRegistry.defaultItemProperties().stacksTo(1).durability(uses));
+        super(AddonItemRegistry.defaultItemProperties().stacksTo(1).durability(uses).component(AddonDataComponentRegistry.CHARM_DATA, new CharmData(uses)));
         this.uses = uses;
     }
 

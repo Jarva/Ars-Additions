@@ -12,7 +12,6 @@ import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -112,7 +111,7 @@ public class LocateUtil {
     }
 
     public static void locateFromStack(ServerLevel level, Vec3 position, ItemStack stack) {
-        ExplorationScrollData data = stack.getOrDefault(AddonDataComponentRegistry.EXPLORATION_SCROLL_DATA, ExplorationScrollData.DEFAULT);
+        ExplorationScrollData data = ExplorationScrollData.fromItemStack(stack);
         HolderSet<Structure> holderSet = LocateUtil.holderFromTag(level, ExplorationScrollData.DEFAULT_DESTINATION);
         Vec3 origin = data.pos().orElse(position);
         int searchRadius = ExplorationScrollData.DEFAULT_SEARCH_RADIUS;

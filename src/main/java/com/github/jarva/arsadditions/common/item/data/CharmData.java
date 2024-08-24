@@ -18,15 +18,19 @@ public record CharmData(int charges) {
     );
 
     public CharmData use(int charges) {
-        return new CharmData(Math.max(this.charges - charges, 0));
+        return set(this.charges - charges);
     }
 
     public CharmData set(int charges) {
         return new CharmData(Math.max(charges, 0));
     }
 
+    public CharmData write(ItemStack stack) {
+        return stack.set(AddonDataComponentRegistry.CHARM_DATA, this);
+    }
+
     public static CharmData getOrDefault(ItemStack stack) {
-        return stack.getOrDefault(AddonDataComponentRegistry.CHARM_DATA, new CharmData(0));
+        return getOrDefault(stack, 0);
     }
 
     public static CharmData getOrDefault(ItemStack stack, int charges) {

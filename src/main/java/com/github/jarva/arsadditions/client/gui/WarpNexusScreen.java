@@ -118,7 +118,7 @@ public class WarpNexusScreen extends Screen {
         if (stack.has(DataComponents.CUSTOM_NAME)) return stack.getHoverName();
         WarpScrollData data = stack.getOrDefault(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true));
         if (!data.isValid()) return stack.getDisplayName();
-        BlockPos pos = data.pos();
+        BlockPos pos = data.pos().get();
         return Component.translatable("tooltip.ars_additions.reliquary.marked.location", pos.getX(), pos.getY(), pos.getZ());
     }
 

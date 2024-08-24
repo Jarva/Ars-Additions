@@ -20,7 +20,7 @@ public class TeleportUtil {
     public static void teleport(ServerLevel level, WarpScrollData data, Entity player) {
         if (!data.isValid()) return;
 
-        teleport(level, data.dimension(), data.pos(), data.rotation(), player);
+        teleport(level, data.dimension(), data.pos().get(), data.rotation(), player);
     }
 
     public static void teleport(ServerLevel level, String dimension, BlockPos pos, Vec2 rotation, Entity player) {

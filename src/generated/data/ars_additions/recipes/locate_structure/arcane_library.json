@@ -2,7 +2,7 @@
   "type": "ars_additions:locate_structure",
   "augments": [
     {
-      "key": "ars_nouveau:novice_spell_book"
+      "key": "ars_nouveau:apprentice_spell_book"
     }
   ],
   "id": "ars_additions:arcane_library",

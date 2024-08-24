@@ -1,8 +1,11 @@
 {
-  "forge:conditions": [
+  "neoforge:conditions": [
     {
       "type": "ars_additions:config",
       "config": "arcane_library_enabled"
+    },
+    {
+      "type": "neoforge:false"
     }
   ],
   "placement": {

@@ -1,5 +1,5 @@
 {
-  "forge:conditions": [
+  "neoforge:conditions": [
     {
       "type": "ars_additions:config",
       "config": "nexus_tower_enabled"

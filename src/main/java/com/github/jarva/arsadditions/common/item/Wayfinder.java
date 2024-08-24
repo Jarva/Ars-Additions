@@ -2,9 +2,12 @@ package com.github.jarva.arsadditions.common.item;
 
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.hollingsworth.arsnouveau.ArsNouveau;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +28,12 @@ public class Wayfinder extends Item {
         if (nbt.contains("Structure")) {
             String json = nbt.getString("Structure");
             tooltipComponents.add(Component.Serializer.fromJson(json).withStyle(ChatFormatting.GRAY));
+        }
+        if (nbt.contains("Locator")) {
+            GlobalPos global = GlobalPos.CODEC.parse(NbtOps.INSTANCE, nbt.get("Locator")).result().get();
+            if (!global.dimension().equals(level.dimension())) return;
+            int distance = global.pos().distManhattan(ArsNouveau.proxy.getPlayer().blockPosition());
+            tooltipComponents.add(Component.translatable("tooltip.ars_additions.wayfinder.distance", distance));
         }
     }
 

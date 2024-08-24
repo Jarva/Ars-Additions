@@ -7,6 +7,7 @@ import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
 import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
 import com.hollingsworth.arsnouveau.common.datagen.StructureTagProvider;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceKey;
@@ -49,6 +50,7 @@ public class LocateStructureProvider extends SimpleDataProvider {
         addEntry("bastion", BuiltinStructures.BASTION_REMNANT, ResourceOrTag.item(Items.POLISHED_BLACKSTONE_BRICKS));
         addEntry("desert_temple", BuiltinStructures.DESERT_PYRAMID, ResourceOrTag.item(Items.SANDSTONE));
         addEntry("trail_ruins", BuiltinStructures.TRAIL_RUINS, ResourceOrTag.tag(ItemTags.TERRACOTTA));
+        addEntry("arcane_library", ResourceKey.create(Registries.STRUCTURE, ArsAdditions.prefix("arcane_library")), ResourceOrTag.item(ItemsRegistry.APPRENTICE_SPELLBOOK.get()));
     }
 
     private void addEntry(String id, ResourceKey<Structure> structureId, ResourceOrTag<Item> ...augments) {

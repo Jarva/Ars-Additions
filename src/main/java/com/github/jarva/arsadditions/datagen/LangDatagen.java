@@ -134,6 +134,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("tooltip.ars_additions.imbued_spell_parchment.scribing", "Scribing: %s");
         this.add("tooltip.ars_additions.imbued_spell_parchment.scribing_progress", "Scribing Progress: %s");
 
+        this.add("tooltip.ars_additions.wayfinder.distance", "%s blocks away");
+
         // Keybinds
 
         this.add("key.ars_additions.open_lectern", "[Ars Additions] Activate Warp Index");

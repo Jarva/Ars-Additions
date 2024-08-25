@@ -22,7 +22,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.DyeColor;
@@ -75,7 +74,7 @@ public class ProcessorDatagen extends SimpleDataProvider {
         nexusTower.add(randomBlockReplace(an(SOURCESTONE_LARGE_BRICKS), an(SOURCESTONE_ALTERNATING), 0.2f));
 
         setupWarpNexus(nexusTower);
-        setupSourceJars(nexusTower);
+//        setupSourceJars(nexusTower);
 
         List<Helper> helpers = List.of(
                 new Helper("Eru", "gray", "Warning: Not to leave unsupervised"),
@@ -92,10 +91,10 @@ public class ProcessorDatagen extends SimpleDataProvider {
                 CompoundTag tag = new CompoundTag();
                 ItemStack is = new ItemStack(ItemsRegistry.STARBUNCLE_CHARM);
                 is.set(DataComponentRegistry.STARBUNCLE_DATA, new StarbuncleCharmData(Optional.of(Component.literal(helper.name()).withStyle(Style.EMPTY.withColor(dyeMap.get(helper.color())))), helper.color(), Optional.empty(), Optional.empty(), StarbyTransportBehavior.TRANSPORT_ID, new CompoundTag(), "", helper.bio()));
-                tag.put("itemStack", is.save(provider, new CompoundTag()));
+                tag.put("itemStack", is.save(provider));
                 modifyBlockEntity(BlockRegistry.SCRIBES_BLOCK.get(), bs -> bs.getValue(ScribesBlock.PART) == ThreePartBlock.HEAD, 0.5f, new AppendStatic(tag), nexusTower);
             }
-        });
+        }).join();
 
         save(pOutput, nexusTower, "nexus_tower");
 
@@ -118,11 +117,10 @@ public class ProcessorDatagen extends SimpleDataProvider {
 
     private void setupWarpNexus(List<ProcessorRule> rules) {
         CompoundTag nexusBlock = new CompoundTag();
-        CompoundTag inventory = new CompoundTag();
         ItemStack stack = new ItemStack(AddonItemRegistry.NEXUS_WARP_SCROLL.get());
         lookupProvider.thenAccept(provider ->
-                inventory.put("itemStack", ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, stack).getOrThrow())
-        );
+                nexusBlock.put("itemStack", stack.save(provider))
+        ).join();
 
         modifyBlockEntity(AddonBlockRegistry.WARP_NEXUS.get(), bs -> bs.getValue(WarpNexus.HALF) == DoubleBlockHalf.LOWER, bs -> bs.setValue(WarpNexus.REQUIRES_SOURCE, false), new AppendStatic(nexusBlock), rules);
         modifyBlockEntity(AddonBlockRegistry.WARP_NEXUS.get(), bs -> bs.getValue(WarpNexus.HALF) == DoubleBlockHalf.UPPER, bs -> bs.setValue(WarpNexus.REQUIRES_SOURCE, false), new AppendStatic(new CompoundTag()), rules);

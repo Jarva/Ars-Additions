@@ -3,8 +3,8 @@ package com.github.jarva.arsadditions.setup.networking;
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.block.WarpNexus;
 import com.github.jarva.arsadditions.common.block.tile.WarpNexusTile;
-import com.github.jarva.arsadditions.common.capability.CapabilityRegistry;
 import com.github.jarva.arsadditions.server.util.TeleportUtil;
+import com.github.jarva.arsadditions.setup.registry.AddonAttachmentRegistry;
 import com.hollingsworth.arsnouveau.api.source.ISpecialSourceProvider;
 import com.hollingsworth.arsnouveau.api.util.SourceUtil;
 import com.hollingsworth.arsnouveau.common.items.data.WarpScrollData;
@@ -47,9 +47,7 @@ public record TeleportNexusPacket(BlockPos pos, int index) implements CustomPack
 
             if (player.blockPosition().distToCenterSqr(pos.getX(), pos.getY(), pos.getZ()) > Math.pow(player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 2)) return;
 
-            ItemStackHandler nexus = player.getCapability(CapabilityRegistry.PLAYER_NEXUS);
-            if (nexus == null) return;
-
+            ItemStackHandler nexus = player.getData(AddonAttachmentRegistry.WARP_NEXUS_INVENTORY);
             ItemStack scroll = nexus.getStackInSlot(index);
             WarpScrollData data = scroll.getOrDefault(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true));
 

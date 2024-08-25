@@ -462,7 +462,12 @@
         {
           "block_entity_modifier": {
             "type": "minecraft:append_static",
-            "data": {}
+            "data": {
+              "itemStack": {
+                "count": 1,
+                "id": "ars_additions:nexus_warp_scroll"
+              }
+            }
           },
           "input_predicate": {
             "block_state": {
@@ -488,7 +493,12 @@
         {
           "block_entity_modifier": {
             "type": "minecraft:append_static",
-            "data": {}
+            "data": {
+              "itemStack": {
+                "count": 1,
+                "id": "ars_additions:nexus_warp_scroll"
+              }
+            }
           },
           "input_predicate": {
             "block_state": {

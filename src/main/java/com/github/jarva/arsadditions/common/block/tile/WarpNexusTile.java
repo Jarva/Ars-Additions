@@ -1,8 +1,6 @@
 package com.github.jarva.arsadditions.common.block.tile;
 
-import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.block.WarpNexus;
-import com.github.jarva.arsadditions.common.item.NexusWarpScroll;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.api.registry.ParticleColorRegistry;
 import com.hollingsworth.arsnouveau.api.util.IWololoable;
@@ -22,10 +20,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.Vec2;
-import net.neoforged.neoforge.capabilities.BlockCapability;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -43,30 +37,18 @@ public class WarpNexusTile extends SingleItemTile implements GeoBlockEntity, ITi
     private boolean hasOpened = false;
     public AnimationController<WarpNexusTile> controller;
     private ParticleColor color = ParticleColor.defaultParticleColor();
-    private ItemStackHandler inventory;
 
     public WarpNexusTile(BlockPos pos, BlockState blockState) {
         super(AddonBlockRegistry.WARP_NEXUS_TILE.get(), pos, blockState);
-        int invSize = blockState.getValue(WarpNexus.HALF) == DoubleBlockHalf.LOWER ? 1 : 0;
+    }
 
-        this.inventory = new ItemStackHandler(invSize) {
-             @Override
-             public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-                 ItemStack scroll = super.extractItem(slot, amount, simulate);
-                 if (!(scroll.getItem() instanceof NexusWarpScroll)) return scroll;
-
-                 scroll.update(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true), (data) ->
-                         data.setPos(pos.north(), level.dimension().location().toString()).setRotation(Vec2.ZERO)
-                 );
-                 return scroll;
-             }
-
-             @Override
-            protected void onContentsChanged(int slot) {
-                super.onContentsChanged(slot);
-                WarpNexusTile.this.setChanged();
-            }
-        };
+    @Override
+    public ItemStack removeItemNoUpdate(int pSlot) {
+        ItemStack scroll = super.removeItemNoUpdate(pSlot);
+        scroll.update(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true), (data) ->
+            data.setPos(this.getBlockPos().north(), this.getLevel().dimension().location().toString()).setRotation(Vec2.ZERO)
+        );
+        return scroll;
     }
 
     @Override

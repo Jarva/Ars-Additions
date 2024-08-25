@@ -3,7 +3,6 @@ package com.github.jarva.arsadditions.common.item;
 import com.github.jarva.arsadditions.server.util.LocateUtil;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.hollingsworth.arsnouveau.common.items.StableWarpScroll;
-import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
@@ -43,6 +42,5 @@ public class NexusWarpScroll extends StableWarpScroll {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext context, List<Component> tooltip2, TooltipFlag flagIn) {
         super.appendHoverText(stack, context, tooltip2, flagIn);
-        stack.addToTooltip(DataComponentRegistry.WARP_SCROLL, context, tooltip2::add, flagIn);
     }
 }

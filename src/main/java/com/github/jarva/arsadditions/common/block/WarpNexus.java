@@ -1,23 +1,19 @@
 package com.github.jarva.arsadditions.common.block;
 
 import com.github.jarva.arsadditions.common.block.tile.WarpNexusTile;
-import com.github.jarva.arsadditions.common.capability.CapabilityRegistry;
 import com.github.jarva.arsadditions.common.menu.WarpNexusMenu;
 import com.github.jarva.arsadditions.setup.networking.OpenNexusPacket;
+import com.github.jarva.arsadditions.setup.registry.AddonAttachmentRegistry;
 import com.hollingsworth.arsnouveau.common.block.ITickableBlock;
 import com.hollingsworth.arsnouveau.common.items.SpellBook;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -32,7 +28,6 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,22 +44,32 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
         builder.add(HALF, REQUIRES_SOURCE);
     }
 
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        return use(state, level, pos, player).result();
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        return use(state, level, pos, player);
+    }
+
+    public ItemInteractionResult use(BlockState state, Level level, BlockPos pos, Player player) {
         WarpNexusTile be = WarpNexusTile.getWarpNexus(level, pos).orElse(null);
 
-        if (be == null) return InteractionResult.FAIL;
+        if (be == null) return ItemInteractionResult.FAIL;
 
         if (!be.getStack().isEmpty()) {
             if (player instanceof ServerPlayer serverPlayer) {
-                ItemStack item = Capabilities.ItemHandler.BLOCK.getCapability(level, pos, state, be, null).extractItem(0, Item.ABSOLUTE_MAX_STACK_SIZE, false);
+                ItemStack item = be.removeItemNoUpdate(0);
                 serverPlayer.getInventory().add(item);
             }
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
         if (player.isSecondaryUseActive()) {
             if (player.getMainHandItem().getItem() instanceof SpellBook) {
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
             if (player instanceof ServerPlayer serverPlayer) {
                 serverPlayer.openMenu(state.getMenuProvider(level, be.getBlockPos()));
@@ -72,14 +77,14 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
         } else {
             OpenNexusPacket.openNexus(player, be.getBlockPos());
         }
-        return InteractionResult.CONSUME;
+        return ItemInteractionResult.CONSUME;
     }
 
     @Nullable
     @Override
     public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         return new SimpleMenuProvider((i, inventory, player) -> {
-            ItemStackHandler itemStackHandler = player.getCapability(CapabilityRegistry.PLAYER_NEXUS);
+            ItemStackHandler itemStackHandler = player.getData(AddonAttachmentRegistry.WARP_NEXUS_INVENTORY);
             return new WarpNexusMenu(i, inventory, ContainerLevelAccess.create(level, pos), itemStackHandler);
         }, Component.translatable("block.ars_additions.warp_nexus"));
     }

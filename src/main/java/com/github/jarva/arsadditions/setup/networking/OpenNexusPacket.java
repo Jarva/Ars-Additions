@@ -2,7 +2,7 @@ package com.github.jarva.arsadditions.setup.networking;
 
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.client.util.ClientUtil;
-import com.github.jarva.arsadditions.common.capability.CapabilityRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonAttachmentRegistry;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
@@ -40,8 +40,7 @@ public record OpenNexusPacket(BlockPos pos, CompoundTag tag) implements CustomPa
     }
 
     public static void openNexus(Player player, BlockPos pos) {
-        ItemStackHandler nexus = player.getCapability(CapabilityRegistry.PLAYER_NEXUS);
-        if (nexus == null) nexus = new ItemStackHandler(9);
+        ItemStackHandler nexus = player.getData(AddonAttachmentRegistry.WARP_NEXUS_INVENTORY);
         CompoundTag tag = nexus.serializeNBT(player.registryAccess());
         if (player instanceof ServerPlayer serverPlayer) {
             NetworkHandler.sendToPlayerClient(new OpenNexusPacket(pos, tag), serverPlayer);

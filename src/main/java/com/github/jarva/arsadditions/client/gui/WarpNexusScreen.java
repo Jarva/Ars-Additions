@@ -12,6 +12,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -85,14 +86,14 @@ public class WarpNexusScreen extends Screen {
                         });
                         this.minecraft.setScreen(null);
                     }, Supplier::get) {
-                        public static final ResourceLocation BUTTON_LOCATION = ArsAdditions.prefix("textures/gui/button.png");
+                        public static final WidgetSprites SPRITES = new WidgetSprites(ArsAdditions.prefix("widget/button"), ResourceLocation.withDefaultNamespace("widget/button_disabled"), ArsAdditions.prefix("widget/button_highlighted"));
                         @Override
                         protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
                             Minecraft minecraft = Minecraft.getInstance();
                             guiGraphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
                             RenderSystem.enableBlend();
                             RenderSystem.enableDepthTest();
-                            guiGraphics.blit(BUTTON_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 16, 4, 200, 20, 0, this.getTextureY());
+                            guiGraphics.blitSprite(SPRITES.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
                             guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
                             int i = this.getFGColor();
                             this.renderString(guiGraphics, minecraft.font, i | Mth.ceil(this.alpha * 255.0F) << 24);

@@ -9,7 +9,6 @@ name: Publish on GitHub, CurseForge and Modrinth
 
 on:
   workflow_dispatch:
-    branches: ["main"]
     inputs:
       version:
         description: "Mod Version"
@@ -17,8 +16,8 @@ on:
         type: string
 
 env:
-  MINECRAFT_VERSION: 1.20.1
-  JAVA_VERSION: 17
+  MINECRAFT_VERSION: 1.21.1
+  JAVA_VERSION: 21
 
 permissions:
   contents: write

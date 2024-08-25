@@ -6,6 +6,7 @@ import com.github.jarva.arsadditions.common.util.LangUtil;
 import com.github.jarva.arsadditions.server.util.LocateUtil;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.recipes.LocateStructureRegistry;
+import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -55,6 +56,7 @@ public class RitualLocateStructure extends AbstractRitual {
                 for (ItemStack consumedItem : getConsumedItems()) {
                     dispenseItem(world, consumedItem, getPos());
                 }
+                dispenseItem(world, new ItemStack(RitualRegistry.getRitualItemMap().get(getRegistryName())), getPos());
                 setFinished();
                 return;
             }
@@ -67,7 +69,7 @@ public class RitualLocateStructure extends AbstractRitual {
                 wayfinderTag.putString("Structure", Component.Serializer.toJson(component));
             });
             GlobalPos global = GlobalPos.of(serverLevel.dimension(), pos);
-            GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, global).result().ifPresent(tag -> {
+            GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, global).result().ifPresent(tag ->   {
                 wayfinderTag.put("Locator", tag);
             });
 

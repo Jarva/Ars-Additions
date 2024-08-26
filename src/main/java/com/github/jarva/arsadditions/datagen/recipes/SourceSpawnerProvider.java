@@ -37,7 +37,7 @@ public class SourceSpawnerProvider extends SimpleDataProvider {
     }
 
     protected void addEntries() {
-        addEntry("default", new ModifyTagRegistry.RemoveGuaranteedHandDrops(), new ModifyTagRegistry.RemoveTag(List.of(InventoryCarrier.TAG_INVENTORY)));
+        addEntry("default", new ModifyTagRegistry.RemoveGuaranteedHandDrops(), new ModifyTagRegistry.RemoveTag(List.of(InventoryCarrier.TAG_INVENTORY, "Items")));
     }
 
     private void addEntry(String id, EntityType<?> entityType, TagModifier... tagModifiers) {

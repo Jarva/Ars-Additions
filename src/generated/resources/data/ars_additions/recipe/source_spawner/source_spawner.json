@@ -8,7 +8,8 @@
     {
       "type": "ars_additions:remove_tag",
       "strip_tags": [
-        "Inventory"
+        "Inventory",
+        "Items"
       ]
     }
   ]

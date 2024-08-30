@@ -55,7 +55,15 @@ public class BookUtil {
             for (; i < pages.size(); i++) {
                 BookPage page = pages.get(i);
                 if (isPage.test(page)) {
-                    if (after) i++;
+                    if (after) {
+                        i++;
+                        for (; i < pages.size(); i++) {
+                            BookPage followUp = pages.get(i);
+                            if (!isBasicTextPage(followUp)) {
+                                break;
+                            }
+                        }
+                    }
                     break;
                 }
             }
@@ -74,12 +82,22 @@ public class BookUtil {
         return page;
     }
 
-    public static boolean isTextPage(BookPage page, String pageTitle) {
+    public static boolean isTitlePage(BookPage page, String pageTitle) {
+        String title = getTitle(page);
+        return title != null && title.equals(pageTitle);
+    }
+
+    public static String getTitle(BookPage page) {
         if (page instanceof PageText text) {
             PageTextAccessor textAccessor = (PageTextAccessor) text;
-            String title = textAccessor.getTitle();
-            if (title == null) return false;
-            return title.equals(pageTitle);
+            return textAccessor.getTitle();
+        }
+        return null;
+    }
+
+    public static boolean isBasicTextPage(BookPage page) {
+        if (page instanceof PageText text) {
+            return getTitle(text) == null;
         }
         return false;
     }

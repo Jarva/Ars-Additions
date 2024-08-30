@@ -6,7 +6,6 @@ import com.github.jarva.arsadditions.client.util.BookUtil;
 import com.github.jarva.arsadditions.client.util.CompassUtil;
 import com.github.jarva.arsadditions.common.item.data.HaversackData;
 import com.github.jarva.arsadditions.common.util.FillUtil;
-import com.github.jarva.arsadditions.mixin.PageTextAccessor;
 import com.github.jarva.arsadditions.setup.networking.OpenTerminalPacket;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
@@ -30,7 +29,6 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import vazkii.patchouli.api.BookContentsReloadEvent;
 import vazkii.patchouli.client.book.BookPage;
-import vazkii.patchouli.client.book.page.PageText;
 
 public class ArsAdditionsClient {
     public static KeyMapping openTerm;
@@ -95,24 +93,15 @@ public class ArsAdditionsClient {
                     "ars_additions.page.wixie_enchanting_apparatus",
                     "ars_additions.page1.wixie_enchanting_apparatus"
             );
-            BookUtil.addPage(ArsNouveau.prefix("automation/wixie_charm"), wixiePage, true, page -> {
-                if (page instanceof PageText text) {
-                    PageTextAccessor textAccessor = (PageTextAccessor) text;
-                    String title = textAccessor.getTitle();
-                    if (title == null) return false;
-                    return title.equals("ars_nouveau.potion_crafting");
-                }
-                return false;
-            });
             BookUtil.addPage(ArsNouveau.prefix("automation/wixie_charm"), wixiePage,
-                    true, page -> BookUtil.isTextPage(page, "ars_nouveau.potion_crafting"));
+                    true, page -> BookUtil.isTitlePage(page, "ars_nouveau.binding_inventories"));
 
             BookPage bulkScribing = BookUtil.newTextPage(
                     "ars_additions.page.bulk_scribing",
                     "ars_additions.page1.bulk_scribing"
             );
             BookUtil.addPage(ArsNouveau.prefix("machines/scribes_block"), bulkScribing,
-                    true, page -> BookUtil.isTextPage(page, "ars_nouveau.scribing"));
+                    true, page -> BookUtil.isTitlePage(page, "ars_nouveau.scribing"));
         }
     }
 

@@ -188,6 +188,9 @@ public class RitualChunkLoading extends AbstractRitual {
 
     private void setChunkLoaded(boolean shouldLoad) {
         if (getWorld() != null && getWorld() instanceof ServerLevel serverLevel && getPos() != null) {
+            if (chunks == null) {
+                chunks = getChunks();
+            }
             for (ChunkPos chunk : chunks) {
                 ChunkLoadingData.updateChunk(serverLevel, activatedPlayer, chunk, shouldLoad);
             }

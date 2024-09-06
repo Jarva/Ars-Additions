@@ -8,6 +8,7 @@ import com.github.jarva.arsadditions.server.util.LocateUtil;
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.recipes.LocateStructureRegistry;
+import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

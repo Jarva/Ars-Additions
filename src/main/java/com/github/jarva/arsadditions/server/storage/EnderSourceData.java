@@ -17,6 +17,8 @@ public class EnderSourceData extends SavedData {
             UUID uuid = entry.getKey();
             Integer source = entry.getValue();
 
+            if (uuid == null) continue;
+
             tag.putInt(uuid.toString(), source);
         }
         return tag;
@@ -35,6 +37,7 @@ public class EnderSourceData extends SavedData {
         EnderSourceData data = EnderSourceData.create();
         List<UUID> uuids = tag.getAllKeys().stream().map(UUID::fromString).toList();
         for (UUID uuid : uuids) {
+            if (uuid == null) continue;
             data.source.put(uuid, tag.getInt(uuid.toString()));
         }
         return data;

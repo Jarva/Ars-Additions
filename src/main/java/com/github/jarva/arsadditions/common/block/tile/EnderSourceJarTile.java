@@ -36,7 +36,7 @@ public class EnderSourceJarTile extends SourceJarTile implements ITickable {
         if (level == null) return;
         if (level.isClientSide) return;
 
-        if (level.getGameTime() % 20 == 0 && !registered) {
+        if (level.getGameTime() % 20 == 0 && !registered && getOwner() != null) {
             int source = EnderSourceData.getSource(level.getServer(), getOwner());
             this.setSource(source);
             SourceJarSync.addPosition(level, this.worldPosition);

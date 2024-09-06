@@ -24,9 +24,11 @@ import org.jetbrains.annotations.Nullable;
 public record ImbueSpellScrollRecipe(ResourceLocation id) implements IImbuementRecipe {
     @Override
     public boolean isMatch(ImbuementTile imbuementTile) {
+        if (imbuementTile.getPedestalItems().isEmpty()) return false;
         ItemStack reagent = imbuementTile.stack;
+        if (!reagent.is(ItemsRegistry.SPELL_PARCHMENT.get())) return false;
         ISpellCaster reagentCaster = CasterUtil.getCaster(reagent);
-        return imbuementTile.getPedestalItems().isEmpty() && reagent.is(ItemsRegistry.SPELL_PARCHMENT.get()) && reagentCaster.getSpell().isValid();
+        return reagentCaster.getSpell().isValid();
     }
 
     @Override

@@ -113,7 +113,13 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
                     .requires(AddonItemRegistry.WAYFINDER.get())
         );
 
-        shapelessBuilder(AddonItemRegistry.ADVANCED_DOMINION_WAND.get()).requires(AddonItemRegistry.ADVANCED_DOMINION_WAND.get()).save(consumer);
+        addClearRecipe(AddonItemRegistry.ADVANCED_DOMINION_WAND.get());
+        addClearRecipe(AddonItemRegistry.HANDY_HAVERSACK.get());
+        addClearRecipe(AddonItemRegistry.XP_JAR.get());
+    }
+
+    public void addClearRecipe(ItemLike item) {
+        shapelessBuilder(item).requires(item).save(consumer, getRecipeId(item, "clear_"));
     }
 
     public void addRitualRecipe(ResourceLocation id, Function<ShapelessRecipeBuilder, ShapelessRecipeBuilder> modifier) {
@@ -257,6 +263,6 @@ public class RecipeDatagen extends com.hollingsworth.arsnouveau.common.datagen.R
 
     public ResourceLocation getRecipeId(ItemLike input, String prefix, boolean convert) {
         ResourceLocation loc = RecipeBuilder.getDefaultRecipeId(input).withPrefix(prefix);
-        return convert? ArsAdditions.prefix(loc.getPath()) : loc;
+        return convert ? ArsAdditions.prefix(loc.getPath()) : loc;
     }
 }

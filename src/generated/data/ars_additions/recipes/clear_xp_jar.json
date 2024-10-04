@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ars_additions:xp_jar"
+    }
+  ],
+  "result": {
+    "item": "ars_additions:xp_jar"
+  }
+}

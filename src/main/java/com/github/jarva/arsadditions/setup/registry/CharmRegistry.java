@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -67,7 +68,7 @@ public class CharmRegistry {
 
         @Override
         public @NotNull String getSerializedName() {
-            return name().toLowerCase() + "_charm";
+            return name().toLowerCase(Locale.ENGLISH) + "_charm";
         }
     }
 

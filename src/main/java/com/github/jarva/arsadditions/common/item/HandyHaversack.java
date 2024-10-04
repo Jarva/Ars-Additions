@@ -15,6 +15,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
@@ -106,7 +107,7 @@ public class HandyHaversack extends Item implements IScribeable {
         if (handler != null) {
             ItemStack stack = context.getItemInHand();
 
-            HaversackData data = new HaversackData(pos, context.getLevel().dimension(), true, new ArrayList<>());
+            HaversackData data = new HaversackData(pos, context.getClickedFace(), context.getLevel().dimension(), true, new ArrayList<>());
             data.write(stack);
 
             if (context.getPlayer() != null) {
@@ -134,7 +135,7 @@ public class HandyHaversack extends Item implements IScribeable {
         }
         return false;
     }
-
+    
     public boolean transportItem(ItemStack haversack, ItemStack other, Player player, Consumer<ItemStack> update) {
         if (player.isCreative()) return true;
 
@@ -183,10 +184,13 @@ public class HandyHaversack extends Item implements IScribeable {
 
             if (data.containsStack(write)) {
                 PortUtil.sendMessage(player, Component.translatable("ars_nouveau.scribe.item_removed"));
-                return data.remove(write);
+                boolean removed = data.remove(write);
+                data.write(haversack);
+                return removed;
             }
             if (data.add(write)) {
                 PortUtil.sendMessage(player, Component.translatable("ars_nouveau.scribe.item_added"));
+                data.write(haversack);
                 return true;
             }
             return false;
@@ -206,7 +210,11 @@ public class HandyHaversack extends Item implements IScribeable {
         if (haversack.isEmpty()) return;
 
         if (haversack.getItem() instanceof HandyHaversack handyHaversack) {
-            handyHaversack.transportItem(haversack, pickedUp, player, remainder);
+            HaversackData.fromItemStack(haversack).ifPresent(data -> {
+                if (data.containsStack(pickedUp)) {
+                    handyHaversack.transportItem(haversack, pickedUp, player, remainder);
+                }
+            });
         }
     }
 
@@ -229,11 +237,12 @@ public class HandyHaversack extends Item implements IScribeable {
         });
     }
 
-    public record HaversackData(BlockPos pos, ResourceKey<Level> level, Boolean active, ArrayList<ItemStack> items) {
+    public record HaversackData(BlockPos pos, Direction side, ResourceKey<Level> level, Boolean active, ArrayList<ItemStack> items) {
         public static final String TAG_KEY = "haversack";
 
         public static final Codec<HaversackData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BlockPos.CODEC.fieldOf("BindPos").forGetter(HaversackData::pos),
+            Direction.CODEC.optionalFieldOf("BindDirection", Direction.UP).forGetter(HaversackData::side),
             Level.RESOURCE_KEY_CODEC.fieldOf("BindDim").forGetter(HaversackData::level),
             Codec.BOOL.optionalFieldOf("Active", false).forGetter(HaversackData::active),
             ItemStack.CODEC.listOf().optionalFieldOf("Items", List.of()).xmap(Lists::newArrayList, list -> list).forGetter(HaversackData::items)
@@ -244,7 +253,7 @@ public class HandyHaversack extends Item implements IScribeable {
         }
 
         public boolean toggle(ItemStack stack) {
-            HaversackData toggled = new HaversackData(pos, level, !active, items);
+            HaversackData toggled = new HaversackData(pos, side, level, !active, items);
             toggled.write(stack);
             return toggled.active;
         }
@@ -274,7 +283,9 @@ public class HandyHaversack extends Item implements IScribeable {
             BlockEntity be = level.getBlockEntity(pos);
             if (be == null) return null;
 
-            return InvUtil.getFilteredHandler(be);
+            return be.getCapability(ForgeCapabilities.ITEM_HANDLER, side)
+                    .map(cap -> new FilterableItemHandler(cap, InvUtil.filtersOnTile(be)))
+                    .orElse(null);
         }
     }
 }

@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "ars_additions:advanced_dominion_wand"
+        "recipe": "ars_additions:clear_handy_haversack"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "ars_additions:advanced_dominion_wand"
+      "ars_additions:clear_handy_haversack"
     ]
   },
   "sends_telemetry_event": false

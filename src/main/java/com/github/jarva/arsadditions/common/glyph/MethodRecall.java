@@ -5,6 +5,7 @@ import com.github.jarva.arsadditions.common.item.UnstableReliquary;
 import com.github.jarva.arsadditions.setup.registry.names.AddonGlyphNames;
 import com.github.jarva.arsadditions.server.util.MarkType;
 import com.hollingsworth.arsnouveau.api.spell.*;
+import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.TileCaster;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -91,7 +92,12 @@ public class MethodRecall extends AbstractCastMethod {
             String dim = data.getString("block_dimension");
             if (!dim.equals(caster.level().dimension().location().toString())) return CastResolveType.FAILURE;
 
-            BlockHitResult bhr = new BlockHitResult( pos.getCenter(), Direction.UP, pos, false);
+            Direction direction = caster.getDirection();
+            if (context.getCaster() instanceof TileCaster tileCaster) {
+                direction = tileCaster.getFacingDirection();
+            }
+
+            BlockHitResult bhr = new BlockHitResult( pos.getCenter(), direction, pos, false);
             resolver.onResolveEffect(caster.level(), bhr);
             UnstableReliquary.damage(mark, reliquary, caster);
             return CastResolveType.SUCCESS;

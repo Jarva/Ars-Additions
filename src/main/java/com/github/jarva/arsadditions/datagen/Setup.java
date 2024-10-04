@@ -5,6 +5,7 @@ import com.github.jarva.arsadditions.datagen.recipes.*;
 import com.github.jarva.arsadditions.datagen.tags.BlockTagDatagen;
 import com.github.jarva.arsadditions.datagen.tags.EntityTypeTagDatagen;
 import com.github.jarva.arsadditions.datagen.tags.ItemTagDatagen;
+import com.github.jarva.arsadditions.datagen.tags.StructureTagDatagen;
 import com.github.jarva.arsadditions.datagen.worldgen.ProcessorDatagen;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -32,6 +33,7 @@ public class Setup {
         gen.addProvider(event.includeServer(), new GlyphDatagen(gen));
         gen.addProvider(event.includeServer(), new ProcessorDatagen(gen));
         gen.addProvider(event.includeServer(), new ItemTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), new StructureTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), new BlockTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), new EntityTypeTagDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), new AdvancementDatagen(gen.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));

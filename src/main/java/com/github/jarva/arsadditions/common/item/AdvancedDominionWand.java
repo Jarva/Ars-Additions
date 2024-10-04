@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public class AdvancedDominionWand extends Item {
@@ -184,7 +185,7 @@ public class AdvancedDominionWand extends Item {
 
             @Override
             public @NotNull String getSerializedName() {
-                return name().toLowerCase();
+                return name().toLowerCase(Locale.ENGLISH);
             }
 
             public Component getTranslatable() {

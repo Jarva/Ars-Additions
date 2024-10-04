@@ -7,22 +7,21 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.StructureTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
 public class StructureTagDatagen extends TagsProvider<Structure> {
-    public static TagKey<Structure> ON_EXPLORER_WARP_SCROLL = TagKey.create(Registries.STRUCTURE, new ResourceLocation(ArsAdditions.MODID, "on_explorer_warp_scroll"));
-    public static TagKey<Structure> RUINED_PORTALS = TagKey.create(Registries.STRUCTURE, new ResourceLocation(ArsAdditions.MODID, "ruined_portals"));
+    public static TagKey<Structure> ON_EXPLORER_WARP_SCROLL = TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix("on_explorer_warp_scroll"));
+    public static TagKey<Structure> RUINED_PORTALS = TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix("ruined_portals"));
 
     public StructureTagDatagen(PackOutput arg, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
-        super(arg, Registries.STRUCTURE, future   , ArsAdditions.MODID, helper);
+        super(arg, Registries.STRUCTURE, future, ArsAdditions.MODID, helper);
     }
 
     @Override

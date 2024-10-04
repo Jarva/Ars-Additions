@@ -1,30 +1,27 @@
-package com.github.jarva.arsadditions.datagen.recipes;
+    package com.github.jarva.arsadditions.datagen.recipes;
 
-import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.common.item.data.ExplorationScrollData;
-import com.github.jarva.arsadditions.common.loot.functions.ExplorationScrollFunction;
-import com.github.jarva.arsadditions.common.recipe.LocateStructureRecipe;
-import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
-import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
-import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
-import com.hollingsworth.arsnouveau.common.datagen.StructureTagProvider;
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
-import com.mojang.serialization.JsonOps;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
-import net.minecraft.world.level.levelgen.structure.Structure;
+    import com.github.jarva.arsadditions.ArsAdditions;
+    import com.github.jarva.arsadditions.common.item.data.ExplorationScrollData;
+    import com.github.jarva.arsadditions.common.recipe.LocateStructureRecipe;
+    import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
+    import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
+    import com.hollingsworth.arsnouveau.common.datagen.StructureTagProvider;
+    import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
+    import com.mojang.serialization.JsonOps;
+    import net.minecraft.core.registries.Registries;
+    import net.minecraft.data.CachedOutput;
+    import net.minecraft.data.DataGenerator;
+    import net.minecraft.resources.ResourceKey;
+    import net.minecraft.tags.ItemTags;
+    import net.minecraft.tags.TagKey;
+    import net.minecraft.world.item.Item;
+    import net.minecraft.world.item.Items;
+    import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
+    import net.minecraft.world.level.levelgen.structure.Structure;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+    import java.nio.file.Path;
+    import java.util.ArrayList;
+    import java.util.List;
 
 public class LocateStructureProvider extends SimpleDataProvider {
     public List<LocateStructureRecipe> recipes = new ArrayList<>();

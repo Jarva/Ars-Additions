@@ -97,7 +97,7 @@ public class HandyHaversack extends Item implements IScribeable {
         if (handler != null) {
             ItemStack stack = context.getItemInHand();
 
-            HaversackData data = new HaversackData(new GlobalPos(context.getLevel().dimension(), pos), context.getLevel().dimension(), true, new ArrayList<>(), false);
+            HaversackData data = new HaversackData(new GlobalPos(context.getLevel().dimension(), pos), context.getClickedFace(), true, new ArrayList<>(), false);
             stack.set(AddonDataComponentRegistry.HAVERSACK_DATA, data);
 
             if (context.getPlayer() != null) {
@@ -174,13 +174,7 @@ public class HandyHaversack extends Item implements IScribeable {
 
             if (data.containsStack(write)) {
                 PortUtil.sendMessage(player, Component.translatable("ars_nouveau.scribe.item_removed"));
-                boolean removed = data.remove(write);
-                data.write(haversack);
-                return removed;
-            }
-            if (data.add(write)) {
-                PortUtil.sendMessage(player, Component.translatable("ars_nouveau.scribe.item_added"));
-                data.write(haversack);
+                data.remove(write).write(haversack);
                 return true;
             }
             data.add(write).write(haversack);

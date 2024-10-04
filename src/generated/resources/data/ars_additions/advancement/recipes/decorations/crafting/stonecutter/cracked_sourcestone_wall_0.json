@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "ars_nouveau:worn_notebook"
-            ]
+            "items": "ars_nouveau:worn_notebook"
           }
         ]
       },
@@ -15,21 +13,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "ars_additions:clear_xp_jar"
+        "recipe": "ars_additions:crafting/stonecutter/cracked_sourcestone_wall_0"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_journal",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_journal"
     ]
   ],
   "rewards": {
     "recipes": [
-      "ars_additions:clear_xp_jar"
+      "ars_additions:crafting/stonecutter/cracked_sourcestone_wall_0"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

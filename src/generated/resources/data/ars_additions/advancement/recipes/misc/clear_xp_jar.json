@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "ars_nouveau:worn_notebook"
-            ]
+            "items": "ars_nouveau:worn_notebook"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_journal",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_journal"
     ]
   ],
   "rewards": {
     "recipes": [
       "ars_additions:clear_xp_jar"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -59,24 +59,10 @@ public class AdvancedDominionWand extends Item {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
 
         if (!pPlayer.isShiftKeyDown()) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-            if (stack.has(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA)) {
-                AdvancedDominionData data = stack.get(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA);
-                data.toggleMode();
-                data.write(stack);
-                PortUtil.sendMessageNoSpam(pPlayer, Component.translatable("chat.ars_additions.advanced_dominion_wand.mode", data.mode.getTranslatable()));
-                return InteractionResultHolder.success(stack);
-            }
-=======
-            AdvancedDominionData data = stack.getOrDefault(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA, AdvancedDominionData.DEFAULT_DATA);
-=======
             AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
->>>>>>> 67efe82 (fix: rebase 1.20.1 changes)
             data.toggleMode().write(stack);
             PortUtil.sendMessageNoSpam(pPlayer, Component.translatable("chat.ars_additions.advanced_dominion_wand.mode", data.mode().getTranslatable()));
             return InteractionResultHolder.success(stack);
->>>>>>> b6c67b2 (fix: update datagen and fix bugs)
         }
 
         return super.use(pLevel, pPlayer, pUsedHand);

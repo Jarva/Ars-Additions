@@ -8,10 +8,7 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.*;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -23,21 +20,19 @@ public class ModifyTagRegistry {
             TagModifier::type,
             builder->{});
 
-    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<RemoveGuaranteedHandDrops>> REMOVE_GUARANTEED_HAND_DROPS = TAG_MODIFIER_DISPATCHER.defreg().register("remove_guaranteed_hand_drops", () -> RemoveGuaranteedHandDrops.CODEC);
+    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<RemoveGuaranteedDrops>> REMOVE_GUARANTEED_DROPS = TAG_MODIFIER_DISPATCHER.defreg().register("remove_guaranteed_drops", () -> RemoveGuaranteedDrops.CODEC);
     private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<RemoveTag>> REMOVE_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("remove_tag", () -> RemoveTag.CODEC);
     private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<SetTag>> SET_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("set_tag", () -> SetTag.CODEC);
     private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<AppendTag>> APPEND_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("append_tag", () -> AppendTag.CODEC);
 
-    public static void init() {
+    public static void init() {}
 
-    }
-
-    public record RemoveGuaranteedHandDrops() implements TagModifier {
-        public static MapCodec<RemoveGuaranteedHandDrops> CODEC = MapCodec.unit(RemoveGuaranteedHandDrops::new);
+    public record RemoveGuaranteedDrops() implements TagModifier {
+        public static MapCodec<RemoveGuaranteedDrops> CODEC = MapCodec.unit(RemoveGuaranteedDrops::new);
 
         @Override
-        public MapCodec<RemoveGuaranteedHandDrops> type() {
-            return REMOVE_GUARANTEED_HAND_DROPS.get();
+        public MapCodec<RemoveGuaranteedDrops> type() {
+            return REMOVE_GUARANTEED_DROPS.get();
         }
 
         private void removeGuaranteedDrops(CompoundTag tag, String key) {
@@ -61,7 +56,7 @@ public class ModifyTagRegistry {
 
     public record RemoveTag(List<String> strip) implements TagModifier {
         public static MapCodec<RemoveTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Codec.STRING.listOf().fieldOf("strip_tags").forGetter(RemoveTag::strip)
+                Codec.STRING.listOf().optionalFieldOf("strip_tags", List.of()).forGetter(RemoveTag::strip)
         ).apply(instance, RemoveTag::new));
 
         @Override
@@ -82,6 +77,13 @@ public class ModifyTagRegistry {
 
         @Override
         public void modify(CompoundTag nbt) {
+            List<String> tags = strip();
+            if (tags.isEmpty()) {
+                for (String key : nbt.getAllKeys()) {
+                    nbt.remove(key);
+                }
+                return;
+            }
             for (String tag : strip()) {
                 ArrayDeque<String> compounds = new ArrayDeque<>(List.of(tag.split("\\.")));
                 removeTag(nbt, compounds);

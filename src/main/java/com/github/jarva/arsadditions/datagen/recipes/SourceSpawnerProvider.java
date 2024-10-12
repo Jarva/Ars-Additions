@@ -4,6 +4,7 @@ import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.recipe.SourceSpawnerRecipe;
 import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
 import com.github.jarva.arsadditions.common.util.codec.TagModifier;
+import com.github.jarva.arsadditions.datagen.tags.EntityTypeTagDatagen;
 import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
 import com.github.jarva.arsadditions.setup.registry.ModifyTagRegistry;
 import com.hollingsworth.arsnouveau.common.datagen.SimpleDataProvider;
@@ -37,19 +38,27 @@ public class SourceSpawnerProvider extends SimpleDataProvider {
     }
 
     protected void addEntries() {
-        addEntry("default", new ModifyTagRegistry.RemoveGuaranteedHandDrops(), new ModifyTagRegistry.RemoveTag(List.of(InventoryCarrier.TAG_INVENTORY, "Items")));
+        addEntry("default", new ModifyTagRegistry.RemoveGuaranteedDrops(), new ModifyTagRegistry.RemoveTag(List.of(InventoryCarrier.TAG_INVENTORY, "Items")));
+        addEntry("blacklist", ResourceOrTag.tag(EntityTypeTagDatagen.SOURCE_SPAWNER_NBT_BLACKLIST), null, List.of(new ModifyTagRegistry.RemoveTag(List.of())));
     }
 
     private void addEntry(String id, EntityType<?> entityType, TagModifier... tagModifiers) {
-        addEntry(id, Optional.of(ResourceOrTag.key(entityType.builtInRegistryHolder().key())), Optional.empty(), Optional.of(List.of(tagModifiers)));
+        addEntry(id, ResourceOrTag.key(entityType.builtInRegistryHolder().key()), null, List.of(tagModifiers));
     }
 
     private void addEntry(String id, TagModifier... tagModifiers) {
-        addEntry(id, Optional.empty(), Optional.empty(), Optional.of(List.of(tagModifiers)));
+        addEntry(id, null, null, List.of(tagModifiers));
     }
 
-    private void addEntry(String id, Optional<ResourceOrTag<EntityType<?>>> entity, Optional<Integer> source, Optional<List<TagModifier>> tagModifiers) {
-        recipes.add(new SourceSpawnerRecipe(ArsAdditions.prefix(id), entity, source, tagModifiers));
+    private void addEntry(String id, ResourceOrTag<EntityType<?>> entity, Integer source, List<TagModifier> tagModifiers) {
+        recipes.add(
+            new SourceSpawnerRecipe(
+                ArsAdditions.prefix(id),
+                Optional.ofNullable(entity),
+                Optional.ofNullable(source),
+                Optional.ofNullable(tagModifiers)
+            )
+        );
     }
 
     protected static Path getRecipePath(Path path, String id) {

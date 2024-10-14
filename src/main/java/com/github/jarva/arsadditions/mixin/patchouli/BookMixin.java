@@ -1,4 +1,4 @@
-package com.github.jarva.arsadditions.mixin;
+package com.github.jarva.arsadditions.mixin.patchouli;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;

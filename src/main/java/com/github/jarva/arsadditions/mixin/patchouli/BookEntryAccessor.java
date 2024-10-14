@@ -1,4 +1,4 @@
-package com.github.jarva.arsadditions.mixin;
+package com.github.jarva.arsadditions.mixin.patchouli;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;

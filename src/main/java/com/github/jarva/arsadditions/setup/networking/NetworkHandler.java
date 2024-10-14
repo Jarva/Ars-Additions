@@ -32,6 +32,11 @@ public class NetworkHandler {
                 OpenTerminalPacket.STREAM_CODEC,
                 OpenTerminalPacket::handleData
         );
+        registrar.playToClient(
+                SendLocalWeatherStatus.TYPE,
+                SendLocalWeatherStatus.STREAM_CODEC,
+                SendLocalWeatherStatus::handleData
+        );
     }
 
     public static void sendToPlayerClient(CustomPacketPayload msg, ServerPlayer player) {

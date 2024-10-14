@@ -1,9 +1,9 @@
 package com.github.jarva.arsadditions.client.util;
 
-import com.github.jarva.arsadditions.mixin.BookEntryAccessor;
-import com.github.jarva.arsadditions.mixin.BookPageAccessor;
-import com.github.jarva.arsadditions.mixin.PageRelationsAccessor;
-import com.github.jarva.arsadditions.mixin.PageTextAccessor;
+import com.github.jarva.arsadditions.mixin.patchouli.BookEntryAccessor;
+import com.github.jarva.arsadditions.mixin.patchouli.BookPageAccessor;
+import com.github.jarva.arsadditions.mixin.patchouli.PageRelationsAccessor;
+import com.github.jarva.arsadditions.mixin.patchouli.PageTextAccessor;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import net.minecraft.resources.ResourceLocation;
 import vazkii.patchouli.client.book.BookEntry;

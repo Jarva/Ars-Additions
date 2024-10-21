@@ -10,11 +10,13 @@ import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.recipes.LocateStructureRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
+import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -35,31 +37,57 @@ public class RitualLocateStructure extends AbstractRitual {
         return LocateStructureRegistry.INSTANCE.getRecipes().stream().filter(r -> r.value().matches(getConsumedItems())).findFirst().map(RecipeHolder::value);
     }
 
-    @Override
-    protected void tick() {
+    private void dispenseItem(Level level, ItemStack stack, BlockPos pos) {
+        Direction facing = Direction.UP;
+        double x = pos.getX() + 0.7 * facing.getStepX();
+        double y = pos.getY() + 0.7 * facing.getStepY() - 0.125;
+        double z = pos.getZ() + 0.7 * facing.getStepZ();
+
+        ItemEntity itemEntity = new ItemEntity(level, x, y, z, stack);
+        double g = level.random.nextDouble() * 0.1 + 0.2;
+        itemEntity.setDeltaMovement(level.random.triangle(facing.getStepX() * g, 0.0172275 * 6), level.random.triangle(0.2, 0.0172275 * 6), level.random.triangle(facing.getStepZ() * g, 0.0172275 * 6));
+        level.addFreshEntity(itemEntity);
+    }
+
+    private void fail(@Nullable Player player, String reason) {
         Level world = getWorld();
         if (world == null || getPos() == null) return;
+
+        for (ItemStack consumedItem : getConsumedItems()) {
+            dispenseItem(world, consumedItem, getPos());
+        }
+        dispenseItem(world, new ItemStack(RitualRegistry.getRitualItemMap().get(getRegistryName())), getPos());
+
+        PortUtil.sendMessageNoSpam(player, Component.translatable(reason));
+
+        setFinished();
+    }
+
+    @Override
+    public void onStart(@Nullable Player player) {
+        super.onStart(player);
+
+        Level world = getWorld();
+        if (world == null || getPos() == null) {
+            fail(player, "chat.ars_additions.ritual_locate_structure.failed");
+            return;
+        }
 
         if (recipe == null) recipe = getRecipe();
 
         if (recipe.isEmpty()) {
-            for (ItemStack consumedItem : getConsumedItems()) {
-                dispenseItem(world, consumedItem, getPos());
-            }
-            setFinished();
+            fail(player, "chat.ars_additions.ritual_locate_structure.failed");
             return;
         }
 
-        if (!(world instanceof ServerLevel serverLevel)) return;
+        if (!(world instanceof ServerLevel serverLevel)) {
+            return;
+        };
 
         LocateStructureRecipe locator = recipe.get();
         LocateUtil.locate(serverLevel, locator.getStructureHolder(serverLevel), getPos(), locator.getRadius(), locator.getSkipExisting(), (pair) -> {
             if (pair == null) {
-                for (ItemStack consumedItem : getConsumedItems()) {
-                    dispenseItem(world, consumedItem, getPos());
-                }
-                dispenseItem(world, new ItemStack(RitualRegistry.getRitualItemMap().get(getRegistryName())), getPos());
-                setFinished();
+                fail(player, "chat.ars_additions.ritual_locate_structure.not_found");
                 return;
             }
 
@@ -77,21 +105,9 @@ public class RitualLocateStructure extends AbstractRitual {
         });
     }
 
-    private void dispenseItem(Level level, ItemStack stack, BlockPos pos) {
-        Direction facing = Direction.UP;
-        double x = pos.getX() + 0.7 * facing.getStepX();
-        double y = pos.getY() + 0.7 * facing.getStepY() - 0.125;
-        double z = pos.getZ() + 0.7 * facing.getStepZ();
-
-        ItemEntity itemEntity = new ItemEntity(level, x, y, z, stack);
-        double g = level.random.nextDouble() * 0.1 + 0.2;
-        itemEntity.setDeltaMovement(level.random.triangle(facing.getStepX() * g, 0.0172275 * 6), level.random.triangle(0.2, 0.0172275 * 6), level.random.triangle(facing.getStepZ() * g, 0.0172275 * 6));
-        level.addFreshEntity(itemEntity);
-    }
-
     @Override
-    public void onStart(@Nullable Player player) {
-        super.onStart(player);
+    protected void tick() {
+
     }
 
     @Override

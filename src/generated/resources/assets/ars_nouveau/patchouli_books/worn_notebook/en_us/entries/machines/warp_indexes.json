@@ -9,11 +9,11 @@
     },
     {
       "type": "ars_nouveau:apparatus_recipe",
-      "recipe": "ars_additions:warp_index"
+      "recipe": "ars_additions:apparatus/warp_index"
     },
     {
       "type": "ars_nouveau:apparatus_recipe",
-      "recipe": "ars_additions:stabilized_warp_index"
+      "recipe": "ars_additions:apparatus/stabilized_warp_index"
     },
     {
       "type": "patchouli:relations",

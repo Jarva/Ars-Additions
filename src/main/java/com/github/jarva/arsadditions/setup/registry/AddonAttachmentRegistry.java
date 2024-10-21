@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.setup.registry;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.data.WeatherStatus;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -20,5 +21,8 @@ public class AddonAttachmentRegistry {
     );
     private static final Supplier<AttachmentType<ParticleColor>> PARTICLE_COLOR = ATTACHMENT_TYPES.register(
             "particle_color", () -> AttachmentType.builder(ParticleColor::defaultParticleColor).serialize(ParticleColor.CODEC.codec()).build()
+    );
+    public static final Supplier<AttachmentType<WeatherStatus>> LOCAL_WEATHER = ATTACHMENT_TYPES.register(
+            "local_weather_status", () -> AttachmentType.builder(() -> WeatherStatus.NONE).serialize(WeatherStatus.CODEC).build()
     );
 }

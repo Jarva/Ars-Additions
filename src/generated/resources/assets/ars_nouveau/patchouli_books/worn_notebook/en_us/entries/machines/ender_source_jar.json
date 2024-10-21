@@ -9,7 +9,7 @@
     },
     {
       "type": "ars_nouveau:apparatus_recipe",
-      "recipe": "ars_additions:ender_source_jar"
+      "recipe": "ars_additions:apparatus/ender_source_jar"
     }
   ]
 }

@@ -1,16 +1,12 @@
 {
   "type": "ars_additions:source_spawner",
-  "id": "ars_additions:default",
+  "entity": {
+    "tag": "ars_additions:source_spawner_nbt_blacklist"
+  },
+  "id": "ars_additions:blacklist",
   "tag_modifiers": [
     {
-      "type": "ars_additions:remove_guaranteed_drops"
-    },
-    {
-      "type": "ars_additions:remove_tag",
-      "strip_tags": [
-        "Inventory",
-        "Items"
-      ]
+      "type": "ars_additions:remove_tag"
     }
   ]
 }

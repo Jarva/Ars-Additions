@@ -53,7 +53,7 @@ jobs:
           curseforge-id: 974408
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          github-commitish: ${{ github.head_ref || github.ref_name }}
+          github-commitish: ${{ github.sha }}
           name: ars_additions-${{ env.MINECRAFT_VERSION }}-${{ inputs.version }}
           version: ${{ inputs.version }}
           game-versions: |

@@ -37,7 +37,9 @@ public record SendLocalWeatherStatus(ChunkPos pos, WeatherStatus status) impleme
         LevelChunk chunk = player.level().getChunk(pos.x, pos.z);
         if (chunk == null) return;
 
-        ArsAdditions.LOGGER.info("Received status {} for chunk {}, {}", packet.status, pos.x, pos.z);
+        if (packet.status != WeatherStatus.NONE) {
+            ArsAdditions.LOGGER.info("Received status {} for chunk {}, {}", packet.status, pos.x, pos.z);
+        }
 
         if (packet.status == WeatherStatus.NONE) {
             chunk.removeData(AddonAttachmentRegistry.LOCAL_WEATHER);

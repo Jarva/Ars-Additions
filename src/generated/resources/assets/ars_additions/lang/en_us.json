@@ -79,6 +79,8 @@
   "chat.ars_additions.codex_entry.no_glyphs": "You've learned all this codex can teach you",
   "chat.ars_additions.handy_haversack.invalid": "The Handy Haversack must be bound before scribing.",
   "chat.ars_additions.imbued_spell_parchment.scribing_started": "Scribing %s. Add source nearby to increase scribe speed.",
+  "chat.ars_additions.ritual_locate_structure.failed": "Unable to start ritual",
+  "chat.ars_additions.ritual_locate_structure.not_found": "Unable to locate structure",
   "chat.ars_additions.warp_index.bound": "Bound %s",
   "chat.ars_additions.warp_index.invalid_block": "Invalid %s",
   "chat.ars_additions.warp_index.no_activate": "You are unable to reach the %s here",

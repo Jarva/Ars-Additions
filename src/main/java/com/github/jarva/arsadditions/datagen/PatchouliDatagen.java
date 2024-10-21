@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.datagen.patchouli.ApparatusPageProvider;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.ArsNouveauRegistry;
@@ -47,8 +48,8 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
         addPage(new PatchouliBuilder(MACHINES, AddonItemRegistry.ADVANCED_LECTERN_REMOTE.get())
                         .withName("ars_additions.page.warp_indexes")
                         .withTextPage("ars_additions.page1.warp_indexes")
-                        .withPage(new ApparatusPage(AddonItemRegistry.LECTERN_REMOTE))
-                        .withPage(new ApparatusPage(AddonItemRegistry.ADVANCED_LECTERN_REMOTE))
+                        .withPage(new ApparatusPageProvider(AddonItemRegistry.LECTERN_REMOTE))
+                        .withPage(new ApparatusPageProvider(AddonItemRegistry.ADVANCED_LECTERN_REMOTE))
                         .withPage(new RelationsPage().withEntry(MACHINES, "storage_lectern").withEntry(MACHINES, "bookwyrm_charm")),
                 getPath(MACHINES, "warp_indexes")
         );
@@ -97,8 +98,8 @@ public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datage
                 getPath(EQUIPMENT, "unstable_reliquary")
         );
 
-        addBasicItem(AddonBlockRegistry.ENDER_SOURCE_JAR.get(), MACHINES, new ApparatusPage(AddonBlockRegistry.ENDER_SOURCE_JAR));
-        addBasicItem(AddonItemRegistry.XP_JAR.get(), EQUIPMENT, new ApparatusPage(AddonItemRegistry.XP_JAR));
+        addBasicItem(AddonBlockRegistry.ENDER_SOURCE_JAR.get(), MACHINES, new ApparatusPageProvider(AddonBlockRegistry.ENDER_SOURCE_JAR));
+        addBasicItem(AddonItemRegistry.XP_JAR.get(), EQUIPMENT, new ApparatusPageProvider(AddonItemRegistry.XP_JAR));
         addBasicItem(AddonItemRegistry.HANDY_HAVERSACK.get(), EQUIPMENT, new CraftingPage(AddonItemRegistry.HANDY_HAVERSACK));
 
         PatchouliBuilder charmBuilder = new PatchouliBuilder(EQUIPMENT, AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.FIRE_RESISTANCE))

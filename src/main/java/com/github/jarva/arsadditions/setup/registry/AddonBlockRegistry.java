@@ -6,7 +6,7 @@ import com.github.jarva.arsadditions.common.block.*;
 import com.github.jarva.arsadditions.common.block.tile.*;
 import com.github.jarva.arsadditions.common.item.EnderSourceJarItem;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
-import com.hollingsworth.arsnouveau.client.renderer.tile.GenericRenderer;
+import com.hollingsworth.arsnouveau.client.renderer.tile.GenericTileRenderer;
 import com.hollingsworth.arsnouveau.common.items.RendererBlockItem;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockEntityTypeRegistryWrapper;
@@ -55,7 +55,7 @@ public class AddonBlockRegistry {
         WIXIE_ENCHANTING = registerBlockAndItem(AddonBlockNames.ENCHANTING_WIXIE_CAULDRON, EnchantingWixieCauldron::new, (block) -> new RendererBlockItem(block.get(), defaultItemProperties()) {
             @Override
             public Supplier<BlockEntityWithoutLevelRenderer> getRenderer() {
-                return GenericRenderer.getISTER("enchanting_apparatus");
+                return GenericTileRenderer.getISTER("enchanting_apparatus");
             }
         });
         WIXIE_ENCHANTING_TILE = registerTile(AddonBlockNames.ENCHANTING_WIXIE_CAULDRON, EnchantingWixieCauldronTile::new, () -> new Block[]{WIXIE_ENCHANTING.get()});

@@ -163,6 +163,9 @@ public class LangDatagen extends LanguageProvider {
 
         this.add("chat.ars_additions.advanced_dominion_wand.mode", "Set mode: %s");
 
+        this.add("chat.ars_additions.ritual_locate_structure.failed", "Unable to start ritual");
+        this.add("chat.ars_additions.ritual_locate_structure.not_found", "Unable to locate structure");
+
         // Effects
 
         this.add("effect.ars_additions.marked", "Marked");

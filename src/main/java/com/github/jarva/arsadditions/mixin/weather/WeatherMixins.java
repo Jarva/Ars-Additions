@@ -38,25 +38,15 @@ public class WeatherMixins {
             super(pLevelData, pDimension, pRegistryAccess, pDimensionTypeRegistration, pProfiler, pIsClientSide, pIsDebug, pBiomeZoomSeed, pMaxChainedNeighborUpdates);
         }
 
-//        @WrapOperation(method = "tickChunk",
-//                at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I")
-//        )
-//        public int tickChunk$isThundering(RandomSource instance, int i, Operation<Integer> original) {
-//            if (i == 100000) {
-//                return original.call(instance, 10);
-//            }
-//            return original.call(instance, i);
-//        }
-
         @WrapOperation(method = "tickChunk",
                 at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;isThundering()Z")
         )
         public boolean tickChunk$isThundering(ServerLevel instance, Operation<Boolean> original, @Local ChunkPos chunkPos) {
             WeatherStatus status = WeatherStatus.getByChunkPos(this, chunkPos);
-            if (status != WeatherStatus.NONE) {
-                return status == WeatherStatus.THUNDER;
+            if (status == WeatherStatus.NONE) {
+                return original.call(instance);
             }
-            return original.call(instance);
+            return status == WeatherStatus.THUNDER;
         }
 
         @WrapOperation(method = "tickChunk",
@@ -64,10 +54,10 @@ public class WeatherMixins {
         )
         public boolean tickChunk$isRaining(ServerLevel instance, Operation<Boolean> original, @Local ChunkPos chunkPos) {
             WeatherStatus status = WeatherStatus.getByChunkPos(this, chunkPos);
-            if (status != WeatherStatus.NONE) {
-                return WeatherStatus.isRaining(status);
+            if (status == WeatherStatus.NONE) {
+                return original.call(instance);
             }
-            return original.call(instance);
+            return WeatherStatus.isRaining(status);
         }
 
         @WrapOperation(method = "tickPrecipitation",
@@ -75,24 +65,21 @@ public class WeatherMixins {
         )
         public boolean tickPrecipitation$isRaining(ServerLevel instance, Operation<Boolean> original, @Local(argsOnly = true) BlockPos blockPos) {
             WeatherStatus status = WeatherStatus.getByBlockPos(this, blockPos);
-            if (status != WeatherStatus.NONE) {
-                return WeatherStatus.isRaining(status);
+            if (status == WeatherStatus.NONE) {
+                return original.call(instance);
             }
-            return original.call(instance);
+            return WeatherStatus.isRaining(status);
         }
 
         @WrapOperation(method = "tickPrecipitation", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
         public Biome.Precipitation tickPrecipitation$getPrecipitationAt(Biome instance, BlockPos pPos, Operation<Biome.Precipitation> original) {
             WeatherStatus status = WeatherStatus.getByBlockPos(this, pPos);
 
-            if (status != WeatherStatus.NONE) {
-                return WeatherStatus.getPrecipitation(status);
-            }
-
-            if (this.isRaining()) {
+            if (status == WeatherStatus.NONE) {
                 return original.call(instance, pPos);
             }
-            return Biome.Precipitation.NONE;
+
+            return WeatherStatus.getPrecipitation(status);
         }
     }
 
@@ -151,19 +138,19 @@ public class WeatherMixins {
         @WrapOperation(method = "shouldSnow", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;warmEnoughToRain(Lnet/minecraft/core/BlockPos;)Z"))
         public boolean shouldSnow$warmEnoughToRain(Biome instance, BlockPos pos, Operation<Boolean> original, @Local LevelReader level) {
             WeatherStatus status = WeatherStatus.getByBlockPos(level, pos);
-            if (status != WeatherStatus.NONE) {
-                return status != WeatherStatus.SNOW;
+            if (status == WeatherStatus.NONE) {
+                return original.call(instance, pos);
             }
-            return original.call(instance, pos);
+            return status != WeatherStatus.SNOW;
         }
 
         @WrapOperation(method = "shouldFreeze(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;warmEnoughToRain(Lnet/minecraft/core/BlockPos;)Z"))
         public boolean shouldFreeze$warmEnoughToRain(Biome instance, BlockPos pos, Operation<Boolean> original, @Local LevelReader level) {
             WeatherStatus status = WeatherStatus.getByBlockPos(level, pos);
-            if (status != WeatherStatus.NONE) {
-                return status != WeatherStatus.SNOW;
+            if (status == WeatherStatus.NONE) {
+                return original.call(instance, pos);
             }
-            return original.call(instance, pos);
+            return status != WeatherStatus.SNOW;
         }
     }
 
@@ -180,14 +167,10 @@ public class WeatherMixins {
 
             WeatherStatus status = WeatherStatus.getByBlockPos(level, pPos);
 
-            if (status != WeatherStatus.NONE) {
-                return WeatherStatus.getPrecipitation(status);
-            }
-
-            if (level.isRaining()) {
+            if (status == WeatherStatus.NONE) {
                 return original.call(instance, pPos);
             }
-            return Biome.Precipitation.NONE;
+            return WeatherStatus.getPrecipitation(status);
         }
 
         @WrapOperation(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))
@@ -196,7 +179,11 @@ public class WeatherMixins {
 
             WeatherStatus status = WeatherStatus.getByBlockPos(level, BlockPos.containing(pX, pY, pZ));
 
-            if (status != WeatherStatus.CLEAR) {
+            if (status == WeatherStatus.NONE) {
+                original.call(instance, pParticleData, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
+            }
+
+            if (WeatherStatus.isRaining(status)) {
                 original.call(instance, pParticleData, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
             }
         }

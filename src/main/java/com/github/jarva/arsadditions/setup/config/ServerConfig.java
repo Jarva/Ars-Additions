@@ -43,7 +43,7 @@ public class ServerConfig {
         reliquary_cost_player = addConfig("cost_player", (name) -> builder.comment("How much durability should targeting a player with Recall cost?").defineInRange(name, 1000, 0, 1000));
         reliquary_cost_entity = addConfig("cost_entity", (name) -> builder.comment("How much durability should targeting an entity with Recall cost?").defineInRange(name, 250, 0, 1000));
         reliquary_cost_location = addConfig("cost_location", (name) -> builder.comment("How much durability should targeting a location with Recall cost?").defineInRange(name, 50, 0, 1000));
-        reliquary_effect_duration = addConfig("effect_duration", (name) -> builder.comment("How long should the Marked effect last (in seconds) when Mark is cast on a player?").defineInRange(name, 300, 0, 900));
+        reliquary_effect_duration = addConfig("effect_duration", (name) -> builder.comment("How long should the Marked effect last (in seconds) when Mark is cast on a player?").defineInRange(name, 300, -1, Integer.MAX_VALUE));
     }
 
     public <T extends ForgeConfigSpec.ConfigValue<?>> T addConfig(String name, Function<String, T> consumer) {

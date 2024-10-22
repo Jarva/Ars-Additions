@@ -14,15 +14,9 @@
     "patchouli.BookMixin",
     "patchouli.BookPageAccessor",
     "patchouli.PageRelationsAccessor",
-    "patchouli.PageTextAccessor",
-    "weather.WeatherMixins$BiomeMixin",
-    "weather.WeatherMixins$LevelMixin",
-    "weather.WeatherMixins$ServerLevelMixin"
+    "patchouli.PageTextAccessor"
   ],
   "client": [
-    "weather.WeatherMixins$ClientLevelDataMixin",
-    "weather.WeatherMixins$ClientLevelMixin",
-    "weather.WeatherMixins$LevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

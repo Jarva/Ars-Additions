@@ -48,17 +48,17 @@ public record BulkScribingRecipe(ResourceLocation id) implements IImbuementRecip
         AbstractCaster<?> caster = itemCaster.getSpellCaster(scriberStack);
         if (caster == null || caster.getSpell().isEmpty()) return false;
 
-        if (!(reagent.getItem() instanceof ItemCasterProvider reagentItemCaster)) {
-            return false;
+        if (reagent.getItem() instanceof ItemCasterProvider reagentItemCaster) {
+            AbstractCaster<?> reagentCaster = reagentItemCaster.getSpellCaster(reagent);
+            if (reagentCaster == null) return false;
+            return !reagentCaster.getSpell().equals(caster.getSpell());
         }
-        AbstractCaster<?> reagentCaster = reagentItemCaster.getSpellCaster(reagent);
-        if (reagentCaster == null || !reagentCaster.getSpell().isEmpty()) return false;
 
         return reagent.getItem() instanceof IScribeable;
     }
 
     public Optional<ItemStack> findScriber(ImbuementTile imbuementTile) {
-        return imbuementTile.getPedestalItems().stream().filter(this::isScriber).findFirst();
+    return imbuementTile.getPedestalItems().stream().filter(this::isScriber).findFirst();
     }
 
     public boolean isScriber(ItemStack stack) {

@@ -110,7 +110,7 @@ public class ProcessorDatagen extends SimpleDataProvider {
     private void setupSourceJars(List<ProcessorRule> rules) {
         for (Integer possibleValue : SourceJar.fill.getPossibleValues()) {
             CompoundTag tag = new CompoundTag();
-            tag.putInt("source", Math.min((possibleValue - 1) * 1000, 0));
+            tag.putInt("source", Math.max((possibleValue - 1) * 1000, 0));
             modifyBlockEntity(BlockRegistry.SOURCE_JAR.get(), bs -> true, bs -> bs.setValue(SourceJar.fill, possibleValue), new AppendStatic(tag), rules);
         }
     }

@@ -58,7 +58,7 @@ public class HandyHaversack extends Item implements IScribeable {
         HaversackData.fromItemStack(stack).ifPresent(data -> {
             boolean loaded = level.getServer().getLevel(data.pos().dimension()).isLoaded(data.pos().pos());
             if (data.loaded() != loaded) {
-                data.toggleLoaded();
+                data.toggleLoaded().write(stack);
             }
         });
     }
@@ -71,14 +71,17 @@ public class HandyHaversack extends Item implements IScribeable {
         ItemStack stack = player.getItemInHand(usedHand);
         return HaversackData.fromItemStack(stack).map(data -> {
             if (player.isShiftKeyDown()) {
-                if (data.toggle().active()) {
+                HaversackData updated = data.toggle();
+                if (updated.active()) {
                     PortUtil.sendMessage(player, Component.translatable("ars_nouveau.on"));
                 } else {
                     PortUtil.sendMessage(player, Component.translatable("ars_nouveau.off"));
                 }
+                updated.write(stack);
                 return InteractionResultHolder.consume(stack);
             }
-            ItemStack write = player.getOffhandItem();
+            InteractionHand otherHand = usedHand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+            ItemStack write = player.getItemInHand(otherHand);
             writeStack(player, stack, write);
             return InteractionResultHolder.success(stack);
         }).orElse(InteractionResultHolder.fail(stack));
@@ -137,7 +140,7 @@ public class HandyHaversack extends Item implements IScribeable {
         if (handler == null) return true;
 
         InventoryManager manager = new InventoryManager(List.of(handler));
-        ItemStack remainder = manager.insertStack(other);
+        ItemStack remainder = manager.insertStack(other.copy());
 
         update.accept(remainder);
         return true;
@@ -197,7 +200,7 @@ public class HandyHaversack extends Item implements IScribeable {
 
         if (haversack.getItem() instanceof HandyHaversack handyHaversack) {
             HaversackData.fromItemStack(haversack).ifPresent(data -> {
-                if (data.containsStack(pickedUp)) {
+                if (data.containsStack(pickedUp) && data.active()) {
                     handyHaversack.transportItem(haversack, pickedUp, player, remainder);
                 }
             });

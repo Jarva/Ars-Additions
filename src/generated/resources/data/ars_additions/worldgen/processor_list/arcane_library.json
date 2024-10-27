@@ -577,7 +577,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -605,7 +605,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -633,7 +633,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -661,7 +661,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -689,7 +689,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -717,7 +717,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -745,7 +745,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -773,7 +773,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -801,7 +801,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -829,7 +829,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -857,7 +857,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -885,7 +885,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -913,7 +913,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -941,7 +941,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -969,7 +969,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -997,7 +997,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -1025,7 +1025,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -1053,7 +1053,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -1081,7 +1081,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -1109,7 +1109,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -1137,7 +1137,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -1165,7 +1165,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -1193,7 +1193,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -1221,7 +1221,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": -1000
+              "source": 0
             }
           },
           "input_predicate": {
@@ -1921,7 +1921,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -1949,7 +1949,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -1977,7 +1977,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2005,7 +2005,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2033,7 +2033,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2061,7 +2061,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2089,7 +2089,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2117,7 +2117,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2145,7 +2145,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2173,7 +2173,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2201,7 +2201,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2229,7 +2229,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2257,7 +2257,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2285,7 +2285,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2313,7 +2313,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2341,7 +2341,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2369,7 +2369,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2397,7 +2397,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2425,7 +2425,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2453,7 +2453,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2481,7 +2481,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2509,7 +2509,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2537,7 +2537,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2565,7 +2565,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 1000
             }
           },
           "input_predicate": {
@@ -2593,7 +2593,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2621,7 +2621,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2649,7 +2649,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2677,7 +2677,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2705,7 +2705,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2733,7 +2733,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2761,7 +2761,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2789,7 +2789,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2817,7 +2817,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2845,7 +2845,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2873,7 +2873,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2901,7 +2901,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2929,7 +2929,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2957,7 +2957,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -2985,7 +2985,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -3013,7 +3013,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -3041,7 +3041,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -3069,7 +3069,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -3097,7 +3097,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -3125,7 +3125,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -3153,7 +3153,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -3181,7 +3181,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -3209,7 +3209,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -3237,7 +3237,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 2000
             }
           },
           "input_predicate": {
@@ -3265,7 +3265,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3293,7 +3293,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3321,7 +3321,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3349,7 +3349,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3377,7 +3377,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3405,7 +3405,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3433,7 +3433,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3461,7 +3461,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3489,7 +3489,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3517,7 +3517,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3545,7 +3545,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3573,7 +3573,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3601,7 +3601,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3629,7 +3629,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3657,7 +3657,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3685,7 +3685,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3713,7 +3713,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3741,7 +3741,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3769,7 +3769,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3797,7 +3797,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3825,7 +3825,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3853,7 +3853,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3881,7 +3881,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3909,7 +3909,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 3000
             }
           },
           "input_predicate": {
@@ -3937,7 +3937,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -3965,7 +3965,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -3993,7 +3993,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4021,7 +4021,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4049,7 +4049,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4077,7 +4077,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4105,7 +4105,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4133,7 +4133,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4161,7 +4161,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4189,7 +4189,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4217,7 +4217,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4245,7 +4245,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4273,7 +4273,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4301,7 +4301,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4329,7 +4329,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4357,7 +4357,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4385,7 +4385,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4413,7 +4413,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4441,7 +4441,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4469,7 +4469,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4497,7 +4497,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4525,7 +4525,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4553,7 +4553,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4581,7 +4581,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 4000
             }
           },
           "input_predicate": {
@@ -4609,7 +4609,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4637,7 +4637,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4665,7 +4665,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4693,7 +4693,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4721,7 +4721,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4749,7 +4749,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4777,7 +4777,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4805,7 +4805,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4833,7 +4833,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4861,7 +4861,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4889,7 +4889,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4917,7 +4917,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4945,7 +4945,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -4973,7 +4973,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5001,7 +5001,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5029,7 +5029,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5057,7 +5057,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5085,7 +5085,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5113,7 +5113,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5141,7 +5141,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5169,7 +5169,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5197,7 +5197,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5225,7 +5225,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5253,7 +5253,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 5000
             }
           },
           "input_predicate": {
@@ -5281,7 +5281,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5309,7 +5309,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5337,7 +5337,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5365,7 +5365,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5393,7 +5393,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5421,7 +5421,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5449,7 +5449,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5477,7 +5477,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5505,7 +5505,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5533,7 +5533,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5561,7 +5561,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5589,7 +5589,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5617,7 +5617,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5645,7 +5645,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5673,7 +5673,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5701,7 +5701,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5729,7 +5729,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5757,7 +5757,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5785,7 +5785,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5813,7 +5813,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5841,7 +5841,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5869,7 +5869,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5897,7 +5897,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5925,7 +5925,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 6000
             }
           },
           "input_predicate": {
@@ -5953,7 +5953,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -5981,7 +5981,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6009,7 +6009,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6037,7 +6037,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6065,7 +6065,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6093,7 +6093,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6121,7 +6121,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6149,7 +6149,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6177,7 +6177,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6205,7 +6205,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6233,7 +6233,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6261,7 +6261,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6289,7 +6289,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6317,7 +6317,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6345,7 +6345,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6373,7 +6373,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6401,7 +6401,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6429,7 +6429,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6457,7 +6457,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6485,7 +6485,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6513,7 +6513,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6541,7 +6541,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6569,7 +6569,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6597,7 +6597,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 7000
             }
           },
           "input_predicate": {
@@ -6625,7 +6625,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6653,7 +6653,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6681,7 +6681,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6709,7 +6709,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6737,7 +6737,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6765,7 +6765,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6793,7 +6793,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6821,7 +6821,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6849,7 +6849,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6877,7 +6877,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6905,7 +6905,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6933,7 +6933,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6961,7 +6961,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -6989,7 +6989,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7017,7 +7017,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7045,7 +7045,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7073,7 +7073,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7101,7 +7101,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7129,7 +7129,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7157,7 +7157,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7185,7 +7185,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7213,7 +7213,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7241,7 +7241,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7269,7 +7269,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 8000
             }
           },
           "input_predicate": {
@@ -7297,7 +7297,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7325,7 +7325,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7353,7 +7353,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7381,7 +7381,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7409,7 +7409,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7437,7 +7437,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7465,7 +7465,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7493,7 +7493,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7521,7 +7521,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7549,7 +7549,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7577,7 +7577,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7605,7 +7605,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7633,7 +7633,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7661,7 +7661,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7689,7 +7689,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7717,7 +7717,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7745,7 +7745,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7773,7 +7773,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7801,7 +7801,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7829,7 +7829,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7857,7 +7857,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7885,7 +7885,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7913,7 +7913,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7941,7 +7941,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 9000
             }
           },
           "input_predicate": {
@@ -7969,7 +7969,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -7997,7 +7997,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8025,7 +8025,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8053,7 +8053,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8081,7 +8081,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8109,7 +8109,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8137,7 +8137,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8165,7 +8165,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8193,7 +8193,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8221,7 +8221,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8249,7 +8249,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8277,7 +8277,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8305,7 +8305,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8333,7 +8333,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8361,7 +8361,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8389,7 +8389,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8417,7 +8417,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8445,7 +8445,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8473,7 +8473,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8501,7 +8501,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8529,7 +8529,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8557,7 +8557,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8585,7 +8585,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {
@@ -8613,7 +8613,7 @@
           "block_entity_modifier": {
             "type": "minecraft:append_static",
             "data": {
-              "source": 0
+              "source": 10000
             }
           },
           "input_predicate": {

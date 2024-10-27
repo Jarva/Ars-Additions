@@ -136,8 +136,15 @@ public class WarpNexusScreen extends Screen {
             mouseX /= scaleFactor;
             mouseY /= scaleFactor;
         }
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderAfterScale(guiGraphics, mouseX, mouseY, partialTick);
         matrixStack.popPose();
+    }
+
+    @Override
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+        renderAfterScale(guiGraphics, mouseX, mouseY, partialTick);
     }
 
     private int getMaxAllowedScale() {
@@ -145,10 +152,8 @@ public class WarpNexusScreen extends Screen {
     }
     
     public void renderAfterScale(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         if (topStart >= 0) {
             guiGraphics.drawCenteredString(this.font, Component.literal("Warp Nexus"), width / 2, topStart + 8, new Color(255, 255, 255).getRGB());
         }
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 }

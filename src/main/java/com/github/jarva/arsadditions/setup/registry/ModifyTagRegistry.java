@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ModifyTagRegistry {
-    public static final ResourceKey<Registry<MapCodec<? extends TagModifier>>> TAG_MODIFIER_REGISTRY_KEY = ResourceKey.createRegistryKey(ArsAdditions.prefix("mark_data"));
+    public static final ResourceKey<Registry<MapCodec<? extends TagModifier>>> TAG_MODIFIER_REGISTRY_KEY = ResourceKey.createRegistryKey(ArsAdditions.prefix("tag_modifiers"));
     public static final Registry<MapCodec<? extends TagModifier>> TAG_MODIFIER_REGISTRY = new RegistryBuilder<>(TAG_MODIFIER_REGISTRY_KEY).create();
     public static final DeferredRegister<MapCodec<? extends TagModifier>> TAG_MODIFIER = DeferredRegister.create(TAG_MODIFIER_REGISTRY, ArsAdditions.MODID);
 

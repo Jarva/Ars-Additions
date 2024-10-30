@@ -8,7 +8,7 @@ import net.minecraft.world.item.TooltipFlag;
 
 import java.util.List;
 
-public class BrokenMarkData implements MarkData {
+public record BrokenMarkData() implements MarkData {
     public static final BrokenMarkData INSTANCE = new BrokenMarkData();
     public static final MapCodec<BrokenMarkData> CODEC = MapCodec.unit(() -> INSTANCE);
 

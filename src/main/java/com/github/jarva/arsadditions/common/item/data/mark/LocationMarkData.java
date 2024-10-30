@@ -5,6 +5,7 @@ import com.github.jarva.arsadditions.setup.config.ServerConfig;
 import com.hollingsworth.arsnouveau.api.spell.CastResolveType;
 import com.hollingsworth.arsnouveau.api.spell.SpellContext;
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
+import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.TileCaster;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Direction;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public record LocationMarkData(GlobalPos pos) implements MarkData {
     public static final MapCodec<LocationMarkData> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            GlobalPos.CODEC.fieldOf("pos").forGetter(LocationMarkData::pos)
+            GlobalPos.CODEC.fieldOf("global").forGetter(LocationMarkData::pos)
     ).apply(inst, LocationMarkData::new));
 
     @Override
@@ -34,9 +35,14 @@ public record LocationMarkData(GlobalPos pos) implements MarkData {
 
     @Override
     public CastResolveType cast(SpellContext context, ItemStack reliquary, ServerLevel level, LivingEntity caster, SpellResolver resolver) {
-        if (!pos.dimension().equals(caster.level().dimension().location().toString())) return CastResolveType.FAILURE;
+        if (!pos.dimension().equals(level.dimension())) return CastResolveType.FAILURE;
 
-        BlockHitResult bhr = new BlockHitResult(pos.pos().getCenter(), Direction.UP, pos.pos(), false);
+        Direction direction = caster.getDirection();
+        if (context.getCaster() instanceof TileCaster tileCaster) {
+            direction = tileCaster.getFacingDirection();
+        }
+
+        BlockHitResult bhr = new BlockHitResult(pos.pos().getCenter(), direction, pos.pos(), false);
         resolver.onResolveEffect(caster.level(), bhr);
         UnstableReliquary.damage(this, reliquary, caster);
         return CastResolveType.SUCCESS;

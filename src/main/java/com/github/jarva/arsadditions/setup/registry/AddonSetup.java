@@ -20,8 +20,8 @@ public class AddonSetup {
         AddonConditionRegistry.CONDITION_CODECS.register(modEventBus);
         AddonCreativeTabRegistry.TABS.register(modEventBus);
         Triggers.TRIGGERS.register(modEventBus);
-        ModifyTagRegistry.init();
-        MarkDataRegistry.init();
+        MarkDataRegistry.MARK_DATA.register(modEventBus);
+        ModifyTagRegistry.TAG_MODIFIER.register(modEventBus);
 
         DungeonLootTables.BASIC_LOOT.add(() -> new ItemStack(AddonItemRegistry.CODEX_ENTRY.get(), 1));
     }

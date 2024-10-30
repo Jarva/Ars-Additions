@@ -6,6 +6,7 @@ import com.github.jarva.arsadditions.setup.config.CommonConfig;
 import com.github.jarva.arsadditions.setup.config.ServerConfig;
 import com.github.jarva.arsadditions.setup.registry.AddonSetup;
 import com.github.jarva.arsadditions.setup.registry.ArsNouveauRegistry;
+import com.github.jarva.arsadditions.setup.registry.MarkDataRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GenericRecipeRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +20,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +38,10 @@ public class ArsAdditions {
         modEventBus.addListener(this::common);
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::post);
+
+        modEventBus.addListener((NewRegistryEvent e) -> {
+            e.register(MarkDataRegistry.MARK_DATA_REGISTRY);
+        });
 
         Triggers.init();
     }

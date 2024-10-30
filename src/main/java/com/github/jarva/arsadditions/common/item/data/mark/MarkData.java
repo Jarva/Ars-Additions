@@ -20,18 +20,15 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Function;
 
 public interface MarkData {
-    Codec<MarkData> CODEC = MarkDataRegistry.MARK_DATA_DISPATCHER.dispatchedCodec();
+    Codec<MarkData> CODEC = MarkDataRegistry.MARK_DATA_REGISTRY.byNameCodec().dispatch(MarkData::codec, Function.identity());
     StreamCodec<RegistryFriendlyByteBuf, MarkData> STREAM_CODEC = ByteBufCodecs.fromCodec(CODEC).cast();
 
-    default void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    default void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {}
 
-    }
-
-    default void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-
-    }
+    default void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {}
 
     default CastResolveType cast(SpellContext context, ItemStack reliquary, ServerLevel level, LivingEntity caster, SpellResolver resolver) {
         return CastResolveType.FAILURE;

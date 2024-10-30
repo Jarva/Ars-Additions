@@ -1,31 +1,31 @@
 package com.github.jarva.arsadditions.setup.registry;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.common.util.codec.RegistryDispatcher;
 import com.github.jarva.arsadditions.common.util.codec.TagModifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.*;
+import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegistryBuilder;
 
 import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Map;
 
 public class ModifyTagRegistry {
-    public static final RegistryDispatcher<TagModifier> TAG_MODIFIER_DISPATCHER = RegistryDispatcher.makeDispatchForgeRegistry(
-            ArsAdditions.prefix("tag_modifier"),
-            TagModifier::type,
-            builder->{});
+    public static final ResourceKey<Registry<MapCodec<? extends TagModifier>>> TAG_MODIFIER_REGISTRY_KEY = ResourceKey.createRegistryKey(ArsAdditions.prefix("mark_data"));
+    public static final Registry<MapCodec<? extends TagModifier>> TAG_MODIFIER_REGISTRY = new RegistryBuilder<>(TAG_MODIFIER_REGISTRY_KEY).create();
+    public static final DeferredRegister<MapCodec<? extends TagModifier>> TAG_MODIFIER = DeferredRegister.create(TAG_MODIFIER_REGISTRY, ArsAdditions.MODID);
 
-    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<RemoveGuaranteedDrops>> REMOVE_GUARANTEED_DROPS = TAG_MODIFIER_DISPATCHER.defreg().register("remove_guaranteed_drops", () -> RemoveGuaranteedDrops.CODEC);
-    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<RemoveTag>> REMOVE_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("remove_tag", () -> RemoveTag.CODEC);
-    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<SetTag>> SET_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("set_tag", () -> SetTag.CODEC);
-    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<AppendTag>> APPEND_TAG = TAG_MODIFIER_DISPATCHER.defreg().register("append_tag", () -> AppendTag.CODEC);
-
-    public static void init() {}
+    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<RemoveGuaranteedDrops>> REMOVE_GUARANTEED_DROPS = TAG_MODIFIER.register("remove_guaranteed_drops", () -> RemoveGuaranteedDrops.CODEC);
+    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<RemoveTag>> REMOVE_TAG = TAG_MODIFIER.register("remove_tag", () -> RemoveTag.CODEC);
+    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<SetTag>> SET_TAG = TAG_MODIFIER.register("set_tag", () -> SetTag.CODEC);
+    private static final DeferredHolder<MapCodec<? extends TagModifier>, MapCodec<AppendTag>> APPEND_TAG = TAG_MODIFIER.register("append_tag", () -> AppendTag.CODEC);
 
     public record RemoveGuaranteedDrops() implements TagModifier {
         public static MapCodec<RemoveGuaranteedDrops> CODEC = MapCodec.unit(RemoveGuaranteedDrops::new);

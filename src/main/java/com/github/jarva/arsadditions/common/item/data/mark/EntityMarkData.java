@@ -73,7 +73,7 @@ public record EntityMarkData(UUID uuid, Holder<EntityType<?>> entityType, Option
         }
 
         resolver.onResolveEffect(level, new EntityHitResult(found));
-        UnstableReliquary.damage(this, reliquary, caster);
+        UnstableReliquary.damage(this, reliquary, caster, found);
         return CastResolveType.SUCCESS;
     }
 

@@ -75,8 +75,6 @@ public class UnstableReliquary extends Item {
     public static void damage(MarkData type, ItemStack stack, LivingEntity entity, @Nullable Entity target) {
         if (entity.level().isClientSide())
             return;
-        stack.hurtAndBreak(type.damageAmount(stack, entity, target), (ServerLevel) entity.level(), entity, (e) -> {
-
-        });
+        stack.hurtAndBreak(type.damageAmount(stack, entity, target), (ServerLevel) entity.level(), entity, (e) -> {});
     }
 }

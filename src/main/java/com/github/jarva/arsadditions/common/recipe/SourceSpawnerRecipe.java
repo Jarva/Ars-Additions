@@ -3,7 +3,6 @@ package com.github.jarva.arsadditions.common.recipe;
 import com.github.jarva.arsadditions.common.util.codec.ResourceOrTag;
 import com.github.jarva.arsadditions.common.util.codec.TagModifier;
 import com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry;
-import com.github.jarva.arsadditions.setup.registry.ModifyTagRegistry;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.CheatSerializer;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -71,7 +70,7 @@ public record SourceSpawnerRecipe(ResourceLocation id, Optional<ResourceOrTag<En
                 ResourceLocation.CODEC.fieldOf("id").forGetter(SourceSpawnerRecipe::id),
                 ResourceOrTag.ENTITY_TYPE_CODEC.codec().optionalFieldOf("entity").forGetter(SourceSpawnerRecipe::entity),
                 Codec.INT.optionalFieldOf("source").forGetter(SourceSpawnerRecipe::source),
-                ModifyTagRegistry.TAG_MODIFIER_DISPATCHER.dispatchedCodec().listOf().optionalFieldOf("tag_modifiers").forGetter(SourceSpawnerRecipe::tag_modifiers)
+                TagModifier.CODEC.listOf().optionalFieldOf("tag_modifiers").forGetter(SourceSpawnerRecipe::tag_modifiers)
         ).apply(instance, SourceSpawnerRecipe::new));
 
         @Override

@@ -7,6 +7,7 @@ import com.github.jarva.arsadditions.setup.config.ServerConfig;
 import com.github.jarva.arsadditions.setup.registry.AddonSetup;
 import com.github.jarva.arsadditions.setup.registry.ArsNouveauRegistry;
 import com.github.jarva.arsadditions.setup.registry.MarkDataRegistry;
+import com.github.jarva.arsadditions.setup.registry.ModifyTagRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GenericRecipeRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.resources.ResourceLocation;
@@ -41,6 +42,7 @@ public class ArsAdditions {
 
         modEventBus.addListener((NewRegistryEvent e) -> {
             e.register(MarkDataRegistry.MARK_DATA_REGISTRY);
+            e.register(ModifyTagRegistry.TAG_MODIFIER_REGISTRY);
         });
 
         Triggers.init();

@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.common.data;
 
+import com.github.jarva.arsadditions.setup.networking.SendLocalWeatherStatus;
 import com.github.jarva.arsadditions.setup.registry.AddonAttachmentRegistry;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.level.ChunkWatchEvent;
@@ -52,20 +52,20 @@ public enum WeatherStatus implements StringRepresentable {
     }
 
 //    @SubscribeEvent
-//    public static void sendChunkData(ChunkWatchEvent.Sent event) {
-//        ServerPlayer player = event.getPlayer();
-//        LevelChunk chunk = event.getChunk();
-//        ChunkPos pos = event.getPos();
-//
-//        if (chunk.hasData(AddonAttachmentRegistry.LOCAL_WEATHER)) {
-//            WeatherStatus status = chunk.getData(AddonAttachmentRegistry.LOCAL_WEATHER);
-//            SendLocalWeatherStatus.sendChunkStatus(player, pos, status);
-//        } else {
-//            SendLocalWeatherStatus.sendChunkStatus(player, pos, WeatherStatus.NONE);
-//        }
-//    }
+    public static void sendChunkData(ChunkWatchEvent.Sent event) {
+        ServerPlayer player = event.getPlayer();
+        LevelChunk chunk = event.getChunk();
+        ChunkPos pos = event.getPos();
 
-    @SubscribeEvent
+        if (chunk.hasData(AddonAttachmentRegistry.LOCAL_WEATHER)) {
+            WeatherStatus status = chunk.getData(AddonAttachmentRegistry.LOCAL_WEATHER);
+            SendLocalWeatherStatus.sendChunkStatus(player, pos, status);
+        } else {
+            SendLocalWeatherStatus.sendChunkStatus(player, pos, WeatherStatus.NONE);
+        }
+    }
+
+//    @SubscribeEvent
     public static void setWeatherStatus(ChunkWatchEvent.Watch event) {
         if (FMLEnvironment.production) return;
 

@@ -16,7 +16,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.level.ChunkWatchEvent;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 import java.util.function.IntFunction;
 
-@EventBusSubscriber
+//@EventBusSubscriber
 public enum WeatherStatus implements StringRepresentable {
     NONE(0),
     CLEAR(1),

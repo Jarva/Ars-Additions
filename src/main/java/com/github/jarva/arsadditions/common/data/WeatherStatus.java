@@ -1,6 +1,5 @@
 package com.github.jarva.arsadditions.common.data;
 
-import com.github.jarva.arsadditions.setup.networking.SendLocalWeatherStatus;
 import com.github.jarva.arsadditions.setup.registry.AddonAttachmentRegistry;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
@@ -52,19 +51,19 @@ public enum WeatherStatus implements StringRepresentable {
         return this.name();
     }
 
-    @SubscribeEvent
-    public static void sendChunkData(ChunkWatchEvent.Sent event) {
-        ServerPlayer player = event.getPlayer();
-        LevelChunk chunk = event.getChunk();
-        ChunkPos pos = event.getPos();
-
-        if (chunk.hasData(AddonAttachmentRegistry.LOCAL_WEATHER)) {
-            WeatherStatus status = chunk.getData(AddonAttachmentRegistry.LOCAL_WEATHER);
-            SendLocalWeatherStatus.sendChunkStatus(player, pos, status);
-        } else {
-            SendLocalWeatherStatus.sendChunkStatus(player, pos, WeatherStatus.NONE);
-        }
-    }
+//    @SubscribeEvent
+//    public static void sendChunkData(ChunkWatchEvent.Sent event) {
+//        ServerPlayer player = event.getPlayer();
+//        LevelChunk chunk = event.getChunk();
+//        ChunkPos pos = event.getPos();
+//
+//        if (chunk.hasData(AddonAttachmentRegistry.LOCAL_WEATHER)) {
+//            WeatherStatus status = chunk.getData(AddonAttachmentRegistry.LOCAL_WEATHER);
+//            SendLocalWeatherStatus.sendChunkStatus(player, pos, status);
+//        } else {
+//            SendLocalWeatherStatus.sendChunkStatus(player, pos, WeatherStatus.NONE);
+//        }
+//    }
 
     @SubscribeEvent
     public static void setWeatherStatus(ChunkWatchEvent.Watch event) {

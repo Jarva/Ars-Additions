@@ -53,6 +53,9 @@ mandatory=true
 versionRange="[1.21-9.0.0,)"
 ordering="AFTER"
 side="BOTH"
+[dependencies.${mod_id}.mc-publish]
+    curseforge="curios-continuation"
+    modrinth="curios-continuation"
 
 [[dependencies.${mod_id}]]
 modId="ars_nouveau"

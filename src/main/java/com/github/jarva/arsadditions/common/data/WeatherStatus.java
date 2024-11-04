@@ -16,6 +16,8 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.level.ChunkWatchEvent;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 import java.util.function.IntFunction;
 
-//@EventBusSubscriber
+@EventBusSubscriber
 public enum WeatherStatus implements StringRepresentable {
     NONE(0),
     CLEAR(1),
@@ -50,7 +52,7 @@ public enum WeatherStatus implements StringRepresentable {
         return this.name();
     }
 
-//    @SubscribeEvent
+    @SubscribeEvent
     public static void sendChunkData(ChunkWatchEvent.Sent event) {
         ServerPlayer player = event.getPlayer();
         LevelChunk chunk = event.getChunk();
@@ -64,12 +66,14 @@ public enum WeatherStatus implements StringRepresentable {
         }
     }
 
-//    @SubscribeEvent
+    @SubscribeEvent
     public static void setWeatherStatus(ChunkWatchEvent.Watch event) {
-        if (FMLEnvironment.production) return;
+        LevelChunk chunk = event.getChunk();
+        if (FMLEnvironment.production) {
+            chunk.setData(AddonAttachmentRegistry.LOCAL_WEATHER, WeatherStatus.NONE);
+        };
 
         ServerPlayer player = event.getPlayer();
-        LevelChunk chunk = event.getChunk();
         ChunkPos pos = event.getPos();
 
         WeatherStatus[] values = WeatherStatus.values();

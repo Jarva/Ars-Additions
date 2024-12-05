@@ -474,7 +474,8 @@
               "Name": "ars_additions:warp_nexus",
               "Properties": {
                 "half": "lower",
-                "requires_source": "true"
+                "requires_source": "true",
+                "waterlogged": "true"
               }
             },
             "predicate_type": "minecraft:blockstate_match"
@@ -486,7 +487,8 @@
             "Name": "ars_additions:warp_nexus",
             "Properties": {
               "half": "lower",
-              "requires_source": "false"
+              "requires_source": "false",
+              "waterlogged": "true"
             }
           }
         },
@@ -505,7 +507,8 @@
               "Name": "ars_additions:warp_nexus",
               "Properties": {
                 "half": "lower",
-                "requires_source": "false"
+                "requires_source": "true",
+                "waterlogged": "false"
               }
             },
             "predicate_type": "minecraft:blockstate_match"
@@ -517,7 +520,74 @@
             "Name": "ars_additions:warp_nexus",
             "Properties": {
               "half": "lower",
-              "requires_source": "false"
+              "requires_source": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "itemStack": {
+                "count": 1,
+                "id": "ars_additions:nexus_warp_scroll"
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_additions:warp_nexus",
+              "Properties": {
+                "half": "lower",
+                "requires_source": "false",
+                "waterlogged": "true"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_additions:warp_nexus",
+            "Properties": {
+              "half": "lower",
+              "requires_source": "false",
+              "waterlogged": "true"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {
+              "itemStack": {
+                "count": 1,
+                "id": "ars_additions:nexus_warp_scroll"
+              }
+            }
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_additions:warp_nexus",
+              "Properties": {
+                "half": "lower",
+                "requires_source": "false",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_additions:warp_nexus",
+            "Properties": {
+              "half": "lower",
+              "requires_source": "false",
+              "waterlogged": "false"
             }
           }
         },
@@ -531,7 +601,8 @@
               "Name": "ars_additions:warp_nexus",
               "Properties": {
                 "half": "upper",
-                "requires_source": "true"
+                "requires_source": "true",
+                "waterlogged": "true"
               }
             },
             "predicate_type": "minecraft:blockstate_match"
@@ -543,7 +614,8 @@
             "Name": "ars_additions:warp_nexus",
             "Properties": {
               "half": "upper",
-              "requires_source": "false"
+              "requires_source": "false",
+              "waterlogged": "true"
             }
           }
         },
@@ -557,7 +629,8 @@
               "Name": "ars_additions:warp_nexus",
               "Properties": {
                 "half": "upper",
-                "requires_source": "false"
+                "requires_source": "true",
+                "waterlogged": "false"
               }
             },
             "predicate_type": "minecraft:blockstate_match"
@@ -569,7 +642,64 @@
             "Name": "ars_additions:warp_nexus",
             "Properties": {
               "half": "upper",
-              "requires_source": "false"
+              "requires_source": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {}
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_additions:warp_nexus",
+              "Properties": {
+                "half": "upper",
+                "requires_source": "false",
+                "waterlogged": "true"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_additions:warp_nexus",
+            "Properties": {
+              "half": "upper",
+              "requires_source": "false",
+              "waterlogged": "true"
+            }
+          }
+        },
+        {
+          "block_entity_modifier": {
+            "type": "minecraft:append_static",
+            "data": {}
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "ars_additions:warp_nexus",
+              "Properties": {
+                "half": "upper",
+                "requires_source": "false",
+                "waterlogged": "false"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "ars_additions:warp_nexus",
+            "Properties": {
+              "half": "upper",
+              "requires_source": "false",
+              "waterlogged": "false"
             }
           }
         },

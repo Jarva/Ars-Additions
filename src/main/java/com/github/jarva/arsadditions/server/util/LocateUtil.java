@@ -28,6 +28,7 @@ import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -143,7 +144,7 @@ public class LocateUtil {
 
     public static WarpScrollData setScrollData(ServerLevel level, ItemStack stack, BlockPos pos) {
         return stack.update(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true), (data) ->
-            data.setPos(pos, level.dimension().location().toString()).setRotation(Vec2.ZERO)
+            new WarpScrollData(Optional.of(pos), level.dimension().location().toString(), Vec2.ZERO, true)
         );
     }
 

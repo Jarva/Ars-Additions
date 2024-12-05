@@ -46,7 +46,7 @@ public class WarpNexusTile extends SingleItemTile implements GeoBlockEntity, ITi
     public ItemStack removeItemNoUpdate(int pSlot) {
         ItemStack scroll = super.removeItemNoUpdate(pSlot);
         scroll.update(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true), (data) ->
-            data.setPos(this.getBlockPos().north(2), this.getLevel().dimension().location().toString()).setRotation(Vec2.ZERO)
+            new WarpScrollData(Optional.of(this.getBlockPos().north(2)), this.getLevel().dimension().location().toString(), Vec2.ZERO, true)
         );
         return scroll;
     }

@@ -15,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
@@ -25,6 +26,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
@@ -34,14 +37,20 @@ import org.jetbrains.annotations.Nullable;
 public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     public static final BooleanProperty REQUIRES_SOURCE = BooleanProperty.create("requires_source");
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public WarpNexus() {
         super(Properties.of().sound(SoundType.STONE).strength(3.0f, 6.0f).lightLevel((b) -> 8).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE));
-        this.registerDefaultState(this.stateDefinition.any().setValue(HALF, DoubleBlockHalf.LOWER).setValue(REQUIRES_SOURCE, true));
+        this.registerDefaultState(
+                this.stateDefinition.any()
+                        .setValue(HALF, DoubleBlockHalf.LOWER)
+                        .setValue(REQUIRES_SOURCE, true)
+                        .setValue(WATERLOGGED, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HALF, REQUIRES_SOURCE);
+        builder.add(HALF, REQUIRES_SOURCE, WATERLOGGED);
     }
 
     @Override
@@ -52,6 +61,15 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         return use(state, level, pos, player);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+
+        BlockState state = this.defaultBlockState();
+        return state.setValue(WATERLOGGED, fluidState.is(Fluids.WATER));
     }
 
     public ItemInteractionResult use(BlockState state, Level level, BlockPos pos, Player player) {
@@ -102,6 +120,10 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
 
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+        if (state.getValue(WATERLOGGED)) {
+            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+
         DoubleBlockHalf doubleBlockHalf = state.getValue(HALF);
         if (direction.getAxis() == Direction.Axis.Y && doubleBlockHalf == DoubleBlockHalf.LOWER == (direction == Direction.UP)) {
             return neighborState.is(this) && neighborState.getValue(HALF) != doubleBlockHalf ? state : Blocks.AIR.defaultBlockState();
@@ -111,7 +133,16 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     }
 
     @Override
+    protected FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        level.setBlock(pos.above(), state.setValue(HALF, DoubleBlockHalf.UPPER), 3);
+        BlockPos above = pos.above();
+        BlockState upper = state
+                .setValue(HALF, DoubleBlockHalf.UPPER)
+                .setValue(WATERLOGGED, level.getFluidState(above).is(Fluids.WATER));
+        level.setBlock(pos.above(), upper, 3);
     }
 }

@@ -16,7 +16,7 @@ public class PiglinBruteAiMixin {
         return opt.filter(entity ->
                 !CharmRegistry.processCharmEvent(entity, CharmRegistry.CharmType.GOLDEN,
                         () -> true,
-                        (e, curio) -> CharmRegistry.every(20, entity, 10)
+                        (e, curio) -> CharmRegistry.every(CharmRegistry.CharmType.GOLDEN, 20, entity, 10)
                 )
         );
     }

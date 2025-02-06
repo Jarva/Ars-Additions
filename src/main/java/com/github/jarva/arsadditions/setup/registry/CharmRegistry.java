@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.setup.registry;
 
 import com.github.jarva.arsadditions.common.item.data.CharmData;
+import com.github.jarva.arsadditions.common.util.CooldownManager;
 import com.github.jarva.arsadditions.server.util.PlayerInvUtil;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import net.minecraft.util.StringRepresentable;
@@ -19,6 +20,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class CharmRegistry {
+    private static CooldownManager<CharmType> cooldowns = new CooldownManager<>();
+
     public enum CharmType implements StringRepresentable {
         FIRE_RESISTANCE(1000, 5,"Emberward", "Nullifies Fire Damage", Items.MAGMA_CREAM, Items.LAVA_BUCKET, Items.FLINT_AND_STEEL),
         UNDYING(1, 2000, "Second Wind", "Prevents you from dying", Items.TOTEM_OF_UNDYING, Items.CRYING_OBSIDIAN, Items.GLOWSTONE),
@@ -117,7 +120,7 @@ public class CharmRegistry {
         return true;
     }
 
-    public static int every(int ticks, LivingEntity entity, int charges) {
-        return entity.level().getGameTime() % ticks == 0 ? charges : 0;
+    public static int every(CharmType charmType, int ticks, LivingEntity entity, int charges) {
+        return cooldowns.shouldRun(charmType, entity.level().getGameTime(), ticks) ? charges : 0;
     }
 }

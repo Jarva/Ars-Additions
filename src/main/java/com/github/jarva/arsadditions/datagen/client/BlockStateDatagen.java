@@ -6,9 +6,11 @@ import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
+import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.common.block.SconceBlock;
 import com.hollingsworth.arsnouveau.common.items.Glyph;
+import com.hollingsworth.arsnouveau.common.items.PerkItem;
 import com.hollingsworth.arsnouveau.common.items.RitualTablet;
 import com.hollingsworth.arsnouveau.common.lib.LibBlockNames;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
@@ -49,6 +51,12 @@ public class BlockStateDatagen extends BlockStateProvider {
             ResourceLocation ritualName = tablet.ritual.getRegistryName();
             if (!ritualName.getNamespace().equals(ArsAdditions.MODID)) continue;
             itemModels().basicItem(tablet);
+        }
+
+        for (PerkItem item : PerkRegistry.getPerkItemMap().values()) {
+            ResourceLocation perkName = item.perk.getRegistryName();
+            if (!perkName.getNamespace().equals(ArsAdditions.MODID)) continue;
+            itemModels().basicItem(item);
         }
 
         for (ItemRegistryWrapper<Item> item : AddonItemRegistry.DATAGEN_ITEMS) {

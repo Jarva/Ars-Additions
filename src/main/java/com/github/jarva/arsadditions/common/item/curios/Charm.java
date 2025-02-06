@@ -6,6 +6,7 @@ import com.github.jarva.arsadditions.server.util.TeleportUtil;
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
+import com.github.jarva.arsadditions.setup.registry.CharmRegistry.CharmType;
 import com.hollingsworth.arsnouveau.api.event.DispelEvent;
 import com.hollingsworth.arsnouveau.api.item.ArsNouveauCurio;
 import net.minecraft.ChatFormatting;
@@ -44,7 +45,6 @@ import java.util.Optional;
 
 @EventBusSubscriber(modid = ArsAdditions.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class Charm extends ArsNouveauCurio {
-
     private final int uses;
 
     public Charm(int uses) {
@@ -120,14 +120,14 @@ public class Charm extends ArsNouveauCurio {
     }
 
     public boolean isEnderMask(LivingEntity entity, EnderMan enderMan) {
-        return CharmRegistry.processCharmEvent(entity, CharmRegistry.CharmType.ENDER_MASK, () -> {
+        return CharmRegistry.processCharmEvent(entity, CharmType.ENDER_MASK, () -> {
             Vec3 view = entity.getViewVector(1.0F).normalize();
             Vec3 vec = new Vec3(enderMan.getX() - entity.getX(), enderMan.getEyeY() - entity.getEyeY(), enderMan.getZ() - entity.getZ());
             double d0 = vec.length();
             vec = vec.normalize();
             double d1 = view.dot(vec);
             return d1 > 1.0 - 0.025 / d0 && entity.hasLineOfSight(enderMan);
-        }, (e, curio) -> CharmRegistry.every(10, entity, 1));
+        }, (e, curio) -> CharmRegistry.every(CharmType.ENDER_MASK, 20, entity, 1));
     }
 
     @Override
@@ -141,7 +141,7 @@ public class Charm extends ArsNouveauCurio {
     }
 
     public boolean makesPiglinsNeutral(LivingEntity wearer) {
-        return CharmRegistry.isEnabled(CharmRegistry.CharmType.GOLDEN, wearer);
+        return CharmRegistry.isEnabled(CharmType.GOLDEN, wearer);
     }
 
     @Override
@@ -155,7 +155,7 @@ public class Charm extends ArsNouveauCurio {
     }
 
     public boolean canWalkOnPowderedSnow(LivingEntity wearer) {
-        return CharmRegistry.processCharmEvent(wearer, CharmRegistry.CharmType.POWDERED_SNOW_WALK, () -> true, (entity, curio) -> CharmRegistry.every(10, entity, 1));
+        return CharmRegistry.processCharmEvent(wearer, CharmType.POWDERED_SNOW_WALK, () -> true, (entity, curio) -> CharmRegistry.every(CharmType.POWDERED_SNOW_WALK, 20, entity, 1));
     }
 
     @Override
@@ -171,12 +171,12 @@ public class Charm extends ArsNouveauCurio {
     }
 
     public void tick(ItemStack stack, LivingEntity entity) {
-        CharmRegistry.processCharmEvent(entity, CharmRegistry.CharmType.FALL_PREVENTION, () -> entity.fallDistance > 3.0f, (e, curio) -> {
+        CharmRegistry.processCharmEvent(entity, CharmType.FALL_PREVENTION, () -> entity.fallDistance > 3.0f, (e, curio) -> {
             e.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 100));
             return 1;
         });
 
-        CharmRegistry.processCharmEvent(entity, CharmRegistry.CharmType.NIGHT_VISION, () -> {
+        CharmRegistry.processCharmEvent(entity, CharmType.NIGHT_VISION, () -> {
             int brightness = entity.level().getRawBrightness(entity.blockPosition(), entity.level().getSkyDarken());
             MobEffectInstance nightvision = entity.getEffect(MobEffects.NIGHT_VISION);
             return brightness < 5 && (nightvision == null || nightvision.getDuration() <= (10 * 20));
@@ -185,7 +185,7 @@ public class Charm extends ArsNouveauCurio {
             return 1;
         });
 
-        CharmRegistry.processCharmEvent(entity, CharmRegistry.CharmType.VOID_PROTECTION, () -> {
+        CharmRegistry.processCharmEvent(entity, CharmType.VOID_PROTECTION, () -> {
             if (!entity.onGround()) return false;
             BlockPos below = entity.blockPosition().below();
             return entity.level().getBlockState(below).isRedstoneConductor(entity.level(), below);
@@ -199,7 +199,7 @@ public class Charm extends ArsNouveauCurio {
 
     @SubscribeEvent
     public static void handeUndying(LivingDeathEvent event) {
-        CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.UNDYING, () -> event.getEntity() instanceof Player, (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), CharmType.UNDYING, () -> event.getEntity() instanceof Player, (entity, curio) -> {
             entity.setHealth(1.0F);
             entity.removeAllEffects();
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 900, 1));
@@ -214,21 +214,17 @@ public class Charm extends ArsNouveauCurio {
 
     @SubscribeEvent
     public static void handleDamage(LivingDamageEvent.Pre event) {
-        CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.FIRE_RESISTANCE, () -> event.getSource().is(DamageTypeTags.IS_FIRE), (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), CharmType.FIRE_RESISTANCE, () -> event.getSource().is(DamageTypeTags.IS_FIRE), (entity, curio) -> {
             event.setNewDamage(0);
 
-            if (event.getSource().is(DamageTypes.LAVA)) {
-                return CharmRegistry.every(10, entity, (int) event.getOriginalDamage());
-            }
-
-            return (int) event.getOriginalDamage();
+            return CharmRegistry.every(CharmType.FIRE_RESISTANCE, 20, entity, (int) event.getOriginalDamage());
         });
-        CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.WATER_BREATHING, () -> event.getSource().is(DamageTypeTags.IS_DROWNING), (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), CharmType.WATER_BREATHING, () -> event.getSource().is(DamageTypeTags.IS_DROWNING), (entity, curio) -> {
             event.setNewDamage(0);
 
             return (int) event.getOriginalDamage();
         });
-        CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.VOID_PROTECTION, () -> event.getSource().is(DamageTypes.FELL_OUT_OF_WORLD), (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), CharmType.VOID_PROTECTION, () -> event.getSource().is(DamageTypes.FELL_OUT_OF_WORLD), (entity, curio) -> {
             event.setNewDamage(0);
 
             if (entity.level() instanceof ServerLevel serverLevel) {
@@ -243,7 +239,7 @@ public class Charm extends ArsNouveauCurio {
 
             return 1;
         });
-        CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.SONIC_BOOM_PROTECTION, () -> event.getSource().is(DamageTypes.SONIC_BOOM), (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), CharmType.SONIC_BOOM_PROTECTION, () -> event.getSource().is(DamageTypes.SONIC_BOOM), (entity, curio) -> {
             event.setNewDamage(0);
 
             return 1;
@@ -252,16 +248,16 @@ public class Charm extends ArsNouveauCurio {
 
     @SubscribeEvent
     public static void denyMobEffects(MobEffectEvent.Applicable event) {
-        CharmRegistry.processCharmEvent(event.getEntity(), CharmRegistry.CharmType.WITHER_PROTECTION, () -> event.getEffectInstance().getEffect().equals(MobEffects.WITHER), (entity, curio) -> {
+        CharmRegistry.processCharmEvent(event.getEntity(), CharmType.WITHER_PROTECTION, () -> event.getEffectInstance().getEffect().equals(MobEffects.WITHER), (entity, curio) -> {
             event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
-            return CharmRegistry.every(2, entity, 1);
+            return CharmRegistry.every(CharmType.WITHER_PROTECTION, 20, entity, 1);
         });
     }
 
     @SubscribeEvent
     public static void handeDispel(DispelEvent.Pre event) {
         if (event.rayTraceResult instanceof EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
-            CharmRegistry.processCharmEvent(livingEntity, CharmRegistry.CharmType.DISPEL_PROTECTION, () -> !event.shooter.equals(livingEntity), (entity, curio) -> {
+            CharmRegistry.processCharmEvent(livingEntity, CharmType.DISPEL_PROTECTION, () -> !event.shooter.equals(livingEntity), (entity, curio) -> {
                 event.setCanceled(true);
 
                 return 1;

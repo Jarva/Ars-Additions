@@ -15,6 +15,7 @@ import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemRegistryWrapper;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -24,13 +25,14 @@ import net.minecraft.world.level.block.Blocks;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import static com.hollingsworth.arsnouveau.setup.registry.RegistryHelper.getRegistryName;
 
 public class PatchouliDatagen extends com.hollingsworth.arsnouveau.common.datagen.PatchouliProvider {
 
-    public PatchouliDatagen(DataGenerator generatorIn) {
-        super(generatorIn);
+    public PatchouliDatagen(DataGenerator generatorIn, CompletableFuture<HolderLookup.Provider> registries) {
+        super(generatorIn, registries);
     }
 
     public static ResourceLocation STRUCTURES = ArsNouveau.prefix("structures");

@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class RitualChunkLoading extends AbstractRitual {
 
         if (activatedPlayer == null) {
             BlockPos blockPos = getPos();
-            Player nearby = getWorld().getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 5, true);
+            Player nearby = getNearestPlayer(blockPos);
             if (nearby != null) {
                 activatedPlayer = nearby.getUUID();
             } else {
@@ -61,7 +62,7 @@ public class RitualChunkLoading extends AbstractRitual {
             setChunkLoaded(true);
         }
 
-        if (ServerConfig.SERVER.chunkloading_repeat_cost.get() && ticksSinceStart % ServerConfig.SERVER.chunkloading_cost_interval.get() == 0) {
+        if (consumesSource() && ServerConfig.SERVER.chunkloading_repeat_cost.get() && ticksSinceStart % ServerConfig.SERVER.chunkloading_cost_interval.get() == 0) {
             setNeedsSource(true);
         }
     }
@@ -123,10 +124,10 @@ public class RitualChunkLoading extends AbstractRitual {
         Level world = getWorld();
         BlockPos blockPos = getPos();
         if (world == null || blockPos == null) return false;
-        if (world.isClientSide) return true;
+//        if (world.isClientSide) return true;
 
         if (player == null) {
-            Player nearby = getWorld().getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 5, false);
+            Player nearby = getNearestPlayer(blockPos);
             if (nearby != null) {
                 activatedPlayer = nearby.getUUID();
             } else {
@@ -137,6 +138,10 @@ public class RitualChunkLoading extends AbstractRitual {
         }
 
         return ServerConfig.SERVER.chunkloading_player_limit.get() > ChunkLoadingData.countChunks(world.getServer(), activatedPlayer);
+    }
+
+    private @Nullable Player getNearestPlayer(BlockPos blockPos) {
+        return getWorld().getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 5, true);
     }
 
     @Override
@@ -188,7 +193,7 @@ public class RitualChunkLoading extends AbstractRitual {
     }
 
     private void setChunkLoaded(boolean shouldLoad) {
-        if (getWorld() != null && getWorld() instanceof ServerLevel serverLevel && getPos() != null) {
+        if (getWorld() != null && getWorld() instanceof ServerLevel serverLevel && getPos() != null && activatedPlayer != null) {
             if (chunks == null) {
                 chunks = getChunks();
             }

@@ -3,12 +3,15 @@ package com.github.jarva.arsadditions.setup.registry;
 import com.github.jarva.arsadditions.common.glyph.EffectMark;
 import com.github.jarva.arsadditions.common.glyph.MethodRecall;
 import com.github.jarva.arsadditions.common.glyph.MethodRetaliate;
+import com.github.jarva.arsadditions.common.perk.ReachPerk;
 import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.github.jarva.arsadditions.common.ritual.RitualLocateStructure;
 import com.github.jarva.arsadditions.setup.registry.recipes.LocateStructureRegistry;
 import com.github.jarva.arsadditions.setup.registry.recipes.SourceSpawnerRegistry;
+import com.hollingsworth.arsnouveau.api.perk.IPerk;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.registry.ImbuementRecipeRegistry;
+import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
@@ -28,6 +31,7 @@ import static com.hollingsworth.arsnouveau.common.block.BasicSpellTurret.TURRET_
 public class ArsNouveauRegistry {
     public static List<AbstractSpellPart> GLYPHS = new ArrayList<>();
     public static List<AbstractRitual> RITUALS = new ArrayList<>();
+    public static List<IPerk> PERKS = new ArrayList<>();
 
     static {
         TURRET_BEHAVIOR_MAP.put(MethodRecall.INSTANCE, new ITurretBehavior() {
@@ -41,12 +45,17 @@ public class ArsNouveauRegistry {
     public static void init() {
         registerRituals();
         registerGlyphs();
+        registerPerks();
 
         LocateStructureRegistry.INSTANCE = new LocateStructureRegistry();
         SourceSpawnerRegistry.INSTANCE = new SourceSpawnerRegistry();
         ImbuementRecipeRegistry.INSTANCE.addRecipeType(AddonRecipeRegistry.CHARM_CHARGING_TYPE);
         ImbuementRecipeRegistry.INSTANCE.addRecipeType(AddonRecipeRegistry.BULK_SCRIBING_TYPE);
         ImbuementRecipeRegistry.INSTANCE.addRecipeType(AddonRecipeRegistry.IMBUE_SCROLL_TYPE);
+    }
+
+    private static void registerPerks() {
+        register(ReachPerk.INSTANCE);
     }
 
     private static void registerGlyphs() {
@@ -68,5 +77,10 @@ public class ArsNouveauRegistry {
     private static void register(AbstractSpellPart glyph) {
         GlyphRegistry.registerSpell(glyph);
         GLYPHS.add(glyph);
+    }
+
+    private static void register(IPerk instance) {
+        PerkRegistry.registerPerk(instance);
+        PERKS.add(instance);
     }
 }

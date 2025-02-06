@@ -25,6 +25,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -74,13 +75,18 @@ public class EnchantingApparatusRecipeWrapper extends MultiRecipeWrapper {
                 for (BlockPos p : cauldronTile.getInventories()) {
                     BlockEntity be = world.getBlockEntity(p);
                     if (be == null) continue;
-                    filterables.add(new FilterableItemHandler(serverLevel.getCapability(Capabilities.ItemHandler.BLOCK, pos, serverLevel.getBlockState(pos), be, null)));
+                    IItemHandler handler = serverLevel.getCapability(Capabilities.ItemHandler.BLOCK, pos, serverLevel.getBlockState(pos), be, null);
+                    if (handler != null) {
+                        filterables.add(new FilterableItemHandler(handler));
+                    }
                 }
                 InventoryManager inventoryManager = new InventoryManager(filterables);
                 SlotReference slot = inventoryManager.findItem(is -> is.is(Items.BOOK) || enchantmentRecipe.doesReagentMatch(new ApparatusRecipeInput(is, List.of(), null), serverLevel, null), InteractType.EXTRACT);
                 if (slot.isEmpty()) return null;
 
-                ItemStack found = slot.getHandler().getStackInSlot(slot.getSlot()).copy();
+                IItemHandler foundHandler = slot.getHandler();
+                if (foundHandler == null) return null;
+                ItemStack found = foundHandler.getStackInSlot(slot.getSlot()).copy();
                 items.add(found);
 
                 ItemStack output = found.getItem() == Items.BOOK ? new ItemStack(Items.ENCHANTED_BOOK) : found.copy();

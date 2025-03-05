@@ -7,6 +7,6 @@
   ],
   "id": "ars_additions:ancient_city",
   "structure": {
-    "key": "minecraft:ancient_city"
+    "tag": "ars_additions:ancient_city"
   }
 }

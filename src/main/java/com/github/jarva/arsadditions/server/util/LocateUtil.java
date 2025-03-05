@@ -1,6 +1,5 @@
 package com.github.jarva.arsadditions.server.util;
 
-import brightspark.asynclocator.AsyncLocator;
 import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.common.item.data.ExplorationScrollData;
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
@@ -24,7 +23,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
@@ -121,25 +119,14 @@ public class LocateUtil {
     }
 
     public static void locate(ServerLevel level, HolderSet<Structure> holderSet, BlockPos origin, int searchRadius, boolean skipKnownStructures, Consumer<Pair<BlockPos, Holder<Structure>>> consumer) {
-        if (ModList.get().isLoaded("asynclocator")) {
-            AsyncLocator.locate(level, holderSet, origin, searchRadius, skipKnownStructures).then((pair) -> {
-                if (pair == null) {
-                    level.getServer().submit(() -> consumer.accept(null));
-                    return;
-                }
-                Pair<BlockPos, Holder<Structure>> modified = pair.mapFirst(pos -> findBlockPos(level, pair.getSecond().value(), pos));
-                level.getServer().submit(() -> consumer.accept(modified));
-            });
-        } else {
-            ArsAdditions.LOGGER.warn("Running locate on server thread. If this causes lag please install Async Locator https://modrinth.com/mod/async-locator");
-            Pair<BlockPos, Holder<Structure>> pair = level.getChunkSource().getGenerator().findNearestMapStructure(level, holderSet, origin, searchRadius, skipKnownStructures);
+        AsyncLocator.locate(level, holderSet, origin, searchRadius, skipKnownStructures).then((pair) -> {
             if (pair == null) {
-                consumer.accept(null);
+                level.getServer().submit(() -> consumer.accept(null));
                 return;
             }
             Pair<BlockPos, Holder<Structure>> modified = pair.mapFirst(pos -> findBlockPos(level, pair.getSecond().value(), pos));
-            consumer.accept(modified);
-        }
+            level.getServer().submit(() -> consumer.accept(modified));
+        });
     }
 
     public static WarpScrollData setScrollData(ServerLevel level, ItemStack stack, BlockPos pos) {

@@ -7,6 +7,6 @@
   ],
   "id": "ars_additions:desert_temple",
   "structure": {
-    "key": "minecraft:desert_pyramid"
+    "tag": "ars_additions:desert_temple"
   }
 }

@@ -1,50 +1,19 @@
 {
   "values": [
-    {
-      "id": "minecraft:stronghold",
-      "required": false
-    },
-    {
-      "id": "minecraft:ancient_city",
-      "required": false
-    },
-    {
-      "id": "minecraft:desert_pyramid",
-      "required": false
-    },
-    {
-      "id": "minecraft:jungle_pyramid",
-      "required": false
-    },
-    {
-      "id": "minecraft:pillager_outpost",
-      "required": false
-    },
-    {
-      "id": "#minecraft:village",
-      "required": false
-    },
+    "#ars_additions:monument",
+    "#ars_additions:desert_temple",
+    "#ars_additions:jungle_temple",
+    "#ars_additions:stronghold",
+    "#ars_additions:nether_fortress",
+    "#ars_additions:ancient_city",
+    "#ars_additions:pillager_outpost",
+    "#ars_additions:igloo",
+    "#ars_additions:trail_ruins",
+    "#ars_additions:witch_hut",
+    "#minecraft:village",
     "#ars_nouveau:wilden_den",
-    {
-      "id": "minecraft:igloo",
-      "required": false
-    },
-    {
-      "id": "minecraft:trail_ruins",
-      "required": false
-    },
-    {
-      "id": "#minecraft:ocean_ruin",
-      "required": false
-    },
-    {
-      "id": "#minecraft:shipwreck",
-      "required": false
-    },
-    {
-      "id": "minecraft:swamp_hut",
-      "required": false
-    },
+    "#minecraft:ocean_ruin",
+    "#minecraft:shipwreck",
     "ars_additions:nexus_tower"
   ]
 }

@@ -54,6 +54,7 @@ public class MethodRetaliate extends AbstractCastMethod {
     public CastResolveType cast(LivingEntity caster, SpellResolver resolver) {
         LivingEntity lastHurtBy = caster.getKillCredit();
         if (lastHurtBy == null) return CastResolveType.FAILURE;
+        if (lastHurtBy.equals(caster)) return CastResolveType.FAILURE;
 
         resolver.onResolveEffect(caster.level(), new EntityHitResult(lastHurtBy));
         return CastResolveType.SUCCESS;

@@ -7,6 +7,6 @@
   ],
   "id": "ars_additions:bastion",
   "structure": {
-    "key": "minecraft:bastion_remnant"
+    "tag": "ars_additions:bastion"
   }
 }

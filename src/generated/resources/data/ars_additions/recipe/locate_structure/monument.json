@@ -7,6 +7,6 @@
   ],
   "id": "ars_additions:monument",
   "structure": {
-    "key": "minecraft:monument"
+    "tag": "ars_additions:monument"
   }
 }

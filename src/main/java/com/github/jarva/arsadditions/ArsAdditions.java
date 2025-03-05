@@ -2,6 +2,7 @@ package com.github.jarva.arsadditions;
 
 import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.common.util.DispenserExperienceGemBehavior;
+import com.github.jarva.arsadditions.server.util.AsyncLocator;
 import com.github.jarva.arsadditions.setup.config.CommonConfig;
 import com.github.jarva.arsadditions.setup.config.ServerConfig;
 import com.github.jarva.arsadditions.setup.registry.AddonSetup;
@@ -18,7 +19,9 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +39,9 @@ public class ArsAdditions {
         modEventBus.addListener(this::common);
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::post);
+
+        NeoForge.EVENT_BUS.addListener(this::setupExecutor);
+        NeoForge.EVENT_BUS.addListener(this::shutdownExecutor);
 
         Triggers.init();
     }
@@ -59,5 +65,13 @@ public class ArsAdditions {
             DispenserBlock.registerBehavior(ItemsRegistry.EXPERIENCE_GEM, new DispenserExperienceGemBehavior());
             DispenserBlock.registerBehavior(ItemsRegistry.GREATER_EXPERIENCE_GEM, new DispenserExperienceGemBehavior());
         });
+    }
+
+    public void setupExecutor(ServerAboutToStartEvent event) {
+        AsyncLocator.setupExecutorService();
+    }
+
+    public void shutdownExecutor(ServerStoppingEvent event) {
+        AsyncLocator.shutdownExecutorService();
     }
 }

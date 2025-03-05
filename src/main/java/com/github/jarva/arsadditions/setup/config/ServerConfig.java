@@ -23,6 +23,7 @@ public class ServerConfig {
     public final ModConfigSpec.IntValue reliquary_cost_entity;
     public final ModConfigSpec.IntValue reliquary_cost_location;
     public final ModConfigSpec.IntValue reliquary_effect_duration;
+    public final ModConfigSpec.IntValue locating_threads;
 
     ServerConfig(ModConfigSpec.Builder builder) {
         builder.comment("Ritual of Arcane Permanence").push("chunkloading");
@@ -37,6 +38,18 @@ public class ServerConfig {
         chunkloading_require_online = addConfig("require_online", (name) -> builder.comment("Should the ritual require the player who started it to be online?").define(name, true));
         chunkloading_player_limit = addConfig("max_rituals", (name) -> builder.comment("How many rituals should players be able to run?").defineInRange(name, Integer.MAX_VALUE, 1, Integer.MAX_VALUE));
         chunkloading_log_loading = addConfig("log_chunkloading", (name) -> builder.comment("Should the server log when a chunk is loaded/unloaded?").define(name, false));
+        builder.pop();
+
+        builder.comment("Ritual of Locate Structure").push("locator");
+        locating_threads = addConfig("threads", (name) ->
+                builder.worldRestart().comment(
+                        "The maximum number of threads in the async locator thread pool.",
+                        "There's no upper bound to this, however this should only be increased if you're experiencing",
+                        "simultaneous location lookups causing issues AND you have the hardware capable of handling",
+                        "the extra possible threads.",
+                        "The default of 1 should be suitable for most users."
+                ).defineInRange(name, 1, 1, Integer.MAX_VALUE)
+        );
         builder.pop();
 
         builder.comment("Reliquary").push("mark_and_recall");

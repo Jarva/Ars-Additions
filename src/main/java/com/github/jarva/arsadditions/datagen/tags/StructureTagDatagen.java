@@ -17,8 +17,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 
 public class StructureTagDatagen extends TagsProvider<Structure> {
-    public static TagKey<Structure> ON_EXPLORER_WARP_SCROLL = TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix("on_explorer_warp_scroll"));
-    public static TagKey<Structure> RUINED_PORTALS = TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix("ruined_portals"));
+    public static TagKey<Structure> ON_EXPLORER_WARP_SCROLL = create("on_explorer_warp_scroll");
+    public static TagKey<Structure> RUINED_PORTALS = create("ruined_portals");
+
+    public static TagKey<Structure> MONUMENT = create("monument");
+    public static TagKey<Structure> DESERT_TEMPLE = create("desert_temple");
+    public static TagKey<Structure> JUNGLE_TEMPLE = create("jungle_temple");
+    public static TagKey<Structure> STRONGHOLD = create("stronghold");
+    public static TagKey<Structure> NETHER_FORTRESS = create("nether_fortress");
+    public static TagKey<Structure> ANCIENT_CITY = create("ancient_city");
+    public static TagKey<Structure> PILLAGER_OUTPOST = create("pillager_outpost");
+    public static TagKey<Structure> IGLOO = create("igloo");
+    public static TagKey<Structure> TRAIL_RUINS = create("trail_ruins");
+    public static TagKey<Structure> WITCH_HUT = create("witch_hut");
+    public static TagKey<Structure> BASTION = create("bastion");
+    public static TagKey<Structure> END_CITY = create("end_city");
 
     public StructureTagDatagen(PackOutput arg, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
         super(arg, Registries.STRUCTURE, future, ArsAdditions.MODID, helper);
@@ -26,23 +39,58 @@ public class StructureTagDatagen extends TagsProvider<Structure> {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
+        this.tag(MONUMENT)
+                .addOptional(BuiltinStructures.OCEAN_MONUMENT.location());
+        this.tag(DESERT_TEMPLE)
+                .addOptional(BuiltinStructures.DESERT_PYRAMID.location());
+        this.tag(JUNGLE_TEMPLE)
+                .addOptional(BuiltinStructures.JUNGLE_TEMPLE.location());
+        this.tag(STRONGHOLD)
+                .addOptional(BuiltinStructures.STRONGHOLD.location());
+        this.tag(NETHER_FORTRESS)
+                .addOptional(BuiltinStructures.FORTRESS.location());
+        this.tag(ANCIENT_CITY)
+                .addOptional(BuiltinStructures.ANCIENT_CITY.location());
+        this.tag(PILLAGER_OUTPOST)
+                .addOptional(BuiltinStructures.PILLAGER_OUTPOST.location());
+        this.tag(IGLOO)
+                .addOptional(BuiltinStructures.IGLOO.location());
+        this.tag(TRAIL_RUINS)
+                .addOptional(BuiltinStructures.TRAIL_RUINS.location());
+        this.tag(WITCH_HUT)
+                .addOptional(BuiltinStructures.SWAMP_HUT.location());
+        this.tag(BASTION)
+                .addOptional(BuiltinStructures.BASTION_REMNANT.location());
+        this.tag(END_CITY)
+                .addOptional(BuiltinStructures.END_CITY.location());
+
         this.tag(ON_EXPLORER_WARP_SCROLL)
-                .addOptional(BuiltinStructures.STRONGHOLD.location())
-                .addOptional(BuiltinStructures.ANCIENT_CITY.location())
-                .addOptional(BuiltinStructures.DESERT_PYRAMID.location())
-                .addOptional(BuiltinStructures.JUNGLE_TEMPLE.location())
-                .addOptional(BuiltinStructures.PILLAGER_OUTPOST.location())
-                .addOptionalTag(StructureTags.VILLAGE.location())
+                .addTag(MONUMENT)
+                .addTag(DESERT_TEMPLE)
+                .addTag(JUNGLE_TEMPLE)
+                .addTag(STRONGHOLD)
+                .addTag(NETHER_FORTRESS)
+                .addTag(ANCIENT_CITY)
+                .addTag(PILLAGER_OUTPOST)
+                .addTag(IGLOO)
+                .addTag(TRAIL_RUINS)
+                .addTag(WITCH_HUT)
+                .addTag(StructureTags.VILLAGE)
                 .addTag(StructureTagProvider.WILDEN_DEN)
-                .addOptional(BuiltinStructures.IGLOO.location())
-                .addOptional(BuiltinStructures.TRAIL_RUINS.location())
-                .addOptionalTag(StructureTags.OCEAN_RUIN.location())
-                .addOptionalTag(StructureTags.SHIPWRECK.location())
-                .addOptional(BuiltinStructures.SWAMP_HUT.location())
-                .add(ResourceKey.create(Registries.STRUCTURE, ArsAdditions.prefix("nexus_tower")));
+                .addTag(StructureTags.OCEAN_RUIN)
+                .addTag(StructureTags.SHIPWRECK)
+                .add(structure("nexus_tower"));
 
         this.tag(RUINED_PORTALS)
-                .add(ResourceKey.create(Registries.STRUCTURE, ArsAdditions.prefix("ruined_portal")))
-                .add(ResourceKey.create(Registries.STRUCTURE, ArsAdditions.prefix("ruined_portal_large")));
+                .add(structure("ruined_portal"))
+                .add(structure("ruined_portal_large"));
+    }
+
+    public static TagKey<Structure> create(String name) {
+        return TagKey.create(Registries.STRUCTURE, ArsAdditions.prefix(name));
+    }
+
+    public static ResourceKey<Structure> structure(String name) {
+        return ResourceKey.create(Registries.STRUCTURE, ArsAdditions.prefix(name));
     }
 }

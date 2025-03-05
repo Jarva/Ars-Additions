@@ -134,8 +134,6 @@ dependencies {
 
     implementation "top.theillusivec4.curios:curios-neoforge:${project.curios_version}+${project.mc_version}"
     implementation "com.github.glitchfiend:TerraBlender-neoforge:${project.mc_version}-${project.terrablender_version}"
-
-    compileOnly "maven.modrinth:async-locator:${project.asynclocator_version}"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

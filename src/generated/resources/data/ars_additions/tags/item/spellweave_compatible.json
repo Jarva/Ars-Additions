@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "#ars_nouveau:hood",
+      "required": false
+    },
+    {
+      "id": "#ars_nouveau:robe",
+      "required": false
+    },
+    {
+      "id": "#ars_nouveau:legs",
+      "required": false
+    },
+    {
+      "id": "#ars_nouveau:boot",
+      "required": false
+    }
+  ]
+}

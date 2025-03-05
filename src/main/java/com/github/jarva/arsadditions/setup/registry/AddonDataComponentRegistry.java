@@ -1,17 +1,13 @@
 package com.github.jarva.arsadditions.setup.registry;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.common.item.data.AdvancedDominionData;
-import com.github.jarva.arsadditions.common.item.data.CharmData;
-import com.github.jarva.arsadditions.common.item.data.ExplorationScrollData;
-import com.github.jarva.arsadditions.common.item.data.HaversackData;
-import com.github.jarva.arsadditions.common.item.data.WarpBindData;
-import com.github.jarva.arsadditions.common.item.data.WayfinderData;
+import com.github.jarva.arsadditions.common.item.data.*;
 import com.github.jarva.arsadditions.common.item.data.mark.MarkData;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.util.ExtraCodecs;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -43,5 +39,8 @@ public class AddonDataComponentRegistry {
     );
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<UUID>> STRUCTURE_LOOKUP_DATA = DATA.register("structure_lookup_data",
             () -> DataComponentType.<UUID>builder().persistent(UUIDUtil.CODEC).build()
+    );
+    public static final DeferredHolder<DataComponentType<?> , DataComponentType<Boolean>> OVERRIDE_PERKS = DATA.register("override_perks",
+            () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build()
     );
 }

@@ -23,6 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+import java.util.List;
+
 public record TeleportNexusPacket(BlockPos pos, int index) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<TeleportNexusPacket> TYPE = new CustomPacketPayload.Type<>(ArsAdditions.prefix("teleport_nexus"));
 
@@ -52,7 +54,7 @@ public record TeleportNexusPacket(BlockPos pos, int index) implements CustomPack
             WarpScrollData data = scroll.getOrDefault(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true));
 
             if (be.getBlockState().getValue(WarpNexus.REQUIRES_SOURCE)) {
-                ISpecialSourceProvider takePos = SourceUtil.takeSource(pos, serverPlayer.serverLevel(), 5, 1000);
+                List<ISpecialSourceProvider> takePos = SourceUtil.takeSourceMultiple(pos, serverPlayer.serverLevel(), 5, 1000);
                 if (takePos != null) {
                     TeleportUtil.teleport(serverPlayer.serverLevel(), data, player);
                 } else {

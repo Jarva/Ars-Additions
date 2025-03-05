@@ -124,7 +124,7 @@ public class RitualChunkLoading extends AbstractRitual {
         Level world = getWorld();
         BlockPos blockPos = getPos();
         if (world == null || blockPos == null) return false;
-//        if (world.isClientSide) return true;
+        if (world.isClientSide) return true;
 
         if (player == null) {
             Player nearby = getNearestPlayer(blockPos);

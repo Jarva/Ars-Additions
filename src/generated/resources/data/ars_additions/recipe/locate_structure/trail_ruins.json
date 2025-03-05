@@ -7,6 +7,6 @@
   ],
   "id": "ars_additions:trail_ruins",
   "structure": {
-    "key": "minecraft:trail_ruins"
+    "tag": "ars_additions:trail_ruins"
   }
 }

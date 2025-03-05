@@ -7,6 +7,6 @@
   ],
   "id": "ars_additions:fortress",
   "structure": {
-    "key": "minecraft:fortress"
+    "tag": "ars_additions:nether_fortress"
   }
 }

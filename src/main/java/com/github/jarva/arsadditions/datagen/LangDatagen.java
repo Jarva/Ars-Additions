@@ -1,10 +1,13 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.ArsAdditions;
 import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
+import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
 import com.hollingsworth.arsnouveau.api.ritual.AbstractRitual;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
+import com.hollingsworth.arsnouveau.common.items.PerkItem;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -23,12 +26,28 @@ public class LangDatagen extends LanguageProvider {
             this.add(Setup.root + ".glyph_desc." + registry.getPath(), spell.getBookDescription());
             this.add(Setup.root + ".glyph_name." + registry.getPath(), spell.getName());
         }
+
         for (AbstractRitual ritual : RitualRegistry.getRitualMap().values()) {
             ResourceLocation registry = ritual.getRegistryName();
             if (!registry.getNamespace().equals(Setup.root)) continue;
             this.add("item." + Setup.root + "." + registry.getPath(), ritual.getLangName());
             this.add(ritual.getDescriptionKey(), ritual.getLangDescription());
         }
+
+        // Perks
+
+        this.add("ars_additions.thread_of", "Thread of %s");
+
+        for (PerkItem i : PerkRegistry.getPerkItemMap().values()) {
+            if(i.perk.getRegistryName().getNamespace().equals(ArsAdditions.MODID)) {
+                add("ars_additions.perk_desc." + i.perk.getRegistryName().getPath(), i.perk.getLangDescription());
+                add("item.ars_additions." + i.perk.getRegistryName().getPath(), i.perk.getLangName());
+            }
+        }
+
+        // Enchantments
+
+        this.add("enchantment.ars_additions.spellweave", "Spellweave");
 
         // Blocks
 

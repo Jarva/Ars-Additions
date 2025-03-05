@@ -44,5 +44,6 @@ public class Setup {
         gen.addProvider(event.includeServer(), new BulkScribingProvider(gen));
         gen.addProvider(event.includeServer(), new ImbueSpellScrollProvider(gen));
         gen.addProvider(event.includeServer(), new CuriosDatagen(gen.getPackOutput(), event.getExistingFileHelper(), event.getLookupProvider()));
+        gen.addProvider(event.includeServer(), new EnchantmentDatagen(gen.getPackOutput(), event.getLookupProvider()));
     }
 }

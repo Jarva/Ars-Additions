@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.mixin;
 
 import com.github.jarva.arsadditions.datagen.EnchantmentDatagen;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -21,7 +22,7 @@ public interface ItemStackExtensionMixin extends IItemStackExtension {
     @Inject(method = "supportsEnchantment", at = @At(value = "HEAD"), cancellable = true)
     private void supportEnchantment(Holder<Enchantment> enchantment, CallbackInfoReturnable<Boolean> cir) {
         if (enchantment.is(EnchantmentDatagen.SPELLWEAVE_ENCHANTMENT)) {
-            if (this.self().is(SPELLWEAVE_INCOMPATIBLE)) {
+            if (this.self().has(DataComponentRegistry.ARMOR_PERKS) || this.self().is(SPELLWEAVE_INCOMPATIBLE)) {
                 cir.setReturnValue(false);
             }
         }

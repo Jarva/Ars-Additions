@@ -3,6 +3,10 @@
     {
       "id": "minecraft:jungle_pyramid",
       "required": false
+    },
+    {
+      "id": "#betterjungletemples:better_jungle_temples",
+      "required": false
     }
   ]
 }

@@ -3,6 +3,10 @@
     {
       "id": "minecraft:stronghold",
       "required": false
+    },
+    {
+      "id": "#betterstrongholds:better_strongholds",
+      "required": false
     }
   ]
 }

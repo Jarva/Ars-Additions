@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.StructureTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
@@ -40,25 +41,32 @@ public class StructureTagDatagen extends TagsProvider<Structure> {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         this.tag(MONUMENT)
-                .addOptional(BuiltinStructures.OCEAN_MONUMENT.location());
+                .addOptional(BuiltinStructures.OCEAN_MONUMENT.location())
+                .addOptionalTag(parse("betteroceanmonuments:better_ocean_monuments"));
         this.tag(DESERT_TEMPLE)
-                .addOptional(BuiltinStructures.DESERT_PYRAMID.location());
+                .addOptional(BuiltinStructures.DESERT_PYRAMID.location())
+                .addOptionalTag(parse("betterdeserttemples:better_desert_temples"));
         this.tag(JUNGLE_TEMPLE)
-                .addOptional(BuiltinStructures.JUNGLE_TEMPLE.location());
+                .addOptional(BuiltinStructures.JUNGLE_TEMPLE.location())
+                .addOptionalTag(parse("betterjungletemples:better_jungle_temples"));
         this.tag(STRONGHOLD)
-                .addOptional(BuiltinStructures.STRONGHOLD.location());
+                .addOptional(BuiltinStructures.STRONGHOLD.location())
+                .addOptionalTag(parse("betterstrongholds:better_strongholds"));
         this.tag(NETHER_FORTRESS)
-                .addOptional(BuiltinStructures.FORTRESS.location());
+                .addOptional(BuiltinStructures.FORTRESS.location())
+                .addOptionalTag(parse("betterfortresses:better_fortresses"));
         this.tag(ANCIENT_CITY)
                 .addOptional(BuiltinStructures.ANCIENT_CITY.location());
         this.tag(PILLAGER_OUTPOST)
-                .addOptional(BuiltinStructures.PILLAGER_OUTPOST.location());
+                .addOptional(BuiltinStructures.PILLAGER_OUTPOST.location())
+                .addOptionalTag(parse("minecraft:pillager_outpost"));
         this.tag(IGLOO)
                 .addOptional(BuiltinStructures.IGLOO.location());
         this.tag(TRAIL_RUINS)
                 .addOptional(BuiltinStructures.TRAIL_RUINS.location());
         this.tag(WITCH_HUT)
-                .addOptional(BuiltinStructures.SWAMP_HUT.location());
+                .addOptional(BuiltinStructures.SWAMP_HUT.location())
+                .addOptional(parse("betterwitchhuts:witch_hut"));
         this.tag(BASTION)
                 .addOptional(BuiltinStructures.BASTION_REMNANT.location());
         this.tag(END_CITY)
@@ -92,5 +100,9 @@ public class StructureTagDatagen extends TagsProvider<Structure> {
 
     public static ResourceKey<Structure> structure(String name) {
         return ResourceKey.create(Registries.STRUCTURE, ArsAdditions.prefix(name));
+    }
+
+    public static ResourceLocation parse(String name) {
+        return ResourceLocation.parse(name);
     }
 }

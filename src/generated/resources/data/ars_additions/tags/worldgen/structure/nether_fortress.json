@@ -3,6 +3,10 @@
     {
       "id": "minecraft:fortress",
       "required": false
+    },
+    {
+      "id": "#betterfortresses:better_fortresses",
+      "required": false
     }
   ]
 }

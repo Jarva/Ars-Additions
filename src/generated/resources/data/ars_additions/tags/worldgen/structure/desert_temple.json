@@ -3,6 +3,10 @@
     {
       "id": "minecraft:desert_pyramid",
       "required": false
+    },
+    {
+      "id": "#betterdeserttemples:better_desert_temples",
+      "required": false
     }
   ]
 }

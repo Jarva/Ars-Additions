@@ -8,12 +8,9 @@
     "#ars_additions:ancient_city",
     "#ars_additions:pillager_outpost",
     "#ars_additions:igloo",
-    "#ars_additions:trail_ruins",
     "#ars_additions:witch_hut",
-    "#minecraft:village",
     "#ars_nouveau:wilden_den",
-    "#minecraft:ocean_ruin",
-    "#minecraft:shipwreck",
-    "ars_additions:nexus_tower"
+    "ars_additions:nexus_tower",
+    "ars_additions:arcane_library"
   ]
 }

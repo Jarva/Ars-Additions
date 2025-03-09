@@ -51,7 +51,6 @@ public class ArsAdditionsClient {
                     return FillUtil.getFillLevel(source);
                 });
                 ItemProperties.register(AddonItemRegistry.HANDY_HAVERSACK.get(), ArsAdditions.prefix("loaded"), (stack, level, entity, seed) -> {
-                    if (!stack.has(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA)) return 1.0F;
                     HaversackData data = stack.get(AddonDataComponentRegistry.HAVERSACK_DATA);
                     return data != null && data.loaded() ? 0.0F : 1.0F;
                 });

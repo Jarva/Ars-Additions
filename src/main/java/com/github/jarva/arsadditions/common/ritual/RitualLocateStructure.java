@@ -85,7 +85,7 @@ public class RitualLocateStructure extends AbstractRitual {
         };
 
         LocateStructureRecipe locator = recipe.get();
-        LocateUtil.locate(serverLevel, locator.getStructureHolder(serverLevel), getPos(), locator.getRadius(), locator.getSkipExisting(), (pair) -> {
+        LocateUtil.locateUnsafe(serverLevel, locator.getStructureHolder(serverLevel), getPos(), locator.getRadius(), locator.getSkipExisting(), (pair) -> {
             if (pair == null) {
                 fail(player, "chat.ars_additions.ritual_locate_structure.not_found");
                 return;

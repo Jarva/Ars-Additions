@@ -54,6 +54,7 @@ public class LocateStructureProvider extends SimpleDataProvider {
         addEntry("desert_temple", StructureTagDatagen.DESERT_TEMPLE, ResourceOrTag.item(Items.SANDSTONE));
         addEntry("trail_ruins", StructureTagDatagen.TRAIL_RUINS, ResourceOrTag.tag(ItemTags.TERRACOTTA));
         addEntry("arcane_library", ResourceKey.create(Registries.STRUCTURE, ArsAdditions.prefix("arcane_library")), ResourceOrTag.item(ItemsRegistry.APPRENTICE_SPELLBOOK.get()));
+        addEntry("stronghold", StructureTagDatagen.STRONGHOLD, ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE), ResourceOrTag.item(Items.ENDER_EYE));
     }
 
     private void addEntry(String id, ResourceKey<Structure> structureId, ResourceOrTag<Item> ...augments) {

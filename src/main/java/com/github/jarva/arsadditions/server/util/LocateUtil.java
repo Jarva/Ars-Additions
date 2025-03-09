@@ -118,6 +118,17 @@ public class LocateUtil {
         LocateUtil.locateWithState(stack, level, holderSet, BlockPos.containing(origin), searchRadius, skipKnown);
     }
 
+    public static void locateUnsafe(ServerLevel level, HolderSet<Structure> holderSet, BlockPos origin, int searchRadius, boolean skipKnownStructures, Consumer<Pair<BlockPos, Holder<Structure>>> consumer) {
+        AsyncLocator.locate(level, holderSet, origin, searchRadius, skipKnownStructures).then((pair) -> {
+            if (pair == null) {
+                level.getServer().submit(() -> consumer.accept(null));
+                return;
+            }
+            Pair<BlockPos, Holder<Structure>> modified = pair.mapFirst(pos -> findCenter(level, pair.getSecond().value(), pos));
+            level.getServer().submit(() -> consumer.accept(modified));
+        });
+    }
+
     public static void locate(ServerLevel level, HolderSet<Structure> holderSet, BlockPos origin, int searchRadius, boolean skipKnownStructures, Consumer<Pair<BlockPos, Holder<Structure>>> consumer) {
         AsyncLocator.locate(level, holderSet, origin, searchRadius, skipKnownStructures).then((pair) -> {
             if (pair == null) {
@@ -135,13 +146,24 @@ public class LocateUtil {
         );
     }
 
+    public static BlockPos findCenter(ServerLevel level, Structure structure, BlockPos pos) {
+        StructureStart structureStart = level.structureManager().getStartForStructure(SectionPos.of(pos), structure, level.getChunk(pos));
+        if (structureStart == null) {
+            return pos;
+        }
+
+        BoundingBox box = structureStart.getBoundingBox();
+
+        return box.getCenter();
+    }
+
     public static BlockPos findBlockPos(ServerLevel level, Structure structure, BlockPos pos) {
         StructureStart structureStart = level.structureManager().getStartForStructure(SectionPos.of(pos), structure, level.getChunk(pos));
         if (structureStart == null) {
             BlockPos highest = findHighestSafeBlock(level, pos);
             if (highest == null) return pos.atY(level.getSeaLevel());
             return highest;
-        };
+        }
 
         BoundingBox box = structureStart.getBoundingBox();
 

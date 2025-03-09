@@ -12,6 +12,7 @@ import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.event.EventQueue;
 import com.hollingsworth.arsnouveau.api.event.ITimedEvent;
 import com.hollingsworth.arsnouveau.api.loot.DungeonLootTables;
+import com.hollingsworth.arsnouveau.api.perk.ITickablePerk;
 import com.hollingsworth.arsnouveau.api.perk.PerkInstance;
 import com.hollingsworth.arsnouveau.api.registry.GenericRecipeRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
@@ -31,6 +32,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,6 +47,7 @@ import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -174,6 +177,27 @@ public class ModEvents {
             List<Component> perkTooltips = new ArrayList<>();
             holder.appendPerkTooltip(perkTooltips, is);
             event.getToolTip().addAll(index, perkTooltips);
+        }
+
+        @SubscribeEvent
+        public static void onPlayerTick(PlayerTickEvent.Post event) {
+            Player player = event.getEntity();
+
+            if (player.level().isClientSide()) return;
+
+            for (ItemStack armor : player.getArmorSlots()) {
+                Boolean shouldOverride = armor.getOrDefault(AddonDataComponentRegistry.OVERRIDE_PERKS, false);
+                if (!shouldOverride) continue;
+
+                @Nullable ArmorPerkHolder holder = armor.get(DataComponentRegistry.ARMOR_PERKS);
+                if (holder == null) continue;
+
+                for (PerkInstance instance : holder.getPerkInstances(armor)) {
+                    if (instance.getPerk() instanceof ITickablePerk tickablePerk) {
+                        tickablePerk.tick(armor, player.level(), player, instance);
+                    }
+                }
+            }
         }
     }
 

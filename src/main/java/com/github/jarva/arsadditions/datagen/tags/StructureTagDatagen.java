@@ -8,7 +8,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.StructureTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -81,13 +80,10 @@ public class StructureTagDatagen extends TagsProvider<Structure> {
                 .addTag(ANCIENT_CITY)
                 .addTag(PILLAGER_OUTPOST)
                 .addTag(IGLOO)
-                .addTag(TRAIL_RUINS)
                 .addTag(WITCH_HUT)
-                .addTag(StructureTags.VILLAGE)
                 .addTag(StructureTagProvider.WILDEN_DEN)
-                .addTag(StructureTags.OCEAN_RUIN)
-                .addTag(StructureTags.SHIPWRECK)
-                .add(structure("nexus_tower"));
+                .add(structure("nexus_tower"))
+                .add(structure("arcane_library"));
 
         this.tag(RUINED_PORTALS)
                 .add(structure("ruined_portal"))

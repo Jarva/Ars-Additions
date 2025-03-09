@@ -1,0 +1,45 @@
+{
+  "type": "ars_additions:locate_structure",
+  "augments": [
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    },
+    {
+      "key": "minecraft:ender_eye"
+    }
+  ],
+  "id": "ars_additions:stronghold",
+  "structure": {
+    "tag": "ars_additions:stronghold"
+  }
+}

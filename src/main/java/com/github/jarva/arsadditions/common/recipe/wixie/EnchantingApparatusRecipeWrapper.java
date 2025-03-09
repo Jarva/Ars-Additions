@@ -75,7 +75,7 @@ public class EnchantingApparatusRecipeWrapper extends MultiRecipeWrapper {
                 for (BlockPos p : cauldronTile.getInventories()) {
                     BlockEntity be = world.getBlockEntity(p);
                     if (be == null) continue;
-                    IItemHandler handler = serverLevel.getCapability(Capabilities.ItemHandler.BLOCK, pos, serverLevel.getBlockState(pos), be, null);
+                    IItemHandler handler = serverLevel.getCapability(Capabilities.ItemHandler.BLOCK, p, serverLevel.getBlockState(p), be, null);
                     if (handler != null) {
                         filterables.add(new FilterableItemHandler(handler));
                     }

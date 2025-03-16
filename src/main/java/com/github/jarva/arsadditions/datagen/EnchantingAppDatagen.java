@@ -1,5 +1,6 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.common.perk.ReachPerk;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.Tags;
 
 import java.nio.file.Path;
 
@@ -87,6 +89,36 @@ public class EnchantingAppDatagen extends ApparatusRecipeProvider {
                 .withPedestalItem(ItemsRegistry.SUMMONING_FOCUS)
                 .withPedestalItem(ItemsRegistry.CONJURATION_ESSENCE)
                 .build()
+        );
+        this.addRecipe(this.builder().withResult(getPerkItem(ReachPerk.INSTANCE.getRegistryName()))
+                .withReagent(ItemsRegistry.BLANK_THREAD)
+                .withPedestalItem(3, ItemsRegistry.ALAKARKINOS_SHARD)
+                .withPedestalItem(3, ItemsRegistry.MANIPULATION_ESSENCE)
+                .build()
+        );
+
+        this.addRecipe(this.builder()
+                .withPedestalItem(ItemsRegistry.BLANK_THREAD)
+                .withPedestalItem(4, ItemsRegistry.MAGE_FIBER)
+                .withPedestalItem(BlockRegistry.SOURCE_GEM_BLOCK)
+                .withPedestalItem(Items.DIAMOND_BLOCK)
+                .withPedestalItem(2, Items.LAPIS_BLOCK)
+                .buildEnchantmentRecipe(EnchantmentDatagen.SPELLWEAVE_ENCHANTMENT, 1, 10000)
+        );
+        this.addRecipe(this.builder()
+                .withPedestalItem(2, Ingredient.of(Tags.Items.RODS_BLAZE))
+                .withPedestalItem(2, Items.DIAMOND_BLOCK)
+                .withPedestalItem(Items.LAPIS_BLOCK)
+                .withPedestalItem(BlockRegistry.SOURCE_GEM_BLOCK)
+                .buildEnchantmentRecipe(EnchantmentDatagen.SPELLWEAVE_ENCHANTMENT, 2, 20000)
+        );
+        this.addRecipe(this.builder()
+                .withPedestalItem(2, Ingredient.of(Tags.Items.ENDER_PEARLS))
+                .withPedestalItem(Items.CHORUS_FRUIT)
+                .withPedestalItem(ItemsRegistry.WILDEN_TRIBUTE)
+                .withPedestalItem(3, Items.DIAMOND_BLOCK)
+                .withPedestalItem(Items.LAPIS_BLOCK)
+                .buildEnchantmentRecipe(EnchantmentDatagen.SPELLWEAVE_ENCHANTMENT, 3, 30000)
         );
 
         for (CharmRegistry.CharmType charmType : CharmRegistry.CharmType.values()) {

@@ -11,7 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.ConditionalEffect;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 
 import java.util.List;
@@ -44,7 +46,8 @@ public class EnchantmentDatagen extends DatapackBuiltinEntriesProvider {
                                             List.of(EquipmentSlotGroup.ARMOR)
                                     ),
                                     HolderSet.empty(),
-                                    DataComponentMap.builder().build()
+                                    DataComponentMap.builder()
+                                            .build()
                             )
                     );
                 });

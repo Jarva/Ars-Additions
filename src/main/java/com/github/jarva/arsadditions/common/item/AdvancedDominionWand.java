@@ -5,6 +5,7 @@ import com.github.jarva.arsadditions.common.util.LangUtil;
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.item.IWandable;
+import com.hollingsworth.arsnouveau.common.block.tile.CreativeSourceJarTile;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -114,18 +115,18 @@ public class AdvancedDominionWand extends Item {
         switch (data.mode()) {
             case LOCK_FIRST -> {
                 if (storedWandable != null) {
-                    storedWandable.onFinishedConnectionFirst(targetBlock, null, targetLivingEntity, player);
+                    targetWandable.onFinishedConnectionLast(storedBlock, null, storedLivingEntity, player);
                 }
                 if (targetWandable != null) {
-                    targetWandable.onFinishedConnectionLast(storedBlock, null, storedLivingEntity, player);
+                    storedWandable.onFinishedConnectionFirst(targetBlock, null, targetLivingEntity, player);
                 }
             }
             case LOCK_SECOND -> {
                 if (storedWandable != null) {
-                    storedWandable.onFinishedConnectionLast(targetBlock, null, targetLivingEntity, player);
+                    targetWandable.onFinishedConnectionFirst(storedBlock, null, storedLivingEntity, player);
                 }
                 if (targetWandable != null) {
-                    targetWandable.onFinishedConnectionFirst(storedBlock, null, storedLivingEntity, player);
+                    storedWandable.onFinishedConnectionLast(targetBlock, null, targetLivingEntity, player);
                 }
             }
             default -> {

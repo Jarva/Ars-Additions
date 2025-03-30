@@ -1,7 +1,5 @@
 {
   "type": "ars_additions:charm_charging",
   "id": "ars_additions:night_vision_charm",
-  "item": {
-    "key": "ars_additions:night_vision_charm"
-  }
+  "item": "ars_additions:night_vision_charm"
 }

@@ -26,14 +26,6 @@ public class ImbuementDatagen extends ImbuementRecipeProvider {
     }
 
     public void collectJsons(CachedOutput pOutput) {
-        for (CharmRegistry.CharmType value : CharmRegistry.CharmType.values()) {
-            recipes.add(new ImbuementRecipe(
-                    ArsAdditions.prefix(value.getSerializedName()).withPrefix("charms/"),
-                    Ingredient.of(AddonItemRegistry.CHARMS.get(value).get()),
-                    AddonItemRegistry.CHARMS.get(value).get().getDefaultInstance(),
-                    2000)
-            );
-        }
     }
 
     public CompletableFuture<?> run(CachedOutput pOutput) {

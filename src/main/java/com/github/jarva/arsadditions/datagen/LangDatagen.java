@@ -254,5 +254,8 @@ public class LangDatagen extends LanguageProvider {
 
         this.add("ars_additions.page.arcane_library", "Arcane Library");
         this.add("ars_additions.page1.arcane_library", "Arcane Libraries are a rare structure found in Archwood Forests, they are the remnants of an ancient magic civilization long left behind. Find treasures to fulfil all your magical needs, but beware of the Wilden roaming the halls.");
+
+        this.add("ars_additions.source_per_charge", "Source Per Charge: %d");
+        this.add("ars_additions.charm_recharging", "Charm Recharging");
     }
 }

@@ -1,4 +1,4 @@
-package com.github.jarva.arsadditions.mixin;
+package com.github.jarva.arsadditions.mixin.spellweave;
 
 import com.github.jarva.arsadditions.datagen.EnchantmentDatagen;
 import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;

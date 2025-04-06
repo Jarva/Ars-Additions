@@ -1,4 +1,4 @@
-package com.github.jarva.arsadditions.mixin;
+package com.github.jarva.arsadditions.mixin.wixie;
 
 import com.hollingsworth.arsnouveau.common.block.tile.WixieCauldronTile;
 import net.minecraft.world.item.ItemStack;

@@ -1,4 +1,4 @@
-package com.github.jarva.arsadditions.mixin;
+package com.github.jarva.arsadditions.mixin.wixie;
 
 import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;

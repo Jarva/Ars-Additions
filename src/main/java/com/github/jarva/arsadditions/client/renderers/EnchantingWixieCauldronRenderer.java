@@ -1,7 +1,7 @@
 package com.github.jarva.arsadditions.client.renderers;
 
 import com.github.jarva.arsadditions.common.block.tile.EnchantingWixieCauldronTile;
-import com.github.jarva.arsadditions.mixin.WixieCauldronAccessor;
+import com.github.jarva.arsadditions.mixin.wixie.WixieCauldronAccessor;
 import com.hollingsworth.arsnouveau.client.renderer.tile.ArsGeoBlockRenderer;
 import com.hollingsworth.arsnouveau.client.renderer.tile.GenericModel;
 import com.mojang.blaze3d.vertex.PoseStack;

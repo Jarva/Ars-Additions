@@ -1,7 +1,6 @@
 package com.github.jarva.arsadditions.common.item;
 
 import com.github.jarva.arsadditions.ArsAdditions;
-import com.github.jarva.arsadditions.client.util.KeypressUtil;
 import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.server.util.LocateUtil;
 import com.github.jarva.arsadditions.server.util.TeleportUtil;
@@ -85,7 +84,7 @@ public class ExplorationWarpScroll extends Item {
             tooltipComponents.add(Component.translatable("tooltip.ars_additions.exploration_warp_scroll.locating"));
         }
 
-        if (KeypressUtil.isShiftPressed()) {
+        if (tooltipFlag.hasShiftDown()) {
             tooltipComponents.add(Component.translatable("tooltip.ars_additions.exploration_warp_scroll.use", Minecraft.getInstance().options.keyUse.getKey().getDisplayName()));
         } else {
             tooltipComponents.add(Component.translatable("tooltip.ars_nouveau.hold_shift", Minecraft.getInstance().options.keyShift.getKey().getDisplayName()));

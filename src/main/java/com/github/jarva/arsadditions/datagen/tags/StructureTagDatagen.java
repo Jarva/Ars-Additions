@@ -33,6 +33,7 @@ public class StructureTagDatagen extends TagsProvider<Structure> {
     public static TagKey<Structure> BASTION = create("bastion");
     public static TagKey<Structure> END_CITY = create("end_city");
     public static TagKey<Structure> TRIAL_CHAMBERS = create("trial_chambers");
+    public static TagKey<Structure> WOODLAND_MANSION = create("woodland_mansion");
 
     public StructureTagDatagen(PackOutput arg, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
         super(arg, Registries.STRUCTURE, future, ArsAdditions.MODID, helper);
@@ -72,7 +73,9 @@ public class StructureTagDatagen extends TagsProvider<Structure> {
         this.tag(END_CITY)
                 .addOptional(BuiltinStructures.END_CITY.location());
         this.tag(TRIAL_CHAMBERS)
-                .addOptionalTag(BuiltinStructures.TRIAL_CHAMBERS.location());
+                .addOptional(BuiltinStructures.TRIAL_CHAMBERS.location());
+        this.tag(WOODLAND_MANSION)
+                .addOptional(BuiltinStructures.WOODLAND_MANSION.location());
 
         this.tag(ON_EXPLORER_WARP_SCROLL)
                 .addTag(MONUMENT)

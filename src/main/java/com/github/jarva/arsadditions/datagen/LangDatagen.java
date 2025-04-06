@@ -155,6 +155,8 @@ public class LangDatagen extends LanguageProvider {
 
         this.add("tooltip.ars_additions.wayfinder.distance", "%s blocks away");
 
+        this.add("tooltip.ars_additions.wixie_cauldron.storage", "Output storage bound");
+
         // Keybinds
 
         this.add("key.ars_additions.open_lectern", "[Ars Additions] Activate Warp Index");
@@ -184,6 +186,9 @@ public class LangDatagen extends LanguageProvider {
 
         this.add("chat.ars_additions.ritual_locate_structure.failed", "Unable to start ritual");
         this.add("chat.ars_additions.ritual_locate_structure.not_found", "Unable to locate structure");
+
+        this.add("chat.ars_additions.wixie_cauldron.storage.cleared", "Storage removed.");
+        this.add("chat.ars_additions.wixie_cauldron.storage.set", "Storage bound.");
 
         // Effects
 

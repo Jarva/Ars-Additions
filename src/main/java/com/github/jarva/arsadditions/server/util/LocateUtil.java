@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -118,7 +119,7 @@ public class LocateUtil {
         LocateUtil.locateWithState(stack, level, holderSet, BlockPos.containing(origin), searchRadius, skipKnown);
     }
 
-    public static void locateUnsafe(ServerLevel level, HolderSet<Structure> holderSet, BlockPos origin, int searchRadius, boolean skipKnownStructures, Consumer<Pair<BlockPos, Holder<Structure>>> consumer) {
+    public static void locateCenter(ServerLevel level, HolderSet<Structure> holderSet, BlockPos origin, int searchRadius, boolean skipKnownStructures, Consumer<Pair<BlockPos, Holder<Structure>>> consumer) {
         AsyncLocator.locate(level, holderSet, origin, searchRadius, skipKnownStructures).then((pair) -> {
             if (pair == null) {
                 level.getServer().submit(() -> consumer.accept(null));
@@ -167,10 +168,12 @@ public class LocateUtil {
 
         BoundingBox box = structureStart.getBoundingBox();
 
+        RandomSource random = RandomSource.createNewThreadLocalInstance();
+
         for (int i = 0; i < 5; i++) {
-            int x = Mth.randomBetweenInclusive(level.random, box.minX(), box.maxX());
-            int y = Mth.randomBetweenInclusive(level.random, box.minY(), box.maxY());
-            int z = Mth.randomBetweenInclusive(level.random, box.minZ(), box.maxZ());
+            int x = Mth.randomBetweenInclusive(random, box.minX(), box.maxX());
+            int y = Mth.randomBetweenInclusive(random, box.minY(), box.maxY());
+            int z = Mth.randomBetweenInclusive(random, box.minZ(), box.maxZ());
             BlockPos start = new BlockPos(x, y, z);
 
             for (BlockPos.MutableBlockPos position : BlockPos.spiralAround(start, 10, Direction.NORTH, Direction.EAST)) {

@@ -90,6 +90,8 @@
   "chat.ars_additions.warp_index.unbound": "%s + %s to bind a %s",
   "chat.ars_additions.warp_nexus.no_scrolls": "You don't have any warp destinations available.",
   "chat.ars_additions.warp_nexus.no_scrolls.instruction": "Press %s+%s to store a Warp Scroll.",
+  "chat.ars_additions.wixie_cauldron.storage.cleared": "Storage removed.",
+  "chat.ars_additions.wixie_cauldron.storage.set": "Storage bound.",
   "effect.ars_additions.marked": "Marked",
   "enchantment.ars_additions.spellweave": "Spellweave",
   "item.ars_additions.advanced_dominion_wand": "Advanced Dominion Wand",
@@ -187,5 +189,6 @@
   "tooltip.ars_additions.warp_index.keybind.outline": "[%s]",
   "tooltip.ars_additions.water_breathing_charm": "Enables you to breath underwater",
   "tooltip.ars_additions.wayfinder.distance": "%s blocks away",
-  "tooltip.ars_additions.wither_protection_charm": "Prevents you from being afflicted with Wither"
+  "tooltip.ars_additions.wither_protection_charm": "Prevents you from being afflicted with Wither",
+  "tooltip.ars_additions.wixie_cauldron.storage": "Output storage bound"
 }

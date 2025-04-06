@@ -1,4 +1,4 @@
-package com.github.jarva.arsadditions.mixin;
+package com.github.jarva.arsadditions.mixin.charms;
 
 import com.github.jarva.arsadditions.setup.registry.CharmRegistry;
 import com.llamalad7.mixinextras.sugar.Local;

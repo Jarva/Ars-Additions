@@ -60,7 +60,7 @@ public class AdvancedDominionWand extends Item {
 
         if (!pPlayer.isShiftKeyDown()) {
             AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
-            data.toggleMode().write(stack);
+            data = data.toggleMode().write(stack);
             PortUtil.sendMessageNoSpam(pPlayer, Component.translatable("chat.ars_additions.advanced_dominion_wand.mode", data.mode().getTranslatable()));
             return InteractionResultHolder.success(stack);
         }

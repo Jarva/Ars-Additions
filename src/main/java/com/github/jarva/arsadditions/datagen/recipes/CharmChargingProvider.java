@@ -38,11 +38,11 @@ public class CharmChargingProvider extends SimpleDataProvider {
     protected void addEntries() {
         for (Map.Entry<CharmRegistry.CharmType, ItemRegistryWrapper<Item>> entry : AddonItemRegistry.CHARMS.entrySet()) {
             CharmRegistry.CharmType type = entry.getKey();
-            addEntry(type.getSerializedName(), ResourceOrTag.item(entry.getValue().get()), type.getCostPerCharge());
+            addEntry(type.getSerializedName(), entry.getValue().get(), type.getCostPerCharge());
         }
     }
 
-    private void addEntry(String id, ResourceOrTag<Item> reagent, int costPerCharge) {
+    private void addEntry(String id, Item reagent, int costPerCharge) {
         recipes.add(new CharmChargingRecipe(ArsAdditions.prefix(id), reagent, costPerCharge));
     }
 

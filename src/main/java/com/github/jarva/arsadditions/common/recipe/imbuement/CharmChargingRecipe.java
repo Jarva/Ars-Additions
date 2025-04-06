@@ -12,10 +12,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,14 +26,16 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
-public record CharmChargingRecipe(ResourceLocation id, ResourceOrTag<Item> input, int costPerCharge) implements IImbuementRecipe {
+public record CharmChargingRecipe(ResourceLocation id, Item input, int costPerCharge) implements IImbuementRecipe {
     @Override
     public boolean matches(ImbuementTile imbuementTile, Level leve) {
         ItemStack reagent = imbuementTile.stack;
         if (reagent.getItem() instanceof Charm charm) {
-            if (charm.getDamage(reagent) == 0) return false;
-            return input.map(Ingredient::of, key -> Ingredient.of(BuiltInRegistries.ITEM.get(key)))
-                    .map(ingredient -> ingredient.test(imbuementTile.stack)).orElse(false);
+            if (charm.getDamage(reagent) == 0) {
+                return false;
+            }
+
+            return reagent.is(input);
         }
         return false;
     }
@@ -88,13 +92,13 @@ public record CharmChargingRecipe(ResourceLocation id, ResourceOrTag<Item> input
     public static class Serializer implements RecipeSerializer<CharmChargingRecipe> {
         public static final MapCodec<CharmChargingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 ResourceLocation.CODEC.fieldOf("id").forGetter(CharmChargingRecipe::id),
-                ResourceOrTag.ITEM_CODEC.fieldOf("item").forGetter(CharmChargingRecipe::input),
+                BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(CharmChargingRecipe::input),
                 Codec.INT.optionalFieldOf("costPerDamage", 10).forGetter(CharmChargingRecipe::costPerCharge)
         ).apply(instance, CharmChargingRecipe::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, CharmChargingRecipe> STREAM_CODEC = StreamCodec.composite(
                 ResourceLocation.STREAM_CODEC, CharmChargingRecipe::id,
-                ResourceOrTag.ITEM_STREAM_CODEC, CharmChargingRecipe::input,
+                ByteBufCodecs.registry(Registries.ITEM), CharmChargingRecipe::input,
                 ByteBufCodecs.INT, CharmChargingRecipe::costPerCharge,
                 CharmChargingRecipe::new
         );

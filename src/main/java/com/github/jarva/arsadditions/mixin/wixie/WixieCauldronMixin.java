@@ -46,6 +46,11 @@ public abstract class WixieCauldronMixin extends SummoningTile implements IWanda
     }
 
     @Override
+    public void ars_additions$setOutputStorage(BlockPos pos) {
+        ars_additions$finishedStorage = pos;
+    }
+
+    @Override
     public void onFinishedConnectionFirst(@Nullable BlockPos storedPos, @Nullable LivingEntity storedEntity, Player playerEntity) {
         if (storedPos == null || level == null) return;
 

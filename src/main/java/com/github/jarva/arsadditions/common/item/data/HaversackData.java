@@ -10,8 +10,10 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import org.jetbrains.annotations.Nullable;
@@ -73,7 +75,13 @@ public record HaversackData(GlobalPos pos, Direction side, Boolean active, List<
     }
 
     @Nullable
-    public FilterableItemHandler getItemHandler(Level level) {
+    public FilterableItemHandler getItemHandler(Player player) {
+        MinecraftServer server = player.getServer();
+        if (server == null) return null;
+
+        ServerLevel level = server.getLevel(pos.dimension());
+        if (level == null) return null;
+
         if (!level.isLoaded(pos.pos())) return null;
 
         BlockEntity be = level.getBlockEntity(pos.pos());

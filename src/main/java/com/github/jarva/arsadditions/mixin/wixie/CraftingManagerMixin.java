@@ -39,11 +39,19 @@ public class CraftingManagerMixin {
             if (item.isEmpty()) return original.call(instance, entity);
 
             @Nullable IItemHandler capability = instance.getCapability(Capabilities.ItemHandler.BLOCK, pos, null);
-            if (capability == null) return original.call(instance, entity);
+            if (capability == null) {
+                storage.ars_additions$setOutputStorage(null);
+                return original.call(instance, entity);
+            }
 
             FilterableItemHandler handler = new FilterableItemHandler(capability, InvUtil.filtersOnTile(tile));
             InventoryManager manager = new InventoryManager(List.of(handler));
-            manager.insertStack(item);
+            ItemStack rem = manager.insertStack(item);
+            if (!rem.isEmpty()) {
+                itemEntity.setItem(rem);
+                return original.call(instance, entity);
+            }
+
             if (instance instanceof ServerLevel serverLevel) {
                 spawnFlyingItem(serverLevel, pos, tile.getBlockPos(), item.copy());
             }

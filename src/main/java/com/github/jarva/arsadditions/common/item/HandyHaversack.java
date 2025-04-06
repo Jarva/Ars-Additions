@@ -13,6 +13,8 @@ import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -54,7 +56,13 @@ public class HandyHaversack extends Item implements IScribeable {
         if (level.getGameTime() % 10 == 0) return;
 
         HaversackData.fromItemStack(stack).ifPresent(data -> {
-            boolean loaded = level.getServer().getLevel(data.pos().dimension()).isLoaded(data.pos().pos());
+            MinecraftServer server = level.getServer();
+            if (server == null) return;
+
+            ServerLevel target = server.getLevel(data.pos().dimension());
+            if (target == null) return;
+
+            boolean loaded = target.isLoaded(data.pos().pos());
             if (data.loaded() != loaded) {
                 data.toggleLoaded().write(stack);
             }
@@ -134,7 +142,7 @@ public class HandyHaversack extends Item implements IScribeable {
         if (dataOpt.isEmpty()) return true;
 
         HaversackData data = dataOpt.get();
-        FilterableItemHandler handler = data.getItemHandler(player.level());
+        FilterableItemHandler handler = data.getItemHandler(player);
         if (handler == null) return true;
 
         InventoryManager manager = new InventoryManager(List.of(handler));

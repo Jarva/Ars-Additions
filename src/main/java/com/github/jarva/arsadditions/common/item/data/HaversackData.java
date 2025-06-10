@@ -1,6 +1,8 @@
 package com.github.jarva.arsadditions.common.item.data;
 
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
+import com.google.common.collect.ImmutableList;
+import com.hollingsworth.arsnouveau.api.item.inv.FilterSet;
 import com.hollingsworth.arsnouveau.api.item.inv.FilterableItemHandler;
 import com.hollingsworth.arsnouveau.api.util.InvUtil;
 import com.mojang.serialization.Codec;
@@ -53,15 +55,24 @@ public record HaversackData(GlobalPos pos, Direction side, Boolean active, List<
     }
 
     public HaversackData add(ItemStack stack) {
-        ArrayList<ItemStack> list = new ArrayList<>(items);
-        list.add(stack.copy());
+        List<ItemStack> list = ImmutableList.<ItemStack>builder()
+                .addAll(items)
+                .add(stack.copy())
+                .build();
         return new HaversackData(pos, side, active, list, loaded);
     }
 
+    /**
+     * Removes all items with the same Item type as the ItemStack provided
+     * @param stack ItemStack of the Item type to remove
+     * @return A new HaversackData component made from the new list
+     * @apiNote Does not compare component data. Will remove all ItemStacks
+     *          matching the Item returned by stack.getItem()
+     */
     public HaversackData remove(ItemStack stack) {
         ArrayList<ItemStack> list = new ArrayList<>(items);
         if (list.removeIf(s -> ItemStack.isSameItem(s, stack))) {
-            return new HaversackData(pos, side, active, list, loaded);
+            return new HaversackData(pos, side, active, ImmutableList.copyOf(list), loaded);
         }
         return this;
     }
@@ -87,6 +98,6 @@ public record HaversackData(GlobalPos pos, Direction side, Boolean active, List<
         BlockEntity be = level.getBlockEntity(pos.pos());
         if (be == null) return null;
 
-        return new FilterableItemHandler(level.getCapability(Capabilities.ItemHandler.BLOCK, pos.pos(), side), InvUtil.filtersOnTile(be));
+        return new FilterableItemHandler(level.getCapability(Capabilities.ItemHandler.BLOCK, pos.pos(), side), FilterSet.forPosition(level,pos.pos()));
     }
 }

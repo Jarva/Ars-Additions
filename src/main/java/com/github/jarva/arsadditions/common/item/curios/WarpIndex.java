@@ -25,6 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public class WarpIndex extends Item {
     public WarpIndex() {
@@ -33,17 +34,11 @@ public class WarpIndex extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        WarpBindData data = stack.get(AddonDataComponentRegistry.WARP_BIND_DATA);
-        if(data != null) {
-            int x = data.x();
-            int y = data.y();
-            int z = data.z();
-            String dim = data.getDimensionString();
-            tooltip.add(Component.translatable("tooltip.ars_additions.warp_index.bound", x, y, z, dim));
-        } else {
-            tooltip.add(Component.translatable("chat.ars_additions.warp_index.unbound", Component.keybind("key.sneak"), Component.keybind("key.use"), LangUtil.storageLectern()));
-        }
-
+        tooltip.add(
+            WarpBindData.fromItemStack(stack)
+                .map(data -> Component.translatable("tooltip.ars_additions.warp_index.bound", data.x(), data.y(), data.z(), data.getDimensionString()))
+                .orElse(Component.translatable("chat.ars_additions.warp_index.unbound", Component.keybind("key.sneak"), Component.keybind("key.use"), LangUtil.storageLectern()))
+        );
         tooltip.add(Component.translatable("tooltip.ars_additions.warp_index.keybind", Component.translatable("tooltip.ars_additions.warp_index.keybind.outline", Component.keybind("key.ars_additions.open_lectern")).withStyle(ChatFormatting.GREEN)));
     }
 
@@ -70,8 +65,8 @@ public class WarpIndex extends Item {
     }
 
     public InteractionResult activateTerminal(Level worldIn, ItemStack stack, Player playerIn, InteractionHand handIn) {
-        WarpBindData data = stack.get(AddonDataComponentRegistry.WARP_BIND_DATA);
-        if (data == null) {
+        Optional<WarpBindData> dataOptional = WarpBindData.fromItemStack(stack);
+        if (dataOptional.isEmpty()) {
             playerIn.displayClientMessage(Component.translatable("chat.ars_additions.warp_index.unbound", Component.keybind("key.sneak"), Component.keybind("key.use"), LangUtil.storageLectern()), true);
             return InteractionResult.PASS;
         }
@@ -88,6 +83,7 @@ public class WarpIndex extends Item {
             return InteractionResult.CONSUME;
         }
 
+        WarpBindData data = dataOptional.get();
         ResourceKey<Level> dim = data.dimension();
         BlockPos boundPos = data.blockPos();
         Level lecternWorld = server.getLevel(dim);
@@ -109,9 +105,9 @@ public class WarpIndex extends Item {
     }
 
     public boolean canActivate(Level worldIn, ItemStack stack, Player playerIn, InteractionHand handIn) {
-        WarpBindData data = stack.get(AddonDataComponentRegistry.WARP_BIND_DATA);
-        if (data == null) return false;
-        return data.isIn(worldIn.dimension());
+        return WarpBindData.fromItemStack(stack)
+                .map(data->data.isIn(worldIn.dimension()))
+                .orElse(false);
     }
 
     public void open(Player sender, ItemStack t) {

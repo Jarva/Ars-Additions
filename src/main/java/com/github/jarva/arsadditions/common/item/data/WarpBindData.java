@@ -11,6 +11,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.Optional;
+
 public record WarpBindData(GlobalPos pos) {
     public static final Codec<WarpBindData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             GlobalPos.CODEC.fieldOf("pos").forGetter(WarpBindData::pos)
@@ -22,6 +24,10 @@ public record WarpBindData(GlobalPos pos) {
 
     public WarpBindData(Level level, BlockPos pos) {
         this(new GlobalPos(level.dimension(), pos));
+    }
+
+    public static Optional<WarpBindData> fromItemStack(ItemStack stack) {
+        return Optional.ofNullable(stack.get(AddonDataComponentRegistry.WARP_BIND_DATA));
     }
 
     public boolean isIn(ResourceKey<Level> dimension) {

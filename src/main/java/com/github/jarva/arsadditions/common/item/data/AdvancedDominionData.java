@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -46,6 +47,7 @@ public record AdvancedDominionData(Optional<BlockPos> pos, Optional<ResourceKey<
         }
     }
 
+    @NotNull
     public static AdvancedDominionData fromItemStack(ItemStack stack) {
         return stack.getOrDefault(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA.get(), new AdvancedDominionData(Optional.empty(), Optional.empty(), Optional.empty(), AdvancedDominionData.Mode.LOCK_FIRST));
     }
@@ -63,6 +65,11 @@ public record AdvancedDominionData(Optional<BlockPos> pos, Optional<ResourceKey<
         return new AdvancedDominionData(this.pos, this.level, this.entityId, this.mode == AdvancedDominionData.Mode.LOCK_FIRST ? AdvancedDominionData.Mode.LOCK_SECOND : AdvancedDominionData.Mode.LOCK_FIRST);
     }
 
+    /**
+     * @param stack The ItemStack to write the component to
+     * @return Returns the previously stored value of component or null if previously unset
+     */
+    @Nullable
     public AdvancedDominionData write(ItemStack stack) {
         return stack.set(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA, this);
     }

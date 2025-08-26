@@ -11,6 +11,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +27,11 @@ public class AlterationTableMixin {
     private ArmorPerkHolder useItemOn(ItemStack stack, Operation<ArmorPerkHolder> original, @Local(argsOnly = true) Level level) {
         ArmorPerkHolder def = original.call(stack);
 
-        if (!(stack.getItem() instanceof ArmorItem)) {
+        boolean override = stack.getOrDefault(AddonDataComponentRegistry.OVERRIDE_PERKS, false);
+        if (!(stack.getItem() instanceof ArmorItem) || (stack.has(DataComponentRegistry.ARMOR_PERKS) && !override)) {
+            EnchantmentHelper.updateEnchantments(stack, (mutable) -> {
+                mutable.removeIf(enchantment -> enchantment.is(SPELLWEAVE_ENCHANTMENT));
+            });
             return def;
         }
 
@@ -43,9 +48,6 @@ public class AlterationTableMixin {
 
         stack.set(AddonDataComponentRegistry.OVERRIDE_PERKS, true);
 
-        return stack.update(DataComponentRegistry.ARMOR_PERKS, new ArmorPerkHolder(), (holder) -> {
-            holder.setTier(enchantment);
-            return holder;
-        });
+        return stack.update(DataComponentRegistry.ARMOR_PERKS, new ArmorPerkHolder(), (holder) -> holder.setTier(enchantment - 1));
     }
 }

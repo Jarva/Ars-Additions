@@ -20,7 +20,7 @@ public class PerkRegistryMixin {
     private static List<List<PerkSlot>> getPerkProvider(Item item, Operation<List<List<PerkSlot>>> original, @Local(argsOnly = true) ItemStack itemStack) {
         Boolean shouldOverride = itemStack.getOrDefault(AddonDataComponentRegistry.OVERRIDE_PERKS, false);
         if (shouldOverride) {
-            return PerkSlot.PERK_SLOTS.values().stream().sorted(Comparator.comparingInt(PerkSlot::value).reversed()).map(List::of).toList();
+            return PerkSlot.PERK_SLOTS.values().stream().sorted(Comparator.comparingInt(PerkSlot::value)).map(List::of).toList();
         }
         return original.call(item);
     }

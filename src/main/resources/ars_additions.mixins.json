@@ -13,7 +13,7 @@
     "patchouli.PageRelationsAccessor",
     "patchouli.PageTextAccessor",
     "spellweave.AlterationTableMixin",
-    "spellweave.ItemStackExtensionMixin",
+    "spellweave.EnchantmentMixin",
     "spellweave.PerkRegistryMixin",
     "wixie.CraftingManagerMixin",
     "wixie.WixieCauldronAccessor",

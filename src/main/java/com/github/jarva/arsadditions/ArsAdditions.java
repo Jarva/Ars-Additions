@@ -2,22 +2,27 @@ package com.github.jarva.arsadditions;
 
 import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.common.util.DispenserExperienceGemBehavior;
+import com.github.jarva.arsadditions.datagen.EnchantmentDatagen;
 import com.github.jarva.arsadditions.server.util.AsyncLocator;
 import com.github.jarva.arsadditions.setup.config.CommonConfig;
 import com.github.jarva.arsadditions.setup.config.ServerConfig;
 import com.github.jarva.arsadditions.setup.registry.AddonSetup;
 import com.github.jarva.arsadditions.setup.registry.ArsNouveauRegistry;
+import com.hollingsworth.arsnouveau.api.perk.PerkSlot;
 import com.hollingsworth.arsnouveau.api.registry.GenericRecipeRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
@@ -39,6 +44,7 @@ public class ArsAdditions {
         modEventBus.addListener(this::common);
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::post);
+        modEventBus.addListener(this::imc);
 
         NeoForge.EVENT_BUS.addListener(this::setupExecutor);
         NeoForge.EVENT_BUS.addListener(this::shutdownExecutor);
@@ -60,18 +66,24 @@ public class ArsAdditions {
         ArsAdditionsClient.clientSetup();
     }
 
-    public void post(final FMLLoadCompleteEvent event) {
+    private void post(final FMLLoadCompleteEvent event) {
         event.enqueueWork(() -> {
             DispenserBlock.registerBehavior(ItemsRegistry.EXPERIENCE_GEM, new DispenserExperienceGemBehavior());
             DispenserBlock.registerBehavior(ItemsRegistry.GREATER_EXPERIENCE_GEM, new DispenserExperienceGemBehavior());
         });
     }
 
-    public void setupExecutor(ServerAboutToStartEvent event) {
+    private void imc(final InterModEnqueueEvent event) {
+        InterModComms.sendTo(MODID, "apothic_enchanting", "set_ench_hard_cap",
+                () -> Pair.of(EnchantmentDatagen.SPELLWEAVE_ENCHANTMENT, PerkSlot.PERK_SLOTS.values().stream().map(PerkSlot::value).max(Integer::compareTo).orElse(3))
+        );
+    }
+
+    private void setupExecutor(ServerAboutToStartEvent event) {
         AsyncLocator.setupExecutorService();
     }
 
-    public void shutdownExecutor(ServerStoppingEvent event) {
+    private void shutdownExecutor(ServerStoppingEvent event) {
         AsyncLocator.shutdownExecutorService();
     }
 }

@@ -204,7 +204,7 @@ public class LangDatagen extends LanguageProvider {
 
         // Creative Tab
 
-        this.add("itemGroup.ars_additions", "Ars Additions");
+        this.add("itemGroup.ars_additions", "Super fancy magic mod addon");
 
         // Patchouli
 

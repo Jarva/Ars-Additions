@@ -138,9 +138,14 @@ public class LangDatagen extends LanguageProvider {
         this.add("tooltip.ars_additions.handy_haversack.container", "Container");
         this.add("tooltip.ars_additions.handy_haversack.instructions", "Click items into the Handy Haversack, or click the Handy Haversack onto items");
 
-        this.add("tooltip.ars_additions.advanced_dominion_wand.mode", "Mode: %s");
-        this.add("tooltip.ars_additions.advanced_dominion_wand.mode.first", "Locked First");
-        this.add("tooltip.ars_additions.advanced_dominion_wand.mode.second", "Locked Second");
+        this.add("tooltip.ars_additions.advanced_dominion_wand.link_order", "Link Order: %s");
+        this.add("tooltip.ars_additions.advanced_dominion_wand.link_count", "Link Mode: %s");
+        this.add("tooltip.ars_additions.advanced_dominion_wand.order.first", "First");
+        this.add("tooltip.ars_additions.advanced_dominion_wand.order.second", "Second");
+        this.add("tooltip.ars_additions.advanced_dominion_wand.count.single", "Single");
+        this.add("tooltip.ars_additions.advanced_dominion_wand.count.multi", "Multi");
+        this.add("tooltip.ars_additions.advanced_dominion_wand.radial.clear", "Clear Position");
+        this.add("tooltip.ars_additions.advanced_dominion_wand.radial.toggle", "%s → %s");
 
         this.add("tooltip.ars_additions.ritual_locate_structure.name", "Locator");
 
@@ -182,7 +187,11 @@ public class LangDatagen extends LanguageProvider {
 
         this.add("chat.ars_additions.imbued_spell_parchment.scribing_started", "Scribing %s. Add source nearby to increase scribe speed.");
 
-        this.add("chat.ars_additions.advanced_dominion_wand.mode", "Set mode: %s");
+        this.add("chat.ars_additions.advanced_dominion_wand.link_success", "Successfully wanded");
+        this.add("chat.ars_additions.advanced_dominion_wand.multi_link_success", "Successfully wanded %s of %s targets");
+        this.add("chat.ars_additions.advanced_dominion_wand.multi_link_failed", "Connection failed for all %s targets");
+        this.add("chat.ars_additions.advanced_dominion_wand.multi_link_not_wandable", "Found %s blocks, but none are wandable");
+        this.add("chat.ars_additions.advanced_dominion_wand.multi_link_no_targets", "No targets found");
 
         this.add("chat.ars_additions.ritual_locate_structure.failed", "Unable to start ritual");
         this.add("chat.ars_additions.ritual_locate_structure.not_found", "Unable to locate structure");

@@ -37,6 +37,21 @@ public class NetworkHandler {
                 SendLocalWeatherStatus.STREAM_CODEC,
                 SendLocalWeatherStatus::handleData
         );
+        registrar.playToServer(
+                PacketUpdateAdvancedDominionWand.TYPE,
+                PacketUpdateAdvancedDominionWand.STREAM_CODEC,
+                PacketUpdateAdvancedDominionWand::handleData
+        );
+        registrar.playToServer(
+                PacketMultiTargetConnection.TYPE,
+                PacketMultiTargetConnection.STREAM_CODEC,
+                PacketMultiTargetConnection::handleData
+        );
+        registrar.playToClient(
+                PacketRequestEntitySearch.TYPE,
+                PacketRequestEntitySearch.STREAM_CODEC,
+                PacketRequestEntitySearch::handleData
+        );
     }
 
     public static void sendToPlayerClient(CustomPacketPayload msg, ServerPlayer player) {

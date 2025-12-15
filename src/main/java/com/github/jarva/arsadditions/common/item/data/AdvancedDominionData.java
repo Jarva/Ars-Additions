@@ -18,22 +18,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record AdvancedDominionData(Optional<BlockPos> pos, Optional<ResourceKey<Level>> level, Optional<Integer> entityId, Mode mode) {
-    public static AdvancedDominionData fromPos(BlockPos pos, ResourceKey<Level> serverLevel) {
-        return new AdvancedDominionData(Optional.of(pos), Optional.of(serverLevel), Optional.empty(), Mode.LOCK_FIRST);
+public record AdvancedDominionData(Optional<BlockPos> pos, Optional<ResourceKey<Level>> level, Optional<Integer> entityId, LinkOrder linkOrder, LinkCount linkCount) {
+    public static AdvancedDominionData fromPos(BlockPos pos, ResourceKey<Level> serverLevel, LinkOrder linkOrder, LinkCount linkCount) {
+        return new AdvancedDominionData(Optional.of(pos), Optional.of(serverLevel), Optional.empty(), linkOrder, linkCount);
     }
 
-    public static AdvancedDominionData fromEntity(ResourceKey<Level> serverLevel, Entity entity) {
-        return new AdvancedDominionData(Optional.empty(), Optional.of(serverLevel), Optional.of(entity.getId()), Mode.LOCK_FIRST);
+    public static AdvancedDominionData fromEntity(ResourceKey<Level> serverLevel, Entity entity, LinkOrder linkOrder, LinkCount linkCount) {
+        return new AdvancedDominionData(Optional.empty(), Optional.of(serverLevel), Optional.of(entity.getId()), linkOrder, linkCount);
     }
 
-    public enum Mode implements StringRepresentable {
-        LOCK_FIRST("tooltip.ars_additions.advanced_dominion_wand.mode.first"),
-        LOCK_SECOND("tooltip.ars_additions.advanced_dominion_wand.mode.second");
+    public enum LinkOrder implements StringRepresentable {
+        FIRST("tooltip.ars_additions.advanced_dominion_wand.order.first"),
+        SECOND("tooltip.ars_additions.advanced_dominion_wand.order.second");
 
         private final String translatable;
 
-        Mode(String translatable) {
+        LinkOrder(String translatable) {
             this.translatable = translatable;
         }
 
@@ -45,24 +45,61 @@ public record AdvancedDominionData(Optional<BlockPos> pos, Optional<ResourceKey<
         public Component getTranslatable() {
             return Component.translatable(translatable);
         }
+
+        public LinkOrder toggle() {
+            return this == FIRST ? SECOND : FIRST;
+        }
+    }
+
+    public enum LinkCount implements StringRepresentable {
+        SINGLE("tooltip.ars_additions.advanced_dominion_wand.count.single"),
+        MULTI("tooltip.ars_additions.advanced_dominion_wand.count.multi");
+
+        private final String translatable;
+
+        LinkCount(String translatable) {
+            this.translatable = translatable;
+        }
+
+        @Override
+        public @NotNull String getSerializedName() {
+            return name().toLowerCase();
+        }
+
+        public Component getTranslatable() {
+            return Component.translatable(translatable);
+        }
+
+        public LinkCount toggle() {
+            return this == SINGLE ? MULTI : SINGLE;
+        }
     }
 
     @NotNull
     public static AdvancedDominionData fromItemStack(ItemStack stack) {
-        return stack.getOrDefault(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA.get(), new AdvancedDominionData(Optional.empty(), Optional.empty(), Optional.empty(), AdvancedDominionData.Mode.LOCK_FIRST));
+        return stack.getOrDefault(AddonDataComponentRegistry.ADVANCED_DOMINION_DATA.get(), new AdvancedDominionData(Optional.empty(), Optional.empty(), Optional.empty(), LinkOrder.FIRST, LinkCount.SINGLE));
     }
 
     public static final Codec<AdvancedDominionData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BlockPos.CODEC.optionalFieldOf("Pos").forGetter(AdvancedDominionData::pos),
             Level.RESOURCE_KEY_CODEC.optionalFieldOf("Level").forGetter(AdvancedDominionData::level),
             Codec.INT.optionalFieldOf("StoredEntity").forGetter(AdvancedDominionData::entityId),
-            StringRepresentable.fromEnum(AdvancedDominionData.Mode::values).optionalFieldOf("Mode", Mode.LOCK_FIRST).forGetter(AdvancedDominionData::mode)
+            StringRepresentable.fromEnum(LinkOrder::values).optionalFieldOf("LinkOrder", LinkOrder.FIRST).forGetter(AdvancedDominionData::linkOrder),
+            StringRepresentable.fromEnum(LinkCount::values).optionalFieldOf("LinkCount", LinkCount.SINGLE).forGetter(AdvancedDominionData::linkCount)
     ).apply(instance, AdvancedDominionData::new));
 
     public static final StreamCodec<ByteBuf, AdvancedDominionData> STREAM_CODEC = ByteBufCodecs.fromCodec(CODEC);
 
-    public AdvancedDominionData toggleMode() {
-        return new AdvancedDominionData(this.pos, this.level, this.entityId, this.mode == AdvancedDominionData.Mode.LOCK_FIRST ? AdvancedDominionData.Mode.LOCK_SECOND : AdvancedDominionData.Mode.LOCK_FIRST);
+    public AdvancedDominionData toggleLinkOrder() {
+        return new AdvancedDominionData(this.pos, this.level, this.entityId, this.linkOrder.toggle(), this.linkCount);
+    }
+
+    public AdvancedDominionData toggleLinkCount() {
+        return new AdvancedDominionData(this.pos, this.level, this.entityId, this.linkOrder, this.linkCount.toggle());
+    }
+
+    public AdvancedDominionData clear() {
+        return new AdvancedDominionData(Optional.empty(), Optional.empty(), Optional.empty(), this.linkOrder, this.linkCount);
     }
 
     /**

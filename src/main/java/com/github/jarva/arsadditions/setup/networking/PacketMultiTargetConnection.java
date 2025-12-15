@@ -5,6 +5,7 @@ import com.github.jarva.arsadditions.common.item.AdvancedDominionWand;
 import com.github.jarva.arsadditions.common.item.data.AdvancedDominionData;
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.hollingsworth.arsnouveau.api.item.IWandable;
+import com.hollingsworth.arsnouveau.api.util.BlockUtil;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
@@ -93,6 +94,12 @@ public record PacketMultiTargetConnection(List<BlockPos> blockPositions, List<In
                 if (player.distanceToSqr(targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5) > MAX_DISTANCE * MAX_DISTANCE) {
                     continue;
                 }
+
+                // Security: Validate player has permission to interact with this block
+                if (!BlockUtil.destroyRespectsClaim(player, serverLevel, targetPos)) {
+                    continue;
+                }
+
                 BlockEntity be = serverLevel.getBlockEntity(targetPos);
                 IWandable targetWandable = be instanceof IWandable wand ? wand : null;
 
@@ -115,6 +122,11 @@ public record PacketMultiTargetConnection(List<BlockPos> blockPositions, List<In
 
                 // Security: Validate distance from player
                 if (player.distanceToSqr(targetEntity) > MAX_DISTANCE * MAX_DISTANCE) {
+                    continue;
+                }
+
+                // Security: Validate player has permission to interact with this entity's position
+                if (!BlockUtil.destroyRespectsClaim(player, serverLevel, targetEntity.blockPosition())) {
                     continue;
                 }
 

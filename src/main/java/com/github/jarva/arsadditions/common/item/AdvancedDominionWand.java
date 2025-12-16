@@ -9,23 +9,30 @@ import com.github.jarva.arsadditions.setup.networking.PacketRequestEntitySearch;
 import com.github.jarva.arsadditions.setup.networking.PacketUpdateAdvancedDominionWand;
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+
 import com.hollingsworth.arsnouveau.api.item.IRadialProvider;
 import com.hollingsworth.arsnouveau.api.item.IWandable;
+import com.hollingsworth.arsnouveau.client.ClientInfo;
 import com.hollingsworth.arsnouveau.client.gui.radial_menu.GuiRadialMenu;
 import com.hollingsworth.arsnouveau.client.gui.radial_menu.RadialMenu;
 import com.hollingsworth.arsnouveau.client.gui.radial_menu.RadialMenuSlot;
 import com.hollingsworth.arsnouveau.client.gui.utils.RenderUtils;
+import com.hollingsworth.arsnouveau.client.particle.ColorPos;
+import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
+import com.hollingsworth.arsnouveau.common.network.HighlightAreaPacket;
+import com.hollingsworth.arsnouveau.common.network.Networking;
 import com.hollingsworth.arsnouveau.common.util.PortUtil;
+
 import net.minecraft.client.Minecraft;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -34,6 +41,13 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.ArrayList;
@@ -41,6 +55,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class AdvancedDominionWand extends Item implements IRadialProvider {
+    private static final int HIGHLIGHT_TICKS = 10;
+    private static final ParticleColor MULTI_LINK_PREVIEW_COLOR = new ParticleColor(100, 200, 255);
+
     public AdvancedDominionWand() {
         super(AddonItemRegistry.defaultItemProperties().stacksTo(1));
     }
@@ -101,13 +118,83 @@ public class AdvancedDominionWand extends Item implements IRadialProvider {
                 data.linkOrder().getTranslatable().getString()));
 
         String clearText = AdvancedDominionSlots.CLEAR.translatable(data).getString();
-        radialMenuSlots.add(new RadialMenuSlot<>(clearText, "Clear"));
+        radialMenuSlots.add(new RadialMenuSlot<>(clearText, clearText));
 
         String toggleCountText = AdvancedDominionSlots.TOGGLE_COUNT.translatable(data).getString();
         radialMenuSlots.add(new RadialMenuSlot<>(toggleCountText,
                 data.linkCount().getTranslatable().getString()));
 
         return radialMenuSlots;
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
+        if (!isSelected || level.getGameTime() % 5 != 0) {
+            return;
+        }
+
+        AdvancedDominionData data = AdvancedDominionData.fromItemStack(stack);
+
+        if (level.isClientSide && entity instanceof Player player && data.linkCount() == AdvancedDominionData.LinkCount.MULTI) {
+            handleClientPreview(level, player, data);
+            return;
+        }
+
+        if (level.isClientSide) {
+            return;
+        }
+
+        if (data.pos().isPresent() && data.level().isPresent()) {
+            ServerLevel serverLevel = getServerLevel((ServerLevel) level, data.level().get());
+            if (serverLevel != null && serverLevel.getBlockEntity(data.pos().get()) instanceof IWandable wandable) {
+                Networking.sendToPlayerClient(new HighlightAreaPacket(wandable.getWandHighlight(new ArrayList<>()), HIGHLIGHT_TICKS), (ServerPlayer) entity);
+            }
+            return;
+        }
+
+        if (data.entityId().isPresent() && data.level().isPresent()) {
+            ServerLevel serverLevel = getServerLevel((ServerLevel) level, data.level().get());
+            if (serverLevel != null && serverLevel.getEntity(data.entityId().get()) instanceof IWandable wandable) {
+                Networking.sendToPlayerClient(new HighlightAreaPacket(wandable.getWandHighlight(new ArrayList<>()), HIGHLIGHT_TICKS), (ServerPlayer) entity);
+            }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void handleClientPreview(Level level, Player player, AdvancedDominionData data) {
+        if (!player.isShiftKeyDown()) {
+            return;
+        }
+
+        HitResult hitResult = Minecraft.getInstance().hitResult;
+        if (hitResult == null) {
+            return;
+        }
+
+        List<ColorPos> colorPositions = new ArrayList<>();
+
+        if (hitResult.getType() == HitResult.Type.BLOCK) {
+            BlockHitResult blockHit = (BlockHitResult) hitResult;
+            BlockPos targetPos = blockHit.getBlockPos();
+            List<BlockPos> connectedBlocks = MultiTargetUtil.findConnectedBlocks(level, targetPos);
+
+            for (BlockPos pos : connectedBlocks) {
+                colorPositions.add(ColorPos.centered(pos, MULTI_LINK_PREVIEW_COLOR));
+            }
+        } else if (hitResult.getType() == HitResult.Type.ENTITY && hitResult instanceof EntityHitResult entityHit) {
+            if (entityHit.getEntity() instanceof LivingEntity livingEntity) {
+                List<LivingEntity> nearbyEntities = MultiTargetUtil.findNearbyEntities(level, livingEntity);
+
+                for (LivingEntity entity : nearbyEntities) {
+                    colorPositions.add(new ColorPos(entity.position(), MULTI_LINK_PREVIEW_COLOR));
+                }
+            }
+        }
+
+        if (!colorPositions.isEmpty()) {
+            ClientInfo.highlightPosition(colorPositions, HIGHLIGHT_TICKS);
+        }
     }
 
     @Override
@@ -243,6 +330,10 @@ public class AdvancedDominionWand extends Item implements IRadialProvider {
             return Triple.of(null, living, null);
         }
         return Triple.of(null, null, null);
+    }
+
+    private ServerLevel getServerLevel(ServerLevel currentLevel, ResourceKey<Level> targetDimension) {
+        return currentLevel.getServer().getLevel(targetDimension);
     }
 
     @Override

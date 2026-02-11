@@ -114,7 +114,7 @@ public class AddonDocumentation {
         ).withRelation(glyph(EffectMark.INSTANCE)).withRelation(glyph(MethodRecall.INSTANCE));
 
         addPage(EntryBuilder.of(MACHINES, AddonBlockRegistry.ENDER_SOURCE_JAR).withIcon(AddonBlockRegistry.ENDER_SOURCE_JAR).withTextPage("ars_additions.page.ender_source_jar").withCraftingPages(AddonBlockRegistry.ENDER_SOURCE_JAR));
-        addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.XP_JAR).withIcon(AddonItemRegistry.XP_JAR).withTextPage("ars_additions.page.ender_source_jar").withCraftingPages(AddonItemRegistry.XP_JAR));
+        addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.XP_JAR).withIcon(AddonItemRegistry.XP_JAR).withTextPage("ars_additions.page.xp_jar").withCraftingPages(AddonItemRegistry.XP_JAR));
         addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.HANDY_HAVERSACK).withIcon(AddonItemRegistry.HANDY_HAVERSACK).withTextPage("ars_additions.page.handy_haversack").withCraftingPages(AddonItemRegistry.HANDY_HAVERSACK));
 
         DocEntryBuilder charmBuilder = EntryBuilder.of(EQUIPMENT, AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.FIRE_RESISTANCE))

@@ -36,8 +36,6 @@ public class LangDatagen extends LanguageProvider {
 
         // Perks
 
-        this.add("ars_additions.thread_of", "Thread of %s");
-
         for (PerkItem i : PerkRegistry.getPerkItemMap().values()) {
             if(i.perk.getRegistryName().getNamespace().equals(ArsAdditions.MODID)) {
                 add("ars_additions.perk_desc." + i.perk.getRegistryName().getPath(), i.perk.getLangDescription());
@@ -103,6 +101,7 @@ public class LangDatagen extends LanguageProvider {
         this.add("item.ars_additions.wayfinder", "Wayfinder");
         this.add("item.ars_additions.bound_wayfinder", "Bound Wayfinder");
         this.add("item.ars_additions.imbued_spell_parchment", "Imbued Spell Parchment");
+        this.add("item.ars_additions.memory_crystal", "Memory Crystal");
 
         for (CharmRegistry.CharmType charm : CharmRegistry.CharmType.values()) {
             this.add("page.ars_additions." + charm.getSerializedName() + ".title", charm.getName());
@@ -147,7 +146,15 @@ public class LangDatagen extends LanguageProvider {
         this.add("tooltip.ars_additions.advanced_dominion_wand.radial.clear", "Clear Position");
         this.add("tooltip.ars_additions.advanced_dominion_wand.radial.toggle", "%s → %s");
 
-        this.add("tooltip.ars_additions.ritual_locate_structure.name", "Locator");
+        this.add("tooltip.ars_additions.memory_crystal.selected_slot", "Selected Slot: %s");
+        this.add("tooltip.ars_additions.memory_crystal.slot_has_data", "Has Data");
+        this.add("tooltip.ars_additions.memory_crystal.usage", "Shift + Right-click to save/load");
+        this.add("tooltip.ars_additions.memory_crystal.radial.clear", "Clear");
+        this.add("tooltip.ars_additions.memory_crystal.radial.lock", "Lock");
+        this.add("tooltip.ars_additions.memory_crystal.radial.unlock", "Unlock");
+        this.add("tooltip.ars_additions.memory_crystal.radial.empty", "Empty");
+        this.add("tooltip.ars_additions.memory_crystal.radial.corrupt_data", "Corrupt Data");
+        this.add("tooltip.ars_additions.memory_crystal.radial.unknown_handler", "Unknown Handler");
 
         this.add("tooltip.ars_additions.charm.charges", "Charges %s / %s");
         this.add("tooltip.ars_additions.charm.desc", "Rechargeable");
@@ -196,8 +203,35 @@ public class LangDatagen extends LanguageProvider {
         this.add("chat.ars_additions.ritual_locate_structure.failed", "Unable to start ritual");
         this.add("chat.ars_additions.ritual_locate_structure.not_found", "Unable to locate structure");
 
+        this.add("chat.ars_additions.memory_crystal.saved", "Saved to slot %s");
+        this.add("chat.ars_additions.memory_crystal.loaded", "Loaded from slot %s");
+        this.add("chat.ars_additions.memory_crystal.cleared", "Cleared slot %s");
+        this.add("chat.ars_additions.memory_crystal.locked", "Locked slot %s");
+        this.add("chat.ars_additions.memory_crystal.unlocked", "Unlocked slot %s");
+        this.add("chat.ars_additions.memory_crystal.slot_locked", "Slot is locked");
+        this.add("chat.ars_additions.memory_crystal.already_empty", "Slot %s is already empty");
+        this.add("chat.ars_additions.memory_crystal.cannot_lock_empty", "Cannot lock empty slot %s");
+        this.add("chat.ars_additions.memory_crystal.unsupported_block", "This block is not supported");
+        this.add("chat.ars_additions.memory_crystal.unsupported_entity", "This entity is not supported");
+
         this.add("chat.ars_additions.wixie_cauldron.storage.cleared", "Storage removed.");
         this.add("chat.ars_additions.wixie_cauldron.storage.set", "Storage bound.");
+
+        // Memory Handlers
+
+        this.add("memory_handler.ars_additions.detail", "  %s");
+        this.add("memory_handler.ars_additions.spell_turret", "Spell Turret");
+        this.add("memory_handler.ars_additions.spell_turret.delay", "Delay: %ss");
+        this.add("memory_handler.ars_additions.starbuncle", "Starbuncle");
+        this.add("memory_handler.ars_additions.rune", "Rune");
+        this.add("memory_handler.ars_additions.rune.sensitive", "Sensitive");
+        this.add("memory_handler.ars_additions.spell_sensor", "Spell Sensor");
+        this.add("memory_handler.ars_additions.spell_sensor.on_cast", "Mode: On Cast");
+        this.add("memory_handler.ars_additions.spell_sensor.on_resolve", "Mode: On Resolve");
+        this.add("memory_handler.ars_additions.spell_sensor.strength", "Strength: %s");
+        this.add("memory_handler.ars_additions.spell_sensor.has_filter", "Has Parchment Filter");
+        this.add("memory_handler.ars_additions.item_detector", "Item Detector");
+        this.add("memory_handler.ars_additions.item_detector.count", "Count: %s");
 
         // Effects
 

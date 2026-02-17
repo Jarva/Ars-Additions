@@ -36,6 +36,7 @@ public class LocateUtil {
         PENDING,
         SUCCESS,
         FAILURE,
+        RETRY,
     }
 
     public record LocateState(Status status, Structure structure, BlockPos pos) {
@@ -105,7 +106,11 @@ public class LocateUtil {
             if (pos == null) {
                 STRUCTURE_LOOKUP_CACHE.put(finalUuid, LocateState.failure());
             } else {
-                STRUCTURE_LOOKUP_CACHE.put(finalUuid, LocateState.success(pair.getSecond().value(), pos));
+                if (!level.isInWorldBounds(pos)) {
+                    STRUCTURE_LOOKUP_CACHE.put(finalUuid, LocateState.failure());
+                } else {
+                    STRUCTURE_LOOKUP_CACHE.put(finalUuid, LocateState.success(pair.getSecond().value(), pos));
+                }
             }
         });
     }

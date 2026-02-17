@@ -21,4 +21,5 @@ public class AddonItemNames {
     public static final String ENDER_MASK_CHARM = "ender_mask_charm";
     public static final String VOID_PROTECTION_CHARM = "void_protection_charm";
     public static final String IMBUED_SPELL_PARCHMENT = "imbued_spell_parchment";
+    public static final String MEMORY_CRYSTAL = "memory_crystal";
 }

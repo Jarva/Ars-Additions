@@ -43,4 +43,7 @@ public class AddonDataComponentRegistry {
     public static final DeferredHolder<DataComponentType<?> , DataComponentType<Boolean>> OVERRIDE_PERKS = DATA.register("override_perks",
             () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build()
     );
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<MemoryCrystalData>> MEMORY_CRYSTAL_DATA = DATA.register("memory_crystal_data",
+            () -> DataComponentType.<MemoryCrystalData>builder().persistent(MemoryCrystalData.CODEC).networkSynchronized(MemoryCrystalData.STREAM_CODEC).build()
+    );
 }

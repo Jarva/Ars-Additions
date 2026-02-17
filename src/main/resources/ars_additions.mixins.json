@@ -22,6 +22,7 @@
     "wixie.WixieCharmMixin"
   ],
   "client": [
+    "GuiAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

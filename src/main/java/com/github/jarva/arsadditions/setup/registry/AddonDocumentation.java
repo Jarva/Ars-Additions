@@ -97,8 +97,7 @@ public class AddonDocumentation {
                 .addConnectedSearch(AddonItemRegistry.EXPLORATION_WARP_SCROLL.get())
         );
 
-        var nexusTower = addPage(EntryBuilder.of(STRUCTURES, AddonBlockRegistry.WARP_NEXUS)
-                .withName("ars_additions.page.nexus_tower")
+        var nexusTower = addPage(EntryBuilder.of(STRUCTURES, "nexus_tower")
                 .withIcon(AddonBlockRegistry.WARP_NEXUS)
                 .withIntroPageNoIncrement("ars_additions.page1.nexus_tower")
                 .withPage(TextEntry.create(Component.translatable("ars_additions.spotlight.warp_nexus"), Component.translatable("block.ars_additions.warp_nexus"), AddonBlockRegistry.WARP_NEXUS))
@@ -221,11 +220,11 @@ public class AddonDocumentation {
         }
 
         public static EntryBuilder of(DocCategory category, ItemRegistryWrapper<? extends Item> item) {
-            return of(category, item.get().getDescriptionId());
+            return of(category, item.get().getDescriptionId(), BuiltInRegistries.ITEM.getKey(item.get()));
         }
 
         public static EntryBuilder of(DocCategory category, ItemLike item) {
-            return of(category, item.asItem().getDescriptionId());
+            return of(category, item.asItem().getDescriptionId(), BuiltInRegistries.ITEM.getKey(item.asItem()));
         }
 
         public static EntryBuilder of(AbstractSpellPart glyph) {
@@ -237,7 +236,7 @@ public class AddonDocumentation {
         }
 
         public static EntryBuilder of(DocCategory category, BlockRegistryWrapper<? extends Block> block) {
-            return of(category, block.get().getDescriptionId());
+            return of(category, block.get().getDescriptionId(), BuiltInRegistries.BLOCK.getKey(block.get()));
         }
 
         private EntryBuilder(DocCategory category, String name, ResourceLocation entryId) {

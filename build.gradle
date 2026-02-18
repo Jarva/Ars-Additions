@@ -127,7 +127,6 @@ dependencies {
     compileOnly "com.hollingsworth.nuggets:nuggets-neoforge-${project.mc_version}:${project.nuggets_version}"
 
     implementation "software.bernie.geckolib:geckolib-neoforge-${project.minecraft_version}:${project.gecko_version}"
-    implementation "vazkii.patchouli:Patchouli:${project.mc_version}-${project.patchouli_version}"
 
     compileOnly "mezz.jei:jei-${project.minecraft_version}-neoforge-api:${project.jei_version}"
     implementation "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"

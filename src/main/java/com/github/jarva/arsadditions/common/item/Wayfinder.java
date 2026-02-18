@@ -31,6 +31,7 @@ public class Wayfinder extends Item {
             LodestoneTracker lodestoneTracker = stack.get(DataComponents.LODESTONE_TRACKER);
             lodestoneTracker.target().ifPresent(global -> {
                 Player player = ArsNouveau.proxy.getPlayer();
+                if (player == null || player.level() == null) return;
                 if (!global.dimension().equals(player.level().dimension())) return;
                 int distance = global.pos().distManhattan(player.blockPosition());
                 tooltipComponents.add(Component.translatable("tooltip.ars_additions.wayfinder.distance", distance));

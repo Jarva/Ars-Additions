@@ -2,7 +2,6 @@ package com.github.jarva.arsadditions;
 
 import com.github.jarva.arsadditions.client.renderers.EnchantingWixieCauldronRenderer;
 import com.github.jarva.arsadditions.client.renderers.tile.WarpNexusRenderer;
-import com.github.jarva.arsadditions.client.util.BookUtil;
 import com.github.jarva.arsadditions.client.util.CompassUtil;
 import com.github.jarva.arsadditions.common.item.data.HaversackData;
 import com.github.jarva.arsadditions.common.util.FillUtil;
@@ -10,7 +9,6 @@ import com.github.jarva.arsadditions.setup.networking.OpenTerminalPacket;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
-import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.common.items.data.BlockFillContents;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
@@ -18,7 +16,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -27,9 +24,6 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
-import vazkii.patchouli.api.BookContentsReloadEvent;
-import vazkii.patchouli.client.book.BookPage;
-
 public class ArsAdditionsClient {
     public static KeyMapping openTerm;
 
@@ -79,29 +73,6 @@ public class ArsAdditionsClient {
             }
         }
 
-        @SubscribeEvent
-        public static void updateBookContents(BookContentsReloadEvent event) {
-            ResourceLocation bookId = event.getBook();
-            if (!bookId.equals(BookUtil.WORN_NOTEBOOK)) return;
-
-            BookUtil.addRelation(
-                    ArsNouveau.prefix("machines/storage_lectern"),
-                    ArsNouveau.prefix("machines/warp_indexes")
-            );
-            BookPage wixiePage = BookUtil.newTextPage(
-                    "ars_additions.page.wixie_enchanting_apparatus",
-                    "ars_additions.page1.wixie_enchanting_apparatus"
-            );
-            BookUtil.addPage(ArsNouveau.prefix("automation/wixie_charm"), wixiePage,
-                    true, page -> BookUtil.isTitlePage(page, "ars_nouveau.binding_inventories"));
-
-            BookPage bulkScribing = BookUtil.newTextPage(
-                    "ars_additions.page.bulk_scribing",
-                    "ars_additions.page1.bulk_scribing"
-            );
-            BookUtil.addPage(ArsNouveau.prefix("machines/scribes_block"), bulkScribing,
-                    true, page -> BookUtil.isTitlePage(page, "ars_nouveau.scribing"));
-        }
     }
 
     public static void clientSetup() {

@@ -25,8 +25,8 @@ import java.util.List;
 
 @JeiPlugin
 public class ModPlugin implements IModPlugin {
-    public static final RecipeType<RecipeHolder<LocateStructureRecipe>> LOCATE_STRUCTURE_RECIPE_TYPE = RecipeType.createFromVanilla(com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry.LOCATE_STRUCTURE_TYPE.get());
-    public static final RecipeType<RecipeHolder<CharmChargingRecipe>> CHARM_CHARGING_RECIPE_TYPE = RecipeType.createFromVanilla(com.github.jarva.arsadditions.setup.registry.AddonRecipeRegistry.CHARM_CHARGING_TYPE.get());
+    public static final RecipeType<RecipeHolder<LocateStructureRecipe>> LOCATE_STRUCTURE_RECIPE_TYPE = RecipeType.createRecipeHolderType(ArsAdditions.prefix("locate_structure"));
+    public static final RecipeType<RecipeHolder<CharmChargingRecipe>> CHARM_CHARGING_RECIPE_TYPE = RecipeType.createRecipeHolderType(ArsAdditions.prefix("charm_charging"));
 
     @Override
     public ResourceLocation getPluginUid() {

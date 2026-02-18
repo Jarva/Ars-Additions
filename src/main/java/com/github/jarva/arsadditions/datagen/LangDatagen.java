@@ -46,6 +46,7 @@ public class LangDatagen extends LanguageProvider {
         // Enchantments
 
         this.add("enchantment.ars_additions.spellweave", "Spellweave");
+        this.add("enchantment.ars_additions.spellweave.desc", "Provides a thread slot on armor that doesn't have threads.");
 
         // Blocks
 
@@ -249,13 +250,10 @@ public class LangDatagen extends LanguageProvider {
 
         this.add("itemGroup.ars_additions", "Ars Additions");
 
-        // Patchouli
+        // Documentation
 
         this.add("ars_additions.page.warp_indexes", "Warp Indexes");
         this.add("ars_additions.page1.warp_indexes", "Warp Indexes are used to remotely access your Storage Lecterns. The Warp Index allows you to access your Storage Lectern anywhere within the same dimension. The Stabilized Warp Index does not have the same limitation and will work in any dimension. Both of these Warp Indexes require your Storage Lectern to be chunk-loaded.");
-
-        this.add("ars_additions.category.structures", "Structures");
-        this.add("ars_additions.category.structures.desc", "Structures that can be found around your world to sprinkle in a little extra magic.");
 
         this.add("ars_additions.page.ruined_warp_portals", "Ruined Warp Portals");
         this.add("ars_additions.page1.ruined_warp_portals", "Ruined Warp Portals can be found scattered around the world, displaying an Ancient Warp Portal that has degraded over time. Accompanying these portals is a chest containing an Explorer's Warp Scroll. This scroll remains heavily imbued with magic after all these years and can activate the repaired portal with no additional source required.");
@@ -273,7 +271,7 @@ public class LangDatagen extends LanguageProvider {
         this.add("ars_additions.page1.nexus_tower", "Nexus Towers are located on converging points of Source Leylines allowing them to harness the natural source in the world to allow easier transportation around the realm.");
         this.add("ars_additions.spotlight.warp_nexus", "These towers use this natural source via their Warp Nexus, an ancient waystone containing a Nexus Scroll bound to the towers location.");
 
-        this.add("ars_additions.page.wixie_enchanting_apparatus", "Enchanting Apparatus");
+        this.add("ars_additions.page.wixie_enchanting_apparatus", "Apparatus Automation");
         this.add("ars_additions.page1.wixie_enchanting_apparatus", "To create a Wixie Enchanting Apparatus, use a Wixie Charm on an Enchanting Apparatus while Sneaking. The Wixie Enchanting Apparatus works in the exact same way as the Item Crafting mentioned previously.");
 
         this.add("ars_additions.page.xp_jar", "A jar that can destroy items on pickup and grants a small amount of XP in return. To turn the jar on and off, use the jar while sneaking. To add or remove an item to be destroyed by the jar, use the jar with an item in the off hand, or use an item on the Scribes Table with the jar placed on it. The jar must be in your hotbar to function.");
@@ -299,6 +297,10 @@ public class LangDatagen extends LanguageProvider {
         this.add("ars_additions.page1.bulk_scribing", "It's also possible to scribe items in bulk by placing a Spell Book or scribed Spell Parchment on a pedestal next to an imbuement chamber and then placing the blank parchment or other item to be scribed inside the imbuement chamber.");
 
         this.add("ars_additions.page.imbued_spell_parchment", "You can imbue source into a spell parchment to allow you to cast that spell without consuming mana. To cast with an imbued spell parchment, you need to hold use to gather up all the source in the parchment ready to release. It takes about half a second to gather up 100 mana worth of source from the parchment, so bigger spells will take a longer time to cast.");
+
+        this.add("ars_additions.page.memory_crystal", "The Memory Crystal can save and load configuration data from supported blocks and entities. Shift + Right-Click a supported block or entity to save its configuration to the selected slot. Shift + Right-Click again to load the saved data back. Use the Radial Menu to select between 10 memory slots. Shift + Radial Menu allows you to clear or lock slots to prevent accidental overwrites.");
+        this.add("ars_additions.page.advanced_dominion_wand", "The Advanced Dominion Wand is an upgraded Dominion Wand with the ability to control link order and link multiple blocks at once. Use the Radial Menu to toggle between First/Second link order and Single/Multi link count. In Multi mode, Shift + Right-Clicking a block will find all connected blocks of the same type and link them all at once.");
+        this.add("ars_additions.page.source_spawner", "The Source Spawner is a source-powered mob spawner that reads nearby Mob Jars to determine what to spawn. Each mob spawned consumes source from nearby Source Jars, with the cost varying based on the mob type. The spawner can be disabled with a redstone signal and outputs a comparator signal proportional to the current spawn delay.");
 
         this.add("ars_additions.page.arcane_library", "Arcane Library");
         this.add("ars_additions.page1.arcane_library", "Arcane Libraries are a rare structure found in Archwood Forests, they are the remnants of an ancient magic civilization long left behind. Find treasures to fulfil all your magical needs, but beware of the Wilden roaming the halls.");

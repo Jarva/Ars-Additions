@@ -7,8 +7,10 @@ import com.github.jarva.arsadditions.datagen.Setup;
 import com.github.jarva.arsadditions.setup.registry.names.AddonBlockNames;
 import com.hollingsworth.arsnouveau.api.documentation.DocCategory;
 import com.hollingsworth.arsnouveau.api.documentation.ReloadDocumentationEvent;
+import com.hollingsworth.arsnouveau.api.documentation.SinglePageCtor;
 import com.hollingsworth.arsnouveau.api.documentation.builder.DocEntryBuilder;
 import com.hollingsworth.arsnouveau.api.documentation.entry.DocEntry;
+import com.hollingsworth.arsnouveau.api.documentation.entry.GlyphEntry;
 import com.hollingsworth.arsnouveau.api.documentation.entry.TextEntry;
 import com.hollingsworth.arsnouveau.api.registry.DocumentationRegistry;
 import com.hollingsworth.arsnouveau.api.registry.RitualRegistry;
@@ -29,6 +31,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.IntStream;
 
 import static com.hollingsworth.arsnouveau.api.registry.DocumentationRegistry.*;
 
@@ -40,6 +44,7 @@ public class AddonDocumentation {
             var entry = addPage(EntryBuilder.of(glyph)
                     .withName(Setup.root + ".glyph_name." + glyph.getRegistryName().getPath())
                     .withIcon(glyph.glyphItem)
+                    .withPage(GlyphEntry.create(glyph))
                     .withCraftingPages(glyph.glyphItem));
 
             entry.withSearchTag(Component.translatable("ars_nouveau.keyword.glyph"));
@@ -57,7 +62,9 @@ public class AddonDocumentation {
             addPage(EntryBuilder.of(ritual)
                     .withName(ritual.getLangName())
                     .withIcon(tablet)
-                    .withCraftingPages(Setup.root + ":tablet_" + ritual.getRegistryName().getPath(), tablet));
+                    .withIntroPageNoIncrement(ritual.getDescriptionKey())
+                    .withCraftingPages(Setup.root + ":tablet_" + ritual.getRegistryName().getPath(), tablet))
+                    .withSearchTag(Component.translatable("ars_nouveau.keyword.ritual"));
         }
 
         DocCategory MACHINES = DocumentationRegistry.CRAFTING;
@@ -77,7 +84,7 @@ public class AddonDocumentation {
         addPage(EntryBuilder.of(MACHINES, AddonItemRegistry.ADVANCED_LECTERN_REMOTE)
                 .withName("ars_additions.page.warp_indexes")
                 .withIcon(AddonItemRegistry.ADVANCED_LECTERN_REMOTE)
-                .withTextPage("ars_additions.page1.warp_indexes")
+                .withIntroPageNoIncrement("ars_additions.page1.warp_indexes")
                 .withCraftingPages(AddonItemRegistry.LECTERN_REMOTE)
                 .withCraftingPages(AddonItemRegistry.ADVANCED_LECTERN_REMOTE)
         ).withRelation(block(BlockRegistry.CRAFTING_LECTERN)).withRelation(item(ItemsRegistry.BOOKWYRM_CHARM));
@@ -85,7 +92,7 @@ public class AddonDocumentation {
         addPage(EntryBuilder.of(STRUCTURES, AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_LANTERN))
                 .withName("ars_additions.page.ruined_warp_portals")
                 .withIcon(AddonBlockRegistry.getBlock(AddonBlockNames.SOURCESTONE_LANTERN))
-                .withTextPage("ars_additions.page1.ruined_warp_portals")
+                .withIntroPageNoIncrement("ars_additions.page1.ruined_warp_portals")
                 .withPage(TextEntry.create(Component.empty(), Component.translatable("item.ars_additions.exploration_warp_scroll"), AddonItemRegistry.EXPLORATION_WARP_SCROLL))
                 .addConnectedSearch(AddonItemRegistry.EXPLORATION_WARP_SCROLL.get())
         );
@@ -93,35 +100,35 @@ public class AddonDocumentation {
         var nexusTower = addPage(EntryBuilder.of(STRUCTURES, AddonBlockRegistry.WARP_NEXUS)
                 .withName("ars_additions.page.nexus_tower")
                 .withIcon(AddonBlockRegistry.WARP_NEXUS)
-                .withTextPage("ars_additions.page1.nexus_tower")
+                .withIntroPageNoIncrement("ars_additions.page1.nexus_tower")
                 .withPage(TextEntry.create(Component.translatable("ars_additions.spotlight.warp_nexus"), Component.translatable("block.ars_additions.warp_nexus"), AddonBlockRegistry.WARP_NEXUS))
         ).withRelation(BuiltInRegistries.BLOCK.getKey(AddonBlockRegistry.WARP_NEXUS.get()));
 
         addPage(EntryBuilder.of(MACHINES, AddonBlockRegistry.WARP_NEXUS)
                 .withIcon(AddonBlockRegistry.WARP_NEXUS)
-                .withTextPage("ars_additions.page1.warp_nexus")
+                .withIntroPageNoIncrement("ars_additions.page1.warp_nexus")
                 .withTextPage("ars_additions.page2.warp_nexus")
         ).withRelation(nexusTower);
 
         addPage(EntryBuilder.of(STRUCTURES, BlockRegistry.FLOURISHING_WOOD)
                 .withName("ars_nouveau.page.wilden_dens")
                 .withIcon(BlockRegistry.FLOURISHING_WOOD)
-                .withTextPage("ars_nouveau.page1.wilden_dens")
+                .withIntroPageNoIncrement("ars_nouveau.page1.wilden_dens")
         );
 
         addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.UNSTABLE_RELIQUARY)
                 .withIcon(AddonItemRegistry.UNSTABLE_RELIQUARY)
-                .withTextPage("ars_additions.page.unstable_reliquary")
+                .withIntroPageNoIncrement("ars_additions.page.unstable_reliquary")
         ).withRelation(glyph(EffectMark.INSTANCE)).withRelation(glyph(MethodRecall.INSTANCE));
 
-        addPage(EntryBuilder.of(MACHINES, AddonBlockRegistry.ENDER_SOURCE_JAR).withIcon(AddonBlockRegistry.ENDER_SOURCE_JAR).withTextPage("ars_additions.page.ender_source_jar").withCraftingPages(AddonBlockRegistry.ENDER_SOURCE_JAR));
-        addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.XP_JAR).withIcon(AddonItemRegistry.XP_JAR).withTextPage("ars_additions.page.ender_source_jar").withCraftingPages(AddonItemRegistry.XP_JAR));
-        addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.HANDY_HAVERSACK).withIcon(AddonItemRegistry.HANDY_HAVERSACK).withTextPage("ars_additions.page.handy_haversack").withCraftingPages(AddonItemRegistry.HANDY_HAVERSACK));
+        addPage(EntryBuilder.of(MACHINES, AddonBlockRegistry.ENDER_SOURCE_JAR).withIcon(AddonBlockRegistry.ENDER_SOURCE_JAR).withIntroPageNoIncrement("ars_additions.page.ender_source_jar").withCraftingPages(AddonBlockRegistry.ENDER_SOURCE_JAR));
+        addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.XP_JAR).withIcon(AddonItemRegistry.XP_JAR).withIntroPageNoIncrement("ars_additions.page.xp_jar").withCraftingPages(AddonItemRegistry.XP_JAR));
+        addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.HANDY_HAVERSACK).withIcon(AddonItemRegistry.HANDY_HAVERSACK).withIntroPageNoIncrement("ars_additions.page.handy_haversack").withCraftingPages(AddonItemRegistry.HANDY_HAVERSACK));
 
         DocEntryBuilder charmBuilder = EntryBuilder.of(EQUIPMENT, AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.FIRE_RESISTANCE))
                 .withName("ars_additions.page.charms")
                 .withIcon(AddonItemRegistry.CHARMS.get(CharmRegistry.CharmType.FIRE_RESISTANCE))
-                .withTextPage("ars_additions.page1.charms");
+                .withIntroPageNoIncrement("ars_additions.page1.charms");
 
         for (Map.Entry<CharmRegistry.CharmType, ItemRegistryWrapper<Item>> entry : AddonItemRegistry.CHARMS.entrySet().stream().sorted(Comparator.comparing(entry -> entry.getKey().getName())).toList()) {
             CharmRegistry.CharmType charmType = entry.getKey();
@@ -134,18 +141,58 @@ public class AddonDocumentation {
         }
         addPage(charmBuilder);
 
-        addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.IMBUED_SPELL_PARCHMENT).withIcon(AddonItemRegistry.IMBUED_SPELL_PARCHMENT).withTextPage("ars_additions.page.imbued_spell_parchment").withCraftingPages(AddonItemRegistry.IMBUED_SPELL_PARCHMENT));
+        addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.IMBUED_SPELL_PARCHMENT).withIcon(AddonItemRegistry.IMBUED_SPELL_PARCHMENT).withIntroPageNoIncrement("ars_additions.page.imbued_spell_parchment").withCraftingPages(AddonItemRegistry.IMBUED_SPELL_PARCHMENT));
+
+        addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.MEMORY_CRYSTAL)
+                .withIcon(AddonItemRegistry.MEMORY_CRYSTAL)
+                .withIntroPageNoIncrement("ars_additions.page.memory_crystal")
+                .withCraftingPages(AddonItemRegistry.MEMORY_CRYSTAL)
+        );
+
+        addPage(EntryBuilder.of(EQUIPMENT, AddonItemRegistry.ADVANCED_DOMINION_WAND)
+                .withIcon(AddonItemRegistry.ADVANCED_DOMINION_WAND)
+                .withIntroPageNoIncrement("ars_additions.page.advanced_dominion_wand")
+                .withCraftingPages(AddonItemRegistry.ADVANCED_DOMINION_WAND)
+        );
+
+        addPage(EntryBuilder.of(MACHINES, AddonBlockRegistry.SOURCE_SPAWNER)
+                .withIcon(AddonBlockRegistry.SOURCE_SPAWNER)
+                .withIntroPageNoIncrement("ars_additions.page.source_spawner")
+        );
+
+        addPage(EntryBuilder.of(MACHINES, BlockRegistry.SCRIBES_BLOCK)
+                .withName("ars_additions.page.bulk_scribing")
+                .withIcon(BlockRegistry.SCRIBES_BLOCK)
+                .withIntroPageNoIncrement("ars_additions.page1.bulk_scribing")
+        );
 
         addPage(EntryBuilder.of(STRUCTURES, Blocks.BOOKSHELF)
                 .withName("ars_additions.page.arcane_library")
                 .withIcon(Blocks.BOOKSHELF)
-                .withTextPage("ars_additions.page1.arcane_library")
+                .withIntroPageNoIncrement("ars_additions.page1.arcane_library")
         );
     }
 
     @SubscribeEvent
     public static void editPages(ReloadDocumentationEvent.Post event) {
+        DocEntry enchantingApparatus = block(BlockRegistry.ENCHANTING_APP_BLOCK);
+        if (enchantingApparatus != null) {
+            int insertIndex = Math.min(1, enchantingApparatus.pages().size());
+            enchantingApparatus.pages().add(insertIndex, TextEntry.create(
+                    Component.translatable("ars_additions.page1.wixie_enchanting_apparatus"),
+                    Component.translatable("ars_additions.page.wixie_enchanting_apparatus")
+            ));
+        }
 
+        DocEntry wixieCharm = item(ItemsRegistry.WIXIE_CHARM);
+        if (wixieCharm != null) {
+            // Insert after the "Multi-Item Crafting" page (index 4) in the Wixie Charm entry
+            int insertIndex = Math.min(5, wixieCharm.pages().size());
+            wixieCharm.pages().add(insertIndex, TextEntry.create(
+                    Component.translatable("ars_additions.page1.wixie_enchanting_apparatus"),
+                    Component.translatable("ars_additions.page.wixie_enchanting_apparatus")
+            ));
+        }
     }
 
     private static DocEntry block(BlockRegistryWrapper<? extends Block> block) {

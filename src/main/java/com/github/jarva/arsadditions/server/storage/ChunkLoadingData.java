@@ -37,8 +37,11 @@ public class ChunkLoadingData extends SavedData {
     }
 
     public boolean updateChunk(UUID uuid, ChunkPos pos, boolean status) {
-        Set<ChunkPos> chunkSet = chunks.getOrDefault(uuid, new HashSet<>());
+        Set<ChunkPos> chunkSet = chunks.computeIfAbsent(uuid, ignored -> new HashSet<>());
         boolean updated = status ? chunkSet.add(pos) : chunkSet.remove(pos);
+        if (!status && chunkSet.isEmpty()) {
+            chunks.remove(uuid);
+        }
         if (updated) setDirty();
         return updated;
     }
@@ -108,8 +111,10 @@ public class ChunkLoadingData extends SavedData {
 
     public static boolean updateChunk(ServerLevel level, UUID uuid, ChunkPos pos, boolean shouldLoad) {
         boolean updated = getData(level).updateChunk(uuid, pos, shouldLoad);
-        logInfo(shouldLoad, pos, uuid);
-        TICKET_CONTROLLER.forceChunk(level, uuid, pos.x, pos.z, shouldLoad, true);
+        if (updated) {
+            logInfo(shouldLoad, pos, uuid);
+            TICKET_CONTROLLER.forceChunk(level, uuid, pos.x, pos.z, shouldLoad, true);
+        }
         return updated;
     }
 

@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions;
 
 import com.github.jarva.arsadditions.common.advancement.Triggers;
+import com.github.jarva.arsadditions.server.storage.ChunkLoadingData;
 import com.github.jarva.arsadditions.common.util.DispenserExperienceGemBehavior;
 import com.github.jarva.arsadditions.datagen.EnchantmentDatagen;
 import com.github.jarva.arsadditions.server.util.AsyncLocator;
@@ -24,6 +25,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.world.chunk.RegisterTicketControllersEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
@@ -45,6 +47,7 @@ public class ArsAdditions {
         modEventBus.addListener(this::client);
         modEventBus.addListener(this::post);
         modEventBus.addListener(this::imc);
+        modEventBus.addListener(this::registerTicketControllers);
 
         NeoForge.EVENT_BUS.addListener(this::setupExecutor);
         NeoForge.EVENT_BUS.addListener(this::shutdownExecutor);
@@ -77,6 +80,10 @@ public class ArsAdditions {
         InterModComms.sendTo(MODID, "apothic_enchanting", "set_ench_hard_cap",
                 () -> Pair.of(EnchantmentDatagen.SPELLWEAVE_ENCHANTMENT, PerkSlot.PERK_SLOTS.values().stream().map(PerkSlot::value).max(Integer::compareTo).orElse(3))
         );
+    }
+
+    private void registerTicketControllers(RegisterTicketControllersEvent event) {
+        event.register(ChunkLoadingData.TICKET_CONTROLLER);
     }
 
     private void setupExecutor(ServerAboutToStartEvent event) {

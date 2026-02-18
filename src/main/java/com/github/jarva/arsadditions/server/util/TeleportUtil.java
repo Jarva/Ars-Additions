@@ -25,10 +25,12 @@ public class TeleportUtil {
 
     public static void teleport(ServerLevel level, String dimension, BlockPos pos, Vec2 rotation, Entity player) {
         ServerLevel dim = PortalTile.getServerLevel(dimension, level);
+        if (dim == null) return;
         teleport(dim, pos, rotation, player);
     }
 
     public static void teleport(ServerLevel level, BlockPos pos, Vec2 rotation, Entity player) {
+        if (level == null) return;
         PortalTile.teleportEntityTo(player, level, pos, rotation);
 
         createTeleportDecoration(level, pos);

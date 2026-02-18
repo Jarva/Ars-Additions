@@ -80,7 +80,9 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
         if (!be.getStack().isEmpty()) {
             if (player instanceof ServerPlayer serverPlayer) {
                 ItemStack item = be.removeItemNoUpdate(0);
-                serverPlayer.getInventory().add(item);
+                if (!serverPlayer.getInventory().add(item)) {
+                    serverPlayer.drop(item, false);
+                }
             }
             return ItemInteractionResult.SUCCESS;
         }

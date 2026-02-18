@@ -80,6 +80,9 @@ public record PacketMultiTargetConnection(List<BlockPos> blockPositions, List<In
 
             MinecraftServer server = serverLevel.getServer();
             ServerLevel originLevel = server.getLevel(data.level().get());
+            if (originLevel == null) {
+                return;
+            }
 
             Triple<IWandable, LivingEntity, BlockPos> stored = getWandable(originLevel, data.pos(), data.entityId());
             IWandable storedWandable = stored.getLeft();

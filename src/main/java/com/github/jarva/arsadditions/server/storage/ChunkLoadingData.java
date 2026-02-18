@@ -37,12 +37,18 @@ public class ChunkLoadingData extends SavedData {
     }
 
     public boolean updateChunk(UUID uuid, ChunkPos pos, boolean status) {
-        Set<ChunkPos> chunkSet = chunks.computeIfAbsent(uuid, ignored -> new HashSet<>());
-        boolean updated = status ? chunkSet.add(pos) : chunkSet.remove(pos);
-        if (!status && chunkSet.isEmpty()) {
-            chunks.remove(uuid);
+        Set<ChunkPos> chunkSet = status ? chunks.computeIfAbsent(uuid, k -> new HashSet<>()) : chunks.get(uuid);
+        if (chunkSet == null) {
+            return false;
         }
-        if (updated) setDirty();
+
+        boolean updated = status ? chunkSet.add(pos) : chunkSet.remove(pos);
+        if (updated) {
+            if (!status && chunkSet.isEmpty()) {
+                chunks.remove(uuid);
+            }
+            setDirty();
+        }
         return updated;
     }
 

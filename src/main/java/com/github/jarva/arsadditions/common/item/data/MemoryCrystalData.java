@@ -19,6 +19,11 @@ public record MemoryCrystalData(
 ) {
     public static final int MAX_SLOTS = 10;
 
+    public MemoryCrystalData {
+        slots = normalizeSlots(slots);
+        selectedSlot = clampSelectedSlot(selectedSlot);
+    }
+
     public record MemorySlot(Optional<CompoundTag> data, boolean locked) {
         public static final Codec<MemorySlot> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
@@ -51,6 +56,28 @@ public record MemoryCrystalData(
             slots.add(MemorySlot.EMPTY);
         }
         return slots;
+    }
+
+    private static List<MemorySlot> normalizeSlots(List<MemorySlot> slots) {
+        List<MemorySlot> normalized = new ArrayList<>(MAX_SLOTS);
+        if (slots != null) {
+            int upperBound = Math.min(slots.size(), MAX_SLOTS);
+            for (int i = 0; i < upperBound; i++) {
+                MemorySlot slot = slots.get(i);
+                normalized.add(slot == null ? MemorySlot.EMPTY : slot);
+            }
+        }
+        while (normalized.size() < MAX_SLOTS) {
+            normalized.add(MemorySlot.EMPTY);
+        }
+        return List.copyOf(normalized);
+    }
+
+    private static int clampSelectedSlot(int selectedSlot) {
+        if (selectedSlot < 0) {
+            return 0;
+        }
+        return Math.min(selectedSlot, MAX_SLOTS - 1);
     }
 
     public static MemoryCrystalData fromItemStack(ItemStack stack) {

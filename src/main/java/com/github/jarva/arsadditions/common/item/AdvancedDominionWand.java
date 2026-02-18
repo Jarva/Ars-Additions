@@ -144,11 +144,14 @@ public class AdvancedDominionWand extends Item implements IRadialProvider {
         if (level.isClientSide) {
             return;
         }
+        if (!(entity instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
 
         if (data.pos().isPresent() && data.level().isPresent()) {
             ServerLevel serverLevel = getServerLevel((ServerLevel) level, data.level().get());
             if (serverLevel != null && serverLevel.getBlockEntity(data.pos().get()) instanceof IWandable wandable) {
-                Networking.sendToPlayerClient(new HighlightAreaPacket(wandable.getWandHighlight(new ArrayList<>()), HIGHLIGHT_TICKS), (ServerPlayer) entity);
+                Networking.sendToPlayerClient(new HighlightAreaPacket(wandable.getWandHighlight(new ArrayList<>()), HIGHLIGHT_TICKS), serverPlayer);
             }
             return;
         }
@@ -156,7 +159,7 @@ public class AdvancedDominionWand extends Item implements IRadialProvider {
         if (data.entityId().isPresent() && data.level().isPresent()) {
             ServerLevel serverLevel = getServerLevel((ServerLevel) level, data.level().get());
             if (serverLevel != null && serverLevel.getEntity(data.entityId().get()) instanceof IWandable wandable) {
-                Networking.sendToPlayerClient(new HighlightAreaPacket(wandable.getWandHighlight(new ArrayList<>()), HIGHLIGHT_TICKS), (ServerPlayer) entity);
+                Networking.sendToPlayerClient(new HighlightAreaPacket(wandable.getWandHighlight(new ArrayList<>()), HIGHLIGHT_TICKS), serverPlayer);
             }
         }
     }
@@ -276,7 +279,13 @@ public class AdvancedDominionWand extends Item implements IRadialProvider {
     }
 
     private InteractionResult attemptConnection(MinecraftServer server, AdvancedDominionData data, Player player, Triple<IWandable, LivingEntity, BlockPos> target) {
+        if (data.level().isEmpty()) {
+            return InteractionResult.FAIL;
+        }
         ServerLevel origin = server.getLevel(data.level().get());
+        if (origin == null) {
+            return InteractionResult.FAIL;
+        }
 
         IWandable targetWandable = target.getLeft();
         LivingEntity targetLivingEntity = target.getMiddle();

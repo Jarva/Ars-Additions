@@ -91,8 +91,11 @@ public class RitualChunkLoading extends AbstractRitual {
     }
 
     public int getConsumedCount() {
-        Item configured = getConfiguredItem();
-        long consumedCount = getConsumedItems().stream().filter(item -> item.is(configured)).count();
+        Optional<Item> configured = getConfiguredItem();
+        if (configured.isEmpty()) {
+            return 0;
+        }
+        long consumedCount = getConsumedItems().stream().filter(item -> item.is(configured.get())).count();
 
         return (int) Math.min(consumedCount, ServerConfig.SERVER.chunkloading_radius_increment_max.get());
     }
@@ -104,19 +107,18 @@ public class RitualChunkLoading extends AbstractRitual {
 
         if (getConsumedCount() == ServerConfig.SERVER.chunkloading_radius_increment_max.get()) return super.canConsumeItem(stack);
 
-        Item configured = getConfiguredItem();
-        return stack.is(configured);
+        return getConfiguredItem().map(stack::is).orElse(false);
     }
 
-    public Item getConfiguredItem() {
-        if (getWorld() == null) return null;
+    public Optional<Item> getConfiguredItem() {
+        if (getWorld() == null) return Optional.empty();
 
         ResourceLocation item = ResourceLocation.tryParse(ServerConfig.SERVER.chunkloading_radius_increment_item.get());
-        if (item == null) return null;
+        if (item == null) return Optional.empty();
 
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, item);
         Optional<? extends Holder<Item>> optional = getWorld().holderLookup(Registries.ITEM).get(key);
-        return optional.map(Holder::value).orElse(null);
+        return optional.map(Holder::value);
     }
 
     @Override

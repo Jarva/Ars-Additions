@@ -323,7 +323,8 @@ public class MemoryCrystal extends Item implements IRadialProvider {
     private Optional<MemoryHandler> getHandlerFromData(CompoundTag data) {
         return Optional.of(data)
             .filter(tag -> tag.contains(NBT_HANDLER_ID))
-            .map(tag -> ResourceLocation.parse(tag.getString(NBT_HANDLER_ID)))
-            .map(MemoryHandlerRegistry::get);
+            .flatMap(tag -> Optional.ofNullable(ResourceLocation.tryParse(tag.getString(NBT_HANDLER_ID))))
+            .map(MemoryHandlerRegistry::get)
+            .flatMap(Optional::ofNullable);
     }
 }

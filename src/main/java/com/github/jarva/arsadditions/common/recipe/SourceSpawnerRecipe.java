@@ -47,7 +47,7 @@ public record SourceSpawnerRecipe(ResourceLocation id, Optional<ResourceOrTag<En
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider provider) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

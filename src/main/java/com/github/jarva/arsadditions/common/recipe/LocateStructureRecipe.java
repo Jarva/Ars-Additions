@@ -71,7 +71,7 @@ public class LocateStructureRecipe implements Recipe<RecipeInput> {
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider provider) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

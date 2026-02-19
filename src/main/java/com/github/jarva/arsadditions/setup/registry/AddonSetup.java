@@ -12,6 +12,7 @@ public class AddonSetup {
 
         AddonBlockRegistry.BLOCKS.register(modEventBus);
         AddonBlockRegistry.BLOCK_ENTITIES.register(modEventBus);
+        AddonEntityRegistry.ENTITIES.register(modEventBus);
         AddonItemRegistry.ITEMS.register(modEventBus);
         AddonLootItemFunctionsRegistry.FUNCTION_TYPES.register(modEventBus);
         AddonEffectRegistry.EFFECTS.register(modEventBus);

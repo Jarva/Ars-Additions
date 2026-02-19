@@ -13,6 +13,7 @@ public class AddonItemNames {
     public static final String HANDY_HAVERSACK = "handy_haversack";
     public static final String ADVANCED_DOMINION_WAND = "advanced_dominion_wand";
     public static final String WAYFINDER = "wayfinder";
+    public static final String MAGIC_CARPET = "magic_carpet";
     public static final String FIRE_RESISTANCE_CHARM = "fire_resistance_charm";
     public static final String UNDYING_CHARM = "undying_charm";
     public static final String DISPEL_PROTECTION_CHARM = "dispel_protection_charm";

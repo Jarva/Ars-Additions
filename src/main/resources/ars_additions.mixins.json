@@ -6,6 +6,7 @@
   "mixins": [
     "CasterTomeRegistryMixin",
     "EffectBlinkMixin",
+    "LivingEntityAccessor",
     "charms.PiglinAiMixin",
     "charms.PiglinBruteAiMixin",
     "spellweave.AlterationTableMixin",

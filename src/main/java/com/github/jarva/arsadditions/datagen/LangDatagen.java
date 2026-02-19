@@ -103,6 +103,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("item.ars_additions.bound_wayfinder", "Bound Wayfinder");
         this.add("item.ars_additions.imbued_spell_parchment", "Imbued Spell Parchment");
         this.add("item.ars_additions.memory_crystal", "Memory Crystal");
+        this.add("item.ars_additions.magic_carpet", "Magic Carpet");
+        this.add("entity.ars_additions.magic_carpet", "Magic Carpet");
 
         for (CharmRegistry.CharmType charm : CharmRegistry.CharmType.values()) {
             this.add("page.ars_additions." + charm.getSerializedName() + ".title", charm.getName());

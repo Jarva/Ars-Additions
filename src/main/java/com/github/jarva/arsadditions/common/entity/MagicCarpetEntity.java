@@ -1,0 +1,434 @@
+package com.github.jarva.arsadditions.common.entity;
+
+import com.github.jarva.arsadditions.mixin.LivingEntityAccessor;
+import com.github.jarva.arsadditions.setup.registry.AddonEntityRegistry;
+import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.DismountHelper;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.util.GeckoLibUtil;
+
+public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
+    public static final String DESCEND_INPUT_TAG = "ars_additions_magic_carpet_descend";
+    private static final EntityDataAccessor<Float> DATA_ID_SIDE_TILT = SynchedEntityData.defineId(MagicCarpetEntity.class, EntityDataSerializers.FLOAT);
+    private static final int MAX_PASSENGERS = 2;
+    private static final float FRONT_PASSENGER_OFFSET = 0.2F;
+    private static final float BACK_PASSENGER_OFFSET = -0.6F;
+    private static final double PASSENGER_HEIGHT_OFFSET = 0.08D;
+    private static final double DISMOUNT_TOP_OFFSET = 0.08D;
+    private static final float MAX_SIDE_TILT = 18.0F;
+    private static final float SIDE_TILT_LERP = 0.25F;
+
+    private static final double MAX_HORIZONTAL_SPEED = 0.90D;
+    private static final double MAX_VERTICAL_SPEED = 0.30D;
+    private static final double HORIZONTAL_ACCELERATION = 0.045D;
+    private static final double VERTICAL_ACCELERATION = 0.05D;
+    private static final double RIDDEN_DRAG = 0.96D;
+    private static final double VERTICAL_DRAG = 0.85D;
+    private static final double IDLE_DRAG = 0.8D;
+    private static final double IDLE_VERTICAL_DRAG = 0.65D;
+    private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation MOVE_ANIMATION = RawAnimation.begin().thenLoop("move");
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private int lerpSteps;
+    private double lerpX;
+    private double lerpY;
+    private double lerpZ;
+    private double lerpYRot;
+    private double lerpXRot;
+
+    public MagicCarpetEntity(EntityType<? extends MagicCarpetEntity> entityType, Level level) {
+        super(entityType, level);
+        this.blocksBuilding = true;
+        this.setNoGravity(true);
+    }
+
+    public MagicCarpetEntity(Level level, double x, double y, double z) {
+        this(AddonEntityRegistry.MAGIC_CARPET_ENTITY.get(), level);
+        this.setPos(x, y, z);
+        this.xo = x;
+        this.yo = y;
+        this.zo = z;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 2, this::animationPredicate));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_ID_SIDE_TILT, 0.0F);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        this.setNoGravity(true);
+        this.tickLerp();
+
+        if (this.isControlledByLocalInstance()) {
+            LivingEntity controller = this.getControllingPassenger();
+            if (controller != null) {
+                this.applyControlledMovement(controller);
+            } else {
+                this.applyIdleMovement();
+            }
+
+            this.move(MoverType.SELF, this.getDeltaMovement());
+        } else {
+            this.setDeltaMovement(Vec3.ZERO);
+        }
+
+        this.checkInsideBlocks();
+    }
+
+    private void tickLerp() {
+        if (this.isControlledByLocalInstance()) {
+            this.lerpSteps = 0;
+            this.syncPacketPositionCodec(this.getX(), this.getY(), this.getZ());
+        }
+
+        if (this.lerpSteps > 0) {
+            this.lerpPositionAndRotationStep(this.lerpSteps, this.lerpX, this.lerpY, this.lerpZ, this.lerpYRot, this.lerpXRot);
+            this.lerpSteps--;
+        }
+    }
+
+    @Override
+    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
+        this.lerpX = x;
+        this.lerpY = y;
+        this.lerpZ = z;
+        this.lerpYRot = (double) yRot;
+        this.lerpXRot = (double) xRot;
+        this.lerpSteps = 10;
+    }
+
+    @Override
+    public double lerpTargetX() {
+        return this.lerpSteps > 0 ? this.lerpX : this.getX();
+    }
+
+    @Override
+    public double lerpTargetY() {
+        return this.lerpSteps > 0 ? this.lerpY : this.getY();
+    }
+
+    @Override
+    public double lerpTargetZ() {
+        return this.lerpSteps > 0 ? this.lerpZ : this.getZ();
+    }
+
+    @Override
+    public float lerpTargetXRot() {
+        return this.lerpSteps > 0 ? (float) this.lerpXRot : this.getXRot();
+    }
+
+    @Override
+    public float lerpTargetYRot() {
+        return this.lerpSteps > 0 ? (float) this.lerpYRot : this.getYRot();
+    }
+
+    private void applyControlledMovement(LivingEntity controller) {
+        if (!(controller instanceof Player player)) {
+            this.applyIdleMovement();
+            return;
+        }
+
+        player.setSprinting(false);
+
+        float previousYaw = this.getYRot();
+        float previousPitch = this.getXRot();
+        this.setXRot(player.getXRot() * 0.5F);
+        this.setYRot(player.getYRot());
+        this.xRotO = previousPitch;
+        this.yRotO = previousYaw;
+        this.updateSideTilt(player.xxa);
+
+        Vec3 riddenInput = this.getRiddenInput(player);
+        Vec3 horizontalIntent = new Vec3(riddenInput.x, 0.0D, riddenInput.z);
+
+        if (horizontalIntent.lengthSqr() > 1.0D) {
+            horizontalIntent = horizontalIntent.normalize();
+        }
+
+        Vec3 worldIntent = this.toWorldIntent(horizontalIntent, player.getYRot());
+        double verticalIntent = this.getVerticalIntent(player, horizontalIntent);
+
+        Vec3 velocity = this.getDeltaMovement();
+        velocity = velocity.add(worldIntent.scale(HORIZONTAL_ACCELERATION));
+        velocity = new Vec3(velocity.x, velocity.y + verticalIntent * VERTICAL_ACCELERATION, velocity.z);
+
+        if (horizontalIntent.lengthSqr() < 1.0E-4D) {
+            velocity = new Vec3(velocity.x * 0.75D, velocity.y, velocity.z * 0.75D);
+        }
+
+        velocity = this.clampVelocity(velocity);
+        this.setDeltaMovement(velocity.multiply(RIDDEN_DRAG, VERTICAL_DRAG, RIDDEN_DRAG));
+    }
+
+    private double getVerticalIntent(Player player, Vec3 horizontalIntent) {
+        if (this.isRiderJumping(player)) {
+            return 1.0D;
+        }
+        if (this.isRiderDescending(player)) {
+            return -1.0D;
+        }
+        if (Math.abs(horizontalIntent.z) > 0.01D) {
+            return -Mth.sin(player.getXRot() * Mth.DEG_TO_RAD) * Math.abs(horizontalIntent.z);
+        }
+        return 0.0D;
+    }
+
+    private boolean isRiderJumping(LivingEntity rider) {
+        return rider instanceof LivingEntityAccessor accessor && accessor.ars_additions$isJumping();
+    }
+
+    private boolean isRiderDescending(Player rider) {
+        return rider.getPersistentData().getBoolean(DESCEND_INPUT_TAG);
+    }
+
+    private void applyIdleMovement() {
+        float previousPitch = this.getXRot();
+        this.setXRot(Mth.lerp(0.2F, this.getXRot(), 0.0F));
+        this.xRotO = previousPitch;
+        this.updateSideTilt(0.0F);
+
+        Vec3 velocity = this.getDeltaMovement().multiply(IDLE_DRAG, IDLE_VERTICAL_DRAG, IDLE_DRAG);
+        if (velocity.lengthSqr() < 1.0E-4D) {
+            velocity = Vec3.ZERO;
+        }
+        this.setDeltaMovement(velocity);
+    }
+
+    private void updateSideTilt(float strafeInput) {
+        float targetTilt = Mth.clamp(strafeInput, -1.0F, 1.0F) * MAX_SIDE_TILT;
+        this.setSideTilt(Mth.lerp(SIDE_TILT_LERP, this.getSideTilt(), targetTilt));
+    }
+
+    public float getSideTilt() {
+        return this.entityData.get(DATA_ID_SIDE_TILT);
+    }
+
+    private void setSideTilt(float sideTilt) {
+        this.entityData.set(DATA_ID_SIDE_TILT, sideTilt);
+    }
+
+    private Vec3 clampVelocity(Vec3 velocity) {
+        Vec3 horizontal = new Vec3(velocity.x, 0.0D, velocity.z);
+        double horizontalSpeed = horizontal.length();
+        if (horizontalSpeed > MAX_HORIZONTAL_SPEED) {
+            double scale = MAX_HORIZONTAL_SPEED / horizontalSpeed;
+            velocity = new Vec3(velocity.x * scale, velocity.y, velocity.z * scale);
+        }
+        return new Vec3(velocity.x, Mth.clamp(velocity.y, -MAX_VERTICAL_SPEED, MAX_VERTICAL_SPEED), velocity.z);
+    }
+
+    @Override
+    public InteractionResult interact(Player player, InteractionHand hand) {
+        InteractionResult result = super.interact(player, hand);
+        if (result != InteractionResult.PASS) {
+            return result;
+        }
+        if (player.isSecondaryUseActive()) {
+            return InteractionResult.PASS;
+        }
+
+        if (!this.level().isClientSide) {
+            return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
+        this.resetFallDistance();
+    }
+
+    @Override
+    public boolean isPickable() {
+        return this.isAlive();
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return this.isAlive();
+    }
+
+    @Override
+    public boolean canCollideWith(Entity entity) {
+        return (entity.canBeCollidedWith() || entity.isPushable()) && !this.isPassengerOfSameVehicle(entity);
+    }
+
+    @Override
+    public boolean isPushable() {
+        return this.isAlive();
+    }
+
+    @Override
+    public boolean canSprint() {
+        return false;
+    }
+
+    @Override
+    public void push(Entity entity) {
+        if (!this.hasPassenger(entity)) {
+            if (entity instanceof MagicCarpetEntity) {
+                if (entity.getBoundingBox().minY < this.getBoundingBox().maxY) {
+                    super.push(entity);
+                }
+            } else if (entity.getBoundingBox().minY <= this.getBoundingBox().minY) {
+                super.push(entity);
+            }
+        }
+    }
+
+    @Override
+    protected void removePassenger(Entity passenger) {
+        super.removePassenger(passenger);
+        if (!this.isVehicle()) {
+            this.setDeltaMovement(Vec3.ZERO);
+            this.lerpSteps = 0;
+        }
+    }
+
+    @Override
+    protected boolean canAddPassenger(Entity passenger) {
+        return passenger instanceof Player && this.getPassengers().size() < MAX_PASSENGERS;
+    }
+
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        return this.getFirstPassenger() instanceof LivingEntity livingEntity ? livingEntity : null;
+    }
+
+    @Override
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float partialTick) {
+        float zOffset = this.getPassengerSeatOffset(passenger);
+        double yOffset = (double) (dimensions.height() / 3.0F) + PASSENGER_HEIGHT_OFFSET;
+        return new Vec3(0.0D, yOffset, (double) zOffset).yRot(-this.getYRot() * Mth.DEG_TO_RAD);
+    }
+
+    @Override
+    protected void positionRider(Entity passenger, MoveFunction callback) {
+        super.positionRider(passenger, callback);
+        if (passenger instanceof LivingEntity livingEntity) {
+            livingEntity.yBodyRot = this.getYRot();
+        }
+    }
+
+    @Override
+    public Vec3 getDismountLocationForPassenger(LivingEntity livingEntity) {
+        Vec3 topCenter = new Vec3(this.getX(), this.getBoundingBox().maxY + DISMOUNT_TOP_OFFSET, this.getZ());
+        for (Pose pose : livingEntity.getDismountPoses()) {
+            if (DismountHelper.canDismountTo(this.level(), topCenter, livingEntity, pose)) {
+                livingEntity.setPose(pose);
+                this.stabilizeDismount(livingEntity);
+                return topCenter;
+            }
+        }
+        this.stabilizeDismount(livingEntity);
+        return topCenter;
+    }
+
+    private void stabilizeDismount(LivingEntity livingEntity) {
+        Vec3 motion = livingEntity.getDeltaMovement();
+        livingEntity.setDeltaMovement(motion.x, 0.0D, motion.z);
+        livingEntity.resetFallDistance();
+    }
+
+    @Override
+    public ItemStack getPickResult() {
+        return new ItemStack(AddonItemRegistry.MAGIC_CARPET.get());
+    }
+
+    @Override
+    protected Item getDropItem() {
+        return AddonItemRegistry.MAGIC_CARPET.get();
+    }
+
+    private Vec3 toWorldIntent(Vec3 localIntent, float yawDegrees) {
+        if (localIntent.lengthSqr() < 1.0E-7D) {
+            return Vec3.ZERO;
+        }
+
+        float yawRadians = yawDegrees * Mth.DEG_TO_RAD;
+        float sinYaw = Mth.sin(yawRadians);
+        float cosYaw = Mth.cos(yawRadians);
+        return new Vec3(
+                localIntent.x * cosYaw - localIntent.z * sinYaw,
+                0.0D,
+                localIntent.z * cosYaw + localIntent.x * sinYaw
+        );
+    }
+
+    private Vec3 getRiddenInput(Player rider) {
+        float strafe = rider.xxa * 0.5F;
+        float forward = rider.zza;
+        if (forward <= 0.0F) {
+            forward *= 0.25F;
+        }
+        return new Vec3(strafe, 0.0D, forward);
+    }
+
+    private float getPassengerSeatOffset(Entity passenger) {
+        if (this.getPassengers().size() <= 1) {
+            return 0.0F;
+        }
+
+        int index = this.getPassengers().indexOf(passenger);
+        return index == 0 ? FRONT_PASSENGER_OFFSET : BACK_PASSENGER_OFFSET;
+    }
+
+    private PlayState animationPredicate(AnimationState<MagicCarpetEntity> state) {
+        Vec3 velocity = this.getDeltaMovement();
+        if (velocity.horizontalDistanceSqr() > 2.5E-3D || Math.abs(velocity.y) > 0.015D) {
+            return state.setAndContinue(MOVE_ANIMATION);
+        }
+        return state.setAndContinue(IDLE_ANIMATION);
+    }
+}

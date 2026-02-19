@@ -9,7 +9,6 @@ import net.minecraft.util.Mth;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class MagicCarpetRenderer extends GeoEntityRenderer<MagicCarpetEntity> {
-    private static final float MODEL_YAW_OFFSET = 90.0F;
     private static final float MAX_VISUAL_PITCH = 35.0F;
     private static final float MAX_VISUAL_SIDE_TILT = 18.0F;
 
@@ -29,10 +28,10 @@ public class MagicCarpetRenderer extends GeoEntityRenderer<MagicCarpetEntity> {
     @Override
     protected void applyRotations(MagicCarpetEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick, float nativeScale) {
         float interpolatedYaw = Mth.rotLerp(partialTick, animatable.yRotO, animatable.getYRot());
-        super.applyRotations(animatable, poseStack, ageInTicks, interpolatedYaw + MODEL_YAW_OFFSET, partialTick, nativeScale);
+        super.applyRotations(animatable, poseStack, ageInTicks, interpolatedYaw, partialTick, nativeScale);
         float interpolatedPitch = Mth.lerp(partialTick, animatable.xRotO, animatable.getXRot());
-        poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.clamp(interpolatedPitch, -MAX_VISUAL_PITCH, MAX_VISUAL_PITCH)));
+        poseStack.mulPose(Axis.XP.rotationDegrees(-Mth.clamp(interpolatedPitch, -MAX_VISUAL_PITCH, MAX_VISUAL_PITCH)));
         float sideTilt = Mth.clamp(animatable.getSideTilt(), -MAX_VISUAL_SIDE_TILT, MAX_VISUAL_SIDE_TILT);
-        poseStack.mulPose(Axis.XP.rotationDegrees(sideTilt));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(sideTilt));
     }
 }

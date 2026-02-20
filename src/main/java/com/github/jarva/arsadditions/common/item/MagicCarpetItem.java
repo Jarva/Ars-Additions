@@ -54,6 +54,7 @@ public class MagicCarpetItem extends Item {
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             MagicCarpetEntity carpet = new MagicCarpetEntity(level, hitResult.getLocation().x, hitResult.getLocation().y + 0.1D, hitResult.getLocation().z);
             carpet.setYRot(player.getYRot());
+            carpet.setOwnerUUID(player.getUUID());
             if (!level.noCollision(carpet, carpet.getBoundingBox().inflate(-0.1D))) {
                 return InteractionResultHolder.fail(itemStack);
             }

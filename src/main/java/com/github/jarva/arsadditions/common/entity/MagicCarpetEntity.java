@@ -4,6 +4,7 @@ import com.github.jarva.arsadditions.mixin.LivingEntityAccessor;
 import com.github.jarva.arsadditions.setup.registry.AddonEntityRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -36,8 +38,11 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.UUID;
+
 public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     public static final String DESCEND_INPUT_TAG = "ars_additions_magic_carpet_descend";
+    private static final String OWNER_UUID_TAG = "OwnerUUID";
     private static final EntityDataAccessor<Float> DATA_ID_SIDE_TILT = SynchedEntityData.defineId(MagicCarpetEntity.class, EntityDataSerializers.FLOAT);
     private static final int MAX_PASSENGERS = 2;
     private static final float FRONT_PASSENGER_OFFSET = 0.2F;
@@ -46,11 +51,25 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     private static final double DISMOUNT_TOP_OFFSET = 0.08D;
     private static final float MAX_SIDE_TILT = 18.0F;
     private static final float SIDE_TILT_LERP = 0.25F;
+    private static final double HITBOX_HALF_WIDTH = 12.0D / 16.0D;
+    private static final double HITBOX_HALF_LENGTH = 16.0D / 16.0D;
+    private static final double HITBOX_HEIGHT = 1.0D / 16.0D;
+    private static final double HITBOX_Z_OFFSET = -1.0D / 16.0D;
+    private static final double HITBOX_ROTATION_CLEARANCE = 1.0D / 16.0D;
 
     private static final double MAX_HORIZONTAL_SPEED = 0.90D;
     private static final double MAX_VERTICAL_SPEED = 0.30D;
     private static final double HORIZONTAL_ACCELERATION = 0.045D;
     private static final double VERTICAL_ACCELERATION = 0.05D;
+    private static final double SUMMON_STANDOFF_DISTANCE = 5.0D;
+    private static final double SUMMON_STANDOFF_TOLERANCE = 0.35D;
+    private static final double SUMMON_VERTICAL_ALIGN_EPSILON = 0.35D;
+    private static final double SUMMON_VERTICAL_TRACK_FACTOR = 0.4D;
+    private static final double SUMMON_APPROACH_SPEED = 0.72D;
+    private static final double SUMMON_CORRECTION_SPEED = 0.45D;
+    private static final double SUMMON_VERTICAL_SPEED = 0.22D;
+    private static final double SUMMON_VELOCITY_LERP = 0.35D;
+    private static final double SUMMON_PITCH_FACTOR = 16.0D;
     private static final double RIDDEN_DRAG = 0.96D;
     private static final double VERTICAL_DRAG = 0.85D;
     private static final double IDLE_DRAG = 0.8D;
@@ -64,11 +83,17 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     private double lerpZ;
     private double lerpYRot;
     private double lerpXRot;
+    private Direction hitboxFacing = Direction.NORTH;
+    @Nullable
+    private UUID ownerUUID;
+    @Nullable
+    private UUID summonTargetUUID;
 
     public MagicCarpetEntity(EntityType<? extends MagicCarpetEntity> entityType, Level level) {
         super(entityType, level);
         this.blocksBuilding = true;
         this.setNoGravity(true);
+        this.hitboxFacing = Direction.fromYRot((double) this.getYRot());
     }
 
     public MagicCarpetEntity(Level level, double x, double y, double z) {
@@ -97,10 +122,14 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
+        this.ownerUUID = compound.hasUUID(OWNER_UUID_TAG) ? compound.getUUID(OWNER_UUID_TAG) : null;
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
+        if (this.ownerUUID != null) {
+            compound.putUUID(OWNER_UUID_TAG, this.ownerUUID);
+        }
     }
 
     @Override
@@ -113,6 +142,8 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
             LivingEntity controller = this.getControllingPassenger();
             if (controller != null) {
                 this.applyControlledMovement(controller);
+            } else if (this.hasSummonTarget()) {
+                this.applySummonMovement();
             } else {
                 this.applyIdleMovement();
             }
@@ -122,6 +153,7 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
             this.setDeltaMovement(Vec3.ZERO);
         }
 
+        this.updateHitboxFacingSafely();
         this.checkInsideBlocks();
     }
 
@@ -173,6 +205,7 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     }
 
     private void applyControlledMovement(LivingEntity controller) {
+        this.clearSummonTarget();
         if (!(controller instanceof Player player)) {
             this.applyIdleMovement();
             return;
@@ -242,6 +275,137 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
             velocity = Vec3.ZERO;
         }
         this.setDeltaMovement(velocity);
+    }
+
+    private boolean hasSummonTarget() {
+        return this.summonTargetUUID != null;
+    }
+
+    private void clearSummonTarget() {
+        this.summonTargetUUID = null;
+    }
+
+    private void applySummonMovement() {
+        Player target = this.resolveSummonTargetPlayer();
+        if (target == null || !target.isAlive()) {
+            this.clearSummonTarget();
+            this.applyIdleMovement();
+            return;
+        }
+
+        Vec3 carpetPos = this.position();
+        double verticalDelta = target.getY() - carpetPos.y;
+        Vec3 horizontalDelta = new Vec3(target.getX() - carpetPos.x, 0.0D, target.getZ() - carpetPos.z);
+        double horizontalDistance = horizontalDelta.length();
+
+        boolean verticalAligned = Math.abs(verticalDelta) <= SUMMON_VERTICAL_ALIGN_EPSILON;
+        boolean inStandoffBand = horizontalDistance >= SUMMON_STANDOFF_DISTANCE - SUMMON_STANDOFF_TOLERANCE
+                && horizontalDistance <= SUMMON_STANDOFF_DISTANCE + SUMMON_STANDOFF_TOLERANCE;
+        if (verticalAligned && inStandoffBand) {
+            this.clearSummonTarget();
+            this.applyIdleMovement();
+            return;
+        }
+
+        Vec3 horizontalIntent = Vec3.ZERO;
+        double targetHorizontalSpeed = 0.0D;
+        if (horizontalDistance > 1.0E-5D) {
+            double minDistance = SUMMON_STANDOFF_DISTANCE - SUMMON_STANDOFF_TOLERANCE;
+            double maxDistance = SUMMON_STANDOFF_DISTANCE + SUMMON_STANDOFF_TOLERANCE;
+            if (horizontalDistance > maxDistance) {
+                horizontalIntent = horizontalDelta.scale(1.0D / horizontalDistance);
+                targetHorizontalSpeed = SUMMON_APPROACH_SPEED;
+            } else if (horizontalDistance < minDistance) {
+                horizontalIntent = horizontalDelta.scale(-1.0D / horizontalDistance);
+                targetHorizontalSpeed = SUMMON_CORRECTION_SPEED;
+            }
+        }
+
+        double verticalIntent = Mth.clamp(verticalDelta * SUMMON_VERTICAL_TRACK_FACTOR, -1.0D, 1.0D);
+
+        if (horizontalIntent.lengthSqr() > 1.0E-5D) {
+            float previousYaw = this.getYRot();
+            float targetYaw = (float) (Mth.atan2(-horizontalIntent.x, horizontalIntent.z) * Mth.RAD_TO_DEG);
+            this.setYRot(Mth.rotLerp(0.45F, previousYaw, targetYaw));
+            this.yRotO = previousYaw;
+        }
+
+        float previousPitch = this.getXRot();
+        this.setXRot(Mth.lerp(0.2F, this.getXRot(), (float) (-verticalIntent * SUMMON_PITCH_FACTOR)));
+        this.xRotO = previousPitch;
+        this.updateSideTilt(0.0F);
+
+        Vec3 desiredVelocity = new Vec3(
+                horizontalIntent.x * targetHorizontalSpeed,
+                verticalIntent * SUMMON_VERTICAL_SPEED,
+                horizontalIntent.z * targetHorizontalSpeed
+        );
+        Vec3 velocity = this.getDeltaMovement().lerp(desiredVelocity, SUMMON_VELOCITY_LERP);
+
+        if (horizontalIntent.lengthSqr() < 1.0E-5D) {
+            velocity = new Vec3(velocity.x * 0.8D, velocity.y, velocity.z * 0.8D);
+        }
+        if (Math.abs(verticalIntent) < 0.02D) {
+            velocity = new Vec3(velocity.x, velocity.y * 0.7D, velocity.z);
+        }
+
+        velocity = this.clampVelocity(velocity);
+        this.setDeltaMovement(velocity);
+    }
+
+    @Nullable
+    private Player resolveSummonTargetPlayer() {
+        if (this.summonTargetUUID == null) {
+            return null;
+        }
+
+        for (Player player : this.level().players()) {
+            if (this.summonTargetUUID.equals(player.getUUID())) {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public void setOwnerUUID(@Nullable UUID ownerUUID) {
+        this.ownerUUID = ownerUUID;
+    }
+
+    @Nullable
+    public UUID getOwnerUUID() {
+        return this.ownerUUID;
+    }
+
+    public boolean isOwnedBy(Player player) {
+        return this.ownerUUID == null || this.ownerUUID.equals(player.getUUID());
+    }
+
+    public boolean canBeSummonedBy(Player player) {
+        if (!this.isAlive() || !this.isOwnedBy(player)) {
+            return false;
+        }
+
+        LivingEntity controller = this.getControllingPassenger();
+        if (controller != null && controller != player) {
+            return false;
+        }
+
+        return !this.isVehicle() || this.hasPassenger(player);
+    }
+
+    public boolean summonTo(Player player) {
+        if (!this.canBeSummonedBy(player)) {
+            return false;
+        }
+
+        if (this.ownerUUID == null) {
+            this.ownerUUID = player.getUUID();
+        }
+        this.summonTargetUUID = player.getUUID();
+        if (!this.hasPassenger(player)) {
+            this.setDeltaMovement(this.getDeltaMovement().multiply(0.8D, 0.8D, 0.8D));
+        }
+        return true;
     }
 
     private void updateSideTilt(float strafeInput) {
@@ -384,6 +548,45 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     @Override
     public ItemStack getPickResult() {
         return new ItemStack(AddonItemRegistry.MAGIC_CARPET.get());
+    }
+
+    @Override
+    protected AABB makeBoundingBox() {
+        Direction facing = this.hitboxFacing;
+        if (facing == null) {
+            facing = Direction.fromYRot((double) this.getYRot());
+            if (facing == null) {
+                facing = Direction.NORTH;
+            }
+        }
+        return this.makeBoundingBoxForFacing(facing);
+    }
+
+    private AABB makeBoundingBoxForFacing(Direction facing) {
+        float yawRadians = facing.toYRot() * Mth.DEG_TO_RAD;
+        double sinYaw = Mth.sin(yawRadians);
+        double cosYaw = Mth.cos(yawRadians);
+        double centerX = this.getX() - HITBOX_Z_OFFSET * sinYaw;
+        double centerZ = this.getZ() + HITBOX_Z_OFFSET * cosYaw;
+        double halfX = facing.getAxis() == Direction.Axis.X ? HITBOX_HALF_LENGTH : HITBOX_HALF_WIDTH;
+        double halfZ = facing.getAxis() == Direction.Axis.X ? HITBOX_HALF_WIDTH : HITBOX_HALF_LENGTH;
+        double minY = this.getY();
+        return new AABB(centerX - halfX, minY, centerZ - halfZ, centerX + halfX, minY + HITBOX_HEIGHT, centerZ + halfZ);
+    }
+
+    private void updateHitboxFacingSafely() {
+        Direction desiredFacing = Direction.fromYRot((double) this.getYRot());
+        Direction currentFacing = this.hitboxFacing == null ? Direction.NORTH : this.hitboxFacing;
+        if (desiredFacing == currentFacing) {
+            return;
+        }
+
+        AABB targetBox = this.makeBoundingBoxForFacing(desiredFacing);
+        AABB clearanceBox = targetBox.inflate(HITBOX_ROTATION_CLEARANCE, 0.0D, HITBOX_ROTATION_CLEARANCE);
+        if (this.level().noBlockCollision(this, clearanceBox)) {
+            this.hitboxFacing = desiredFacing;
+            this.setBoundingBox(targetBox);
+        }
     }
 
     @Override

@@ -65,7 +65,7 @@ repositories {
 }
 
 base {
-    version = "${minecraft_version}-${new File('version').text.trim()}"
+    version = "${minecraft_version}-${file('version').text.trim()}"
     group = mod_group_id
     archivesName = mod_id
 }

@@ -216,6 +216,10 @@ public class LangDatagen extends LanguageProvider {
         this.add("chat.ars_additions.memory_crystal.cannot_lock_empty", "Cannot lock empty slot %s");
         this.add("chat.ars_additions.memory_crystal.unsupported_block", "This block is not supported");
         this.add("chat.ars_additions.memory_crystal.unsupported_entity", "This entity is not supported");
+        this.add("chat.ars_additions.magic_carpet.dismount_confirm", "Press %s again to dismount");
+        this.add("chat.ars_additions.magic_carpet.coming", "Your magic carpet is on its way.");
+        this.add("chat.ars_additions.magic_carpet.not_found", "No nearby magic carpet answers your call.");
+        this.add("chat.ars_additions.magic_carpet.busy", "That magic carpet is currently occupied.");
 
         this.add("chat.ars_additions.wixie_cauldron.storage.cleared", "Storage removed.");
         this.add("chat.ars_additions.wixie_cauldron.storage.set", "Storage bound.");

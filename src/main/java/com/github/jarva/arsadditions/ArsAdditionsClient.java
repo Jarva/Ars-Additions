@@ -12,6 +12,7 @@ import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonEntityRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.hollingsworth.arsnouveau.common.items.PerkItem;
 import com.hollingsworth.arsnouveau.common.items.data.BlockFillContents;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.math.Axis;
@@ -20,6 +21,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -30,8 +33,11 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ArsAdditionsClient {
@@ -75,23 +81,64 @@ public class ArsAdditionsClient {
     public static class ClientForgeEvents {
         private static final float MAX_PLAYER_PITCH_TILT = 35.0F;
         private static final float MAX_PLAYER_SIDE_TILT = 18.0F;
+        private static final int DESCEND_HOLD_TICKS = 5;
         private static final Set<Integer> CARPET_TILTED_PLAYERS = new HashSet<>();
+        private static int carpetShiftHoldTicks = 0;
 
         @SubscribeEvent
         public static void clientTick(ClientTickEvent.Post evt) {
-            if (Minecraft.getInstance().player == null)
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.player == null)
                 return;
 
-            boolean ridingCarpet = Minecraft.getInstance().player.getVehicle() instanceof MagicCarpetEntity;
-            boolean descendPressed = Minecraft.getInstance().options.keySprint.isDown() && ridingCarpet;
-            Minecraft.getInstance().player.getPersistentData().putBoolean(MagicCarpetEntity.DESCEND_INPUT_TAG, descendPressed);
+            boolean ridingCarpet = minecraft.player.getVehicle() instanceof MagicCarpetEntity;
+            boolean inGameplayInputContext = minecraft.screen == null;
+            boolean descendInputDown = ridingCarpet && inGameplayInputContext && minecraft.options.keyShift.isDown();
+
+            if (descendInputDown) {
+                carpetShiftHoldTicks++;
+            } else {
+                carpetShiftHoldTicks = 0;
+            }
+
+            boolean descendPressed = descendInputDown && carpetShiftHoldTicks >= DESCEND_HOLD_TICKS;
+            minecraft.player.getPersistentData().putBoolean(MagicCarpetEntity.DESCEND_INPUT_TAG, descendPressed);
             if (ridingCarpet) {
-                Minecraft.getInstance().player.setSprinting(false);
+                minecraft.player.setSprinting(false);
             }
 
             if(openTerm.consumeClick()) {
                 OpenTerminalPacket.openTerminal();
             }
+        }
+
+        @SubscribeEvent
+        public static void onItemTooltip(ItemTooltipEvent event) {
+            if (!(event.getItemStack().getItem() instanceof PerkItem perkItem) || perkItem.perk == null) {
+                return;
+            }
+
+            if (!isShiftDown()) {
+                return;
+            }
+
+            List<Component> tooltip = event.getToolTip();
+            boolean removedHoldShift = tooltip.removeIf(component ->
+                    component.getContents() instanceof TranslatableContents translatableContents
+                            && "tooltip.ars_nouveau.hold_shift".equals(translatableContents.getKey())
+            );
+            if (!removedHoldShift) {
+                return;
+            }
+
+            tooltip.add(Component.translatable(perkItem.perk.getDescriptionKey()));
+        }
+
+        private static boolean isShiftDown() {
+            Minecraft minecraft = Minecraft.getInstance();
+            long windowHandle = minecraft.getWindow().getWindow();
+            return InputConstants.isKeyDown(windowHandle, GLFW.GLFW_KEY_LEFT_SHIFT)
+                    || InputConstants.isKeyDown(windowHandle, GLFW.GLFW_KEY_RIGHT_SHIFT);
         }
 
         @SubscribeEvent

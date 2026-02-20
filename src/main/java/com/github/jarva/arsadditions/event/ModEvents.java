@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.event;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.commands.ArsCarpetCommand;
 import com.github.jarva.arsadditions.common.advancement.Triggers;
 import com.github.jarva.arsadditions.common.commands.ArsChunksCommand;
 import com.github.jarva.arsadditions.common.commands.SetLootTableCommand;
@@ -141,6 +142,7 @@ public class ModEvents {
         @SubscribeEvent
         public static void commandRegister(RegisterCommandsEvent event) {
             ArsChunksCommand.register(event.getDispatcher());
+            ArsCarpetCommand.register(event.getDispatcher());
             SetLootTableCommand.register(event.getDispatcher(), event.getBuildContext());
         }
 

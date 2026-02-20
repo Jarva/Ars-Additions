@@ -23,11 +23,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.phys.Vec2;
 
 import java.util.List;
 
-public class LocateStructureRecipeCategory implements IRecipeCategory<LocateStructureRecipe> {
+public class LocateStructureRecipeCategory implements IRecipeCategory<RecipeHolder<LocateStructureRecipe>> {
 
     public IDrawable background;
     public IDrawable icon;
@@ -41,7 +42,7 @@ public class LocateStructureRecipeCategory implements IRecipeCategory<LocateStru
     }
 
     @Override
-    public RecipeType<LocateStructureRecipe> getRecipeType() {
+    public RecipeType<RecipeHolder<LocateStructureRecipe>> getRecipeType() {
         return ModPlugin.LOCATE_STRUCTURE_RECIPE_TYPE;
     }
 
@@ -61,7 +62,8 @@ public class LocateStructureRecipeCategory implements IRecipeCategory<LocateStru
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, LocateStructureRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<LocateStructureRecipe> recipeHolder, IFocusGroup focuses) {
+        LocateStructureRecipe recipe = recipeHolder.value();
         builder.addSlot(RecipeIngredientRole.CATALYST, (int) center.x, (int) center.y).addIngredients(Ingredient.of(RitualRegistry.getRitualItemMap().get(RitualLocateStructure.RESOURCE_LOCATION)));
 
         List<Ingredient> inputs = recipe.getIngredients();
@@ -79,11 +81,11 @@ public class LocateStructureRecipeCategory implements IRecipeCategory<LocateStru
     }
 
     @Override
-    public void draw(LocateStructureRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<LocateStructureRecipe> recipeHolder, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        LocateStructureRecipe recipe = recipeHolder.value();
         Font renderer = Minecraft.getInstance().font;
         Component name = recipe.getName();
 
         guiGraphics.drawString(renderer, name, 0, 100, 10, false);
     }
 }
-

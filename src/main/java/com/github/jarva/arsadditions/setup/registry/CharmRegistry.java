@@ -15,12 +15,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class CharmRegistry {
-    private static CooldownManager<CharmType> cooldowns = new CooldownManager<>();
+    private static final CooldownManager<CharmCooldownKey> cooldowns = new CooldownManager<>();
+
+    private record CharmCooldownKey(CharmType type, UUID entityId) {}
 
     public enum CharmType implements StringRepresentable {
         FIRE_RESISTANCE(1000, 5,"Emberward", "Nullifies Fire Damage", Items.MAGMA_CREAM, Items.LAVA_BUCKET, Items.FLINT_AND_STEEL),
@@ -121,6 +124,7 @@ public class CharmRegistry {
     }
 
     public static int every(CharmType charmType, int ticks, LivingEntity entity, int charges) {
-        return cooldowns.shouldRun(charmType, entity.level().getGameTime(), ticks) ? charges : 0;
+        CharmCooldownKey key = new CharmCooldownKey(charmType, entity.getUUID());
+        return cooldowns.shouldRun(key, entity.level().getGameTime(), ticks) ? charges : 0;
     }
 }

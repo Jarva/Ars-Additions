@@ -36,6 +36,7 @@ public class AddonItemRegistry {
     public static final ItemRegistryWrapper<Item> ADVANCED_DOMINION_WAND;
     public static final ItemRegistryWrapper<Item> WAYFINDER;
     public static final ItemRegistryWrapper<Item> IMBUED_SPELL_PARCHMENT;
+    public static final ItemRegistryWrapper<Item> MEMORY_CRYSTAL;
 
     public static final HashMap<CharmRegistry.CharmType, ItemRegistryWrapper<Item>> CHARMS = new HashMap<>();
 
@@ -53,6 +54,7 @@ public class AddonItemRegistry {
         ADVANCED_DOMINION_WAND = register(AddonItemNames.ADVANCED_DOMINION_WAND, AdvancedDominionWand::new);
         WAYFINDER = register(AddonItemNames.WAYFINDER, Wayfinder::new, false);
         IMBUED_SPELL_PARCHMENT = register(AddonItemNames.IMBUED_SPELL_PARCHMENT, ImbuedSpellParchment::new);
+        MEMORY_CRYSTAL = register(AddonItemNames.MEMORY_CRYSTAL, MemoryCrystal::new);
 
         registerCharms();
     }

@@ -43,9 +43,9 @@ public class EnchantingWixieCauldronTile extends WixieCauldronTile implements Ge
 
     private <E extends BlockEntity & GeoAnimatable> PlayState predicate(AnimationState<E> event) {
         if (isCraftingDone()) {
-            return event.setAndContinue(FLOAT);
+            return event.setAndContinue(CRAFT);
         }
-        return event.setAndContinue(CRAFT);
+        return event.setAndContinue(FLOAT);
     }
 
     @Override

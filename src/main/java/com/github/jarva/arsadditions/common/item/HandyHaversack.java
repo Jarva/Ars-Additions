@@ -53,7 +53,7 @@ public class HandyHaversack extends Item implements IScribeable {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (level.isClientSide) return;
 
-        if (level.getGameTime() % 10 == 0) return;
+        if (level.getGameTime() % 10 != 0) return;
 
         HaversackData.fromItemStack(stack).ifPresent(data -> {
             MinecraftServer server = level.getServer();

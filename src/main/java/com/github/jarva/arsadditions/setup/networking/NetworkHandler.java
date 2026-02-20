@@ -52,6 +52,11 @@ public class NetworkHandler {
                 PacketRequestEntitySearch.STREAM_CODEC,
                 PacketRequestEntitySearch::handleData
         );
+        registrar.playToServer(
+                PacketMemoryCrystalAction.TYPE,
+                PacketMemoryCrystalAction.STREAM_CODEC,
+                PacketMemoryCrystalAction::handleData
+        );
     }
 
     public static void sendToPlayerClient(CustomPacketPayload msg, ServerPlayer player) {

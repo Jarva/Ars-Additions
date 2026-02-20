@@ -50,6 +50,7 @@ public record TeleportNexusPacket(BlockPos pos, int index) implements CustomPack
             if (player.blockPosition().distToCenterSqr(pos.getX(), pos.getY(), pos.getZ()) > Math.pow(player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE), 2)) return;
 
             ItemStackHandler nexus = player.getData(AddonAttachmentRegistry.WARP_NEXUS_INVENTORY);
+            if (index < 0 || index >= nexus.getSlots()) return;
             ItemStack scroll = nexus.getStackInSlot(index);
             WarpScrollData data = scroll.getOrDefault(DataComponentRegistry.WARP_SCROLL, new WarpScrollData(null, null, null, true));
 

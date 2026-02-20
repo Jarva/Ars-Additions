@@ -126,14 +126,13 @@ dependencies {
     implementation "com.hollingsworth.ars_nouveau:ars_nouveau-${project.minecraft_version}:${project.ars_version}"
     compileOnly "com.hollingsworth.nuggets:nuggets-neoforge-${project.mc_version}:${project.nuggets_version}"
 
-    implementation "software.bernie.geckolib:geckolib-neoforge-${project.mc_version}:${project.gecko_version}"
-    implementation "vazkii.patchouli:Patchouli:${project.mc_version}-${project.patchouli_version}"
+    implementation "software.bernie.geckolib:geckolib-neoforge-${project.minecraft_version}:${project.gecko_version}"
 
-    compileOnly "mezz.jei:jei-${project.mc_version}-neoforge-api:${project.jei_version}"
-    implementation "mezz.jei:jei-${project.mc_version}-neoforge:${project.jei_version}"
+    compileOnly "mezz.jei:jei-${project.minecraft_version}-neoforge-api:${project.jei_version}"
+    implementation "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"
 
-    implementation "top.theillusivec4.curios:curios-neoforge:${project.curios_version}+${project.mc_version}"
-    implementation "com.github.glitchfiend:TerraBlender-neoforge:${project.mc_version}-${project.terrablender_version}"
+    implementation "top.theillusivec4.curios:curios-neoforge:${project.curios_version}+${project.minecraft_version}"
+    implementation "com.github.glitchfiend:TerraBlender-neoforge:${project.minecraft_version}-${project.terrablender_version}"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

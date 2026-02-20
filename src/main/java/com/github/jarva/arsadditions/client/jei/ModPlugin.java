@@ -13,21 +13,20 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.library.gui.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @JeiPlugin
 public class ModPlugin implements IModPlugin {
-    public static final RecipeType<LocateStructureRecipe> LOCATE_STRUCTURE_RECIPE_TYPE = RecipeType.create(ArsAdditions.MODID, "locate_structure", LocateStructureRecipe.class);
-    public static final RecipeType<CharmChargingRecipe> CHARM_CHARGING_RECIPE_TYPE = RecipeType.create(ArsAdditions.MODID, "charm_charging", CharmChargingRecipe.class);
+    public static final RecipeType<RecipeHolder<LocateStructureRecipe>> LOCATE_STRUCTURE_RECIPE_TYPE = RecipeType.createRecipeHolderType(ArsAdditions.prefix("locate_structure"));
+    public static final RecipeType<RecipeHolder<CharmChargingRecipe>> CHARM_CHARGING_RECIPE_TYPE = RecipeType.createRecipeHolderType(ArsAdditions.prefix("charm_charging"));
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -44,16 +43,19 @@ public class ModPlugin implements IModPlugin {
         );
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        List<LocateStructureRecipe> locateStructureRecipes = new ArrayList<>();
-        List<CharmChargingRecipe> charmChargingRecipes = new ArrayList<>();
+        List<RecipeHolder<LocateStructureRecipe>> locateStructureRecipes = new ArrayList<>();
+        List<RecipeHolder<CharmChargingRecipe>> charmChargingRecipes = new ArrayList<>();
         RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
-        for (RecipeHolder<?> i : manager.getRecipes()) {
-            switch (i.value()) {
-                case LocateStructureRecipe recipe -> locateStructureRecipes.add(recipe);
-                case CharmChargingRecipe recipe -> charmChargingRecipes.add(recipe);
-                default -> {}
+        for (RecipeHolder<?> h : manager.getRecipes()) {
+            Recipe<?> i = h.value();
+            if (i instanceof LocateStructureRecipe) {
+                locateStructureRecipes.add((RecipeHolder<LocateStructureRecipe>) h);
+            }
+            if (i instanceof CharmChargingRecipe) {
+                charmChargingRecipes.add((RecipeHolder<CharmChargingRecipe>) h);
             }
         }
 

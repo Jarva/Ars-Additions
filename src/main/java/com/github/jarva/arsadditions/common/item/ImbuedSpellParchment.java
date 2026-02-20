@@ -2,17 +2,12 @@ package com.github.jarva.arsadditions.common.item;
 
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
 import com.hollingsworth.arsnouveau.api.event.SpellCostCalcEvent;
-import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
-import com.hollingsworth.arsnouveau.api.registry.SpellCasterRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractCaster;
-import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
-import com.hollingsworth.arsnouveau.api.spell.Spell;
 import com.hollingsworth.arsnouveau.api.spell.SpellCaster;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.CasterTomeData;
 import com.hollingsworth.arsnouveau.common.items.SpellParchment;
 import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,8 +17,6 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-
-import java.util.List;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
 public class ImbuedSpellParchment extends SpellParchment {
@@ -38,15 +31,7 @@ public class ImbuedSpellParchment extends SpellParchment {
      * @return An Imbued Spell Parchment with the tome's spell
      */
     public static ItemStack fromCasterTome(CasterTomeData tome) {
-        List<AbstractSpellPart> parts = tome.spell().stream().map(rl -> GlyphRegistry.getSpellpartMap().get(rl)).toList();
-        Spell.Mutable spell = new Spell().mutable();
-        spell.name = tome.name();
-        spell.recipe.addAll(parts);
-        if (tome.particleColor() != null) {
-            spell.color = tome.particleColor();
-        }
-
-        return CasterTomeData.makeTome(AddonItemRegistry.IMBUED_SPELL_PARCHMENT.get(), tome.name(), spell.immutable(), tome.flavorText());
+        return CasterTomeData.makeTome(AddonItemRegistry.IMBUED_SPELL_PARCHMENT.get(), tome.spell(), tome.flavorText());
     }
 
     @Override

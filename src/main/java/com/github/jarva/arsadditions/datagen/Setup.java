@@ -24,7 +24,6 @@ public class Setup {
     public static void gatherData(GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
 
-        gen.addProvider(event.includeServer(), new PatchouliDatagen(gen, event.getLookupProvider()));
         gen.addProvider(event.includeServer(), new LangDatagen(gen.getPackOutput(), root, "en_us"));
         gen.addProvider(event.includeServer(), new RecipeDatagen(gen.getPackOutput(), event.getLookupProvider()));
         gen.addProvider(event.includeServer(), new EnchantingAppDatagen(gen));

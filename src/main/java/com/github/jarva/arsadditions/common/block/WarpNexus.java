@@ -66,7 +66,17 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+        Level level = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        BlockPos above = pos.above();
+        if (pos.getY() >= level.getMaxBuildHeight() - 1) {
+            return null;
+        }
+        if (!level.getBlockState(above).canBeReplaced(context)) {
+            return null;
+        }
+
+        FluidState fluidState = level.getFluidState(pos);
 
         BlockState state = this.defaultBlockState();
         return state.setValue(WATERLOGGED, fluidState.is(Fluids.WATER));
@@ -80,7 +90,9 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
         if (!be.getStack().isEmpty()) {
             if (player instanceof ServerPlayer serverPlayer) {
                 ItemStack item = be.removeItemNoUpdate(0);
-                serverPlayer.getInventory().add(item);
+                if (!serverPlayer.getInventory().add(item)) {
+                    serverPlayer.drop(item, false);
+                }
             }
             return ItemInteractionResult.SUCCESS;
         }
@@ -139,10 +151,11 @@ public class WarpNexus extends Block implements EntityBlock, ITickableBlock {
 
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
         BlockPos above = pos.above();
         BlockState upper = state
                 .setValue(HALF, DoubleBlockHalf.UPPER)
                 .setValue(WATERLOGGED, level.getFluidState(above).is(Fluids.WATER));
-        level.setBlock(pos.above(), upper, 3);
+        level.setBlock(above, upper, Block.UPDATE_ALL);
     }
 }

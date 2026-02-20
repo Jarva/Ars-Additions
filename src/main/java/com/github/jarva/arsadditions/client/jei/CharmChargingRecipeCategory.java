@@ -1,10 +1,7 @@
 package com.github.jarva.arsadditions.client.jei;
 
 import com.github.jarva.arsadditions.common.recipe.imbuement.CharmChargingRecipe;
-import com.hollingsworth.arsnouveau.client.jei.ImbuementRecipeCategory;
-import com.hollingsworth.arsnouveau.client.jei.JEIArsNouveauPlugin;
 import com.hollingsworth.arsnouveau.client.jei.MultiInputCategory;
-import com.hollingsworth.arsnouveau.common.crafting.recipes.ImbuementRecipe;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -17,10 +14,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class CharmChargingRecipeCategory extends MultiInputCategory<CharmChargingRecipe> {
     public IDrawable background;
@@ -37,7 +33,7 @@ public class CharmChargingRecipeCategory extends MultiInputCategory<CharmChargin
     }
 
     @Override
-    public RecipeType<CharmChargingRecipe> getRecipeType() {
+    public RecipeType<RecipeHolder<CharmChargingRecipe>> getRecipeType() {
         return ModPlugin.CHARM_CHARGING_RECIPE_TYPE;
     }
 
@@ -57,9 +53,9 @@ public class CharmChargingRecipeCategory extends MultiInputCategory<CharmChargin
     }
 
     @Override
-    public void draw(CharmChargingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<CharmChargingRecipe> recipeHolder, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        CharmChargingRecipe recipe = recipeHolder.value();
         Font renderer = Minecraft.getInstance().font;
         guiGraphics.drawString(renderer,  Component.translatable("ars_additions.source_per_charge", recipe.costPerCharge()), 0, 100, 10,false);
     }
 }
-

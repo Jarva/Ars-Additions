@@ -111,8 +111,7 @@ public class ExplorationWarpScroll extends Item {
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
         } else {
             TeleportUtil.teleport(serverLevel, data, player, stack);
+            return InteractionResultHolder.success(stack);
         }
-
-        return InteractionResultHolder.pass(stack);
     }
 }

@@ -9,9 +9,7 @@ tasks.named('wrapper', Wrapper).configure {
 }
 
 repositories {
-    maven { url = "https://maven.createmod.net" } // Create API (Ponder, Flywheel)
-    maven { url = "https://maven.ithundxr.dev/snapshots" } // temp (Registrate)
-    maven { url = "https://maven.architectury.dev" } // temp (Arch API)
+    maven { url = "https://maven.createmod.net" } // Create API
     flatDir {
         dir 'C:/libs' // for Ars Creo, can be a different location (I couldn't find a maven for it)
     }

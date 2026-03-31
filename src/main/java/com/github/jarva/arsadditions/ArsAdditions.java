@@ -5,6 +5,7 @@ import com.github.jarva.arsadditions.server.storage.ChunkLoadingData;
 import com.github.jarva.arsadditions.common.util.DispenserExperienceGemBehavior;
 import com.github.jarva.arsadditions.datagen.EnchantmentDatagen;
 import com.github.jarva.arsadditions.server.util.AsyncLocator;
+import com.github.jarva.arsadditions.setup.CreateSetup;
 import com.github.jarva.arsadditions.setup.config.CommonConfig;
 import com.github.jarva.arsadditions.setup.config.ServerConfig;
 import com.github.jarva.arsadditions.setup.registry.AddonSetup;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -63,6 +65,8 @@ public class ArsAdditions {
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> {
             GenericRecipeRegistry.reloadAll(e.getServer().getRecipeManager());
         });
+        if (ModList.get().isLoaded("ars_creo"))
+            CreateSetup.setup();
     }
 
     private void client(final FMLClientSetupEvent event) {

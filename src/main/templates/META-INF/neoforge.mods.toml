@@ -60,3 +60,10 @@ side="BOTH"
 [dependencies.ars_additions.custom.mc-publish]
 ignore=false
 curseforge="ars-nouveau" # CurseForge's project slug
+
+[[dependencies."${mod_id}"]] # No error this way
+modId="ars_creo"
+type="optional"
+versionRange="[5.0.2,)"
+ordering="AFTER" # to make sure the if statement passes in "ArsAdditions" line 68
+side="BOTH"

@@ -8,6 +8,7 @@
     "EffectBlinkMixin",
     "charms.PiglinAiMixin",
     "charms.PiglinBruteAiMixin",
+    "compat.ars_creo.ContraptionUtilsMixin",
     "spellweave.AlterationTableMixin",
     "spellweave.EnchantmentMixin",
     "spellweave.PerkRegistryMixin",

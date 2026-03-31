@@ -1,12 +1,14 @@
 package com.github.jarva.arsadditions.server.sync;
 
 import com.github.jarva.arsadditions.common.block.tile.EnderSourceJarTile;
+import com.github.jarva.arsadditions.compat.ars_creo.EnderSourceJarUpdateEvent;
 import com.github.jarva.arsadditions.server.storage.EnderSourceData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,6 +23,7 @@ public class SourceJarSync {
 
     public static void updateSourceLevel(MinecraftServer server, UUID uuid) {
         int source = EnderSourceData.getSource(server, uuid);
+        NeoForge.EVENT_BUS.post(new EnderSourceJarUpdateEvent(source, uuid));
         for (Map.Entry<ResourceKey<Level>, Set<BlockPos>> entry : posMap.entrySet()) {
             Level world = server.getLevel(entry.getKey());
             if (world == null) continue;

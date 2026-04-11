@@ -8,24 +8,25 @@ import com.hollingsworth.arsnouveau.common.block.SourceJar;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import static com.github.jarva.arsadditions.common.block.tile.EnderSourceJarTile.OWNER_UUID_TAG;
 
 public class EnderSourceInfo extends SourceInfo {
-    private final AbstractContraptionEntity contraptionEntity;
+    private final MinecraftServer server;
 
-    public EnderSourceInfo(StructureTemplate.StructureBlockInfo blockInfo, AbstractContraptionEntity contraptionEntity) {
+    public EnderSourceInfo(StructureTemplate.StructureBlockInfo blockInfo, MinecraftServer server) {
         super(blockInfo, 0);
-        this.contraptionEntity = contraptionEntity;
+        this.server = server;
     }
 
     @Override
     public int getAmount() {
         if (this.blockInfo.nbt() == null)
             return 0;
-        this.amount = EnderSourceData.getSource(contraptionEntity.getServer(), this.blockInfo.nbt().getUUID(OWNER_UUID_TAG));
+        this.amount = EnderSourceData.getSource(server, this.blockInfo.nbt().getUUID(OWNER_UUID_TAG));
         return amount;
     }
 
@@ -33,8 +34,8 @@ public class EnderSourceInfo extends SourceInfo {
     public void removeAmount(int amount) {
         if (this.blockInfo.nbt() == null)
             return;
-        EnderSourceData.setSource(contraptionEntity.getServer(), this.blockInfo.nbt().getUUID(OWNER_UUID_TAG),
-                EnderSourceData.getSource(contraptionEntity.getServer(), this.blockInfo.nbt().getUUID(OWNER_UUID_TAG)) - amount);
+        EnderSourceData.setSource(server, this.blockInfo.nbt().getUUID(OWNER_UUID_TAG),
+                EnderSourceData.getSource(server, this.blockInfo.nbt().getUUID(OWNER_UUID_TAG)) - amount);
         this.amount -= amount;
     }
 
@@ -42,8 +43,8 @@ public class EnderSourceInfo extends SourceInfo {
     public void addAmount(int amount) {
         if (this.blockInfo.nbt() == null)
             return;
-        EnderSourceData.setSource(contraptionEntity.getServer(), this.blockInfo.nbt().getUUID(OWNER_UUID_TAG),
-                EnderSourceData.getSource(contraptionEntity.getServer(), this.blockInfo.nbt().getUUID(OWNER_UUID_TAG)) + amount);
+        EnderSourceData.setSource(server, this.blockInfo.nbt().getUUID(OWNER_UUID_TAG),
+                EnderSourceData.getSource(server, this.blockInfo.nbt().getUUID(OWNER_UUID_TAG)) + amount);
         this.amount += amount;
     }
 
@@ -72,13 +73,5 @@ public class EnderSourceInfo extends SourceInfo {
         BlockPos structurePos = this.blockInfo.pos();
         CompoundTag structureTag = this.blockInfo.nbt();
         contraption.setBlock(structurePos, new StructureTemplate.StructureBlockInfo(structurePos, AddonBlockRegistry.ENDER_SOURCE_JAR.defaultBlockState().setValue(SourceJar.fill, nextFillState), structureTag));
-    }
-
-    @SuppressWarnings("all")
-    public void syncEventListener(EnderSourceJarUpdateEvent event) {
-        if (event.uuid.equals(blockInfo.nbt().getUUID(OWNER_UUID_TAG))) {
-            amount = event.source;
-            syncSource(contraptionEntity, ContraptionUtils.getFillState(amount));
-        }
     }
 }

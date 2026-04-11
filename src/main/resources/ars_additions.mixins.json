@@ -9,6 +9,7 @@
     "charms.PiglinAiMixin",
     "charms.PiglinBruteAiMixin",
     "compat.ars_creo.ContraptionUtilsMixin",
+    "compat.create.ContraptionMixin",
     "spellweave.AlterationTableMixin",
     "spellweave.EnchantmentMixin",
     "spellweave.PerkRegistryMixin",

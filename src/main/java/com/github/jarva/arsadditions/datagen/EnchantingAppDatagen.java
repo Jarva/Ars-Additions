@@ -1,5 +1,8 @@
 package com.github.jarva.arsadditions.datagen;
 
+import com.github.jarva.arsadditions.common.perk.CarpetInventoryPerk;
+import com.github.jarva.arsadditions.common.perk.CarpetSizePerk;
+import com.github.jarva.arsadditions.common.perk.CarpetSpeedPerk;
 import com.github.jarva.arsadditions.common.perk.ReachPerk;
 import com.github.jarva.arsadditions.setup.registry.AddonBlockRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
@@ -94,6 +97,27 @@ public class EnchantingAppDatagen extends ApparatusRecipeProvider {
                 .withReagent(ItemsRegistry.BLANK_THREAD)
                 .withPedestalItem(3, ItemsRegistry.ALAKARKINOS_SHARD)
                 .withPedestalItem(3, ItemsRegistry.MANIPULATION_ESSENCE)
+                .build()
+        );
+        this.addRecipe(this.builder().withResult(getPerkItem(CarpetSizePerk.INSTANCE.getRegistryName()))
+                .withReagent(ItemsRegistry.BLANK_THREAD)
+                .withPedestalItem(2, ItemsRegistry.MAGE_FIBER)
+                .withPedestalItem(2, Items.LEAD)
+                .withPedestalItem(2, Items.WHITE_WOOL)
+                .build()
+        );
+        this.addRecipe(this.builder().withResult(getPerkItem(CarpetSpeedPerk.INSTANCE.getRegistryName()))
+                .withReagent(ItemsRegistry.BLANK_THREAD)
+                .withPedestalItem(2, ItemsRegistry.AIR_ESSENCE)
+                .withPedestalItem(Items.PHANTOM_MEMBRANE)
+                .withPedestalItem(Items.SUGAR)
+                .build()
+        );
+        this.addRecipe(this.builder().withResult(getPerkItem(CarpetInventoryPerk.INSTANCE.getRegistryName()))
+                .withReagent(ItemsRegistry.BLANK_THREAD)
+                .withPedestalItem(2, ItemsRegistry.CONJURATION_ESSENCE)
+                .withPedestalItem(Items.CHEST)
+                .withPedestalItem(2, ItemsRegistry.MAGE_FIBER)
                 .build()
         );
 

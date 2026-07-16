@@ -3,12 +3,16 @@ package com.github.jarva.arsadditions.setup.registry;
 import com.github.jarva.arsadditions.common.glyph.EffectMark;
 import com.github.jarva.arsadditions.common.glyph.MethodRecall;
 import com.github.jarva.arsadditions.common.glyph.MethodRetaliate;
+import com.github.jarva.arsadditions.common.perk.CarpetInventoryPerk;
+import com.github.jarva.arsadditions.common.perk.CarpetSizePerk;
+import com.github.jarva.arsadditions.common.perk.CarpetSpeedPerk;
 import com.github.jarva.arsadditions.common.perk.ReachPerk;
 import com.github.jarva.arsadditions.common.ritual.RitualChunkLoading;
 import com.github.jarva.arsadditions.common.ritual.RitualLocateStructure;
 import com.github.jarva.arsadditions.setup.registry.recipes.LocateStructureRegistry;
 import com.github.jarva.arsadditions.setup.registry.recipes.SourceSpawnerRegistry;
 import com.hollingsworth.arsnouveau.api.perk.IPerk;
+import com.hollingsworth.arsnouveau.api.perk.PerkSlot;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.registry.ImbuementRecipeRegistry;
 import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
@@ -56,6 +60,13 @@ public class ArsNouveauRegistry {
 
     private static void registerPerks() {
         register(ReachPerk.INSTANCE);
+        register(CarpetSizePerk.INSTANCE);
+        register(CarpetSpeedPerk.INSTANCE);
+        register(CarpetInventoryPerk.INSTANCE);
+    }
+
+    public static void registerPerkProviders() {
+        PerkRegistry.registerPerkProvider(AddonItemRegistry.MAGIC_CARPET.get(), List.of(List.of(PerkSlot.ONE, PerkSlot.TWO, PerkSlot.THREE)));
     }
 
     private static void registerGlyphs() {

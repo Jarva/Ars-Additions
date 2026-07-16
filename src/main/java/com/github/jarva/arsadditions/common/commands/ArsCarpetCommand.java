@@ -48,7 +48,7 @@ public class ArsCarpetCommand {
         List<MagicCarpetEntity> carpets = player.serverLevel().getEntitiesOfClass(
                 MagicCarpetEntity.class,
                 player.getBoundingBox().inflate(SUMMON_SEARCH_RADIUS),
-                carpet -> carpet.isAlive() && carpet.isOwnedBy(player)
+                carpet -> carpet.isAlive() && carpet.isOwnedBy(player) && carpet.canBeSummonedBy(player)
         );
 
         MagicCarpetEntity nearest = null;

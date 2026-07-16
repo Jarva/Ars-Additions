@@ -1,33 +1,55 @@
 package com.github.jarva.arsadditions.common.entity;
 
+import com.github.jarva.arsadditions.common.item.data.MagicCarpetInventoryData;
+import com.github.jarva.arsadditions.common.perk.CarpetInventoryPerk;
+import com.github.jarva.arsadditions.common.perk.CarpetSizePerk;
+import com.github.jarva.arsadditions.common.perk.CarpetSpeedPerk;
 import com.github.jarva.arsadditions.mixin.LivingEntityAccessor;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonEntityRegistry;
 import com.github.jarva.arsadditions.setup.registry.AddonItemRegistry;
+import com.hollingsworth.arsnouveau.api.perk.IPerk;
+import com.hollingsworth.arsnouveau.api.perk.PerkInstance;
+import com.hollingsworth.arsnouveau.api.perk.PerkSlot;
+import com.hollingsworth.arsnouveau.api.util.PerkUtil;
+import com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.SimpleMenuProvider;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -38,28 +60,50 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.List;
 import java.util.UUID;
 
 public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     private static final String OWNER_UUID_TAG = "OwnerUUID";
+    private static final String CARPET_STACK_TAG = "CarpetStack";
     private static final EntityDataAccessor<Float> DATA_ID_SIDE_TILT = SynchedEntityData.defineId(MagicCarpetEntity.class, EntityDataSerializers.FLOAT);
-    private static final int MAX_PASSENGERS = 2;
-    private static final float FRONT_PASSENGER_OFFSET = 0.2F;
-    private static final float BACK_PASSENGER_OFFSET = -0.6F;
+    private static final EntityDataAccessor<ItemStack> DATA_ID_CARPET_STACK = SynchedEntityData.defineId(MagicCarpetEntity.class, EntityDataSerializers.ITEM_STACK);
+
+    private static final int SMALL_MAX_PASSENGERS = 2;
+    private static final int LARGE_MAX_PASSENGERS = 5;
+    private static final float SMALL_FRONT_PASSENGER_Z = 0.2F;
+    private static final float SMALL_BACK_PASSENGER_Z = -0.6F;
+    private static final float LARGE_DRIVER_SEAT_X = 0.0F;
+    private static final float LARGE_DRIVER_SEAT_Z = 14.0F / 16.0F;
+    private static final float LARGE_PASSENGER_X_SPREAD = 10.0F / 16.0F;
+    private static final float LARGE_PASSENGER_FRONT_ROW_Z = 2.0F / 16.0F;
+    private static final float LARGE_PASSENGER_BACK_ROW_Z = -8.0F / 16.0F;
     private static final double PASSENGER_HEIGHT_OFFSET = 0.08D;
     private static final double DISMOUNT_TOP_OFFSET = 0.08D;
     private static final float MAX_SIDE_TILT = 18.0F;
     private static final float SIDE_TILT_LERP = 0.25F;
-    private static final double HITBOX_HALF_WIDTH = 12.0D / 16.0D;
-    private static final double HITBOX_HALF_LENGTH = 16.0D / 16.0D;
+    private static final double SMALL_HITBOX_HALF_WIDTH = 12.0D / 16.0D;
+    private static final double SMALL_HITBOX_HALF_LENGTH = 16.0D / 16.0D;
+    private static final double LARGE_HITBOX_HALF_WIDTH = 24.0D / 16.0D;
+    private static final double LARGE_HITBOX_HALF_LENGTH = 32.0D / 16.0D;
     private static final double HITBOX_HEIGHT = 1.0D / 16.0D;
-    private static final double HITBOX_Z_OFFSET = -1.0D / 16.0D;
+    private static final double SMALL_HITBOX_LOCAL_X_OFFSET = 0.0D;
+    private static final double SMALL_HITBOX_LOCAL_Z_OFFSET = -1.0D / 16.0D;
+    private static final double LARGE_HITBOX_LOCAL_X_OFFSET = 0.0D;
+    private static final double LARGE_HITBOX_LOCAL_Z_OFFSET = 0.0D;
     private static final double HITBOX_ROTATION_CLEARANCE = 1.0D / 16.0D;
+    private static final float SMALL_SHADOW_RADIUS = 0.8F;
+    private static final float LARGE_SHADOW_RADIUS = 1.2F;
+    private static final double SMALL_MODEL_HALF_LENGTH = 1.0D;
+    private static final double SMALL_MODEL_HALF_WIDTH = 0.75D;
+    private static final double LARGE_MODEL_HALF_LENGTH = 32.0D / 16.0D;
+    private static final double LARGE_MODEL_HALF_WIDTH = 24.0D / 16.0D;
 
     private static final double MAX_HORIZONTAL_SPEED = 0.90D;
     private static final double MAX_VERTICAL_SPEED = 0.30D;
     private static final double HORIZONTAL_ACCELERATION = 0.045D;
     private static final double VERTICAL_ACCELERATION = 0.05D;
+    private static final double SPEED_THREAD_BONUS_PER_SLOT = 0.15D;
     private static final double SUMMON_STANDOFF_DISTANCE = 5.0D;
     private static final double SUMMON_STANDOFF_TOLERANCE = 0.35D;
     private static final double SUMMON_VERTICAL_ALIGN_EPSILON = 0.35D;
@@ -74,8 +118,10 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     private static final double VERTICAL_DRAG = 0.85D;
     private static final double IDLE_DRAG = 0.8D;
     private static final double IDLE_VERTICAL_DRAG = 0.65D;
+    private static final double INVENTORY_INTERACTION_DISTANCE_SQR = 64.0D;
     private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation MOVE_ANIMATION = RawAnimation.begin().thenLoop("move");
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private int lerpSteps;
     private double lerpX;
@@ -95,7 +141,7 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
         super(entityType, level);
         this.blocksBuilding = true;
         this.setNoGravity(true);
-        this.hitboxFacing = Direction.fromYRot((double) this.getYRot());
+        this.hitboxFacing = Direction.fromYRot(this.getYRot());
     }
 
     public MagicCarpetEntity(Level level, double x, double y, double z) {
@@ -120,11 +166,16 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ID_SIDE_TILT, 0.0F);
+        builder.define(DATA_ID_CARPET_STACK, createBaseCarpetStack());
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         this.ownerUUID = compound.hasUUID(OWNER_UUID_TAG) ? compound.getUUID(OWNER_UUID_TAG) : null;
+        if (compound.contains(CARPET_STACK_TAG)) {
+            ItemStack stack = ItemStack.parse(this.registryAccess(), compound.getCompound(CARPET_STACK_TAG)).orElse(createBaseCarpetStack());
+            this.setCarpetStack(stack);
+        }
     }
 
     @Override
@@ -132,6 +183,7 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
         if (this.ownerUUID != null) {
             compound.putUUID(OWNER_UUID_TAG, this.ownerUUID);
         }
+        compound.put(CARPET_STACK_TAG, this.getCarpetStack().save(this.registryAccess()));
     }
 
     @Override
@@ -180,8 +232,8 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
         this.lerpX = x;
         this.lerpY = y;
         this.lerpZ = z;
-        this.lerpYRot = (double) yRot;
-        this.lerpXRot = (double) xRot;
+        this.lerpYRot = yRot;
+        this.lerpXRot = xRot;
         this.lerpSteps = 10;
     }
 
@@ -237,9 +289,11 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
 
         Vec3 worldIntent = this.toWorldIntent(horizontalIntent, player.getYRot());
         double verticalIntent = this.getVerticalIntent(player, horizontalIntent);
+        double speedMultiplier = this.getSpeedMultiplier();
 
         Vec3 velocity = this.getDeltaMovement();
-        velocity = velocity.add(worldIntent.scale(HORIZONTAL_ACCELERATION));
+        // Scale acceleration with thread speed so boosted caps are actually reachable while riding.
+        velocity = velocity.add(worldIntent.scale(HORIZONTAL_ACCELERATION * speedMultiplier));
         velocity = new Vec3(velocity.x, velocity.y + verticalIntent * VERTICAL_ACCELERATION, velocity.z);
 
         if (horizontalIntent.lengthSqr() < 1.0E-4D) {
@@ -339,6 +393,7 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
             }
         }
 
+        targetHorizontalSpeed *= this.getSpeedMultiplier();
         double verticalIntent = Mth.clamp(verticalDelta * SUMMON_VERTICAL_TRACK_FACTOR, -1.0D, 1.0D);
 
         if (horizontalIntent.lengthSqr() > 1.0E-5D) {
@@ -442,8 +497,9 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     private Vec3 clampVelocity(Vec3 velocity) {
         Vec3 horizontal = new Vec3(velocity.x, 0.0D, velocity.z);
         double horizontalSpeed = horizontal.length();
-        if (horizontalSpeed > MAX_HORIZONTAL_SPEED) {
-            double scale = MAX_HORIZONTAL_SPEED / horizontalSpeed;
+        double maxHorizontalSpeed = MAX_HORIZONTAL_SPEED * this.getSpeedMultiplier();
+        if (horizontalSpeed > maxHorizontalSpeed) {
+            double scale = maxHorizontalSpeed / horizontalSpeed;
             velocity = new Vec3(velocity.x * scale, velocity.y, velocity.z * scale);
         }
         return new Vec3(velocity.x, Mth.clamp(velocity.y, -MAX_VERTICAL_SPEED, MAX_VERTICAL_SPEED), velocity.z);
@@ -455,8 +511,12 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
         if (result != InteractionResult.PASS) {
             return result;
         }
+
         if (player.isSecondaryUseActive()) {
-            return InteractionResult.PASS;
+            InteractionResult inventoryResult = this.tryOpenInventory(player);
+            if (inventoryResult != InteractionResult.PASS) {
+                return inventoryResult;
+            }
         }
 
         if (!this.canPlayerRide(player)) {
@@ -467,6 +527,62 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
             return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
         }
         return InteractionResult.SUCCESS;
+    }
+
+    private InteractionResult tryOpenInventory(Player player) {
+        int capacity = this.getInventoryCapacity();
+        if (capacity <= 0) {
+            return InteractionResult.PASS;
+        }
+
+        if (!this.isOwnedBy(player)) {
+            if (!this.level().isClientSide) {
+                player.displayClientMessage(Component.translatable("chat.ars_additions.magic_carpet.inventory_owner_only"), true);
+            }
+            return InteractionResult.CONSUME;
+        }
+
+        if (this.level().isClientSide) {
+            return InteractionResult.SUCCESS;
+        }
+
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return InteractionResult.PASS;
+        }
+        this.openInventory(serverPlayer, capacity);
+        return InteractionResult.CONSUME;
+    }
+
+    private void openInventory(ServerPlayer player, int capacity) {
+        int rows = Mth.clamp(capacity / 9, 1, 3);
+        MenuProvider provider = new SimpleMenuProvider(
+                (containerId, inventory, entityPlayer) -> {
+                    CarpetInventoryContainer container = new CarpetInventoryContainer(this, capacity);
+                    return switch (rows) {
+                        case 1 -> new ChestMenu(MenuType.GENERIC_9x1, containerId, inventory, container, 1);
+                        case 2 -> new ChestMenu(MenuType.GENERIC_9x2, containerId, inventory, container, 2);
+                        default -> ChestMenu.threeRows(containerId, inventory, container);
+                    };
+                },
+                Component.translatable("container.ars_additions.magic_carpet_inventory")
+        );
+        player.openMenu(provider);
+    }
+
+    public int getInventoryCapacity() {
+        return getInventoryCapacityForStack(this.getCarpetStack());
+    }
+
+    private void saveInventoryFromContainer(SimpleContainer container) {
+        ItemStack stack = this.getCarpetStack().copy();
+        MagicCarpetInventoryData data = MagicCarpetInventoryData.fromStack(stack).orElse(MagicCarpetInventoryData.empty());
+        List<ItemStack> items = data.mutableItems();
+        for (int i = 0; i < container.getContainerSize(); i++) {
+            ItemStack containerStack = container.getItem(i);
+            items.set(i, containerStack.isEmpty() ? ItemStack.EMPTY : containerStack.copy());
+        }
+        stack.set(AddonDataComponentRegistry.MAGIC_CARPET_INVENTORY, new MagicCarpetInventoryData(items));
+        this.setCarpetStack(stack);
     }
 
     @Override
@@ -528,8 +644,12 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     @Override
     protected boolean canAddPassenger(Entity passenger) {
         return passenger instanceof Player player
-                && this.getPassengers().size() < MAX_PASSENGERS
+                && this.getPassengers().size() < this.getMaxPassengers()
                 && this.canPlayerRide(player);
+    }
+
+    private int getMaxPassengers() {
+        return this.isLargeCarpet() ? LARGE_MAX_PASSENGERS : SMALL_MAX_PASSENGERS;
     }
 
     private boolean canPlayerRide(Player player) {
@@ -556,9 +676,22 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
 
     @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float partialTick) {
-        float zOffset = this.getPassengerSeatOffset(passenger);
+        Vec2 seatOffset = this.getPassengerSeatOffset(passenger);
         double yOffset = (double) (dimensions.height() / 3.0F) + PASSENGER_HEIGHT_OFFSET;
-        return new Vec3(0.0D, yOffset, (double) zOffset).yRot(-this.getYRot() * Mth.DEG_TO_RAD);
+        float pitchRadians = Mth.lerp(partialTick, this.xRotO, this.getXRot()) * Mth.DEG_TO_RAD;
+        float yawRadians = Mth.lerp(partialTick, this.yRotO, this.getYRot()) * Mth.DEG_TO_RAD;
+
+        double localX = seatOffset.x;
+        double localY = yOffset;
+        double localZ = seatOffset.y;
+
+        // Rotate seat point with carpet pitch so riders stay attached when leaning forward/back.
+        double pitchedY = localY * Mth.cos(pitchRadians) - localZ * Mth.sin(pitchRadians);
+        double pitchedZ = localY * Mth.sin(pitchRadians) + localZ * Mth.cos(pitchRadians);
+
+        double worldX = localX * Mth.cos(yawRadians) - pitchedZ * Mth.sin(yawRadians);
+        double worldZ = pitchedZ * Mth.cos(yawRadians) + localX * Mth.sin(yawRadians);
+        return new Vec3(worldX, pitchedY, worldZ);
     }
 
     @Override
@@ -591,14 +724,14 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(AddonItemRegistry.MAGIC_CARPET.get());
+        return this.getCarpetStack().copyWithCount(1);
     }
 
     @Override
     protected AABB makeBoundingBox() {
         Direction facing = this.hitboxFacing;
         if (facing == null) {
-            facing = Direction.fromYRot((double) this.getYRot());
+            facing = Direction.fromYRot(this.getYRot());
             if (facing == null) {
                 facing = Direction.NORTH;
             }
@@ -607,21 +740,28 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     }
 
     private AABB makeBoundingBoxForFacing(Direction facing) {
-        float yawRadians = facing.toYRot() * Mth.DEG_TO_RAD;
+        float yawRadians = this.getYRot() * Mth.DEG_TO_RAD;
         double sinYaw = Mth.sin(yawRadians);
         double cosYaw = Mth.cos(yawRadians);
-        double centerX = this.getX() - HITBOX_Z_OFFSET * sinYaw;
-        double centerZ = this.getZ() + HITBOX_Z_OFFSET * cosYaw;
-        double halfX = facing.getAxis() == Direction.Axis.X ? HITBOX_HALF_LENGTH : HITBOX_HALF_WIDTH;
-        double halfZ = facing.getAxis() == Direction.Axis.X ? HITBOX_HALF_WIDTH : HITBOX_HALF_LENGTH;
+        boolean large = this.isLargeCarpet();
+        double localXOffset = large ? LARGE_HITBOX_LOCAL_X_OFFSET : SMALL_HITBOX_LOCAL_X_OFFSET;
+        double localZOffset = large ? LARGE_HITBOX_LOCAL_Z_OFFSET : SMALL_HITBOX_LOCAL_Z_OFFSET;
+        double centerX = this.getX() + (localXOffset * cosYaw - localZOffset * sinYaw);
+        double centerZ = this.getZ() + (localZOffset * cosYaw + localXOffset * sinYaw);
+        double halfWidth = large ? LARGE_HITBOX_HALF_WIDTH : SMALL_HITBOX_HALF_WIDTH;
+        double halfLength = large ? LARGE_HITBOX_HALF_LENGTH : SMALL_HITBOX_HALF_LENGTH;
+        double halfX = facing.getAxis() == Direction.Axis.X ? halfLength : halfWidth;
+        double halfZ = facing.getAxis() == Direction.Axis.X ? halfWidth : halfLength;
         double minY = this.getY();
         return new AABB(centerX - halfX, minY, centerZ - halfZ, centerX + halfX, minY + HITBOX_HEIGHT, centerZ + halfZ);
     }
 
     private void updateHitboxFacingSafely() {
-        Direction desiredFacing = Direction.fromYRot((double) this.getYRot());
+        Direction desiredFacing = Direction.fromYRot(this.getYRot());
         Direction currentFacing = this.hitboxFacing == null ? Direction.NORTH : this.hitboxFacing;
         if (desiredFacing == currentFacing) {
+            // Keep center offset aligned to current yaw even when cardinal facing is unchanged.
+            this.setBoundingBox(this.makeBoundingBoxForFacing(currentFacing));
             return;
         }
 
@@ -630,6 +770,9 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
         if (this.level().noBlockCollision(this, clearanceBox)) {
             this.hitboxFacing = desiredFacing;
             this.setBoundingBox(targetBox);
+        } else {
+            // Fallback keeps center in sync if we cannot rotate to the next axis-aligned hitbox.
+            this.setBoundingBox(this.makeBoundingBoxForFacing(currentFacing));
         }
     }
 
@@ -637,6 +780,161 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     protected Item getDropItem() {
         return AddonItemRegistry.MAGIC_CARPET.get();
     }
+
+    @Override
+    protected void destroy(DamageSource damageSource) {
+        this.kill();
+        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+            ItemStack stack = this.getCarpetStack().copyWithCount(1);
+            stack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
+            this.spawnAtLocation(stack);
+        }
+    }
+
+    public ItemStack getCarpetStack() {
+        return this.entityData.get(DATA_ID_CARPET_STACK);
+    }
+
+    public void setCarpetStack(ItemStack stack) {
+        ItemStack normalized = normalizeCarpetStack(stack);
+        ItemStack previous = this.getCarpetStack();
+        boolean wasLarge = isLargeCarpetForStack(previous);
+        boolean isLarge = isLargeCarpetForStack(normalized);
+        if (!this.level().isClientSide && !previous.isEmpty()) {
+            spillOverflowAfterCapacityDrop(normalized, previous, this.level(), this.position());
+        }
+        this.entityData.set(DATA_ID_CARPET_STACK, normalized);
+        if (wasLarge != isLarge) {
+            Direction facing = this.hitboxFacing == null ? Direction.NORTH : this.hitboxFacing;
+            this.setBoundingBox(this.makeBoundingBoxForFacing(facing));
+        }
+    }
+
+    public boolean isLargeCarpet() {
+        return isLargeCarpetForStack(this.getCarpetStack());
+    }
+
+    public double getModelHalfLength() {
+        return this.isLargeCarpet() ? LARGE_MODEL_HALF_LENGTH : SMALL_MODEL_HALF_LENGTH;
+    }
+
+    public double getModelHalfWidth() {
+        return this.isLargeCarpet() ? LARGE_MODEL_HALF_WIDTH : SMALL_MODEL_HALF_WIDTH;
+    }
+
+    public float getCarpetShadowRadius() {
+        return this.isLargeCarpet() ? LARGE_SHADOW_RADIUS : SMALL_SHADOW_RADIUS;
+    }
+
+    private double getSpeedMultiplier() {
+        int slotValue = getSlotValueForPerk(this.getCarpetStack(), CarpetSpeedPerk.INSTANCE);
+        return 1.0D + (slotValue * SPEED_THREAD_BONUS_PER_SLOT);
+    }
+
+    public static boolean isLargeCarpetForStack(ItemStack stack) {
+        return getSlotValueForPerk(stack, CarpetSizePerk.INSTANCE) > 0;
+    }
+
+    public static int getInventoryCapacityForStack(ItemStack stack) {
+        int slotTier = Mth.clamp(getEffectiveSlotTierForPerk(stack, CarpetInventoryPerk.INSTANCE), 0, 3);
+        return slotTier * 9;
+    }
+
+    private static int getEffectiveSlotTierForPerk(ItemStack stack, IPerk targetPerk) {
+        ArmorPerkHolder holder = PerkUtil.getPerkHolder(stack);
+        if (holder == null) {
+            return 0;
+        }
+
+        List<IPerk> perks = holder.getPerks();
+        List<PerkSlot> activeSlots = holder.getSlotsForTier(stack);
+        int pairedSize = Math.min(perks.size(), activeSlots.size());
+        for (int i = 0; i < pairedSize; i++) {
+            if (perks.get(i).equals(targetPerk)) {
+                return activeSlots.get(i).value();
+            }
+        }
+        return 0;
+    }
+
+    private static int getSlotValueForPerk(ItemStack stack, IPerk targetPerk) {
+        ArmorPerkHolder holder = PerkUtil.getPerkHolder(stack);
+        if (holder == null) {
+            return 0;
+        }
+
+        int slotValue = 0;
+        for (PerkInstance instance : holder.getPerkInstances(stack)) {
+            if (instance.getPerk().equals(targetPerk)) {
+                slotValue = Math.max(slotValue, instance.getSlot().value());
+            }
+        }
+        return slotValue;
+    }
+
+    public static void spillOverflowAfterCapacityDrop(ItemStack updatedStack, ItemStack previousStack, Level level, Vec3 dropPosition) {
+        if (level.isClientSide) {
+            return;
+        }
+
+        int oldCapacity = getInventoryCapacityForStack(previousStack);
+        int newCapacity = getInventoryCapacityForStack(updatedStack);
+        if (newCapacity >= MagicCarpetInventoryData.SLOT_COUNT) {
+            return;
+        }
+        if (oldCapacity > 0 && newCapacity >= oldCapacity) {
+            return;
+        }
+
+        MagicCarpetInventoryData data = updatedStack.get(AddonDataComponentRegistry.MAGIC_CARPET_INVENTORY);
+        if (data == null) {
+            return;
+        }
+
+        List<ItemStack> items = data.mutableItems();
+        boolean spilledAny = false;
+        for (int i = Math.max(newCapacity, 0); i < MagicCarpetInventoryData.SLOT_COUNT; i++) {
+            ItemStack stack = items.get(i);
+            if (stack.isEmpty()) {
+                continue;
+            }
+            level.addFreshEntity(new ItemEntity(level, dropPosition.x, dropPosition.y + 0.25D, dropPosition.z, stack.copy()));
+            items.set(i, ItemStack.EMPTY);
+            spilledAny = true;
+        }
+
+        if (spilledAny) {
+            updatedStack.set(AddonDataComponentRegistry.MAGIC_CARPET_INVENTORY, new MagicCarpetInventoryData(items));
+        }
+    }
+
+    private static ItemStack createBaseCarpetStack() {
+        ItemStack base = new ItemStack(AddonItemRegistry.MAGIC_CARPET.get());
+        if (!base.has(DataComponentRegistry.ARMOR_PERKS)) {
+            base.set(DataComponentRegistry.ARMOR_PERKS, new ArmorPerkHolder());
+        }
+        if (!base.has(AddonDataComponentRegistry.MAGIC_CARPET_INVENTORY)) {
+            base.set(AddonDataComponentRegistry.MAGIC_CARPET_INVENTORY, MagicCarpetInventoryData.empty());
+        }
+        return base;
+    }
+
+    private static ItemStack normalizeCarpetStack(ItemStack stack) {
+        ItemStack normalized;
+        if (stack.isEmpty() || !stack.is(AddonItemRegistry.MAGIC_CARPET.get())) {
+            normalized = createBaseCarpetStack();
+        } else {
+            normalized = stack.copyWithCount(1);
+            if (!normalized.has(DataComponentRegistry.ARMOR_PERKS)) {
+                normalized.set(DataComponentRegistry.ARMOR_PERKS, new ArmorPerkHolder());
+            }
+            if (!normalized.has(AddonDataComponentRegistry.MAGIC_CARPET_INVENTORY)) {
+                normalized.set(AddonDataComponentRegistry.MAGIC_CARPET_INVENTORY, MagicCarpetInventoryData.empty());
+            }
+        }
+        return normalized;
+    }
+
     private Vec3 toWorldIntent(Vec3 localIntent, float yawDegrees) {
         if (localIntent.lengthSqr() < 1.0E-7D) {
             return Vec3.ZERO;
@@ -661,13 +959,46 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
         return new Vec3(strafe, 0.0D, forward);
     }
 
-    private float getPassengerSeatOffset(Entity passenger) {
-        if (this.getPassengers().size() <= 1) {
-            return 0.0F;
+    private Vec2 getPassengerSeatOffset(Entity passenger) {
+        List<Entity> passengers = this.getPassengers();
+        int index = passengers.indexOf(passenger);
+        if (index < 0) {
+            return Vec2.ZERO;
         }
 
-        int index = this.getPassengers().indexOf(passenger);
-        return index == 0 ? FRONT_PASSENGER_OFFSET : BACK_PASSENGER_OFFSET;
+        if (!this.isLargeCarpet()) {
+            if (passengers.size() <= 1) {
+                return Vec2.ZERO;
+            }
+            return index == 0 ? new Vec2(0.0F, SMALL_FRONT_PASSENGER_Z) : new Vec2(0.0F, SMALL_BACK_PASSENGER_Z);
+        }
+
+        Entity driver = this.getControllingPassenger();
+        if (driver == null && !passengers.isEmpty()) {
+            driver = passengers.get(0);
+        }
+
+        if (passenger == driver) {
+            return new Vec2(LARGE_DRIVER_SEAT_X, LARGE_DRIVER_SEAT_Z);
+        }
+
+        int passengerRank = 0;
+        for (Entity rider : passengers) {
+            if (rider == driver) {
+                continue;
+            }
+            if (rider == passenger) {
+                break;
+            }
+            passengerRank++;
+        }
+
+        return switch (passengerRank) {
+            case 0 -> new Vec2(-LARGE_PASSENGER_X_SPREAD, LARGE_PASSENGER_FRONT_ROW_Z);
+            case 1 -> new Vec2(LARGE_PASSENGER_X_SPREAD, LARGE_PASSENGER_FRONT_ROW_Z);
+            case 2 -> new Vec2(-LARGE_PASSENGER_X_SPREAD, LARGE_PASSENGER_BACK_ROW_Z);
+            default -> new Vec2(LARGE_PASSENGER_X_SPREAD, LARGE_PASSENGER_BACK_ROW_Z);
+        };
     }
 
     private PlayState animationPredicate(AnimationState<MagicCarpetEntity> state) {
@@ -681,5 +1012,37 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
             return state.setAndContinue(MOVE_ANIMATION);
         }
         return state.setAndContinue(IDLE_ANIMATION);
+    }
+
+    private static class CarpetInventoryContainer extends SimpleContainer {
+        private final MagicCarpetEntity carpet;
+
+        public CarpetInventoryContainer(MagicCarpetEntity carpet, int capacity) {
+            super(capacity);
+            this.carpet = carpet;
+
+            List<ItemStack> stored = MagicCarpetInventoryData.fromStack(carpet.getCarpetStack())
+                    .orElse(MagicCarpetInventoryData.empty())
+                    .items();
+            for (int i = 0; i < capacity; i++) {
+                this.getItems().set(i, stored.get(i).copy());
+            }
+        }
+
+        @Override
+        public void setChanged() {
+            super.setChanged();
+            if (!this.carpet.level().isClientSide) {
+                this.carpet.saveInventoryFromContainer(this);
+            }
+        }
+
+        @Override
+        public boolean stillValid(Player player) {
+            return this.carpet.isAlive()
+                    && this.carpet.isOwnedBy(player)
+                    && this.carpet.distanceToSqr(player) <= INVENTORY_INTERACTION_DISTANCE_SQR
+                    && this.carpet.getInventoryCapacity() >= this.getContainerSize();
+        }
     }
 }

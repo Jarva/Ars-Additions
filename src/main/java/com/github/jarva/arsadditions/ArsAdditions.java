@@ -71,6 +71,7 @@ public class ArsAdditions {
 
     private void post(final FMLLoadCompleteEvent event) {
         event.enqueueWork(() -> {
+            ArsNouveauRegistry.registerPerkProviders();
             DispenserBlock.registerBehavior(ItemsRegistry.EXPERIENCE_GEM, new DispenserExperienceGemBehavior());
             DispenserBlock.registerBehavior(ItemsRegistry.GREATER_EXPERIENCE_GEM, new DispenserExperienceGemBehavior());
         });

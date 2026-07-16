@@ -1,6 +1,10 @@
 package com.github.jarva.arsadditions.common.item;
 
 import com.github.jarva.arsadditions.common.entity.MagicCarpetEntity;
+import com.github.jarva.arsadditions.common.item.data.MagicCarpetInventoryData;
+import com.github.jarva.arsadditions.setup.registry.AddonDataComponentRegistry;
+import com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +28,10 @@ public class MagicCarpetItem extends Item {
     private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
 
     public MagicCarpetItem() {
-        super(new Properties().stacksTo(1));
+        super(new Properties()
+                .stacksTo(1)
+                .component(DataComponentRegistry.ARMOR_PERKS, new ArmorPerkHolder())
+                .component(AddonDataComponentRegistry.MAGIC_CARPET_INVENTORY, MagicCarpetInventoryData.empty()));
     }
 
     @Override
@@ -55,6 +62,7 @@ public class MagicCarpetItem extends Item {
             MagicCarpetEntity carpet = new MagicCarpetEntity(level, hitResult.getLocation().x, hitResult.getLocation().y + 0.1D, hitResult.getLocation().z);
             carpet.setYRot(player.getYRot());
             carpet.setOwnerUUID(player.getUUID());
+            carpet.setCarpetStack(itemStack.copyWithCount(1));
             if (!level.noCollision(carpet, carpet.getBoundingBox().inflate(-0.1D))) {
                 return InteractionResultHolder.fail(itemStack);
             }

@@ -10,6 +10,7 @@
     "MagicCarpetDismountMixin",
     "charms.PiglinAiMixin",
     "charms.PiglinBruteAiMixin",
+    "spellweave.AlterationTileCarpetMixin",
     "spellweave.AlterationTableMixin",
     "spellweave.EnchantmentMixin",
     "spellweave.PerkRegistryMixin",

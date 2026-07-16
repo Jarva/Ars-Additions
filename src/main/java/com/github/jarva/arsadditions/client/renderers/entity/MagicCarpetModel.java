@@ -7,12 +7,13 @@ import software.bernie.geckolib.model.GeoModel;
 
 public class MagicCarpetModel extends GeoModel<MagicCarpetEntity> {
     private static final ResourceLocation MODEL = ArsAdditions.prefix("geo/magic_carpet.geo.json");
+    private static final ResourceLocation LARGE_MODEL = ArsAdditions.prefix("geo/magic_carpet_large.geo.json");
     private static final ResourceLocation TEXTURE = ArsAdditions.prefix("textures/entity/magic_carpet.png");
     private static final ResourceLocation ANIMATIONS = ArsAdditions.prefix("animations/magic_carpet_animations.json");
 
     @Override
     public ResourceLocation getModelResource(MagicCarpetEntity animatable) {
-        return MODEL;
+        return animatable.isLargeCarpet() ? LARGE_MODEL : MODEL;
     }
 
     @Override

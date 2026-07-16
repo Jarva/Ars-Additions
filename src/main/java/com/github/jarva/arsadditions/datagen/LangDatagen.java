@@ -36,6 +36,7 @@ public class LangDatagen extends LanguageProvider {
 
         // Perks
 
+        this.add("ars_additions.thread_of", "Thread of %s");
         for (PerkItem i : PerkRegistry.getPerkItemMap().values()) {
             if(i.perk.getRegistryName().getNamespace().equals(ArsAdditions.MODID)) {
                 add("ars_additions.perk_desc." + i.perk.getRegistryName().getPath(), i.perk.getLangDescription());
@@ -220,6 +221,8 @@ public class LangDatagen extends LanguageProvider {
         this.add("chat.ars_additions.magic_carpet.coming", "Your magic carpet is on its way.");
         this.add("chat.ars_additions.magic_carpet.not_found", "No nearby magic carpet answers your call.");
         this.add("chat.ars_additions.magic_carpet.busy", "That magic carpet is currently occupied.");
+        this.add("chat.ars_additions.magic_carpet.inventory_owner_only", "Only the owner can access this carpet's storage.");
+        this.add("chat.ars_additions.magic_carpet.duplicate_thread", "That carpet thread is already applied.");
 
         this.add("chat.ars_additions.wixie_cauldron.storage.cleared", "Storage removed.");
         this.add("chat.ars_additions.wixie_cauldron.storage.set", "Storage bound.");
@@ -307,6 +310,7 @@ public class LangDatagen extends LanguageProvider {
         this.add("ars_additions.page.memory_crystal", "The Memory Crystal can save and load configuration data from supported blocks and entities. Shift + Right-Click a supported block or entity to save its configuration to the selected slot. Shift + Right-Click again to load the saved data back. Use the Radial Menu to select between 10 memory slots. Shift + Radial Menu allows you to clear or lock slots to prevent accidental overwrites.");
         this.add("ars_additions.page.advanced_dominion_wand", "The Advanced Dominion Wand is an upgraded Dominion Wand with the ability to control link order and link multiple blocks at once. Use the Radial Menu to toggle between First/Second link order and Single/Multi link count. In Multi mode, Shift + Right-Clicking a block will find all connected blocks of the same type and link them all at once.");
         this.add("ars_additions.page.source_spawner", "The Source Spawner is a source-powered mob spawner that reads nearby Mob Jars to determine what to spawn. Each mob spawned consumes source from nearby Source Jars, with the cost varying based on the mob type. The spawner can be disabled with a redstone signal and outputs a comparator signal proportional to the current spawn delay.");
+        this.add("container.ars_additions.magic_carpet_inventory", "Magic Carpet Storage");
 
         this.add("ars_additions.page.arcane_library", "Arcane Library");
         this.add("ars_additions.page1.arcane_library", "Arcane Libraries are a rare structure found in Archwood Forests, they are the remnants of an ancient magic civilization long left behind. Find treasures to fulfil all your magical needs, but beware of the Wilden roaming the halls.");

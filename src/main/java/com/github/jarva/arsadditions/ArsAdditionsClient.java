@@ -35,9 +35,7 @@ import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ArsAdditionsClient {
     public static KeyMapping openTerm;
@@ -80,7 +78,6 @@ public class ArsAdditionsClient {
     public static class ClientForgeEvents {
         private static final float MAX_PLAYER_PITCH_TILT = 35.0F;
         private static final float MAX_PLAYER_SIDE_TILT = 18.0F;
-        private static final Set<Integer> CARPET_TILTED_PLAYERS = new HashSet<>();
 
         @SubscribeEvent
         public static void clientTick(ClientTickEvent.Post evt) {
@@ -135,19 +132,10 @@ public class ArsAdditionsClient {
             float sideTilt = Mth.clamp(carpet.getSideTilt(), -MAX_PLAYER_SIDE_TILT, MAX_PLAYER_SIDE_TILT);
             float bodyYaw = Mth.rotLerp(event.getPartialTick(), event.getEntity().yBodyRotO, event.getEntity().yBodyRot);
             float yawDegrees = 180.0F - bodyYaw;
-            event.getPoseStack().pushPose();
             event.getPoseStack().mulPose(Axis.YP.rotationDegrees(yawDegrees));
             event.getPoseStack().mulPose(Axis.XP.rotationDegrees(pitchTilt));
             event.getPoseStack().mulPose(Axis.ZP.rotationDegrees(sideTilt));
             event.getPoseStack().mulPose(Axis.YP.rotationDegrees(-yawDegrees));
-            CARPET_TILTED_PLAYERS.add(event.getEntity().getId());
-        }
-
-        @SubscribeEvent
-        public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
-            if (CARPET_TILTED_PLAYERS.remove(event.getEntity().getId())) {
-                event.getPoseStack().popPose();
-            }
         }
 
     }

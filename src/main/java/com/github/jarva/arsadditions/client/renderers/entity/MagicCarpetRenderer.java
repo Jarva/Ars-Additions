@@ -16,8 +16,6 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 public class MagicCarpetRenderer extends GeoEntityRenderer<MagicCarpetEntity> {
     private static final float MAX_VISUAL_PITCH = 35.0F;
     private static final float MAX_VISUAL_SIDE_TILT = 18.0F;
-    private static final double MODEL_HALF_LENGTH = 1.0D;
-    private static final double MODEL_HALF_WIDTH = 0.75D;
     private static final float HURT_WOBBLE_DIVISOR = 10.0F;
     private static final double MIN_GROUND_CLEARANCE = 0.02D;
     private static final int GROUND_SAMPLE_DEPTH = 4;
@@ -29,6 +27,7 @@ public class MagicCarpetRenderer extends GeoEntityRenderer<MagicCarpetEntity> {
 
     @Override
     public void render(MagicCarpetEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+        this.shadowRadius = entity.getCarpetShadowRadius();
         poseStack.pushPose();
         poseStack.translate(0.0D, 0.05D, 0.0D);
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
@@ -64,16 +63,17 @@ public class MagicCarpetRenderer extends GeoEntityRenderer<MagicCarpetEntity> {
 
         double minY = entity.getBoundingBox().minY;
         double minClearance = this.sampleGroundClearance(entity.level(), entity.getX(), entity.getZ(), minY);
+        double modelHalfLength = entity.getModelHalfLength();
         float yawRadians = yawDegrees * Mth.DEG_TO_RAD;
-        double forwardX = -Mth.sin(yawRadians) * MODEL_HALF_LENGTH;
-        double forwardZ = Mth.cos(yawRadians) * MODEL_HALF_LENGTH;
+        double forwardX = -Mth.sin(yawRadians) * modelHalfLength;
+        double forwardZ = Mth.cos(yawRadians) * modelHalfLength;
         minClearance = Math.min(minClearance, this.sampleGroundClearance(entity.level(), entity.getX() + forwardX, entity.getZ() + forwardZ, minY));
         minClearance = Math.min(minClearance, this.sampleGroundClearance(entity.level(), entity.getX() - forwardX, entity.getZ() - forwardZ, minY));
         if (!Double.isFinite(minClearance)) {
             return desiredPitchDegrees;
         }
 
-        float maxPitch = this.maxTiltForClearance(minClearance, MODEL_HALF_LENGTH);
+        float maxPitch = this.maxTiltForClearance(minClearance, modelHalfLength);
         if (maxPitch <= 0.0F) {
             return 0.0F;
         }
@@ -87,16 +87,17 @@ public class MagicCarpetRenderer extends GeoEntityRenderer<MagicCarpetEntity> {
 
         double minY = entity.getBoundingBox().minY;
         double minClearance = this.sampleGroundClearance(entity.level(), entity.getX(), entity.getZ(), minY);
+        double modelHalfWidth = entity.getModelHalfWidth();
         float yawRadians = yawDegrees * Mth.DEG_TO_RAD;
-        double sideX = Mth.cos(yawRadians) * MODEL_HALF_WIDTH;
-        double sideZ = Mth.sin(yawRadians) * MODEL_HALF_WIDTH;
+        double sideX = Mth.cos(yawRadians) * modelHalfWidth;
+        double sideZ = Mth.sin(yawRadians) * modelHalfWidth;
         minClearance = Math.min(minClearance, this.sampleGroundClearance(entity.level(), entity.getX() + sideX, entity.getZ() + sideZ, minY));
         minClearance = Math.min(minClearance, this.sampleGroundClearance(entity.level(), entity.getX() - sideX, entity.getZ() - sideZ, minY));
         if (!Double.isFinite(minClearance)) {
             return desiredSideTiltDegrees;
         }
 
-        float maxSideTilt = this.maxTiltForClearance(minClearance, MODEL_HALF_WIDTH);
+        float maxSideTilt = this.maxTiltForClearance(minClearance, modelHalfWidth);
         if (maxSideTilt <= 0.0F) {
             return 0.0F;
         }

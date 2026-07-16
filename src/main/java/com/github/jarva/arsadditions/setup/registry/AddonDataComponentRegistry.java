@@ -49,4 +49,7 @@ public class AddonDataComponentRegistry {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<MemoryCrystalData>> MEMORY_CRYSTAL_DATA = DATA.register("memory_crystal_data",
             () -> DataComponentType.<MemoryCrystalData>builder().persistent(MemoryCrystalData.CODEC).networkSynchronized(MemoryCrystalData.STREAM_CODEC).build()
     );
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<MagicCarpetInventoryData>> MAGIC_CARPET_INVENTORY = DATA.register("magic_carpet_inventory",
+            () -> DataComponentType.<MagicCarpetInventoryData>builder().persistent(MagicCarpetInventoryData.CODEC).networkSynchronized(MagicCarpetInventoryData.STREAM_CODEC).build()
+    );
 }

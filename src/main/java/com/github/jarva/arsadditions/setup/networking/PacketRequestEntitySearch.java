@@ -18,16 +18,11 @@ public record PacketRequestEntitySearch(int targetEntityId, InteractionHand hand
     public static final CustomPacketPayload.Type<PacketRequestEntitySearch> TYPE =
             new CustomPacketPayload.Type<>(ArsAdditions.prefix("request_entity_search"));
 
-    private static final StreamCodec<ByteBuf, InteractionHand> HAND_CODEC = ByteBufCodecs.idMapper(
-            i -> InteractionHand.values()[i],
-            InteractionHand::ordinal
-    );
-
     public static final StreamCodec<ByteBuf, PacketRequestEntitySearch> STREAM_CODEC =
             StreamCodec.composite(
                     ByteBufCodecs.VAR_INT,
                     PacketRequestEntitySearch::targetEntityId,
-                    HAND_CODEC,
+                    AddonPacketCodecs.INTERACTION_HAND,
                     PacketRequestEntitySearch::hand,
                     PacketRequestEntitySearch::new
             );

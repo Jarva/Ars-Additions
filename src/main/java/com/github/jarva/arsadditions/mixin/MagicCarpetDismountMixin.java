@@ -18,9 +18,7 @@ public class MagicCarpetDismountMixin {
     @Inject(method = "wantsToStopRiding", at = @At("HEAD"), cancellable = true)
     private void ars_additions$doubleTapDismount(CallbackInfoReturnable<Boolean> cir) {
         Player player = (Player) (Object) this;
-        if (player.level().isClientSide()) {
-            return;
-        }
+        boolean clientSide = player.level().isClientSide();
 
         CompoundTag persistentData = player.getPersistentData();
 
@@ -61,10 +59,12 @@ public class MagicCarpetDismountMixin {
         }
 
         persistentData.putLong(CARPET_SHIFT_LAST_TAP_TICK_TAG, currentTick);
-        player.displayClientMessage(
-                Component.translatable("chat.ars_additions.magic_carpet.dismount_confirm", Component.keybind("key.sneak")),
-                true
-        );
+        if (!clientSide) {
+            player.displayClientMessage(
+                    Component.translatable("chat.ars_additions.magic_carpet.dismount_confirm", Component.keybind("key.sneak")),
+                    true
+            );
+        }
         cir.setReturnValue(false);
     }
 

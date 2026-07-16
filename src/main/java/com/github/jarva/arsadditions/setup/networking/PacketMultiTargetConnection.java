@@ -34,18 +34,13 @@ public record PacketMultiTargetConnection(List<BlockPos> blockPositions, List<In
     public static final CustomPacketPayload.Type<PacketMultiTargetConnection> TYPE =
             new CustomPacketPayload.Type<>(ArsAdditions.prefix("multi_target_connection"));
 
-    private static final StreamCodec<ByteBuf, InteractionHand> HAND_CODEC = ByteBufCodecs.idMapper(
-            i -> InteractionHand.values()[i],
-            InteractionHand::ordinal
-    );
-
     public static final StreamCodec<ByteBuf, PacketMultiTargetConnection> STREAM_CODEC =
             StreamCodec.composite(
-                    BlockPos.STREAM_CODEC.apply(ByteBufCodecs.list()),
+                    BlockPos.STREAM_CODEC.apply(ByteBufCodecs.list(MAX_TARGETS)),
                     PacketMultiTargetConnection::blockPositions,
-                    ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()),
+                    ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list(MAX_TARGETS)),
                     PacketMultiTargetConnection::entityIds,
-                    HAND_CODEC,
+                    AddonPacketCodecs.INTERACTION_HAND,
                     PacketMultiTargetConnection::hand,
                     PacketMultiTargetConnection::new
             );

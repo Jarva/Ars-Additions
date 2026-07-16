@@ -18,6 +18,7 @@ public class MagicCarpetRenderer extends GeoEntityRenderer<MagicCarpetEntity> {
     private static final float MAX_VISUAL_SIDE_TILT = 18.0F;
     private static final double MODEL_HALF_LENGTH = 1.0D;
     private static final double MODEL_HALF_WIDTH = 0.75D;
+    private static final float HURT_WOBBLE_DIVISOR = 10.0F;
     private static final double MIN_GROUND_CLEARANCE = 0.02D;
     private static final int GROUND_SAMPLE_DEPTH = 4;
 
@@ -38,6 +39,15 @@ public class MagicCarpetRenderer extends GeoEntityRenderer<MagicCarpetEntity> {
     protected void applyRotations(MagicCarpetEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick, float nativeScale) {
         float interpolatedYaw = Mth.rotLerp(partialTick, animatable.yRotO, animatable.getYRot());
         super.applyRotations(animatable, poseStack, ageInTicks, interpolatedYaw, partialTick, nativeScale);
+        float hurtTime = (float) animatable.getHurtTime() - partialTick;
+        float damage = animatable.getDamage() - partialTick;
+        if (damage < 0.0F) {
+            damage = 0.0F;
+        }
+        if (hurtTime > 0.0F) {
+            float wobbleDegrees = Mth.sin(hurtTime) * hurtTime * damage / HURT_WOBBLE_DIVISOR * (float) animatable.getHurtDir();
+            poseStack.mulPose(Axis.XP.rotationDegrees(wobbleDegrees));
+        }
         float interpolatedPitch = Mth.lerp(partialTick, animatable.xRotO, animatable.getXRot());
         float pitchTilt = -Mth.clamp(interpolatedPitch, -MAX_VISUAL_PITCH, MAX_VISUAL_PITCH);
         pitchTilt = this.clampPitchAgainstGround(animatable, interpolatedYaw, pitchTilt);

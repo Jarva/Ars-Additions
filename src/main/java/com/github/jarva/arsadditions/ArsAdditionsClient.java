@@ -34,7 +34,6 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.HashSet;
 import java.util.List;
@@ -81,9 +80,7 @@ public class ArsAdditionsClient {
     public static class ClientForgeEvents {
         private static final float MAX_PLAYER_PITCH_TILT = 35.0F;
         private static final float MAX_PLAYER_SIDE_TILT = 18.0F;
-        private static final int DESCEND_HOLD_TICKS = 5;
         private static final Set<Integer> CARPET_TILTED_PLAYERS = new HashSet<>();
-        private static int carpetShiftHoldTicks = 0;
 
         @SubscribeEvent
         public static void clientTick(ClientTickEvent.Post evt) {
@@ -92,17 +89,6 @@ public class ArsAdditionsClient {
                 return;
 
             boolean ridingCarpet = minecraft.player.getVehicle() instanceof MagicCarpetEntity;
-            boolean inGameplayInputContext = minecraft.screen == null;
-            boolean descendInputDown = ridingCarpet && inGameplayInputContext && minecraft.options.keyShift.isDown();
-
-            if (descendInputDown) {
-                carpetShiftHoldTicks++;
-            } else {
-                carpetShiftHoldTicks = 0;
-            }
-
-            boolean descendPressed = descendInputDown && carpetShiftHoldTicks >= DESCEND_HOLD_TICKS;
-            minecraft.player.getPersistentData().putBoolean(MagicCarpetEntity.DESCEND_INPUT_TAG, descendPressed);
             if (ridingCarpet) {
                 minecraft.player.setSprinting(false);
             }
@@ -136,9 +122,7 @@ public class ArsAdditionsClient {
 
         private static boolean isShiftDown() {
             Minecraft minecraft = Minecraft.getInstance();
-            long windowHandle = minecraft.getWindow().getWindow();
-            return InputConstants.isKeyDown(windowHandle, GLFW.GLFW_KEY_LEFT_SHIFT)
-                    || InputConstants.isKeyDown(windowHandle, GLFW.GLFW_KEY_RIGHT_SHIFT);
+            return minecraft.options.keyShift.isDown();
         }
 
         @SubscribeEvent

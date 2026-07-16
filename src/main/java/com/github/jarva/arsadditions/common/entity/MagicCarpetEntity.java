@@ -41,7 +41,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.UUID;
 
 public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
-    public static final String DESCEND_INPUT_TAG = "ars_additions_magic_carpet_descend";
     private static final String OWNER_UUID_TAG = "OwnerUUID";
     private static final EntityDataAccessor<Float> DATA_ID_SIDE_TILT = SynchedEntityData.defineId(MagicCarpetEntity.class, EntityDataSerializers.FLOAT);
     private static final int MAX_PASSENGERS = 2;
@@ -70,6 +69,7 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     private static final double SUMMON_VERTICAL_SPEED = 0.22D;
     private static final double SUMMON_VELOCITY_LERP = 0.35D;
     private static final double SUMMON_PITCH_FACTOR = 16.0D;
+    private static final int DESCEND_HOLD_TICKS = 5;
     private static final double RIDDEN_DRAG = 0.96D;
     private static final double VERTICAL_DRAG = 0.85D;
     private static final double IDLE_DRAG = 0.8D;
@@ -88,6 +88,8 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     private UUID ownerUUID;
     @Nullable
     private UUID summonTargetUUID;
+    private int descendHoldTicks;
+    private boolean descendInputActive;
 
     public MagicCarpetEntity(EntityType<? extends MagicCarpetEntity> entityType, Level level) {
         super(entityType, level);
@@ -137,6 +139,10 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
         super.tick();
         this.setNoGravity(true);
         this.tickLerp();
+        if (!(this.getControllingPassenger() instanceof Player)) {
+            this.descendHoldTicks = 0;
+            this.descendInputActive = false;
+        }
 
         if (this.isControlledByLocalInstance()) {
             LivingEntity controller = this.getControllingPassenger();
@@ -220,6 +226,7 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
         this.xRotO = previousPitch;
         this.yRotO = previousYaw;
         this.updateSideTilt(player.xxa);
+        this.updateDescendInput(player);
 
         Vec3 riddenInput = this.getRiddenInput(player);
         Vec3 horizontalIntent = new Vec3(riddenInput.x, 0.0D, riddenInput.z);
@@ -261,7 +268,18 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     }
 
     private boolean isRiderDescending(Player rider) {
-        return rider.getPersistentData().getBoolean(DESCEND_INPUT_TAG);
+        return this.descendInputActive && this.getControllingPassenger() == rider;
+    }
+
+    private void updateDescendInput(Player rider) {
+        if (this.getControllingPassenger() != rider || !rider.isShiftKeyDown()) {
+            this.descendHoldTicks = 0;
+            this.descendInputActive = false;
+            return;
+        }
+
+        this.descendHoldTicks = Math.min(this.descendHoldTicks + 1, DESCEND_HOLD_TICKS);
+        this.descendInputActive = this.descendHoldTicks >= DESCEND_HOLD_TICKS;
     }
 
     private void applyIdleMovement() {
@@ -441,6 +459,10 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
             return InteractionResult.PASS;
         }
 
+        if (!this.canPlayerRide(player)) {
+            return this.level().isClientSide ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
+        }
+
         if (!this.level().isClientSide) {
             return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
         }
@@ -493,6 +515,10 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     @Override
     protected void removePassenger(Entity passenger) {
         super.removePassenger(passenger);
+        if (!(this.getControllingPassenger() instanceof Player)) {
+            this.descendHoldTicks = 0;
+            this.descendInputActive = false;
+        }
         if (!this.isVehicle()) {
             this.setDeltaMovement(Vec3.ZERO);
             this.lerpSteps = 0;
@@ -501,12 +527,30 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
 
     @Override
     protected boolean canAddPassenger(Entity passenger) {
-        return passenger instanceof Player && this.getPassengers().size() < MAX_PASSENGERS;
+        return passenger instanceof Player player
+                && this.getPassengers().size() < MAX_PASSENGERS
+                && this.canPlayerRide(player);
+    }
+
+    private boolean canPlayerRide(Player player) {
+        if (this.isOwnedBy(player)) {
+            return true;
+        }
+
+        return this.getControllingPassenger() instanceof Player controller && this.isOwnedBy(controller);
     }
 
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
+        if (this.ownerUUID != null) {
+            for (Entity passenger : this.getPassengers()) {
+                if (this.ownerUUID.equals(passenger.getUUID()) && passenger instanceof LivingEntity livingEntity) {
+                    return livingEntity;
+                }
+            }
+            return null;
+        }
         return this.getFirstPassenger() instanceof LivingEntity livingEntity ? livingEntity : null;
     }
 
@@ -593,7 +637,6 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
     protected Item getDropItem() {
         return AddonItemRegistry.MAGIC_CARPET.get();
     }
-
     private Vec3 toWorldIntent(Vec3 localIntent, float yawDegrees) {
         if (localIntent.lengthSqr() < 1.0E-7D) {
             return Vec3.ZERO;
@@ -629,7 +672,12 @@ public class MagicCarpetEntity extends VehicleEntity implements GeoEntity {
 
     private PlayState animationPredicate(AnimationState<MagicCarpetEntity> state) {
         Vec3 velocity = this.getDeltaMovement();
-        if (velocity.horizontalDistanceSqr() > 2.5E-3D || Math.abs(velocity.y) > 0.015D) {
+        double dx = this.getX() - this.xo;
+        double dy = this.getY() - this.yo;
+        double dz = this.getZ() - this.zo;
+        double horizontalMotion = Math.max(velocity.horizontalDistanceSqr(), dx * dx + dz * dz);
+        double verticalMotion = Math.max(Math.abs(velocity.y), Math.abs(dy));
+        if (horizontalMotion > 2.5E-3D || verticalMotion > 0.015D) {
             return state.setAndContinue(MOVE_ANIMATION);
         }
         return state.setAndContinue(IDLE_ANIMATION);

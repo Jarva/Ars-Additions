@@ -1,6 +1,7 @@
 package com.github.jarva.arsadditions.common.glyph;
 
 import com.github.jarva.arsadditions.ArsAdditions;
+import com.github.jarva.arsadditions.common.util.RetaliationTargets;
 import com.github.jarva.arsadditions.setup.registry.names.AddonGlyphNames;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import net.minecraft.world.InteractionHand;
@@ -52,7 +53,7 @@ public class MethodRetaliate extends AbstractCastMethod {
     }
 
     public CastResolveType cast(LivingEntity caster, SpellResolver resolver) {
-        LivingEntity lastHurtBy = caster.getKillCredit();
+        LivingEntity lastHurtBy = RetaliationTargets.getAttacker(caster);
         if (lastHurtBy == null) return CastResolveType.FAILURE;
         if (lastHurtBy.equals(caster)) return CastResolveType.FAILURE;
 

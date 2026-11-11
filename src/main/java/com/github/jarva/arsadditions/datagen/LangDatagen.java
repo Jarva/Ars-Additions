@@ -43,6 +43,8 @@ public class LangDatagen extends LanguageProvider {
             }
         }
 
+        this.add("ars_additions.thread_of","Thread of %s");
+
         // Enchantments
 
         this.add("enchantment.ars_additions.spellweave", "Spellweave");

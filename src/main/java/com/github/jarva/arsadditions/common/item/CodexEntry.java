@@ -9,6 +9,7 @@ import com.hollingsworth.arsnouveau.setup.config.Config;
 import com.hollingsworth.arsnouveau.setup.registry.CapabilityRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -55,6 +56,14 @@ public class CodexEntry extends Item {
             playerCap.unlockGlyph(glyph);
             CapabilityRegistry.EventHandler.syncPlayerCap(player);
             player.sendSystemMessage(Component.literal("Unlocked " + glyph.getName()));
+            if (player instanceof ServerPlayer serverPlayer) {
+                var iMana = CapabilityRegistry.getMana(player);
+                IPlayerCap cap = CapabilityRegistry.getPlayerDataCap(player);
+                if (iMana.getGlyphBonus() < cap.getKnownGlyphs().size()) {
+                    iMana.setGlyphBonus(cap.getKnownGlyphs().size());
+                    iMana.syncToClient(serverPlayer);
+                }
+            }
         }
 
         player.getItemInHand(usedHand).consume(1, player);
